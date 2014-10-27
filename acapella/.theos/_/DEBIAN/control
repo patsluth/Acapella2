@@ -1,0 +1,10 @@
+Package: com.patsluth.swacapella
+Name: Acapella
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Pat Sluth
+Author: Pat Sluth
+Section: Tweaks
+Version: 0.0.1-6
+Installed-Size: 232

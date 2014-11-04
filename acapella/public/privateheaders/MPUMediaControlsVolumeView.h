@@ -1,0 +1,10 @@
+
+@interface MPUMediaControlsVolumeView : UIView
+{
+}
+
+@end
+
+
+
+

@@ -7,130 +7,204 @@
 //
 
 #import "SWAcapellaActionIndicator.h"
-#import "SWAcapellaActionView.h"
+#import "sluthwareios.h"
 
 @interface SWAcapellaActionIndicator()
 {
 }
 
-@property (strong, nonatomic) NSMutableArray *actionQueue; //array of action view identifiers to be displayed in order
-@property (strong, nonatomic) NSMutableArray *actionViews; //array of the actual views, saved to be reused
-@property (weak, nonatomic) SWAcapellaActionView *currentActionView;
+@property (readwrite, nonatomic) BOOL isAnimatingToShow;
+@property (readwrite, nonatomic) BOOL isShowing;
+@property (readwrite, nonatomic) BOOL isAnimatingToHide;
+
+@property (strong, nonatomic) NSTimer *initiateHideTimer;
+
+//internal. override in subclasses for custom animations
+- (void)setupViewForShowAnimation;
+- (void)performShowAnimation;
+- (void)setupViewForHideAnimation;
+- (void)performHideAnimation;
 
 @end
 
 @implementation SWAcapellaActionIndicator
 
-#pragma mark Init
-
-- (id)init
+- (id)initWithFrame:(CGRect)frame andActionIndicatorIdentifier:(NSString *)identifier
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     
     if (self){
         
-#ifdef DEBUG
-        self.backgroundColor = [UIColor cyanColor];
-#endif
+        self.alpha = 0.0;
         
+        self.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
+                                 UIViewAutoresizingFlexibleHeight |
+                                 UIViewAutoresizingFlexibleLeftMargin |
+                                 UIViewAutoresizingFlexibleRightMargin |
+                                 UIViewAutoresizingFlexibleTopMargin |
+                                 UIViewAutoresizingFlexibleBottomMargin);
+        
+        self.actionIndicatorIdentifier = identifier;
+        
+        self.actionIndicatorAnimationInTime = SWACAPELLA_ACTIONINDICATOR_DEFAULT_ANIMATION_IN_TIME;
+        self.actionIndicatorDisplayTime = SWACAPELLA_ACTIONINDICATOR_DEFAULT_DISPLAY_TIME;
+        self.actionIndicatorAnimationOutTime = SWACAPELLA_ACTIONINDICATOR_DEFAULT_ANIMATION_OUT_TIME;
+        
+        self.isAnimatingToShow = NO;
+        self.isShowing = NO;
+        self.isAnimatingToHide = NO;
     }
     
     return self;
 }
 
-- (void)layoutSubviews
+- (void)showAnimated:(BOOL)animated
 {
-    for (UIView *view in self.actionViews){
-        view.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    }
-}
-
-#pragma mark Action Views
-
-- (void)addViewToActionQueue:(SWAcapellaActionView *)view;
-{
-    if (![self actionViewForIdentifier:view.actionItemIdentifier]){
-        [self.actionViews addObject:view];
-        view.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        view.alpha = 0.0;
+    if (self.actionIndicatorDelegate){
+        [self.actionIndicatorDelegate actionIndicatorWillShow:self];
     }
     
-    [self.actionQueue addObject:view.actionItemIdentifier];
-    
-    if (!self.currentActionView){
-        [self animateNextAction];
-    }
-}
-
-- (SWAcapellaActionView *)actionViewForIdentifier:(NSString *)identifier
-{
-    for (SWAcapellaActionView *a in self.actionViews){
-        if ([a.actionItemIdentifier isEqualToString:identifier]){
-            return a;
-        }
+    if (!self.isAnimatingToHide){
+        [self setupViewForShowAnimation];
     }
     
-    return nil;
-}
-
-- (void)animateNextAction
-{
-    if (self.actionQueue.count <= 0){
-        return;
-    }
+    self.isAnimatingToShow = YES;
+    self.isShowing = NO;
+    self.isAnimatingToHide = NO;
     
-    if (self.currentActionView){
-        return;
-    }
-    
-    self.currentActionView = [self actionViewForIdentifier:[self.actionQueue objectAtIndex:0]];
-    
-    if (self.currentActionView){
-        
-        [self addSubview:self.currentActionView];
-        self.currentActionView.alpha = 0.0;
-        
-        [UIView animateWithDuration:self.currentActionView.displayTime / 2
-                              delay:0.0
-                            options:UIViewAnimationOptionBeginFromCurrentState
-                         animations:^{
-                             self.currentActionView.alpha = 1.0;
+    [UIView animateWithDuration:animated ? self.actionIndicatorAnimationInTime : 0.0
+                          delay:0.0
+                        options:(UIViewAnimationOptionBeginFromCurrentState |
+                                 UIViewAnimationOptionAllowUserInteraction |
+                                 UIViewAnimationOptionCurveEaseInOut)
+                     animations:^{
+                         [self performShowAnimation];
+                     }
+                     completion:^(BOOL finished){
+                         
+                         if (finished){
+                             
+                             self.isAnimatingToShow = NO;
+                             self.isShowing = YES;
+                             self.isAnimatingToHide = NO;
+                             
+                             if (self.actionIndicatorDelegate){
+                                 [self.actionIndicatorDelegate actionIndicatorDidShow:self];
+                             }
+                             
+                             [self startInitiateHideTimer:self.actionIndicatorDisplayTime animated:animated];
                          }
-                         completion:^(BOOL finished){
-                             [UIView animateWithDuration:self.currentActionView.displayTime / 2
-                                                   delay:0.0
-                                                 options:UIViewAnimationOptionBeginFromCurrentState
-                                              animations:^{
-                                                  self.currentActionView.alpha = 0.0;
-                                              }
-                                              completion:^(BOOL finished){
-                                                  self.currentActionView = nil;
-                                                  [self.actionQueue removeObjectAtIndex:0];
-                                                  [self animateNextAction];
-                                              }];
-                         }];
+                         
+                     }];
+}
+
+- (void)setupViewForShowAnimation
+{
+    self.alpha = 0.0;
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0001, 0.0001);
+}
+
+- (void)performShowAnimation
+{
+    self.alpha = 1.0;
+    //make sure we keep our original rotation
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+}
+
+- (void)delayBySeconds:(CGFloat)seconds
+{
+    if (self.isShowing){
         
-    } else {
+        if (self.initiateHideTimer && self.initiateHideTimer.isValid){
+            [self stopInitiateHideTimer];
+        }
         
-        [self animateNextAction];
+        [self startInitiateHideTimer:seconds animated:YES];
         
+    } else if (self.isAnimatingToShow){
+        
+    } else if (self.isAnimatingToHide){
+        
+        CALayer *presentation = (CALayer *)self.layer.presentationLayer;
+        [self.layer removeAllAnimations];
+        self.layer.transform = [presentation transform];
+        
+        [self showAnimated:YES];
     }
 }
 
-- (NSMutableArray *)actionQueue
+- (void)hideAnimated:(BOOL)animated
 {
-    if (!_actionQueue){
-        _actionQueue = [[NSMutableArray alloc] init];
+    if (self.actionIndicatorDelegate){
+        [self.actionIndicatorDelegate actionIndicatorWillHide:self];
     }
-    return _actionQueue;
+    
+    [self setupViewForHideAnimation];
+    
+    self.isAnimatingToShow = NO;
+    self.isShowing = NO;
+    self.isAnimatingToHide = YES;
+    
+    [UIView animateWithDuration:animated ? self.actionIndicatorAnimationOutTime : 0.0
+                          delay:0.0
+                        options:(UIViewAnimationOptionBeginFromCurrentState |
+                                 UIViewAnimationOptionAllowUserInteraction |
+                                 UIViewAnimationOptionCurveEaseInOut)
+                     animations:^{
+                         [self performHideAnimation];
+                     }
+                     completion:^(BOOL finished){
+                         
+                         if (finished){
+                             
+                             self.isAnimatingToShow = NO;
+                             self.isShowing = NO;
+                             self.isAnimatingToHide = NO;
+                             
+                             if (self.actionIndicatorDelegate){
+                                 [self.actionIndicatorDelegate actionIndicatorDidHide:self];
+                             }
+                         }
+                         
+                     }];
 }
 
-- (NSMutableArray *)actionViews
+- (void)setupViewForHideAnimation
 {
-    if (!_actionViews){
-        _actionViews = [[NSMutableArray alloc] init];
+}
+
+- (void)performHideAnimation
+{
+    self.alpha = 0.0;
+    //make sure we keep our original rotation
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0001, 0.0001);
+}
+
+#pragma mark Hide Timer
+
+- (void)startInitiateHideTimer:(CGFloat)time animated:(BOOL)animated
+{
+    if (self.initiateHideTimer && self.initiateHideTimer.isValid){
+        return;
     }
-    return _actionViews;
+    
+    SEL selector = @selector(hideAnimated:);
+    
+    NSMethodSignature *signature = [SWAcapellaActionIndicator instanceMethodSignatureForSelector:selector];
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+    [invocation setSelector:selector];
+    [invocation setTarget:self];
+    [invocation setArgument:&animated atIndex:2];
+    
+    self.initiateHideTimer = [NSTimer scheduledTimerWithTimeInterval:time invocation:invocation repeats:NO];
+}
+
+- (void)stopInitiateHideTimer
+{
+    if (self.initiateHideTimer){
+        [self.initiateHideTimer invalidate];
+        self.initiateHideTimer = nil;
+    }
 }
 
 @end

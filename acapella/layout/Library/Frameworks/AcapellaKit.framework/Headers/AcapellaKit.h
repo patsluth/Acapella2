@@ -17,6 +17,8 @@ FOUNDATION_EXPORT const unsigned char AcapellaKitVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <AcapellaKit/PublicHeader.h>
 
 #import <AcapellaKit/SWAcapellaBase.h>
+#import <AcapellaKit/SWAcapellaActionIndicator.h>
+#import <AcapellaKit/SWAcapellaActionIndicatorController.h>
 
 
 

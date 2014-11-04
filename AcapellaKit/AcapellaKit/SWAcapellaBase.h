@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-@class SWAcapellaActionIndicator;
+
+@class SWAcapellaActionIndicatorController;
 
 typedef enum {
     SW_DIRECTION_NONE = 0,
@@ -44,10 +45,11 @@ typedef enum {
 @property (readwrite, nonatomic) CGPoint previousScrollOffset;
 
 @property (strong, nonatomic) UIScrollView *scrollview;
-@property (readonly, strong, nonatomic) SWAcapellaActionIndicator *actionIndicator;
+@property (readonly, strong, nonatomic) SWAcapellaActionIndicatorController *actionIndicatorController;
 
 - (void)resetContentOffset;
 - (void)finishWrapAroundAnimation;
+- (void)stopWrapAroundFallback;
 
 @end
 

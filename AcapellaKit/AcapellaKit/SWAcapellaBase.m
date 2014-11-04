@@ -7,7 +7,9 @@
 //
 
 #import "SWAcapellaBase.h"
+
 #import "SWAcapellaActionIndicator.h"
+#import "SWAcapellaActionIndicatorController.h"
 
 #import "sluthwareios.h"
 
@@ -26,7 +28,7 @@
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
 //action indicator
-@property (readwrite, strong, nonatomic) SWAcapellaActionIndicator *actionIndicator;
+@property (readwrite, strong, nonatomic) SWAcapellaActionIndicatorController *actionIndicatorController;
 
 #ifdef DEBUG
 
@@ -66,14 +68,10 @@
         
 #ifdef DEBUG
         self.backgroundColor = [UIColor redColor];
-        self.scrollview.backgroundColor = [UIColor yellowColor];
-        
-        self.scrollview.showsHorizontalScrollIndicator = YES;
-        self.scrollview.showsVerticalScrollIndicator = YES;
         
         self.testLabel = [[UILabel alloc] init];
 
-        self.testLabel.text = @"Test Label";
+        self.testLabel.text = @"Test Content";
         [self.testLabel sizeToFit];
         
         [self.testLabel setCenter:CGPointMake(self.scrollview.contentSize.width / 2, self.scrollview.contentSize.height / 2)];
@@ -86,8 +84,8 @@
         self.previousScrollOffset = CGPointZero;
         
         //action indicator
-        self.actionIndicator = [[SWAcapellaActionIndicator alloc] init];
-        [self addSubview:self.actionIndicator];
+        self.actionIndicatorController = [[SWAcapellaActionIndicatorController alloc] init];
+        [self insertSubview:self.actionIndicatorController belowSubview:self.scrollview];
         
         [self resetContentOffset];
     }
@@ -112,11 +110,9 @@
     [self.testLabel setCenter:CGPointMake(self.scrollview.contentSize.width / 2, self.scrollview.contentSize.height / 2)];
 #endif
     
-    self.actionIndicator.frame = CGRectMake(0,
-                                                    self.frame.size.height / 10,
-                                                    self.frame.size.width / 4,
-                                                    self.frame.size.height / 5);
-    [self.actionIndicator setCenterX:self.frame.size.width / 2];
+    [self.actionIndicatorController setSize:CGSizeMake(self.frame.size.width, self.frame.size.height / 4)];
+    [self.actionIndicatorController setCenterX:self.frame.size.width / 2];
+    [self.actionIndicatorController setOriginY:self.frame.size.height / 12];
 }
 
 - (void)setFrame:(CGRect)frame
@@ -247,10 +243,6 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if (!self.delegateAcapella){
-        return;
-    }
-    
     CGPoint page = [self.scrollview page];
     
     BOOL shouldAnimated = (page.x != 1 || page.y != 1); //centered already
@@ -262,18 +254,20 @@
         SW_SCROLL_DIRECTION direction = SW_DIRECTION_NONE;
         
         if (page.x == 0 && page.y == 1){
-            direction = SW_DIRECTION_LEFT;
-        } else if (page.x == 2 && page.y == 1) {
             direction = SW_DIRECTION_RIGHT;
+        } else if (page.x == 2 && page.y == 1) {
+            direction = SW_DIRECTION_LEFT;
         } else if (page.x == 1 && page.y == 0){
-            direction = SW_DIRECTION_UP;
-        } else if (page.x == 1 && page.y == 2) {
             direction = SW_DIRECTION_DOWN;
+        } else if (page.x == 1 && page.y == 2) {
+            direction = SW_DIRECTION_UP;
         }
         
-        [self.delegateAcapella swAcapellaOnSwipe:direction];
-        
         [self startWrapAroundFallback];
+        
+        if (self.delegateAcapella){
+            [self.delegateAcapella swAcapellaOnSwipe:direction];
+        }
         
     } else {
         [self resetContentOffset];
@@ -303,8 +297,6 @@
 {
     [self stopWrapAroundFallback];
     
-    self.scrollview.userInteractionEnabled = YES;
-    
     CGPoint page = [self.scrollview page];
     
     CGPoint targetContentOffset = CGPointMake(self.scrollview.frame.size.width, self.scrollview.frame.size.height);
@@ -320,6 +312,7 @@
         self.scrollview.contentOffset = CGPointMake(self.scrollview.frame.size.width, 0);
     } else {
         [self resetContentOffset];
+        self.scrollview.userInteractionEnabled = YES;
         return;
     }
     
@@ -344,7 +337,7 @@
                      animations:^{
                          self.scrollview.contentOffset = targetContentOffset;
                      }completion:^(BOOL finished){
-                         
+                         self.scrollview.userInteractionEnabled = YES;
                      }];
 }
 

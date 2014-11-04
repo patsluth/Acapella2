@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "sluthwareios.h"
+#import "test.h"
 
 @interface ViewController ()
 
@@ -15,8 +16,6 @@
 @property (strong, nonatomic) SWAcapellaBase *acapella;
 
 @end
-
-@implementation ViewController
 
 - (void)viewDidLoad
 {
@@ -27,16 +26,23 @@
     [self.view addSubview:self.contentView];
     
     self.acapella = [[SWAcapellaBase alloc] init];
-    self.acapella.delegateAcapella = self;
+    //self.acapella.delegateAcapella = self;
     [self.contentView addSubview:self.acapella];
     
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resizeA) userInfo:nil repeats:NO];
+    
+    test *tester = [[test alloc] initWithFrame:CGRectMake(50, 50, 50, 50)];
+    [self.view addSubview:tester];
+    
+    NSArray *versionCompatibility = [SWDeviceInfo iOSVersion];
+    
+    NSLog(@"%@", versionCompatibility);
 }
 
 - (void)resizeA
 {
     [self.contentView setSize:CGSizeMake(self.view.frame.size.width, 150)];
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
+    //[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
 }
 
 - (void)resizeB
@@ -49,23 +55,6 @@
 - (void)swAcapellaOnTap:(CGPoint)percentage
 {
     //NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
-    
-    SWAcapellaActionView *songSkip = [self.acapella.actionIndicator actionViewForIdentifier:@"songskip"];
-    
-    if (!songSkip){
-        songSkip = [[SWAcapellaActionView alloc] initWithActionItemIdentifier:[NSString
-                                                                               stringWithFormat:@"%d", arc4random()]
-                                                               andDisplayTime:2.0];
-        songSkip.backgroundColor = [UIColor redColor];
-        UILabel *text = [[UILabel alloc] init];
-        text.text = songSkip.actionItemIdentifier;
-        [text sizeToFit];
-        [songSkip addSubview:text];
-    }
-    
-    [self.acapella.actionIndicator addViewToActionQueue:songSkip];
-    
-    
 }
 
 - (void)swAcapellaOnSwipe:(SW_SCROLL_DIRECTION)direction
@@ -73,7 +62,100 @@
     //NSLog(@"Acapella On Swipe %u", direction);
     
     if (direction != SW_DIRECTION_NONE){
-        [self.acapella finishWrapAroundAnimation];
+        
+        if (direction == SW_DIRECTION_UP){
+            
+            [self.acapella stopWrapAroundFallback];
+            
+            [[[SWUIAlertView alloc] initWithTitle:@"a"
+                                         message:@"B"
+                              clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
+                                  
+                              }
+                                 didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
+                                     [self.acapella finishWrapAroundAnimation];
+                                 }
+                               cancelButtonTitle:@"P"
+                                otherButtonTitles:nil] show];
+        } else {
+            
+            [self.acapella finishWrapAroundAnimation];
+        }
+        
+        
+        
+        
+        
+        
+        
+        if (direction == SW_DIRECTION_LEFT || direction == SW_DIRECTION_RIGHT){
+            
+            
+            SWAcapellaActionIndicator *songSkip = [self.acapella.actionIndicatorController
+                                                   actionIndicatorWithIdentifierIfExists:@"songskip"];
+            
+            if (!songSkip){
+                songSkip = [[SWAcapellaActionIndicator alloc] initWithFrame:CGRectMake(0,
+                                                                                       0,
+                                                                                       100,
+                                                                                       self.acapella.actionIndicatorController.frame.size.height)
+                                               andActionIndicatorIdentifier:@"songskip"];
+                songSkip.backgroundColor = [UIColor purpleColor];
+                
+                UILabel *text = [[UILabel alloc] init];
+                text.layer.anchorPoint = CGPointMake(0.5, 0.5);
+                text.textAlignment = NSTextAlignmentCenter;
+                text.text = @"--->";
+                text.textColor = [UIColor whiteColor];
+                [text sizeToFit];
+                [songSkip addSubview:text];
+                [text setCenter:CGPointMake(songSkip.frame.size.width / 2, songSkip.frame.size.height / 2)];
+            }
+            
+            UILabel *lab;
+            
+            for (UILabel *view in songSkip.subviews){
+                lab = view;
+            }
+            
+            if (lab){
+                void (^_applyRotation)(CGAffineTransform tran) = ^(CGAffineTransform tran){
+                    lab.transform = tran;
+                };
+                
+                BOOL animated = songSkip.isShowing || songSkip.isAnimatingToHide;
+                
+                if (animated && direction == SW_DIRECTION_LEFT && !lab.layer.animationKeys){
+                    //we need to set this initially so we will rotate counterclockwise from right to left
+                    _applyRotation(CGAffineTransformMakeRotation(SWDegreesToRadians(-0.001)));
+                }
+                
+                CGFloat animationTime = 0.0;
+                
+                if (songSkip.isShowing){
+                    animationTime = songSkip.actionIndicatorDisplayTime * 0.75; //animate to 75% of the display time, since the timer will be restarted and the view will display for that amount of time
+                //should never hit because of animationToShow, but just in case
+                } else if (songSkip.isAnimatingToHide || songSkip.isAnimatingToShow){
+                    //it will take this ammount of time for the animation to reshow from its current state, so they will be syncronized
+                    animationTime = songSkip.actionIndicatorAnimationInTime;
+                }
+                
+                [UIView animateWithDuration:(animated) ? animationTime : 0.0
+                                      delay:0.0
+                                    options:(UIViewAnimationOptionBeginFromCurrentState |
+                                             UIViewAnimationOptionAllowUserInteraction |
+                                             UIViewAnimationOptionCurveEaseInOut)
+                                 animations:^{
+                                     
+                                     CGFloat deg = (direction == SW_DIRECTION_LEFT) ? 180.0 : 0.0;
+                                     _applyRotation(CGAffineTransformMakeRotation(SWDegreesToRadians(deg)));
+                                     
+                                 }
+                                 completion:nil];
+            }
+            
+            [self.acapella.actionIndicatorController addActionIndicatorToQueue:songSkip];
+        }
     }
 }
 

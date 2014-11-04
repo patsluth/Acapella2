@@ -16,14 +16,13 @@
 		2E75964119FDCCA600001BC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
 		2E75964419FDCCA600001BC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
 		2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964519FDCCA600001BC7 /* Images.xcassets */; };
-		2E75964919FDCCA600001BC7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964719FDCCA600001BC7 /* LaunchScreen.xib */; };
-		2E75966619FDCD5D00001BC7 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E75966419FDCD5D00001BC7 /* Info.plist */; };
 		2E75966719FDCD5D00001BC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75966519FDCD5D00001BC7 /* main.m */; };
 		2E75966B19FDCDD900001BC7 /* AcapellaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2E75967519FDE03B00001BC7 /* SWAcapellaActionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75967319FDE03B00001BC7 /* SWAcapellaActionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E75967619FDE03B00001BC7 /* SWAcapellaActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75967419FDE03B00001BC7 /* SWAcapellaActionView.m */; };
 		2E75967919FDE0DB00001BC7 /* SWAcapellaActionIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75967719FDE0DB00001BC7 /* SWAcapellaActionIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75967A19FDE0DB00001BC7 /* SWAcapellaActionIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */; };
+		2E82A1C71A00456B00F04CDB /* SWAcapellaActionIndicatorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2E82A1C81A00456B00F04CDB /* SWAcapellaActionIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */; };
+		2EDAE4E71A069CC3006274BA /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDAE4E61A069CC3006274BA /* test.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,13 +64,14 @@
 		2E75964019FDCCA600001BC7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2E75964319FDCCA600001BC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2E75964519FDCCA600001BC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2E75964819FDCCA600001BC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2E75966419FDCD5D00001BC7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75966519FDCD5D00001BC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2E75967319FDE03B00001BC7 /* SWAcapellaActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaActionView.h; sourceTree = "<group>"; };
-		2E75967419FDE03B00001BC7 /* SWAcapellaActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaActionView.m; sourceTree = "<group>"; };
 		2E75967719FDE0DB00001BC7 /* SWAcapellaActionIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaActionIndicator.h; sourceTree = "<group>"; };
 		2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaActionIndicator.m; sourceTree = "<group>"; };
+		2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaActionIndicatorController.h; sourceTree = "<group>"; };
+		2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaActionIndicatorController.m; sourceTree = "<group>"; };
+		2EDAE4E51A069CC3006274BA /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		2EDAE4E61A069CC3006274BA /* test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,10 +118,10 @@
 				2E75956F19FD49F500001BC7 /* AcapellaKit.h */,
 				2E75958619FD4A7200001BC7 /* SWAcapellaBase.h */,
 				2E75958719FD4A7200001BC7 /* SWAcapellaBase.m */,
-				2E75967319FDE03B00001BC7 /* SWAcapellaActionView.h */,
-				2E75967419FDE03B00001BC7 /* SWAcapellaActionView.m */,
 				2E75967719FDE0DB00001BC7 /* SWAcapellaActionIndicator.h */,
 				2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */,
+				2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */,
+				2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */,
 				2E75956D19FD49F500001BC7 /* Supporting Files */,
 			);
 			path = AcapellaKit;
@@ -153,8 +153,9 @@
 				2E75964019FDCCA600001BC7 /* ViewController.m */,
 				2E75964219FDCCA600001BC7 /* Main.storyboard */,
 				2E75964519FDCCA600001BC7 /* Images.xcassets */,
-				2E75964719FDCCA600001BC7 /* LaunchScreen.xib */,
 				2E75963819FDCCA600001BC7 /* Supporting Files */,
+				2EDAE4E51A069CC3006274BA /* test.h */,
+				2EDAE4E61A069CC3006274BA /* test.m */,
 			);
 			path = AcapellaTest;
 			sourceTree = "<group>";
@@ -175,10 +176,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E75958819FD4A7200001BC7 /* SWAcapellaBase.h in Headers */,
-				2E75967519FDE03B00001BC7 /* SWAcapellaActionView.h in Headers */,
-				2E75967919FDE0DB00001BC7 /* SWAcapellaActionIndicator.h in Headers */,
 				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
+				2E75958819FD4A7200001BC7 /* SWAcapellaBase.h in Headers */,
+				2E75967919FDE0DB00001BC7 /* SWAcapellaActionIndicator.h in Headers */,
+				2E82A1C71A00456B00F04CDB /* SWAcapellaActionIndicatorController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,9 +272,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E75966619FDCD5D00001BC7 /* Info.plist in Resources */,
 				2E75964419FDCCA600001BC7 /* Main.storyboard in Resources */,
-				2E75964919FDCCA600001BC7 /* LaunchScreen.xib in Resources */,
 				2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,8 +285,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E75958919FD4A7200001BC7 /* SWAcapellaBase.m in Sources */,
-				2E75967619FDE03B00001BC7 /* SWAcapellaActionView.m in Sources */,
 				2E75967A19FDE0DB00001BC7 /* SWAcapellaActionIndicator.m in Sources */,
+				2E82A1C81A00456B00F04CDB /* SWAcapellaActionIndicatorController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E75964119FDCCA600001BC7 /* ViewController.m in Sources */,
+				2EDAE4E71A069CC3006274BA /* test.m in Sources */,
 				2E75966719FDCD5D00001BC7 /* main.m in Sources */,
 				2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */,
 			);
@@ -318,14 +318,6 @@
 				2E75964319FDCCA600001BC7 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		2E75964719FDCCA600001BC7 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2E75964819FDCCA600001BC7 /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -447,6 +439,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = AcapellaKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -469,6 +462,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = AcapellaKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -484,6 +478,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -496,6 +491,7 @@
 					/opt/theos/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = /opt/theos/include/libsw/sluthwareios;
 			};
@@ -505,6 +501,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = AcapellaTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -514,6 +511,7 @@
 					/opt/theos/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = /opt/theos/include/libsw/sluthwareios;
 			};

@@ -6,8 +6,9 @@ TARGET = iphone:clang:latest:7.0
 
 TWEAK_NAME = Acapella
 Acapella_CFLAGS = -fobjc-arc
-Acapella_FILES = Tweak.xm
-Acapella_FRAMEWORKS = Foundation UIKit MediaPlayer MessageUI
+Acapella_LDFLAGS = -ObjC
+Acapella_FILES = SWAcapellaShared.xm SWAcapellaSpringboard.xm
+Acapella_FRAMEWORKS = Foundation CoreGraphics UIKit MediaPlayer MessageUI
 Acapella_LIBRARIES = sw packageinfo
 
 ADDITIONAL_CFLAGS = -Ipublic

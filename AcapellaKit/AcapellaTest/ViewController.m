@@ -17,6 +17,8 @@
 
 @end
 
+@implementation ViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,9 +36,11 @@
     test *tester = [[test alloc] initWithFrame:CGRectMake(50, 50, 50, 50)];
     [self.view addSubview:tester];
     
-    NSArray *versionCompatibility = [SWDeviceInfo iOSVersion];
+    NSString* (^_test)(NSString *string) = ^(NSString *string){
+        return string;
+    };
     
-    NSLog(@"%@", versionCompatibility);
+    NSLog(@"PAT %@", _test(@"HELLO"));CGSizeMake
 }
 
 - (void)resizeA
@@ -101,6 +105,7 @@
                                                                                        self.acapella.actionIndicatorController.frame.size.height)
                                                andActionIndicatorIdentifier:@"songskip"];
                 songSkip.backgroundColor = [UIColor purpleColor];
+                songSkip.actionIndicatorDisplayTime = 5.0;
                 
                 UILabel *text = [[UILabel alloc] init];
                 text.layer.anchorPoint = CGPointMake(0.5, 0.5);

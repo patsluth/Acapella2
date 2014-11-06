@@ -1,6 +1,6 @@
 Package: com.patsluth.swacapella
 Name: Acapella
-Depends: mobilesubstrate
+Depends: firmware (>= 7.1), firmware (<= 8.1), mobilesubstrate, jp.ashikase.libpackageinfo, com.patsluth.libsw
 Version: 0.0.1
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!

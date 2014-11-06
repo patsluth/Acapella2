@@ -51,7 +51,17 @@
     } else {
         if ([self.currentActionIndicator.actionIndicatorIdentifier isEqualToString:view.actionIndicatorIdentifier]){
             [self.currentActionIndicator delayBySeconds:self.currentActionIndicator.actionIndicatorDisplayTime];
+        } else {
+            [self.actionIndicatorQueue addObject:view.actionIndicatorIdentifier];
         }
+    }
+}
+
+- (void)addActionIndicatorToPool:(SWAcapellaActionIndicator *)view
+{
+    if (![self actionIndicatorWithIdentifierIfExists:view.actionIndicatorIdentifier]){
+        view.actionIndicatorDelegate = self;
+        [self.actionIndicatorPool addObject:view];
     }
 }
 

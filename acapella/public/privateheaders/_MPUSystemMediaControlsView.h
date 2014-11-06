@@ -15,10 +15,15 @@
     MPUMediaControlsVolumeView *_volumeView;
 }
 
+@property(readonly, nonatomic) MPUChronologicalProgressView *timeInformationView; // @synthesize timeInformationView=_timeInformationView;
+@property(readonly, nonatomic) MPUMediaControlsTitlesView *trackInformationView; // @synthesize trackInformationView=_trackInformationView;
+@property(readonly, nonatomic) MPUTransportControlsView *transportControlsView; // @synthesize transportControlsView=_transportControlsView;
+@property(readonly, nonatomic) MPUMediaControlsVolumeView *volumeView; // @synthesize volumeView=_volumeView;
+
 - (id)initWithStyle:(int)arg1; //changes color of items, not line numbers
 
 //new
-- (BOOL)showRadioModal;
+//- (BOOL)showRadioModal;
 
 @end
 

@@ -4,7 +4,9 @@
 
 @interface MPUSystemMediaControlsViewController : UIViewController  <SWAcapellaDelegate>
 {
-    _MPUSystemMediaControlsView *_mediaControlsView;
+    id _mediaControlsView;
+    //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
+    //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8
 }
 
 - (void)viewWillAppear:(BOOL)arg1;

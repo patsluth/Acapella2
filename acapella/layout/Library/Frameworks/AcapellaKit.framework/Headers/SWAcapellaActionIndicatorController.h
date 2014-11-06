@@ -13,6 +13,7 @@
 @interface SWAcapellaActionIndicatorController : UIView <SWAcapellaActionIndicatorDelegate>
 
 - (void)addActionIndicatorToQueue:(SWAcapellaActionIndicator *)view;
+- (void)addActionIndicatorToPool:(SWAcapellaActionIndicator *)view;
 - (SWAcapellaActionIndicator *)actionIndicatorWithIdentifierIfExists:(NSString *)identifier;
 
 @end

@@ -135,6 +135,8 @@
 
 - (void)hideAnimated:(BOOL)animated
 {
+    [self stopInitiateHideTimer];
+    
     if (self.actionIndicatorDelegate){
         [self.actionIndicatorDelegate actionIndicatorWillHide:self];
     }

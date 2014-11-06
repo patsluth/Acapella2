@@ -30,12 +30,6 @@
 //action indicator
 @property (readwrite, strong, nonatomic) SWAcapellaActionIndicatorController *actionIndicatorController;
 
-#ifdef DEBUG
-
-@property (strong, nonatomic) UILabel *testLabel;
-
-#endif
-
 @end
 
 @implementation SWAcapellaBase
@@ -68,14 +62,6 @@
         
 #ifdef DEBUG
         self.backgroundColor = [UIColor redColor];
-        
-        self.testLabel = [[UILabel alloc] init];
-
-        self.testLabel.text = @"Test Content";
-        [self.testLabel sizeToFit];
-        
-        [self.testLabel setCenter:CGPointMake(self.scrollview.contentSize.width / 2, self.scrollview.contentSize.height / 2)];
-        [self.scrollview addSubview:self.testLabel];
 #endif
         
         [self initGestureRecognizers];
@@ -85,7 +71,8 @@
         
         //action indicator
         self.actionIndicatorController = [[SWAcapellaActionIndicatorController alloc] init];
-        [self insertSubview:self.actionIndicatorController belowSubview:self.scrollview];
+        [self addSubview:self.actionIndicatorController];
+        [self bringSubviewToFront:self.actionIndicatorController];
         
         [self resetContentOffset];
     }
@@ -104,11 +91,6 @@
                                              self.scrollview.frame.size.height * 3);
     
     self.scrollview.contentOffset = originalContentOffset;
-    
-#ifdef DEBUG
-    //keep centered in the content view
-    [self.testLabel setCenter:CGPointMake(self.scrollview.contentSize.width / 2, self.scrollview.contentSize.height / 2)];
-#endif
     
     [self.actionIndicatorController setSize:CGSizeMake(self.frame.size.width, self.frame.size.height / 4)];
     [self.actionIndicatorController setCenterX:self.frame.size.width / 2];

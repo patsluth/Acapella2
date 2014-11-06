@@ -31,7 +31,7 @@
 {
     %orig(arg1);
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsTitleViewTextDidChange" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:self];
 }
 
 %end

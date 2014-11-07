@@ -40,7 +40,7 @@
         return string;
     };
     
-    NSLog(@"PAT %@", _test(@"HELLO"));CGSizeMake
+    NSLog(@"PAT %@", _test(@"HELLO"));
 }
 
 - (void)resizeA

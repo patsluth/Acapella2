@@ -1,8 +1,7 @@
 
-#import "_MPUSystemMediaControlsView.h"
 #import <AcapellaKit/AcapellaKit.h>
 
-@interface MPUSystemMediaControlsViewController : UIViewController  <SWAcapellaDelegate>
+@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate>
 {
     id _mediaControlsView;
     //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
@@ -12,6 +11,12 @@
 - (void)viewWillAppear:(BOOL)arg1;
 
 //new
+- (_MPUSystemMediaControlsView *)mediaControlsViewIOS7;
+- (MPUSystemMediaControlsView *)mediaControlsViewIOS8;
+- (MPUChronologicalProgressView *)timeInformationView;
+- (MPUMediaControlsTitlesView *)trackInformationView;
+- (MPUTransportControlsView *)transportControlsView;
+- (MPUMediaControlsVolumeView *)volumeView;
 - (SWAcapellaBase *)acapella;
 
 @end

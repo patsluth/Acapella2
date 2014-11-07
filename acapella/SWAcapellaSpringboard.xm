@@ -20,104 +20,66 @@
 
 %hook MPUSystemMediaControlsViewController
 
-- (void)viewDidLoad
+#pragma mark Helper
+
+%new
+- (_MPUSystemMediaControlsView *)mediaControlsViewIOS7
 {
-%orig();
+return MSHookIvar<_MPUSystemMediaControlsView *>(self, "_mediaControlsView");;
+}
 
+%new
+- (MPUSystemMediaControlsView *)mediaControlsViewIOS8
+{
+return MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");;
+}
 
-
-
-SWAcapellaBase *(^_createAcapella)(MPUMediaControlsTitlesView *title) = ^(MPUMediaControlsTitlesView *title){
-
-SWAcapellaBase *acapella = [[%c(SWAcapellaBase) alloc] init];
-acapella.delegateAcapella = self;
-
-title.userInteractionEnabled = NO;
-[acapella.scrollview addSubview:title];
-
-return acapella;
-};
-
-
-
-
-_MPUSystemMediaControlsView *mpu7;
-MPUSystemMediaControlsView *mpu8;
-
+%new
+- (MPUChronologicalProgressView *)timeInformationView
+{
 if ([SWDeviceInfo iOSVersion_First] == 7){
-
-mpu7 = MSHookIvar<_MPUSystemMediaControlsView *>(self, "_mediaControlsView");
-
-if (mpu7){
-[mpu7 layoutSubviews];
-
-[mpu7.transportControlsView removeFromSuperview];
-[mpu7.timeInformationView removeFromSuperview];
-[mpu7.trackInformationView removeFromSuperview];
-[mpu7.volumeView removeFromSuperview];
-}
-
+return [self mediaControlsViewIOS7].timeInformationView;
 } else if ([SWDeviceInfo iOSVersion_First] == 8){
-
-mpu8 = MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
-
-if (mpu8){
-
-//for (UIView *v in mpu8.subviews){
-//    [v removeFromSuperview];
-// }
-
-SWAcapellaBase *acapella = _createAcapella(mpu8.trackInformationView);
-[mpu8 addSubview:acapella];
+return [self mediaControlsViewIOS8].timeInformationView;
 }
 
+return nil;
 }
 
-
-
-
-
-
-
-
-//    return;
-//
-//    NSLog(@"PAT TEST 2 - %@--%@", mpu7, mpu8);
-//
-//    if (progress && transport && volume && title){
-//
-//        NSLog(@"HEY %@ %@ %@ %@", progress, transport, volume, title);
-//
-//        [progress removeFromSuperview];
-//        [transport removeFromSuperview];
-//
-//        NSLog(@"PAT TEST %@---------%@", volume, volume.superview);
-//        //[volume removeFromSuperview];
-//        //[title removeFromSuperview];
-//
-//        SWAcapellaBase *acapella = [[%c(SWAcapellaBase) alloc] init];
-//        acapella.delegateAcapella = self;
-//        [(mpu8) ? mpu8 : mpu7 addSubview:acapella];
-//        acapella.alpha = 0.4;
-//
-//        //NSLog(@"PAT TEST 3 - %@", acapella);
-//
-//        title.userInteractionEnabled = NO;
-//        [acapella.scrollview addSubview:title];
-//
-//    } else {
-//        [[[SWUIAlertView alloc] initWithTitle:@"Acapella Error #6810"
-//                                      message:@"There was an error loading Acapella. Contact Developer with error code if you wish to help :)"
-//                           clickedButtonBlock:nil
-//                              didDismissBlock:nil
-//                            cancelButtonTitle:@"Ok"
-//                            otherButtonTitles:nil] show];
-//    }
-}
-
-- (void)viewWillAppear:(BOOL)arg1
+%new
+- (MPUMediaControlsTitlesView *)trackInformationView
 {
-%orig(arg1);
+if ([SWDeviceInfo iOSVersion_First] == 7){
+return [self mediaControlsViewIOS7].trackInformationView;
+} else if ([SWDeviceInfo iOSVersion_First] == 8){
+return [self mediaControlsViewIOS8].trackInformationView;
+}
+
+return nil;
+}
+
+%new
+- (MPUTransportControlsView *)transportControlsView
+{
+if ([SWDeviceInfo iOSVersion_First] == 7){
+return [self mediaControlsViewIOS7].transportControlsView;
+} else if ([SWDeviceInfo iOSVersion_First] == 8){
+return [self mediaControlsViewIOS8].transportControlsView;
+}
+
+return nil;
+}
+
+%new
+- (MPUMediaControlsVolumeView *)volumeView
+{
+if ([SWDeviceInfo iOSVersion_First] == 7){
+return [self mediaControlsViewIOS7].volumeView;
+} else if ([SWDeviceInfo iOSVersion_First] == 8){
+return [self mediaControlsViewIOS8].volumeView;
+}
+
+return nil;
 }
 
 %new
@@ -125,15 +87,80 @@ SWAcapellaBase *acapella = _createAcapella(mpu8.trackInformationView);
 {
 SWAcapellaBase *acapella;
 
-MPUSystemMediaControlsView *mpuSystemMediaControlsView = MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
+UIView *mediaControlsView = MSHookIvar<UIView *>(self, "_mediaControlsView");
 
-if (mpuSystemMediaControlsView){
-for (SWAcapellaBase *a in mpuSystemMediaControlsView.subviews){
-acapella = a;
+if (mediaControlsView){
+for (UIView *v in mediaControlsView.superview.subviews){
+if ([v isKindOfClass:%c(SWAcapellaBase)]){
+acapella = (SWAcapellaBase *)v;
+}
 }
 }
 
 return acapella;
+}
+
+#pragma mark Init
+
+- (void)viewDidLoad
+{
+%orig();
+}
+
+- (void)viewDidLayoutSubviews
+{
+%orig();
+
+UIView *mediaControlsView = MSHookIvar<UIView *>(self, "_mediaControlsView");
+
+if ([self acapella]){ //we already set up an acapella
+return;
+}
+
+//make sure our frames are set up
+[mediaControlsView.superview layoutSubviews];
+[mediaControlsView layoutSubviews];
+
+if (mediaControlsView){
+
+if ([self timeInformationView] && [self trackInformationView] && [self transportControlsView] && [self volumeView]){ //make sure we have all our views
+
+SWAcapellaBase *(^_createAcapella)(MPUMediaControlsTitlesView *title) = ^(MPUMediaControlsTitlesView *trackView){
+
+SWAcapellaBase *acapella = [[%c(SWAcapellaBase) alloc] init];
+acapella.delegateAcapella = self;
+
+trackView.userInteractionEnabled = NO;
+trackView.backgroundColor = [UIColor blueColor];
+[acapella.scrollview addSubview:trackView];
+
+return acapella;
+};
+
+[[self timeInformationView] removeFromSuperview];
+[[self transportControlsView] removeFromSuperview];
+[[self volumeView] removeFromSuperview];
+
+SWAcapellaBase *acapella = _createAcapella([self trackInformationView]);
+acapella.frame = mediaControlsView.frame;
+[acapella layoutSubviews];
+
+[mediaControlsView.superview addSubview:acapella];
+
+[acapella.scrollview addSubview:[self trackInformationView]];
+mediaControlsView.hidden = YES;
+}
+}
+}
+
+- (void)viewWillAppear:(BOOL)arg1
+{
+%orig(arg1);
+}
+
+- (void)viewDidAppear:(BOOL)arg1
+{
+%orig(arg1);
 }
 
 #pragma mark SWAcapellaDelegate
@@ -142,11 +169,6 @@ return acapella;
 - (void)swAcapellaOnTap:(CGPoint)percentage
 {
 //NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
-
-MPUSystemMediaControlsView *mpuSystemMediaControlsView = MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
-for (UIView *v in mpuSystemMediaControlsView.subviews){
-[v removeFromSuperview];
-}
 
 SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
 
@@ -166,20 +188,18 @@ if (avsc){ //0.0625 = 1 / 16 (number of squares in iOS HUD)
 
 
 
-
-
-
-
 //show the action view
-_MPUSystemMediaControlsView *mpuSystemMediaControlsView = MSHookIvar<_MPUSystemMediaControlsView *>(self, "_mediaControlsView");
+MPUSystemMediaControlsView *mediaControlsView = MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
 
-if (mpuSystemMediaControlsView){
-
-MPUMediaControlsVolumeView *volume = MSHookIvar<MPUMediaControlsVolumeView *>(mpuSystemMediaControlsView, "_volumeView");
+if (mediaControlsView){
 
 SWAcapellaBase *acapella = [self acapella];
 
 if (acapella){
+
+//                    [self.acapella.actionIndicatorController addSubview:mediaControlsView.volumeView];
+//                    [mediaControlsView.volumeView setCenterY:self.acapella.actionIndicatorController.frame.size.height / 2];
+//                    return;
 
 SWAcapellaActionIndicator *volumeActionIndicator = [self.acapella.actionIndicatorController actionIndicatorWithIdentifierIfExists:@"_volumeView"];
 
@@ -192,13 +212,13 @@ andActionIndicatorIdentifier:@"_volumeView"];
 volumeActionIndicator.actionIndicatorAnimationOutTime = 2.0;
 volumeActionIndicator.actionIndicatorAnimationInTime = 2.0;
 volumeActionIndicator.actionIndicatorDisplayTime = 3.0;
-[volumeActionIndicator addSubview:volume];
+[volumeActionIndicator addSubview:mediaControlsView.volumeView];
 }
 
 [self.acapella.actionIndicatorController addActionIndicatorToQueue:volumeActionIndicator];
-[volume setOriginY:0.0];
+[mediaControlsView.volumeView setCenterY:volumeActionIndicator.frame.size.height / 2];
 
-__block MPUMediaControlsVolumeView *volumeBlock = volume;
+__block MPUMediaControlsVolumeView *volumeBlock = mediaControlsView.volumeView;
 __block SWAcapellaActionIndicator *volumeActionIndicatorBlock = volumeActionIndicator;
 
 //dont hide our volume action indicator while we are dragging it
@@ -211,6 +231,7 @@ usingBlock:^(NSNotification *note){
 if (volumeBlock && volumeBlock == note.object){
 //show indefinately. We will handle hiding in the block below
 [volumeActionIndicatorBlock delayBySeconds:INT32_MAX];
+NSLog(@"PAT TEST STOPPPPPP");
 }
 
 if (volumeDragBegin){
@@ -470,11 +491,9 @@ self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.wi
 }
 }
 
-//MPUMediaControlsVolumeView *volume = MSHookIvar<MPUMediaControlsVolumeView *>(self, "_volumeView");
-
-//if (volume){
-//    [volume setOriginY:0.0]; //sometimes dissapears while showing in the action indicator
-//}
+if (self.volumeView){
+[self.volumeView setCenterY:self.volumeView.superview.frame.size.height / 2]; //sometimes dissapears while showing in the action indicator
+}
 }
 
 %end
@@ -498,11 +517,9 @@ self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.wi
 }
 }
 
-//MPUMediaControlsVolumeView *volume = MSHookIvar<MPUMediaControlsVolumeView *>(self, "_volumeView");
-
-//if (volume){
-//    [volume setOriginY:0.0]; //sometimes dissapears while showing in the action indicator
-//}
+if (self.volumeView){
+[self.volumeView setCenterY:self.volumeView.superview.frame.size.height / 2]; //sometimes dissapears while showing in the action indicator
+}
 }
 
 %end
@@ -517,15 +534,15 @@ self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.wi
 - (void)detailScrubControllerDidEndScrubbing:(id)arg1
 {
 %orig(arg1);
-// /
-/// [[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUChronologicalProgressView_detailScrubControllerDidEndScrubbing" object:self];
+
+[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUChronologicalProgressView_detailScrubControllerDidEndScrubbing" object:self];
 }
 
 - (void)detailScrubControllerDidBeginScrubbing:(id)arg1
 {
 %orig(arg1);
 
-//[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUChronologicalProgressView_detailScrubControllerDidBeginScrubbing" object:self];
+[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUChronologicalProgressView_detailScrubControllerDidBeginScrubbing" object:self];
 }
 
 %end
@@ -541,14 +558,14 @@ self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.wi
 {
 %orig(arg1);
 
-//[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderBeganChanging" object:self];
+[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderBeganChanging" object:self];
 }
 
 - (void)_volumeSliderStoppedChanging:(id)arg1
 {
 %orig(arg1);
 
-//[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderStoppedChanging" object:self];
+[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderStoppedChanging" object:self];
 }
 
 %end

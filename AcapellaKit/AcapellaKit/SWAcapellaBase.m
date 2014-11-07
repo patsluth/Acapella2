@@ -75,6 +75,9 @@
         [self bringSubviewToFront:self.actionIndicatorController];
         
         [self resetContentOffset];
+        
+        self.scrollview.layer.anchorPoint = CGPointMake(0.5, 0.5);
+        self.layer.anchorPoint = CGPointMake(0.5, 0.5);
     }
     
     return self;

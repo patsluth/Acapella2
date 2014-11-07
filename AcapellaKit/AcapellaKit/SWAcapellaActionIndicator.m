@@ -35,7 +35,7 @@
     
     if (self){
         
-        self.alpha = 0.0;
+        self.alpha = 1.0;
         
         self.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
                                  UIViewAutoresizingFlexibleHeight |
@@ -100,7 +100,7 @@
 
 - (void)setupViewForShowAnimation
 {
-    self.alpha = 0.0;
+    self.alpha = 1.0;
     self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0001, 0.0001);
 }
 
@@ -177,7 +177,7 @@
 
 - (void)performHideAnimation
 {
-    self.alpha = 0.0;
+    self.alpha = 1.0;
     //make sure we keep our original rotation
     self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0001, 0.0001);
 }

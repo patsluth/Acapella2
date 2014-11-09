@@ -13,7 +13,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) UIView *contentView;
-@property (strong, nonatomic) SWAcapellaBase *acapella;
+@property (strong, nonatomic) SWAcapellaBase2 *acapella;
 
 @end
 
@@ -24,52 +24,47 @@
     [super viewDidLoad];
     
     self.contentView = [[UIView alloc] init];
-    self.contentView.frame = CGRectMake(0, 400, 0, 0);
+    self.contentView.frame = CGRectMake(0, 100, 0, 0);
     [self.view addSubview:self.contentView];
     
-    self.acapella = [[SWAcapellaBase alloc] init];
-    //self.acapella.delegateAcapella = self;
+    self.acapella = [[SWAcapellaBase2 alloc] init];
+    self.acapella.delegateAcapella = self;
     [self.contentView addSubview:self.acapella];
     
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resizeA) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
     
     test *tester = [[test alloc] initWithFrame:CGRectMake(50, 50, 50, 50)];
     [self.view addSubview:tester];
-    
-    NSString* (^_test)(NSString *string) = ^(NSString *string){
-        return string;
-    };
-    
-    NSLog(@"PAT %@", _test(@"HELLO"));
+    [self.view bringSubviewToFront:self.contentView];
 }
 
 - (void)resizeA
 {
-    [self.contentView setSize:CGSizeMake(self.view.frame.size.width, 150)];
-    //[NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
+    self.contentView.frame = CGRectMake(40, 200, self.view.frame.size.width - 80, 300);
+    //[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
 }
 
 - (void)resizeB
 {
-    self.contentView.frame = CGRectMake(40, 200, self.view.frame.size.width - 80, 300);
+    self.contentView.frame = CGRectMake(0, 100, self.view.frame.size.width, 100);
 }
 
 #pragma mark SWAcapellaDelegate
 
 - (void)swAcapellaOnTap:(CGPoint)percentage
 {
-    //NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
+    NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
 }
 
 - (void)swAcapellaOnSwipe:(SW_SCROLL_DIRECTION)direction
 {
     //NSLog(@"Acapella On Swipe %u", direction);
     
-    if (direction != SW_DIRECTION_NONE){
+    if (direction != SW_SCROLL_DIR_NONE){
         
-        if (direction == SW_DIRECTION_UP){
+        if (direction == SW_SCROLL_DIR_UP){
             
-            [self.acapella stopWrapAroundFallback];
+            [self.acapella.scrollview stopWrapAroundFallback];
             
             [[[SWUIAlertView alloc] initWithTitle:@"a"
                                          message:@"B"
@@ -77,13 +72,14 @@
                                   
                               }
                                  didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-                                     [self.acapella finishWrapAroundAnimation];
+                                     [self.acapella.scrollview finishWrapAroundAnimation];
                                  }
                                cancelButtonTitle:@"P"
                                 otherButtonTitles:nil] show];
         } else {
             
-            [self.acapella finishWrapAroundAnimation];
+            [self.acapella.scrollview finishWrapAroundAnimation];
+            
         }
         
         
@@ -92,9 +88,9 @@
         
         
         
-        if (direction == SW_DIRECTION_LEFT || direction == SW_DIRECTION_RIGHT){
+        if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
             
-            
+            /*
             SWAcapellaActionIndicator *songSkip = [self.acapella.actionIndicatorController
                                                    actionIndicatorWithIdentifierIfExists:@"songskip"];
             
@@ -160,6 +156,7 @@
             }
             
             [self.acapella.actionIndicatorController addActionIndicatorToQueue:songSkip];
+             */
         }
     }
 }

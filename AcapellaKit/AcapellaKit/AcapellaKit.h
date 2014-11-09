@@ -8,17 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
-//! Project version number for AcapellaKit.
-FOUNDATION_EXPORT double AcapellaKitVersionNumber;
 
-//! Project version string for AcapellaKit.
-FOUNDATION_EXPORT const unsigned char AcapellaKitVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <AcapellaKit/PublicHeader.h>
+
+
+FOUNDATION_EXPORT double AcapellaKitVersionNumber; //! Project version number for AcapellaKit.
+FOUNDATION_EXPORT const unsigned char AcapellaKitVersionString[]; //! Project version string for AcapellaKit.
+
+
+
+
 
 #import <AcapellaKit/SWAcapellaBase.h>
+#import <AcapellaKit/SWAcapellaBase2.h>
+#import <AcapellaKit/SWAcapellaTableView.h>
+#import <AcapellaKit/SWAcapellaScrollView.h>
 #import <AcapellaKit/SWAcapellaActionIndicator.h>
 #import <AcapellaKit/SWAcapellaActionIndicatorController.h>
+
 
 
 

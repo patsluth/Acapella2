@@ -7,9 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E1DFE651A0DC628000DCF1E /* SWAcapellaBase2.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE631A0DC628000DCF1E /* SWAcapellaBase2.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2E1DFE6E1A0EA3AD000DCF1E /* SWAcapellaTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE6C1A0EA3AD000DCF1E /* SWAcapellaTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2E1DFE6F1A0EA3AD000DCF1E /* SWAcapellaTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */; };
+		2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
+		2E1DFE741A0EA5BE000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75958719FD4A7200001BC7 /* SWAcapellaBase.m */; };
+		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase2.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase2.m */; };
 		2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75956F19FD49F500001BC7 /* AcapellaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75958819FD4A7200001BC7 /* SWAcapellaBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75958619FD4A7200001BC7 /* SWAcapellaBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E75958919FD4A7200001BC7 /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75958719FD4A7200001BC7 /* SWAcapellaBase.m */; };
 		2E75959619FD959E00001BC7 /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
 		2E75959819FD95B500001BC7 /* sluthwareios in Resources */ = {isa = PBXBuildFile; fileRef = 2E75959719FD95B500001BC7 /* sluthwareios */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75963D19FDCCA600001BC7 /* AppDelegate.m */; };
@@ -50,6 +56,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2E1DFE631A0DC628000DCF1E /* SWAcapellaBase2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaBase2.h; sourceTree = "<group>"; };
+		2E1DFE641A0DC628000DCF1E /* SWAcapellaBase2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaBase2.m; sourceTree = "<group>"; };
+		2E1DFE6C1A0EA3AD000DCF1E /* SWAcapellaTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTableView.h; sourceTree = "<group>"; };
+		2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTableView.m; sourceTree = "<group>"; };
+		2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollView.h; sourceTree = "<group>"; };
+		2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaScrollView.m; sourceTree = "<group>"; };
 		2E75956A19FD49F500001BC7 /* AcapellaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AcapellaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75956E19FD49F500001BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75956F19FD49F500001BC7 /* AcapellaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AcapellaKit.h; sourceTree = "<group>"; };
@@ -118,6 +130,12 @@
 				2E75956F19FD49F500001BC7 /* AcapellaKit.h */,
 				2E75958619FD4A7200001BC7 /* SWAcapellaBase.h */,
 				2E75958719FD4A7200001BC7 /* SWAcapellaBase.m */,
+				2E1DFE631A0DC628000DCF1E /* SWAcapellaBase2.h */,
+				2E1DFE641A0DC628000DCF1E /* SWAcapellaBase2.m */,
+				2E1DFE6C1A0EA3AD000DCF1E /* SWAcapellaTableView.h */,
+				2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */,
+				2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */,
+				2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */,
 				2E75967719FDE0DB00001BC7 /* SWAcapellaActionIndicator.h */,
 				2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */,
 				2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */,
@@ -178,6 +196,9 @@
 			files = (
 				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
 				2E75958819FD4A7200001BC7 /* SWAcapellaBase.h in Headers */,
+				2E1DFE651A0DC628000DCF1E /* SWAcapellaBase2.h in Headers */,
+				2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */,
+				2E1DFE6E1A0EA3AD000DCF1E /* SWAcapellaTableView.h in Headers */,
 				2E75967919FDE0DB00001BC7 /* SWAcapellaActionIndicator.h in Headers */,
 				2E82A1C71A00456B00F04CDB /* SWAcapellaActionIndicatorController.h in Headers */,
 			);
@@ -284,7 +305,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E75958919FD4A7200001BC7 /* SWAcapellaBase.m in Sources */,
+				2E1DFE741A0EA5BE000DCF1E /* SWAcapellaBase.m in Sources */,
+				2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase2.m in Sources */,
+				2E1DFE6F1A0EA3AD000DCF1E /* SWAcapellaTableView.m in Sources */,
+				2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */,
 				2E75967A19FDE0DB00001BC7 /* SWAcapellaActionIndicator.m in Sources */,
 				2E82A1C81A00456B00F04CDB /* SWAcapellaActionIndicatorController.m in Sources */,
 			);
@@ -432,6 +456,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -455,6 +480,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -479,6 +505,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -502,6 +529,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = AcapellaTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

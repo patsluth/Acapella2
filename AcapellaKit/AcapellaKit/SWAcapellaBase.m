@@ -23,7 +23,9 @@
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeUp;
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeDown;
 
-//wrap around helpers
+//scroll view wrap around helpers
+@property (readwrite, nonatomic) SW_SCROLL_DIRECTION currentScrollDirection;
+@property (readwrite, nonatomic) CGPoint previousScrollOffset;
 @property (readwrite, nonatomic) CGPoint currentVelocity;
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -103,6 +105,7 @@
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
+    
     [self resetContentOffset];
 }
 
@@ -171,10 +174,7 @@
 
 - (void)resetContentOffset
 {
-    //make sure we are centered
-    if (self.scrollview){
-        self.scrollview.contentOffset = CGPointMake(self.scrollview.frame.size.width, self.scrollview.frame.size.height);
-    }
+    self.scrollview.contentOffset = CGPointMake(self.scrollview.frame.size.width, self.scrollview.frame.size.height);
 }
 
 #pragma mark ScrollView
@@ -228,7 +228,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    CGPoint page = [self.scrollview page];
+    SWPage page = [self.scrollview page];
     
     BOOL shouldAnimated = (page.x != 1 || page.y != 1); //centered already
     
@@ -282,7 +282,7 @@
 {
     [self stopWrapAroundFallback];
     
-    CGPoint page = [self.scrollview page];
+    SWPage page = [self.scrollview page];
     
     CGPoint targetContentOffset = CGPointMake(self.scrollview.frame.size.width, self.scrollview.frame.size.height);
     

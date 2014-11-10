@@ -2,26 +2,43 @@
 //  SWAcapellaBase.h
 //  AcapellaKit
 //
-//  Created by Pat Sluth on 2014-10-26.
+//  Created by Pat Sluth on 2014-11-07.
 //  Copyright (c) 2014 Pat Sluth. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "SWAcapellaBase2.h"
 
-@class SWAcapellaActionIndicatorController;
+#import "SWAcapellaScrollViewProtocol.h"
+#import <libsw/sluthwareios/sluthwareios.h>
 
-@interface SWAcapellaBase : UIView <UIScrollViewDelegate>
+@class SWAcapellaBase;
+@class SWAcapellaTableView;
+@class SWAcapellaScrollView;
 
-@property (weak, nonatomic) id delegateAcapella;
+@protocol SWAcapellaDelegate <NSObject>
 
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UIScrollView *scrollview;
-@property (readonly, strong, nonatomic) SWAcapellaActionIndicatorController *actionIndicatorController;
+@required
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage;
+- (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction;
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage;
 
-- (void)resetContentOffset;
-- (void)finishWrapAroundAnimation;
-- (void)stopWrapAroundFallback;
+@end
+
+
+
+
+
+@interface SWAcapellaBase : UIView <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
+
+@property (weak, nonatomic) id <SWAcapellaDelegate> delegateAcapella;
+
+@property (strong, nonatomic) SWAcapellaTableView *tableView;
+@property (strong, nonatomic) SWAcapellaScrollView *scrollview;
+//@property (readonly, strong, nonatomic) SWAcapellaActionIndicatorController *actionIndicatorController;
+
+
+
 
 @end
 

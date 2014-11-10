@@ -137,9 +137,9 @@ trackView.backgroundColor = [UIColor blueColor];
 return acapella;
 };
 
-[[self timeInformationView] removeFromSuperview];
-[[self transportControlsView] removeFromSuperview];
-[[self volumeView] removeFromSuperview];
+//[[self timeInformationView] removeFromSuperview];
+//[[self transportControlsView] removeFromSuperview];
+//[[self volumeView] removeFromSuperview];
 
 SWAcapellaBase *acapella = _createAcapella([self trackInformationView]);
 acapella.frame = mediaControlsView.frame;
@@ -166,9 +166,11 @@ mediaControlsView.hidden = YES;
 #pragma mark SWAcapellaDelegate
 
 %new
-- (void)swAcapellaOnTap:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage
 {
-//NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
+NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
+
+/*
 
 SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
 
@@ -200,6 +202,7 @@ if (acapella){
 //                    [self.acapella.actionIndicatorController addSubview:mediaControlsView.volumeView];
 //                    [mediaControlsView.volumeView setCenterY:self.acapella.actionIndicatorController.frame.size.height / 2];
 //                    return;
+
 
 SWAcapellaActionIndicator *volumeActionIndicator = [self.acapella.actionIndicatorController actionIndicatorWithIdentifierIfExists:@"_volumeView"];
 
@@ -293,12 +296,14 @@ acapella.transform = CGAffineTransformMakeScale(1.0, 1.0);
 
 } else if (percentage.x > (1.0 - percentBoundaries)){ //right
 _changeVolume(1);
-}
+} */
 }
 
 %new
-- (void)swAcapellaOnSwipe:(SW_SCROLL_DIRECTION)direction
+- (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
 {
+NSLog(@"Acapella On Swipe %u", direction);
+
 //    SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
 //
 //    if (direction == SW_DIRECTION_LEFT || direction == SW_DIRECTION_RIGHT){
@@ -347,9 +352,9 @@ _changeVolume(1);
 }
 
 %new
-- (void)swAcapellaOnLongPress:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage
 {
-//NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
+NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
 
 //    SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
 //

@@ -13,7 +13,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) UIView *contentView;
-@property (strong, nonatomic) SWAcapellaBase2 *acapella;
+@property (strong, nonatomic) SWAcapellaBase *acapella;
 
 @end
 
@@ -27,7 +27,7 @@
     self.contentView.frame = CGRectMake(0, 100, 0, 0);
     [self.view addSubview:self.contentView];
     
-    self.acapella = [[SWAcapellaBase2 alloc] init];
+    self.acapella = [[SWAcapellaBase alloc] init];
     self.acapella.delegateAcapella = self;
     [self.contentView addSubview:self.acapella];
     
@@ -51,36 +51,36 @@
 
 #pragma mark SWAcapellaDelegate
 
-- (void)swAcapellaOnTap:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage
 {
     NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
 }
 
-- (void)swAcapellaOnSwipe:(SW_SCROLL_DIRECTION)direction
+- (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
 {
     //NSLog(@"Acapella On Swipe %u", direction);
     
     if (direction != SW_SCROLL_DIR_NONE){
         
-        if (direction == SW_SCROLL_DIR_UP){
+//        if (direction == SW_SCROLL_DIR_UP){
+//            
+            //[view stopWrapAroundFallback];
+//            
+//            [[[SWUIAlertView alloc] initWithTitle:@"a"
+//                                         message:@"B"
+//                              clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
+//                                  
+//                              }
+//                                 didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
+//                                     [view finishWrapAroundAnimation];
+//                                 }
+//                               cancelButtonTitle:@"P"
+//                                otherButtonTitles:nil] show];
+//        } else {
+        
+            [view finishWrapAroundAnimation];
             
-            [self.acapella.scrollview stopWrapAroundFallback];
-            
-            [[[SWUIAlertView alloc] initWithTitle:@"a"
-                                         message:@"B"
-                              clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-                                  
-                              }
-                                 didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-                                     [self.acapella.scrollview finishWrapAroundAnimation];
-                                 }
-                               cancelButtonTitle:@"P"
-                                otherButtonTitles:nil] show];
-        } else {
-            
-            [self.acapella.scrollview finishWrapAroundAnimation];
-            
-        }
+        //}
         
         
         
@@ -161,7 +161,7 @@
     }
 }
 
-- (void)swAcapellaOnLongPress:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage
 {
     //NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
 }

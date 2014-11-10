@@ -7,11 +7,13 @@
 //
 
 #import "SWAcapellaScrollView.h"
-#import "sluthwareios.h"
+#import <libsw/sluthwareios/sluthwareios.h>
 
 @interface SWAcapellaScrollView()
 {
 }
+
+@property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
 #ifdef DEBUG
 @property (strong, nonatomic) UIView *testView;
@@ -19,7 +21,13 @@
 
 @end
 
+
+
+
+
 @implementation SWAcapellaScrollView
+
+#pragma mark Init
 
 - (id)init
 {
@@ -29,11 +37,12 @@
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         self.decelerationRate = UIScrollViewDecelerationRateFast;
-        self.canCancelContentTouches = YES;
+        
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
         self.pagingEnabled = YES;
         self.directionalLockEnabled = YES;
+        self.scrollsToTop = NO;
         
 #ifdef DEBUG
         self.backgroundColor = [UIColor magentaColor];
@@ -57,7 +66,7 @@
     
     self.contentSize = CGSizeMake(self.frame.size.width * 3, self.frame.size.height);
     
-    [self resetContentOffset];
+    [self resetContentOffset:NO];
 }
 
 - (void)layoutSubviews
@@ -69,9 +78,19 @@
 #endif
 }
 
-- (void)resetContentOffset
+#pragma mark SWAcapellaScrollViewProtocol
+
+- (CGPoint)defaultContentOffset
 {
-    self.contentOffset = CGPointMake(self.contentSize.width / 2 - (self.frame.size.width / 2), 0);
+    return CGPointMake(self.contentSize.width / 2 - (self.frame.size.width / 2), 0);
+}
+
+- (void)resetContentOffset:(BOOL)animated
+{
+    [UIView animateWithDuration:animated ? 1.0 : 0.0
+                     animations:^{
+        self.contentOffset = [self defaultContentOffset];
+    }];
 }
 
 - (void)startWrapAroundFallback
@@ -79,10 +98,10 @@
     [self stopWrapAroundFallback];
     
     self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:0.8
-                                                                          target:self
-                                                                        selector:@selector(finishWrapAroundAnimation)
-                                                                        userInfo:nil
-                                                                         repeats:NO];
+                                                               target:self
+                                                             selector:@selector(finishWrapAroundAnimation)
+                                                             userInfo:nil
+                                                              repeats:NO];
 }
 
 - (void)stopWrapAroundFallback
@@ -99,15 +118,13 @@
     
     SWPage page = [self page];
     
-    CGPoint targetContentOffset = CGPointMake(self.frame.size.width, 0);
-    
     //make content offset the on the oposite side, to appear as if we wrapped around
     if (page.x == 0 && page.y == 0){ //left
         self.contentOffset = CGPointMake(self.frame.size.width * 2, 0);
     } else if (page.x == 2 && page.y == 0) { //right
         self.contentOffset = CGPointMake(0, 0);
     } else {
-        [self resetContentOffset];
+        [self resetContentOffset:NO];
         self.userInteractionEnabled = YES;
         return;
     }
@@ -117,8 +134,8 @@
     }
     
     //calcualte distance we need to animate
-    CGPoint distance = CGPointMake(fabs(self.contentOffset.x - targetContentOffset.x),
-                                   self.contentOffset.y - targetContentOffset.y);
+    CGPoint distance = CGPointMake(fabs(self.contentOffset.x - [self defaultContentOffset].x),
+                                   self.contentOffset.y - [self defaultContentOffset].y);
     //get total animation time using the points/ms we got from
     //scrollViewWillEndDragging with velocity (converted to seconds)
     CGFloat animationTime = ((distance.x == 0) ? distance.y : distance.x /
@@ -132,7 +149,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-                         self.contentOffset = targetContentOffset;
+                         self.contentOffset = [self defaultContentOffset];
                      }completion:^(BOOL finished){
                          self.userInteractionEnabled = YES;
                      }];

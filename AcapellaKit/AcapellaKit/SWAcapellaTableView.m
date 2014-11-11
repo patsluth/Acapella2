@@ -88,20 +88,25 @@
 {
     //reset
     self.currentVelocity = CGPointZero;
+    self.userInteractionEnabled = YES;
     
-    self.isPerformingWrapAroundAnimation = YES;
+    self.isPerformingWrapAroundAnimation = (animated && YES);
     
     if (self.numberOfSections == 1 && [self numberOfRowsInSection:0] > 3){
         
-        [UIView animateWithDuration:animated ? 1.0 : 0.0
-                              delay:0.0
-                            options:UIViewAnimationOptionBeginFromCurrentState
-                         animations:^{
-                             self.contentOffset = [self defaultContentOffset];
-                         }completion:^(BOOL finished){
-                             self.isPerformingWrapAroundAnimation = NO;
-                             self.userInteractionEnabled = YES;
-                         }];
+//        [UIView animateWithDuration:animated ? 0.5 : 0.0
+//                              delay:0.0
+//                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
+//                         animations:^{
+//                             self.contentOffset = [self defaultContentOffset];
+//                         }completion:^(BOOL finished){
+//                             self.isPerformingWrapAroundAnimation = NO;
+//                         }];
+        
+        //the above way makes the cells have a wierd animation
+        [self scrollToRowAtIndexPath:[self defaultIndexPath]
+                    atScrollPosition:UITableViewScrollPositionMiddle
+                            animated:animated];
         
     }
 }

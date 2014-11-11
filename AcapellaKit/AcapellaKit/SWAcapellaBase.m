@@ -161,33 +161,6 @@
     return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        if (indexPath.section == 0){
-            if (indexPath.row == 2){
-                self.scrollview = [[SWAcapellaScrollView alloc] init];
-                self.scrollview.delegate = self;
-                self.scrollview.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
-                
-                [cell.contentView addSubview:self.scrollview];
-            }
-        }
-    }
-    
-    return cell;
-}
-
 - (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0){
@@ -218,6 +191,51 @@
     }
     
     return @"default";
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        if (indexPath.section == 0){
+            if (indexPath.row == 2){
+                self.scrollview = [[SWAcapellaScrollView alloc] init];
+                self.scrollview.delegate = self;
+                self.scrollview.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
+                
+                [cell.contentView addSubview:self.scrollview];
+            }
+        }
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegateAcapella){
+        if ([self.delegateAcapella respondsToSelector:@selector(swAcapalle:willDisplayCell:atIndexPath:)]){
+            [self.delegateAcapella swAcapalle:self willDisplayCell:cell atIndexPath:indexPath];
+        }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegateAcapella){
+        if ([self.delegateAcapella respondsToSelector:@selector(swAcapalle:didEndDisplayingCell:atIndexPath:)]){
+            [self.delegateAcapella swAcapalle:self didEndDisplayingCell:cell atIndexPath:indexPath];
+        }
+    }
 }
 
 #pragma mark UIScrollView
@@ -368,8 +386,6 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    scrollView.userInteractionEnabled = NO;
-    
     if (self.scrollview == scrollView){
         
         SWPage page = [self.scrollview page];
@@ -377,6 +393,8 @@
         BOOL shouldAnimate = (page.x != [self.scrollview pageInCentre].x); //centered already
         
         if (shouldAnimate){
+            
+            scrollView.userInteractionEnabled = NO;
             
             SW_SCROLL_DIRECTION direction = SW_SCROLL_DIR_NONE;
             
@@ -395,11 +413,12 @@
         } else {
             
             [self.scrollview resetContentOffset:NO];
-            self.scrollview.userInteractionEnabled = YES;
             
         }
         
     } else if (self.tableview == scrollView){
+        
+        scrollView.userInteractionEnabled = NO;
         
         CGFloat contentOffsetCenterY;
         
@@ -413,49 +432,6 @@
                                                                                           contentOffsetCenterY)];
         
         if (centredIndexPath.section == 0){
-            
-            
-            
-            
-            
-//            switch (centredIndexPath.row) {
-//                case 0:
-//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-//                                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//                    break;
-//                    
-//                case 1:
-//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]
-//                                          atScrollPosition:UITableViewScrollPositionTop animated:YES];
-//                    break;
-//                    
-//                case 2:
-//                {
-//                   [self.tableview resetContentOffset:YES];
-//                }
-//                    break;
-//                    
-//                case 3:
-//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]
-//                                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//                    break;
-//                    
-//                case 4:
-//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]
-//                                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//                    
-//                    [self.tableview startWrapAroundFallback];
-//                    break;
-//                    
-//                default:
-//                    self.userInteractionEnabled = YES;
-//                    break;
-//            }
-            
-            
-            
-            
-            
             
             if (centredIndexPath.row == 0 || centredIndexPath.row == [self.tableview numberOfRowsInSection:0] - 1){
                 
@@ -475,7 +451,6 @@
         } else {
             
             [self.tableview resetContentOffset:NO];
-            self.tableview.userInteractionEnabled = YES;
             
         }
     }
@@ -483,7 +458,9 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    scrollView.userInteractionEnabled = YES;
+    if (self.tableview == scrollView){
+        self.tableview.isPerformingWrapAroundAnimation = NO;
+    }
 }
 
 #pragma mark Gesture Recognizers

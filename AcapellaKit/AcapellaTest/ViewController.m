@@ -175,4 +175,9 @@
     //NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
 }
 
+- (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"WILL DISPLAY CELL AT ROW %ld", (long)indexPath.row);
+}
+
 @end

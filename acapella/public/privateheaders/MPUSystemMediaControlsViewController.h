@@ -8,18 +8,15 @@
 @class MPUTransportControlsView;
 @class MPUMediaControlsVolumeView;
 
-//#import "_MPUSystemMediaControlsView.h"
-//#import "MPUSystemMediaControlsView.h"
-//#import "MPUChronologicalProgressView.h"
-//#import "MPUMediaControlsTitlesView.h"
-//#import "MPUTransportControlsView.h"
-//#import "MPUMediaControlsVolumeView.h"
+@class MPUNowPlayingController;
 
 @interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate>
 {
     id _mediaControlsView;
     //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
     //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8
+    
+    MPUNowPlayingController *_nowPlayingController;
 }
 
 //new. convenience for different ios versions

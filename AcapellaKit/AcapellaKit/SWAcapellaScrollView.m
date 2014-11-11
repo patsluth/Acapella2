@@ -49,13 +49,13 @@
         self.backgroundColor = [UIColor clearColor];
         
 #ifdef DEBUG
-        //self.backgroundColor = [UIColor magentaColor];
-        self.showsHorizontalScrollIndicator = YES;
-        self.showsVerticalScrollIndicator = YES;
-        
-        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-        self.testView.backgroundColor = [UIColor blackColor];
-        self.testView.alpha = 0.2;
+//        //self.backgroundColor = [UIColor magentaColor];
+//        self.showsHorizontalScrollIndicator = YES;
+//        self.showsVerticalScrollIndicator = YES;
+//        
+//        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+//        self.testView.backgroundColor = [UIColor blackColor];
+//        self.testView.alpha = 0.2;
         [self addSubview:self.testView];
 #endif
         
@@ -74,6 +74,17 @@
     [self resetContentOffset:NO];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+#ifdef DEBUG
+    if (self.testView){
+        self.testView.center = CGPointMake(self.contentSize.width / 2, self.contentSize.height / 2);
+    }
+#endif
+}
+
 #pragma mark SWAcapellaScrollViewProtocol
 
 - (CGPoint)defaultContentOffset
@@ -87,15 +98,15 @@
     self.currentVelocity = CGPointZero;
     
     self.isPerformingWrapAroundAnimation = YES;
+    self.userInteractionEnabled = YES;
     
-    [UIView animateWithDuration:animated ? 1.0 : 0.0
+    [UIView animateWithDuration:animated ? 0.5 : 0.0
                           delay:0.0
-                        options:UIViewAnimationOptionBeginFromCurrentState
+                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          self.contentOffset = [self defaultContentOffset];
                      }completion:^(BOOL finished){
                          self.isPerformingWrapAroundAnimation = NO;
-                         self.userInteractionEnabled = YES;
                      }];
 }
 

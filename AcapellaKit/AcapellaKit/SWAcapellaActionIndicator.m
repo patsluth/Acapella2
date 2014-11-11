@@ -7,7 +7,7 @@
 //
 
 #import "SWAcapellaActionIndicator.h"
-#import <libsw/sluthwareios/sluthwareios.h>
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @interface SWAcapellaActionIndicator()
 {

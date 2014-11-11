@@ -7,7 +7,7 @@
 //
 
 #import "test.h"
-#import "sluthwareios.h"
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @implementation test
 

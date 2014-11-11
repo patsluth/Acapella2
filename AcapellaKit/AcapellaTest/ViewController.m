@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "sluthwareios.h"
+#import "libsw/sluthwareios/sluthwareios.h"
 #import "test.h"
 
 @interface ViewController ()
@@ -31,7 +31,7 @@
     self.acapella.delegateAcapella = self;
     [self.contentView addSubview:self.acapella];
     
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
     
     test *tester = [[test alloc] initWithFrame:CGRectMake(50, 50, 50, 50)];
     [self.view addSubview:tester];
@@ -40,20 +40,23 @@
 
 - (void)resizeA
 {
-    self.contentView.frame = CGRectMake(40, 200, self.view.frame.size.width - 80, 300);
-    //[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
+    self.contentView.frame = CGRectMake(40, 100, self.view.frame.size.width - 80, 500);
 }
 
 - (void)resizeB
 {
-    self.contentView.frame = CGRectMake(0, 100, self.view.frame.size.width, 100);
+    self.contentView.frame = CGRectMake(0, 100, self.view.frame.size.width, 200);
+    [NSTimer scheduledTimerWithTimeInterval:2.0
+                                      block:^{
+                                          //self.acapella.acapellaTopAccessoryHeight = 200;
+    }repeats:NO];
 }
 
 #pragma mark SWAcapellaDelegate
 
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage
 {
-    NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
+    //NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
 }
 
 - (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
@@ -62,25 +65,31 @@
     
     if (direction != SW_SCROLL_DIR_NONE){
         
-//        if (direction == SW_SCROLL_DIR_UP){
-//            
-            //[view stopWrapAroundFallback];
-//            
-//            [[[SWUIAlertView alloc] initWithTitle:@"a"
-//                                         message:@"B"
-//                              clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-//                                  
-//                              }
-//                                 didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-//                                     [view finishWrapAroundAnimation];
-//                                 }
-//                               cancelButtonTitle:@"P"
-//                                otherButtonTitles:nil] show];
-//        } else {
-        
-            [view finishWrapAroundAnimation];
+        if (direction == SW_SCROLL_DIR_UP){
             
-        //}
+            [view stopWrapAroundFallback];
+            
+            [[[SWUIAlertView alloc] initWithTitle:@"a"
+                                         message:@"B"
+                              clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
+                                  
+                              }
+                                 didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
+                                     [view finishWrapAroundAnimation];
+                                 }
+                               cancelButtonTitle:@"P"
+                                otherButtonTitles:nil] show];
+        } else if (direction == SW_SCROLL_DIR_LEFT) {
+            
+            NSLog(@"%@", view.isPerformingWrapAroundAnimation ? @"YES" : @"NO");
+            [view finishWrapAroundAnimation];
+            NSLog(@"%@", view.isPerformingWrapAroundAnimation ? @"YES" : @"NO");
+            [view finishWrapAroundAnimation];
+            NSLog(@"%@", view.isPerformingWrapAroundAnimation ? @"YES" : @"NO");
+            
+        } else {
+            [view finishWrapAroundAnimation];
+        }
         
         
         

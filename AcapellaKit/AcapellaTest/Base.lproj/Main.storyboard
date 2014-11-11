@@ -26,7 +26,7 @@
                                 <color key="backgroundColor" red="0.094187393499999994" green="0.1942645053" blue="0.66666666669999997" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.67459753789999999" green="0.032286569850000002" blue="0.033319610409999999" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

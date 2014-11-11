@@ -14,6 +14,8 @@
 
 
 
+
+
 %hook MPUNowPlayingTitlesView
 
 //1 - 2 lines
@@ -30,7 +32,7 @@
 - (void)setTitleText:(NSString *)arg1
 {
     %orig(arg1);
-    
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:self];
 }
 

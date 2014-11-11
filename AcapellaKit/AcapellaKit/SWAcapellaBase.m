@@ -30,33 +30,31 @@
     
     if (self){
         
-        self.tableView = [[SWAcapellaTableView alloc] init];
+        self.tableview = [[SWAcapellaTableView alloc] init];
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        [self addSubview:self.tableView];
+        [self addSubview:self.tableview];
         
-        self.tableView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
+        self.tableview.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        self.tableview.delegate = self;
+        self.tableview.dataSource = self;
+        
+        self.backgroundColor = [UIColor clearColor];
         
 #ifdef DEBUG
-        self.backgroundColor = [UIColor redColor];
-        self.tableView.backgroundColor = [UIColor orangeColor];
+        //self.backgroundColor = [UIColor yellowColor];
+       // self.tableview.backgroundColor = [UIColor orangeColor];
 #endif
         
         [self initGestureRecognizers];
         
-        [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(test) userInfo:nil repeats:YES];
+        self.acapellaTopAccessoryHeight = 0.0;
+        self.acapellaBottomAccessoryHeight = 0.0;
     }
     
     return self;
-}
-
-- (void)test
-{
-    
 }
 
 - (void)initGestureRecognizers
@@ -92,6 +90,29 @@
     }
 }
 
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    
+    if (self.tableview){
+        [self.tableview reloadData];
+    }
+}
+
+- (void)setAcapellaTopAccessoryHeight:(CGFloat)acapellaTopAccessoryHeight
+{
+    _acapellaTopAccessoryHeight = acapellaTopAccessoryHeight;
+    
+    [self.tableview reloadData];
+}
+
+- (void)setAcapellaBottomAccessoryHeight:(CGFloat)acapellaBottomAccessoryHeight
+{
+    _acapellaBottomAccessoryHeight = acapellaBottomAccessoryHeight;
+    
+    [self.tableview reloadData];
+}
+
 #pragma mark UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -113,23 +134,23 @@
     if (indexPath.section == 0){
         switch (indexPath.row) {
             case 0:
-                return 200;
+                return self.frame.size.height * 3;
                 break;
                 
             case 1:
-                return 40;
+                return (self.acapellaTopAccessoryHeight <= 0.0) ? self.frame.size.height * 0.4 : self.acapellaTopAccessoryHeight;
                 break;
                 
             case 2:
-                return 100;
+                return self.frame.size.height;
                 break;
                 
             case 3:
-                return 40;
+                return (self.acapellaBottomAccessoryHeight <= 0.0) ? self.frame.size.height * 0.4 : self.acapellaBottomAccessoryHeight;
                 break;
                 
             case 4:
-                return 200;
+                return self.frame.size.height * 3;
                 break;
                 
             default:
@@ -149,8 +170,7 @@
     if (!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.backgroundColor = [UIColor blackColor];
-        cell.alpha = 0.5;
+        cell.backgroundColor = [UIColor clearColor];
         cell.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -239,74 +259,68 @@
 {
     scrollView.currentVelocity = velocity;
     
-    if (self.tableView == scrollView){
+    if (self.tableview == scrollView){
         
-        if (fabs(velocity.y) > 0.3){
-            return;
+        if (velocity.y > 0.2){
+            //return;
         }
         
-        NSInteger directionModifier;
-        
-        if (self.tableView.currentScrollDirection == SW_SCROLL_DIR_DOWN){
-            directionModifier = +1;
-        } else if (self.tableView.currentScrollDirection == SW_SCROLL_DIR_UP){
-            directionModifier = -1;
-        } else {
-            return;
-        }
-        
-        NSIndexPath *targetIndexPath = [self.tableView indexPathForRowAtPoint:*targetContentOffset];
+        NSIndexPath *targetIndexPath = [self.tableview indexPathForRowAtPoint:*targetContentOffset];
         
         if (targetIndexPath.section != 0){
             return;
         }
         
-        NSInteger numberOfRows = [self.tableView numberOfRowsInSection:0];
-        
-        
+        //auto set to the top and bottom of these so we snap nicely
         if (targetIndexPath.row == 0){
-            directionModifier = 1;
-        } else if (targetIndexPath.row == numberOfRows - 1){
-            directionModifier = -1;
+            CGRect edgeOfWorldTopRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            *targetContentOffset = CGPointMake(edgeOfWorldTopRect.origin.x,
+                                               (edgeOfWorldTopRect.origin.y + edgeOfWorldTopRect.size.height) -
+                                               self.tableview.frame.size.height);
+            return;
+        } else if (targetIndexPath.row == 4){
+            *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]].origin;
+            return;
         }
         
         
-        CGFloat contentOffsetCenterY = self.tableView.contentOffset.y + (self.frame.size.height / 2);
-        NSIndexPath *centredIndexPath;
         
-        for (NSUInteger x = 0; x < numberOfRows; x++){
-            CGRect rect = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:x inSection:0]];
-            if (CGRectContainsPoint(rect, CGPointMake(rect.origin.x + (rect.size.width / 2), contentOffsetCenterY))){
-                centredIndexPath = [NSIndexPath indexPathForRow:x inSection:0];
-            }
+        CGFloat contentOffsetCenterY = targetContentOffset->y + (self.frame.size.height / 2);
+        
+        if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
+            contentOffsetCenterY = targetContentOffset->y + self.frame.size.height;
+        } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
+            contentOffsetCenterY = targetContentOffset->y;
         }
         
-        CGRect centredIndexPathFrame = [self.tableView rectForRowAtIndexPath:centredIndexPath];
+        NSIndexPath *centredIndexPath = [self.tableview indexPathForRowAtPoint:CGPointMake(self.tableview.frame.size.width / 2,
+                                                                                            contentOffsetCenterY)];
+        CGRect centredIndexPathFrame = [self.tableview rectForRowAtIndexPath:centredIndexPath];
+        
+        
+        
+        
         
         switch (centredIndexPath.row) {
             case 0:
-                *targetContentOffset = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].origin;
+                *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].origin;
                 break;
                 
             case 1:
-                *targetContentOffset = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]].origin;
+                *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]].origin;
                 break;
                 
             case 2:
             {
                 NSIndexPath *aboveCentredIndexPath = [NSIndexPath indexPathForRow:centredIndexPath.row - 1 inSection:0];
                 NSIndexPath *belowCentredIndexPath = [NSIndexPath indexPathForRow:centredIndexPath.row + 1 inSection:0];
-                CGRect aboveCentredIndexPathFrame = [self.tableView rectForRowAtIndexPath:aboveCentredIndexPath];
-                CGRect belowCentredIndexPathFrame = [self.tableView rectForRowAtIndexPath:belowCentredIndexPath];
-                
-#ifdef DEBUG
-                //NSLog(@"%ld==%ld", (long)aboveCentredIndexPath.row, (long)belowCentredIndexPath.row);
-#endif
+                CGRect aboveCentredIndexPathFrame = [self.tableview rectForRowAtIndexPath:aboveCentredIndexPath];
+                CGRect belowCentredIndexPathFrame = [self.tableview rectForRowAtIndexPath:belowCentredIndexPath];
                 
                 //these two variables are so we can calucalate the percentage of the accessory view on screen
-                CGFloat distToTopAccessory = self.tableView.contentOffset.y -
+                CGFloat distToTopAccessory = targetContentOffset->y -
                 (aboveCentredIndexPathFrame.origin.y + aboveCentredIndexPathFrame.size.height);
-                CGFloat distToBottomAccessory = (self.tableView.contentOffset.y + centredIndexPathFrame.size.height) -
+                CGFloat distToBottomAccessory = (targetContentOffset->y + centredIndexPathFrame.size.height) -
                 (belowCentredIndexPathFrame.origin.y);
                 
                 if (distToTopAccessory < 0.0 && fabs(distToTopAccessory) > aboveCentredIndexPathFrame.size.height * 0.50){ //25%
@@ -322,7 +336,7 @@
                 } else {
                     
                     //stay centered
-                    *targetContentOffset = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].origin;
+                    *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].origin;
                     
                 }
             }
@@ -330,15 +344,15 @@
                 
             case 3:
             {
-                CGRect mainCellFrame = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-                CGRect bottomAccessoryCellFrame = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
+                CGRect mainCellFrame = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+                CGRect bottomAccessoryCellFrame = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
                 *targetContentOffset = CGPointMake(mainCellFrame.origin.x,
                                                    mainCellFrame.origin.y + bottomAccessoryCellFrame.size.height);
             }
                 break;
                 
             case 4:
-                *targetContentOffset = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]].origin;
+                *targetContentOffset = centredIndexPathFrame.origin;
                 break;
                 
             default:
@@ -350,11 +364,6 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-//    if (self.scrollview == scrollView){
-//        
-//    } else if (self.tableView == scrollView){
-//        
-//    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -390,34 +399,91 @@
             
         }
         
-    } else if (self.tableView == scrollView){
+    } else if (self.tableview == scrollView){
         
-        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:self.tableView.contentOffset];
+        CGFloat contentOffsetCenterY;
         
-        if (indexPath.section == 0){
+        if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
+            contentOffsetCenterY = self.tableview.contentOffset.y + self.frame.size.height - 5;
+        } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_DOWN){
+            contentOffsetCenterY = self.tableview.contentOffset.y + 5;
+        }
+        
+        NSIndexPath *centredIndexPath = [self.tableview indexPathForRowAtPoint:CGPointMake(self.tableview.contentOffset.x,
+                                                                                          contentOffsetCenterY)];
+        
+        if (centredIndexPath.section == 0){
             
-            if (indexPath.row == 0 || indexPath.row == [self.tableView numberOfRowsInSection:0] - 1){
+            
+            
+            
+            
+//            switch (centredIndexPath.row) {
+//                case 0:
+//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+//                                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//                    break;
+//                    
+//                case 1:
+//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]
+//                                          atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//                    break;
+//                    
+//                case 2:
+//                {
+//                   [self.tableview resetContentOffset:YES];
+//                }
+//                    break;
+//                    
+//                case 3:
+//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]
+//                                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//                    break;
+//                    
+//                case 4:
+//                    [self.tableview scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]
+//                                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//                    
+//                    [self.tableview startWrapAroundFallback];
+//                    break;
+//                    
+//                default:
+//                    self.userInteractionEnabled = YES;
+//                    break;
+//            }
+            
+            
+            
+            
+            
+            
+            if (centredIndexPath.row == 0 || centredIndexPath.row == [self.tableview numberOfRowsInSection:0] - 1){
                 
-                [self.scrollview startWrapAroundFallback];
+                [self.tableview startWrapAroundFallback];
                 
                 if (self.delegateAcapella){
-                    [self.delegateAcapella swAcapella:self.tableView
-                                              onSwipe:(indexPath.row == 0) ? SW_SCROLL_DIR_UP : SW_SCROLL_DIR_DOWN];
+                    [self.delegateAcapella swAcapella:self.tableview
+                                              onSwipe:(centredIndexPath.row == 0) ? SW_SCROLL_DIR_DOWN : SW_SCROLL_DIR_UP];
                 }
                 
             } else {
                 
-                self.tableView.userInteractionEnabled = YES;
+                self.tableview.userInteractionEnabled = YES;
                 
             }
             
         } else {
             
-            [self.tableView resetContentOffset:NO];
-            self.tableView.userInteractionEnabled = YES;
+            [self.tableview resetContentOffset:NO];
+            self.tableview.userInteractionEnabled = YES;
             
         }
     }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    scrollView.userInteractionEnabled = YES;
 }
 
 #pragma mark Gesture Recognizers

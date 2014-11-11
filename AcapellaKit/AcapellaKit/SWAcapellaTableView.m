@@ -7,7 +7,7 @@
 //
 
 #import "SWAcapellaTableView.h"
-#import <libsw/sluthwareios/sluthwareios.h>
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @interface SWAcapellaTableView()
 {
@@ -23,6 +23,8 @@
 
 @implementation SWAcapellaTableView
 
+@synthesize isPerformingWrapAroundAnimation = _isPerformingWrapAroundAnimation;
+
 #pragma mark Init
 
 - (id)init
@@ -33,12 +35,18 @@
         
         self.decelerationRate = UIScrollViewDecelerationRateFast;
         
+        //self.showsHorizontalScrollIndicator = NO;
+        //self.showsVerticalScrollIndicator = NO;
+        
         self.bounces = NO;
         self.alwaysBounceHorizontal = NO;
         self.alwaysBounceVertical = NO;
         
         self.scrollsToTop = NO;
         
+        self.backgroundColor = [UIColor clearColor];
+        //self.separatorColor = [UIColor clearColor];
+        //self.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     
     return self;
@@ -56,7 +64,20 @@
     [super layoutSubviews];
 }
 
+- (void)reloadData
+{
+    [super reloadData];
+    
+    [self resetContentOffset:NO];
+}
+
 #pragma mark SWAcapellaScrollViewProtocol
+
+- (CGPoint)defaultContentOffset
+{
+    CGRect mainRect = [self rectForRowAtIndexPath:[self defaultIndexPath]];
+    return mainRect.origin;
+}
 
 - (NSIndexPath *)defaultIndexPath;
 {
@@ -65,10 +86,23 @@
 
 - (void)resetContentOffset:(BOOL)animated
 {
+    //reset
+    self.currentVelocity = CGPointZero;
+    
+    self.isPerformingWrapAroundAnimation = YES;
+    
     if (self.numberOfSections == 1 && [self numberOfRowsInSection:0] > 3){
-        [self scrollToRowAtIndexPath:[self defaultIndexPath] //row for our main acapella view
-                    atScrollPosition:UITableViewScrollPositionMiddle
-                            animated:animated];
+        
+        [UIView animateWithDuration:animated ? 1.0 : 0.0
+                              delay:0.0
+                            options:UIViewAnimationOptionBeginFromCurrentState
+                         animations:^{
+                             self.contentOffset = [self defaultContentOffset];
+                         }completion:^(BOOL finished){
+                             self.isPerformingWrapAroundAnimation = NO;
+                             self.userInteractionEnabled = YES;
+                         }];
+        
     }
 }
 
@@ -93,61 +127,13 @@
 
 - (void)finishWrapAroundAnimation
 {
+    if (self.isPerformingWrapAroundAnimation){
+        return;
+    }
+    
     [self stopWrapAroundFallback];
     
-    NSIndexPath *currentIndexPath = [self indexPathForRowAtPoint:self.contentOffset];
-    
-    
-    //set up so we wrap around
-    if (currentIndexPath.section == 0 && currentIndexPath.row <= 0){
-        
-        //bottom
-        [self scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self numberOfRowsInSection:0] -1
-                                                        inSection:0]
-                    atScrollPosition:UITableViewScrollPositionBottom
-                            animated:NO];
-        
-    } else if (currentIndexPath.section == 0 && currentIndexPath.row == [self numberOfRowsInSection:0] - 1){
-        
-        //top
-        [self scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-                    atScrollPosition:UITableViewScrollPositionTop
-                            animated:NO];
-        
-    } else {
-        
-        [self resetContentOffset:NO];
-        self.userInteractionEnabled = YES;
-        return;
-        
-    }
-    
-    if (self.currentVelocity.x == 0.0 && self.currentVelocity.y == 0.0){
-        self.currentVelocity = CGPointMake(self.decelerationRate, self.decelerationRate);
-    }
-    
-    CGRect mainAcapellaRect = [self rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-    
-    //calcualte distance we need to animate
-    CGPoint distance = CGPointMake(fabs(self.contentOffset.x - mainAcapellaRect.origin.x),
-                                   self.contentOffset.y - mainAcapellaRect.origin.y);
-    //get total animation time using the points/ms we got from
-    //scrollViewWillEndDragging with velocity (converted to seconds)
-    CGFloat animationTime = ((distance.x == 0) ? distance.y : distance.x /
-                             fabs((self.currentVelocity.x == 0) ?
-                                  self.currentVelocity.y : self.currentVelocity.x)) / 1000;
-    
-    //reset
-    self.currentVelocity = CGPointZero;
-    
-    [UIView animateWithDuration:animationTime
-                          delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         [self resetContentOffset:YES];
-                     }completion:^(BOOL finished){
-                         self.userInteractionEnabled = YES;
-                     }];
+    [self resetContentOffset:YES];
 }
 
 @end

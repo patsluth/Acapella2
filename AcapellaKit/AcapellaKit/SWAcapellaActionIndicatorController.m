@@ -7,7 +7,7 @@
 //
 
 #import "SWAcapellaActionIndicatorController.h"
-#import <libsw/sluthwareios/sluthwareios.h>
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @interface SWAcapellaActionIndicatorController()
 {
@@ -31,7 +31,7 @@
         self.clipsToBounds = YES;
         
 #ifdef DEBUG
-        self.backgroundColor = [UIColor cyanColor];
+        //self.backgroundColor = [UIColor cyanColor];
 #endif
     }
     

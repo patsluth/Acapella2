@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 #import "SWAcapellaScrollViewProtocol.h"
-#import <libsw/sluthwareios/sluthwareios.h>
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @class SWAcapellaBase;
 @class SWAcapellaTableView;
@@ -33,12 +33,11 @@
 
 @property (weak, nonatomic) id <SWAcapellaDelegate> delegateAcapella;
 
-@property (strong, nonatomic) SWAcapellaTableView *tableView;
+@property (strong, nonatomic) SWAcapellaTableView *tableview;
 @property (strong, nonatomic) SWAcapellaScrollView *scrollview;
-//@property (readonly, strong, nonatomic) SWAcapellaActionIndicatorController *actionIndicatorController;
 
-
-
+@property (readwrite, nonatomic) CGFloat acapellaTopAccessoryHeight;
+@property (readwrite, nonatomic) CGFloat acapellaBottomAccessoryHeight;
 
 @end
 

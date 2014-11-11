@@ -7,7 +7,7 @@
 //
 
 #import "SWAcapellaScrollView.h"
-#import <libsw/sluthwareios/sluthwareios.h>
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @interface SWAcapellaScrollView()
 {
@@ -27,6 +27,8 @@
 
 @implementation SWAcapellaScrollView
 
+@synthesize isPerformingWrapAroundAnimation = _isPerformingWrapAroundAnimation;
+
 #pragma mark Init
 
 - (id)init
@@ -44,13 +46,16 @@
         self.directionalLockEnabled = YES;
         self.scrollsToTop = NO;
         
+        self.backgroundColor = [UIColor clearColor];
+        
 #ifdef DEBUG
-        self.backgroundColor = [UIColor magentaColor];
+        //self.backgroundColor = [UIColor magentaColor];
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;
         
         self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
         self.testView.backgroundColor = [UIColor blackColor];
+        self.testView.alpha = 0.2;
         [self addSubview:self.testView];
 #endif
         
@@ -69,15 +74,6 @@
     [self resetContentOffset:NO];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-#ifdef DEBUG
-    [self.testView setCenter:CGPointMake(self.contentSize.width / 2, self.contentSize.height / 2)];
-#endif
-}
-
 #pragma mark SWAcapellaScrollViewProtocol
 
 - (CGPoint)defaultContentOffset
@@ -87,10 +83,20 @@
 
 - (void)resetContentOffset:(BOOL)animated
 {
+    //reset
+    self.currentVelocity = CGPointZero;
+    
+    self.isPerformingWrapAroundAnimation = YES;
+    
     [UIView animateWithDuration:animated ? 1.0 : 0.0
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-        self.contentOffset = [self defaultContentOffset];
-    }];
+                         self.contentOffset = [self defaultContentOffset];
+                     }completion:^(BOOL finished){
+                         self.isPerformingWrapAroundAnimation = NO;
+                         self.userInteractionEnabled = YES;
+                     }];
 }
 
 - (void)startWrapAroundFallback
@@ -114,6 +120,10 @@
 
 - (void)finishWrapAroundAnimation
 {
+    if (self.isPerformingWrapAroundAnimation){
+        return;
+    }
+    
     [self stopWrapAroundFallback];
     
     SWPage page = [self page];
@@ -125,34 +135,11 @@
         self.contentOffset = CGPointMake(0, 0);
     } else {
         [self resetContentOffset:NO];
-        self.userInteractionEnabled = YES;
         return;
     }
     
-    if (self.currentVelocity.x == 0.0 && self.currentVelocity.y == 0.0){
-        self.currentVelocity = CGPointMake(self.decelerationRate, self.decelerationRate);
-    }
     
-    //calcualte distance we need to animate
-    CGPoint distance = CGPointMake(fabs(self.contentOffset.x - [self defaultContentOffset].x),
-                                   self.contentOffset.y - [self defaultContentOffset].y);
-    //get total animation time using the points/ms we got from
-    //scrollViewWillEndDragging with velocity (converted to seconds)
-    CGFloat animationTime = ((distance.x == 0) ? distance.y : distance.x /
-                             fabs((self.currentVelocity.x == 0) ?
-                                  self.currentVelocity.y : self.currentVelocity.x)) / 1000;
-    
-    //reset
-    self.currentVelocity = CGPointZero;
-    
-    [UIView animateWithDuration:animationTime
-                          delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         self.contentOffset = [self defaultContentOffset];
-                     }completion:^(BOOL finished){
-                         self.userInteractionEnabled = YES;
-                     }];
+    [self resetContentOffset:YES];
 }
 
 @end

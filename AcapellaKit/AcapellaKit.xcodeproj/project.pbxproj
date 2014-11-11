@@ -26,6 +26,7 @@
 		2E75967A19FDE0DB00001BC7 /* SWAcapellaActionIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */; };
 		2E82A1C71A00456B00F04CDB /* SWAcapellaActionIndicatorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E82A1C81A00456B00F04CDB /* SWAcapellaActionIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */; };
+		2ECEF5CA1A111E5300CFDE39 /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
 		2ED282FC1A10671C00772295 /* SWAcapellaScrollViewProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2EDAE4E71A069CC3006274BA /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDAE4E61A069CC3006274BA /* test.m */; };
 /* End PBXBuildFile section */
@@ -97,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2ECEF5CA1A111E5300CFDE39 /* libsluthwareios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +397,7 @@
 				SDKROOT = iphoneos;
 				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -446,6 +449,7 @@
 				SDKROOT = iphoneos;
 				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -530,7 +534,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = /opt/theos/include/libsw/sluthwareios;
+				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 			};
 			name = Debug;
 		};
@@ -555,7 +559,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = /opt/theos/include/libsw/sluthwareios;
+				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 			};
 			name = Release;
 		};

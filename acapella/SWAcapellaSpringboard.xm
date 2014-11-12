@@ -103,6 +103,14 @@ objc_setAssociatedObject(self, &_acapella, acapella, OBJC_ASSOCIATION_RETAIN_NON
 
 #pragma mark Init
 
+- (void)viewDidLoad
+{
+[[NSNotificationCenter defaultCenter] addObserver:self
+selector:@selector(onTitleTextDidChangeNotification:)
+name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText"
+object:nil];
+}
+
 - (void)viewDidLayoutSubviews
 {
 %orig();
@@ -133,6 +141,11 @@ self.acapella.delegateAcapella = self;
 self.acapella.frame = mediaControlsView.frame;
 [mediaControlsView.superview addSubview:self.acapella];
 
+if (self.acapella){
+[self.acapella.tableview resetContentOffset:NO];
+[self.acapella.scrollview resetContentOffset:NO];
+}
+
 [self trackInformationView].userInteractionEnabled = NO;
 }
 }
@@ -142,11 +155,6 @@ self.acapella.frame = mediaControlsView.frame;
 %orig(arg1);
 
 [self viewDidLayoutSubviews];
-
-[[NSNotificationCenter defaultCenter] addObserver:self
-selector:@selector(onTitleTextDidChangeNotification:)
-name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText"
-object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -165,7 +173,7 @@ object:nil];
 {
 %orig(arg1);
 
-[[NSNotificationCenter defaultCenter] removeObserver:self name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:nil];
+//[[NSNotificationCenter defaultCenter] removeObserver:self name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:nil];
 }
 
 #pragma mark Notification
@@ -340,8 +348,6 @@ long skipDirection = (direction == SW_SCROLL_DIR_LEFT) ? -1 : 1;
 //NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
 
 void (^_openNowPlayingApp)() = ^(){
-
-return;
 
 MPUNowPlayingController *nowPlayingController = MSHookIvar<MPUNowPlayingController *>(self, "_nowPlayingController");
 

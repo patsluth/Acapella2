@@ -141,6 +141,22 @@
     [self resetContentOffset:YES];
 }
 
+#pragma mark Helper
+
+- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled
+{
+    [super setUserInteractionEnabled:userInteractionEnabled];
+    
+    if (self.delegate){
+        
+        SEL selector = NSSelectorFromString(@"scrollViewUserInteractionEnabledDidChange:");
+        
+        if ([self.delegate respondsToSelector:selector]){
+            SWSuppressPerformSelectorLeakWarning([self.delegate performSelector:selector withObject:self]);
+        }
+    }
+}
+
 @end
 
 

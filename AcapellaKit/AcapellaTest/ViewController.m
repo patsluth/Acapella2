@@ -26,11 +26,10 @@
     self.contentView = [[UIView alloc] init];
     self.contentView.frame = CGRectMake(0, 100, 0, 0);
     [self.view addSubview:self.contentView];
-    
+    SW_STRING_FROM_BOOL(YES);
     self.acapella = [[SWAcapellaBase alloc] init];
     self.acapella.delegateAcapella = self;
     [self.contentView addSubview:self.acapella];
-    
     [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
     
     test *tester = [[test alloc] initWithFrame:CGRectMake(50, 50, 50, 50)];
@@ -81,21 +80,11 @@
                                 otherButtonTitles:nil] show];
         } else if (direction == SW_SCROLL_DIR_LEFT) {
             
-            NSLog(@"%@", view.isPerformingWrapAroundAnimation ? @"YES" : @"NO");
             [view finishWrapAroundAnimation];
-            NSLog(@"%@", view.isPerformingWrapAroundAnimation ? @"YES" : @"NO");
-            [view finishWrapAroundAnimation];
-            NSLog(@"%@", view.isPerformingWrapAroundAnimation ? @"YES" : @"NO");
             
         } else {
             [view finishWrapAroundAnimation];
         }
-        
-        
-        
-        
-        
-        
         
         if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
             
@@ -177,7 +166,7 @@
 
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"WILL DISPLAY CELL AT ROW %ld", (long)indexPath.row);
+    //NSLog(@"Acapella Will Display Cell %@ At Row %@", cell, indexPath.row);
 }
 
 @end

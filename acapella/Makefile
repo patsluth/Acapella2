@@ -16,12 +16,16 @@ TARGET = iphone:clang:latest:7.0
 TWEAK_NAME = Acapella
 Acapella_CFLAGS = -fobjc-arc
 Acapella_LDFLAGS = -ObjC
-Acapella_FILES = SWAcapellaShared.xm SWAcapellaSpringboard.xm
+Acapella_FILES = SWAcapellaMusicApp.xm SWAcapellaPrefs.xm SWAcapellaSpringboard.xm SWAcapellaSystemTitlesView.xm
 Acapella_FRAMEWORKS = Foundation CoreGraphics UIKit MediaPlayer MessageUI
 Acapella_LIBRARIES = sw packageinfo
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders
+ADDITIONAL_CFLAGS += -Ipublic/privateheaders/MusicApp
+ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Shared
+ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Springboard
+ADDITIONAL_CFLAGS += -Ipublic/privateheaders/SpringboardMusic
 
 include theos/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk

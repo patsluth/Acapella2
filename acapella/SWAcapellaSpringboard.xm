@@ -4,9 +4,9 @@
 #import <libsw/sluthwareios/sluthwareios.h>
 #import <libsw/SWAppLauncher.h>
 
+#import "MPUSystemMediaControlsViewController.h"
 #import "_MPUSystemMediaControlsView.h" //iOS 7
 #import "MPUSystemMediaControlsView.h" //iOS 8
-#import "MPUSystemMediaControlsViewController.h"
 #import "MPUNowPlayingController.h"
 #import "SBCCMediaControlsSectionController.h"
 #import "SBMediaController.h"
@@ -16,6 +16,7 @@
 
 #import "substrate.h"
 #import <objc/runtime.h>
+
 
 
 
@@ -105,6 +106,8 @@ objc_setAssociatedObject(self, &_acapella, acapella, OBJC_ASSOCIATION_RETAIN_NON
 
 - (void)viewDidLoad
 {
+%orig();
+
 [[NSNotificationCenter defaultCenter] addObserver:self
 selector:@selector(onTitleTextDidChangeNotification:)
 name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText"
@@ -204,80 +207,7 @@ AVSystemController *avsc = [%c(AVSystemController) sharedAVSystemController];
 if (avsc){ //0.0625 = 1 / 16 (number of squares in iOS HUD)
 [[UIApplication sharedApplication] setSystemVolumeHUDEnabled:NO forAudioCategory:AUDIO_VIDEO_CATEGORY];
 [avsc changeVolumeBy:0.0625 * direction forCategory:AUDIO_VIDEO_CATEGORY];
-
-//show the action view
-MPUSystemMediaControlsView *mediaControlsView = MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
-
-if (mediaControlsView){
-
-SWAcapellaBase *acapella = [self acapella];
-
-if (acapella){
-
-//                    [self.acapella.actionIndicatorController addSubview:mediaControlsView.volumeView];
-//                    [mediaControlsView.volumeView setCenterY:self.acapella.actionIndicatorController.frame.size.height / 2];
-//                    return;
-
-/*
-SWAcapellaActionIndicator *volumeActionIndicator = [self.acapella.actionIndicatorController actionIndicatorWithIdentifierIfExists:@"_volumeView"];
-
-if (!volumeActionIndicator){
-volumeActionIndicator = [[%c(SWAcapellaActionIndicator) alloc] initWithFrame:CGRectMake(0,
-0,
-self.acapella.actionIndicatorController.frame.size.width,
-self.acapella.actionIndicatorController.frame.size.height)
-andActionIndicatorIdentifier:@"_volumeView"];
-volumeActionIndicator.actionIndicatorAnimationOutTime = 2.0;
-volumeActionIndicator.actionIndicatorAnimationInTime = 2.0;
-volumeActionIndicator.actionIndicatorDisplayTime = 3.0;
-[volumeActionIndicator addSubview:mediaControlsView.volumeView];
 }
-
-
-
-[self.acapella.actionIndicatorController addActionIndicatorToQueue:volumeActionIndicator];
-[mediaControlsView.volumeView setCenterY:volumeActionIndicator.frame.size.height / 2];
-
-__block MPUMediaControlsVolumeView *volumeBlock = mediaControlsView.volumeView;
-__block SWAcapellaActionIndicator *volumeActionIndicatorBlock = volumeActionIndicator;
-
-//dont hide our volume action indicator while we are dragging it
-//notification that we started dragging
-__block id volumeDragBegin = [[NSNotificationCenter defaultCenter] addObserverForName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderBeganChanging"
-object:nil
-queue:[NSOperationQueue mainQueue]
-usingBlock:^(NSNotification *note){
-
-if (volumeBlock && volumeBlock == note.object){
-//show indefinately. We will handle hiding in the block below
-[volumeActionIndicatorBlock delayBySeconds:INT32_MAX];
-NSLog(@"PAT TEST STOPPPPPP");
-}
-
-if (volumeDragBegin){
-[[NSNotificationCenter defaultCenter] removeObserver:volumeDragBegin];
-}
-}];
-//notification that we ended draggint
-__block id volumeDragEnd = [[NSNotificationCenter defaultCenter] addObserverForName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderStoppedChanging"
-object:nil
-queue:[NSOperationQueue mainQueue]
-usingBlock:^(NSNotification *note){
-
-//once we end dragging, show for its default time
-if (volumeBlock && volumeBlock == note.object){
-[volumeActionIndicatorBlock delayBySeconds:volumeActionIndicatorBlock.actionIndicatorDisplayTime];
-}
-
-if (volumeDragEnd){
-[[NSNotificationCenter defaultCenter] removeObserver:volumeDragEnd];
-}
-}];
-*/
-}
-}
-}
-
 };
 
 
@@ -410,7 +340,7 @@ break;
 
 case 2:
 
-if ([self trackInformationView]){
+if ([self trackInformationView] && view.scrollview){
 [view.scrollview addSubview:[self trackInformationView]];
 }
 
@@ -464,6 +394,7 @@ break;
 
 
 
+
 #pragma mark SBCCMediaControlsSectionController
 
 %hook SBCCMediaControlsSectionController
@@ -492,18 +423,18 @@ return original;
 {
 %orig();
 
-if (self.trackInformationView){
-
-UIScrollView *acapellaScrollview;
-
-if ([self.trackInformationView.superview isKindOfClass:[UIScrollView class]]){
-acapellaScrollview = (UIScrollView *)self.trackInformationView.superview;
-}
-
-if (acapellaScrollview){
-self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.width / 2, acapellaScrollview.contentSize.height / 2);
-}
-}
+//    if (self.trackInformationView){
+//
+//        UIScrollView *acapellaScrollview;
+//
+//        if ([self.trackInformationView.superview isKindOfClass:[UIScrollView class]]){
+//            acapellaScrollview = (UIScrollView *)self.trackInformationView.superview;
+//        }
+//
+//        if (acapellaScrollview){
+//            self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.width / 2, acapellaScrollview.contentSize.height / 2);
+//        }
+//    }
 
 if (self.volumeView){
 
@@ -540,18 +471,18 @@ self.timeInformationView.center = CGPointMake(acapellaCell.frame.size.width / 2,
 {
 %orig();
 
-if (self.trackInformationView){
-
-UIScrollView *acapellaScrollview;
-
-if ([self.trackInformationView.superview isKindOfClass:[UIScrollView class]]){
-acapellaScrollview = (UIScrollView *)self.trackInformationView.superview;
-}
-
-if (acapellaScrollview){
-self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.width / 2, acapellaScrollview.contentSize.height / 2);
-}
-}
+//    if (self.trackInformationView){
+//
+//        UIScrollView *acapellaScrollview;
+//
+//        if ([self.trackInformationView.superview isKindOfClass:[UIScrollView class]]){
+//            acapellaScrollview = (UIScrollView *)self.trackInformationView.superview;
+//        }
+//
+//        if (acapellaScrollview){
+//            self.trackInformationView.center = CGPointMake(acapellaScrollview.contentSize.width / 2, acapellaScrollview.contentSize.height / 2);
+//        }
+//    }
 
 if (self.volumeView){
 
@@ -582,51 +513,6 @@ self.timeInformationView.center = CGPointMake(acapellaCell.frame.size.width / 2,
 
 %end
 
-
-
-
-#pragma mark MPUChronologicalProgressView
-
-%hook MPUChronologicalProgressView
-
-- (void)detailScrubControllerDidEndScrubbing:(id)arg1
-{
-%orig(arg1);
-
-[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUChronologicalProgressView_detailScrubControllerDidEndScrubbing" object:self];
-}
-
-- (void)detailScrubControllerDidBeginScrubbing:(id)arg1
-{
-%orig(arg1);
-
-[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUChronologicalProgressView_detailScrubControllerDidBeginScrubbing" object:self];
-}
-
-%end
-
-
-
-
-#pragma mark MPUMediaControlsVolumeView
-
-%hook MPUMediaControlsVolumeView
-
-- (void)_volumeSliderBeganChanging:(id)arg1
-{
-%orig(arg1);
-
-[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderBeganChanging" object:self];
-}
-
-- (void)_volumeSliderStoppedChanging:(id)arg1
-{
-%orig(arg1);
-
-[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUMediaControlsVolumeView__volumeSliderStoppedChanging" object:self];
-}
-
-%end
 
 
 

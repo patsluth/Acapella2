@@ -1,6 +1,5 @@
 
-#import <AcapellaKit/AcapellaKit.h>
-
+@class SWAcapellaBase;
 @class _MPUSystemMediaControlsView;
 @class MPUSystemMediaControlsView;
 @class MPUChronologicalProgressView;

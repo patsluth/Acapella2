@@ -41,12 +41,9 @@
         self.tableview.delegate = self;
         self.tableview.dataSource = self;
         
-        self.backgroundColor = [UIColor clearColor];
+        [self.tableview reloadData];
         
-#ifdef DEBUG
-        //self.backgroundColor = [UIColor yellowColor];
-       // self.tableview.backgroundColor = [UIColor orangeColor];
-#endif
+        self.backgroundColor = [UIColor clearColor];
         
         [self initGestureRecognizers];
         
@@ -208,7 +205,11 @@
         
         if (indexPath.section == 0){
             if (indexPath.row == 2){
-                self.scrollview = [[SWAcapellaScrollView alloc] init];
+                
+                if (!self.scrollview){
+                    self.scrollview = [[SWAcapellaScrollView alloc] init];
+                }
+                
                 self.scrollview.delegate = self;
                 self.scrollview.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
                 
@@ -239,6 +240,13 @@
 }
 
 #pragma mark UIScrollView
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (self.scrollview == scrollView){
+        self.tableview.scrollEnabled = NO;
+    }
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -460,7 +468,22 @@
 {
     if (self.tableview == scrollView){
         self.tableview.isPerformingWrapAroundAnimation = NO;
+    } else if (self.scrollview == scrollView){
+        self.tableview.scrollEnabled = YES;
     }
+}
+
+- (void)scrollViewUserInteractionEnabledDidChange:(UIScrollView *)scrollView
+{
+//    if (self.tableview == scrollView){
+//        
+//    } else if (self.scrollview == scrollView){
+//        if (scrollView.userInteractionEnabled == NO){
+//            self.tableview.scrollEnabled = NO;
+//        } else {
+//            self.tableview.scrollEnabled = YES;
+//        }
+//    }
 }
 
 #pragma mark Gesture Recognizers

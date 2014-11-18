@@ -49,14 +49,14 @@
         self.backgroundColor = [UIColor clearColor];
         
 #ifdef DEBUG
-//        //self.backgroundColor = [UIColor magentaColor];
+        //self.backgroundColor = [UIColor magentaColor];
 //        self.showsHorizontalScrollIndicator = YES;
 //        self.showsVerticalScrollIndicator = YES;
-//        
+        
 //        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
 //        self.testView.backgroundColor = [UIColor blackColor];
-//        self.testView.alpha = 0.2;
-        [self addSubview:self.testView];
+//        self.testView.alpha = 0.1;
+//        [self addSubview:self.testView];
 #endif
         
         self.previousScrollOffset = CGPointZero;
@@ -102,11 +102,16 @@
     
     [UIView animateWithDuration:animated ? 0.5 : 0.0
                           delay:0.0
-                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
+                        options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          self.contentOffset = [self defaultContentOffset];
                      }completion:^(BOOL finished){
                          self.isPerformingWrapAroundAnimation = NO;
+                         
+                         if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){
+                             [self.delegate scrollViewDidEndScrollingAnimation:self];
+                         }
+                         
                      }];
 }
 
@@ -135,6 +140,8 @@
         return;
     }
     
+    NSLog(@"%@", NSStringFromCGPoint(self.contentOffset));
+    
     [self stopWrapAroundFallback];
     
     SWPage page = [self page];
@@ -151,6 +158,22 @@
     
     
     [self resetContentOffset:YES];
+}
+
+#pragma mark Helper
+
+- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled
+{
+    [super setUserInteractionEnabled:userInteractionEnabled];
+    
+    if (self.delegate){
+        
+        SEL selector = NSSelectorFromString(@"scrollViewUserInteractionEnabledDidChange:");
+        
+        if ([self.delegate respondsToSelector:selector]){
+            SWSuppressPerformSelectorLeakWarning([self.delegate performSelector:selector withObject:self]);
+        }
+    }
 }
 
 @end

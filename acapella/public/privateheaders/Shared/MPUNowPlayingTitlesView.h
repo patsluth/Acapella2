@@ -17,6 +17,7 @@
 
 @property (nonatomic, copy) NSString *titleText;
 @property (nonatomic, copy) NSString *artistText;
+@property (nonatomic, copy) NSString *albumText;
 
 - (void)setTitleText:(NSString *)arg1;
 - (void)setArtistText:(NSString *)arg1;
@@ -28,6 +29,9 @@
 - (BOOL)isExplicit;
 - (void)setExplicit:(BOOL)arg1;
 - (void)setExplicitImage:(UIImage *)arg1;
+
+//new
+- (void)updateDetailText;
 
 @end
 

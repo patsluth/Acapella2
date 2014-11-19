@@ -19,9 +19,9 @@
 @protocol SWAcapellaDelegate <NSObject>
 
 @required
-- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage;
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage;
 - (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction;
-- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage;
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage;
 
 @optional
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;

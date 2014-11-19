@@ -473,44 +473,25 @@
     }
 }
 
-- (void)scrollViewUserInteractionEnabledDidChange:(UIScrollView *)scrollView
-{
-//    if (self.tableview == scrollView){
-//        
-//    } else if (self.scrollview == scrollView){
-//        if (scrollView.userInteractionEnabled == NO){
-//            self.tableview.scrollEnabled = NO;
-//        } else {
-//            self.tableview.scrollEnabled = YES;
-//        }
-//    }
-}
-
 #pragma mark Gesture Recognizers
 
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-    if (tap.state == UIGestureRecognizerStateEnded){
-        
-        CGFloat xPercentage = [tap locationInView:self].x / self.frame.size.width;
-        CGFloat yPercentage = [tap locationInView:self].y / self.frame.size.height;
-        
-        if (self.delegateAcapella){
-            [self.delegateAcapella swAcapella:self onTap:CGPointMake(xPercentage, yPercentage)];
-        }
+    CGFloat xPercentage = [tap locationInView:self].x / self.frame.size.width;
+    CGFloat yPercentage = [tap locationInView:self].y / self.frame.size.height;
+    
+    if (self.delegateAcapella){
+        [self.delegateAcapella swAcapella:self onTap:tap percentage:CGPointMake(xPercentage, yPercentage)];
     }
 }
 
-- (void)onPress:(UILongPressGestureRecognizer *)press
+- (void)onPress:(UILongPressGestureRecognizer *)longPress
 {
-    if (press.state == UIGestureRecognizerStateBegan){
-        
-        CGFloat xPercentage = [press locationInView:self].x / self.frame.size.width;
-        CGFloat yPercentage = [press locationInView:self].y / self.frame.size.height;
-        
-        if (self.delegateAcapella){
-            [self.delegateAcapella swAcapella:self onLongPress:CGPointMake(xPercentage, yPercentage)];
-        }
+    CGFloat xPercentage = [longPress locationInView:self].x / self.frame.size.width;
+    CGFloat yPercentage = [longPress locationInView:self].y / self.frame.size.height;
+    
+    if (self.delegateAcapella){
+        [self.delegateAcapella swAcapella:self onLongPress:longPress percentage:CGPointMake(xPercentage, yPercentage)];
     }
 }
 

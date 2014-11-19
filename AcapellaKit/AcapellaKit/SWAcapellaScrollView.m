@@ -102,7 +102,7 @@
     
     [UIView animateWithDuration:animated ? 0.5 : 0.0
                           delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent
                      animations:^{
                          self.contentOffset = [self defaultContentOffset];
                      }completion:^(BOOL finished){
@@ -119,7 +119,7 @@
 {
     [self stopWrapAroundFallback];
     
-    self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:0.8
+    self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                                target:self
                                                              selector:@selector(finishWrapAroundAnimation)
                                                              userInfo:nil
@@ -140,8 +140,6 @@
         return;
     }
     
-    NSLog(@"%@", NSStringFromCGPoint(self.contentOffset));
-    
     [self stopWrapAroundFallback];
     
     SWPage page = [self page];
@@ -158,22 +156,6 @@
     
     
     [self resetContentOffset:YES];
-}
-
-#pragma mark Helper
-
-- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled
-{
-    [super setUserInteractionEnabled:userInteractionEnabled];
-    
-    if (self.delegate){
-        
-        SEL selector = NSSelectorFromString(@"scrollViewUserInteractionEnabledDidChange:");
-        
-        if ([self.delegate respondsToSelector:selector]){
-            SWSuppressPerformSelectorLeakWarning([self.delegate performSelector:selector withObject:self]);
-        }
-    }
 }
 
 @end

@@ -37,9 +37,22 @@ return %orig(1); //force to 2 lines because of our extra room
 {
 %orig(arg1);
 
-[[NSNotificationCenter defaultCenter] postNotificationName:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:self];
-
 [self updateDetailText];
+
+if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
+
+UIScrollView *superScrollView = (UIScrollView *)self.superview;
+
+if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
+
+SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
+
+[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+[acapella.scrollview finishWrapAroundAnimation];
+}];
+
+}
+}
 }
 
 
@@ -64,7 +77,6 @@ return %orig(1); //force to 2 lines because of our extra room
 if (!self.artistText || [self.artistText isEqualToString:@""]){
 if (!self.albumText || [self.albumText isEqualToString:@""]){
 
-
 if (self.titleText && ![self.titleText isEqualToString:@""]){
 
 NSDictionary *appList = [%c(ALApplicationList) sharedApplicationList].applications;
@@ -73,7 +85,7 @@ if (appList){
 for (NSString *appName in appList){
 if ([self.titleText isEqualToString:[appList valueForKey:appName]]){
 [self setArtistText:@"Tap To Play"];
-[self setAlbumText:@""];
+[self setAlbumText:@"Acapella"];
 return;
 }
 }
@@ -81,7 +93,7 @@ return;
 } else {
 
 //special situtation. If we skep a song and the music stops, the app name no longer shows
-[self setTitleText:@"Tap To Play"];
+[self setTitleText:@"Tap To Play - Acapella"];
 
 }
 
@@ -91,8 +103,7 @@ return;
 
 - (void)setFrame:(CGRect)frame
 {
-if ([self.superview isKindOfClass:[UIScrollView class]])
-{
+if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
 
 UIScrollView *superScrollView = (UIScrollView *)self.superview;
 

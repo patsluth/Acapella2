@@ -24,6 +24,7 @@
 - (BOOL)pause;
 - (BOOL)isPaused;
 - (BOOL)play;
+- (BOOL)setPlaybackSpeed:(int)speed;
 - (BOOL)endSeek:(int)arg1;
 - (BOOL)beginSeek:(int)arg1;
 - (BOOL)changeTrack:(int)arg1;

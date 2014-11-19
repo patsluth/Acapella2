@@ -11,20 +11,11 @@
 
 @interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate>
 {
-    id _mediaControlsView;
     //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
     //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8
     
     MPUNowPlayingController *_nowPlayingController;
 }
-
-//new. convenience for different ios versions
-- (_MPUSystemMediaControlsView *)mediaControlsViewIOS7;
-- (MPUSystemMediaControlsView *)mediaControlsViewIOS8;
-- (MPUChronologicalProgressView *)timeInformationView;
-- (MPUMediaControlsTitlesView *)trackInformationView;
-- (MPUTransportControlsView *)transportControlsView;
-- (MPUMediaControlsVolumeView *)volumeView;
 
 @end
 
@@ -36,6 +27,12 @@
 }
 
 @property (strong, nonatomic) SWAcapellaBase *acapella;
+
+- (UIView *)mediaControlsView;
+- (UIView *)timeInformationView;
+- (UIView *)trackInformationView;
+- (UIView *)transportControlsView;
+- (UIView *)volumeView;
 
 @end
 

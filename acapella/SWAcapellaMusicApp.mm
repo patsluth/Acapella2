@@ -4,7 +4,11 @@
 #import <libsw/sluthwareios/sluthwareios.h>
 
 #import "MusicNowPlayingViewController+SW.h"
+#import "MPAVController.h"
 #import "MPUNowPlayingTitlesView.h"
+#import "MPDetailSlider.h"
+#import "MPVolumeSlider.h"
+#import "AVSystemController+SW.h"
 
 #import "substrate.h"
 #import <objc/runtime.h>
@@ -29,33 +33,27 @@ static NSNotification *_titleTextChangeNotification;
 }
 
 %new
+- (MPAVController *)player
+{
+    return MSHookIvar<MPAVController *>([self playbackControlsView], "_player");
+}
+
+%new
 - (UIView *)progressControl
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_progressControl");
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_progressControl");
 }
 
 %new
 - (UIView *)transportControls
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_transportControls");
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_transportControls");
 }
 
 %new
 - (UIView *)volumeSlider
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_volumeSlider");
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_volumeSlider");
 }
 
 %new
@@ -68,6 +66,12 @@ static NSNotification *_titleTextChangeNotification;
 - (UIView *)titlesView
 {
     return MSHookIvar<UIView *>(self, "_titlesView");
+}
+
+%new
+- (UIView *)repeatButton
+{
+    return MSHookIvar<UIView *>([self playbackControlsView], "_repeatButton");
 }
 
 %new
@@ -110,8 +114,6 @@ static NSNotification *_titleTextChangeNotification;
 {
     %orig();
     
-    //return;
-    
     if ([self playbackControlsView]){
         
         if ([self progressControl].superview){
@@ -134,26 +136,24 @@ static NSNotification *_titleTextChangeNotification;
             
             if (!self.acapella){
                 self.acapella = [[%c(SWAcapellaBase) alloc] init];
-                self.acapella.backgroundColor = [UIColor blueColor];
                 self.acapella.delegateAcapella = self;
             }
             
             CGFloat artworkBottomYOrigin = [self artworkView].frame.origin.y + [self artworkView].frame.size.height;
+            //set the bottom acapella origin to the top of the repeat button. Set it to the bottom of the view if repeat button hasnt been set up yet.
+            CGFloat bottomAcapellaYOrigin = (([self repeatButton].frame.origin.y <= 0.0) ?
+                                             [self playbackControlsView].frame.origin.y + [self playbackControlsView].frame.size.height :
+                                             [self repeatButton].frame.origin.y)
+                                                                                                                                            - artworkBottomYOrigin;
             
             self.acapella.frame = CGRectMake([self playbackControlsView].frame.origin.x,
                                              artworkBottomYOrigin,
                                              //the space between the bottom of the artowrk and the bottom of the screen
                                              [self playbackControlsView].frame.size.width,
-                                             ([self playbackControlsView].frame.origin.y + [self playbackControlsView].frame.size.height) - artworkBottomYOrigin);
+                                             bottomAcapellaYOrigin);
             
             [[self playbackControlsView] addSubview:self.acapella];
-            
-            if (self.acapella){
-                [self.acapella.tableview resetContentOffset:NO];
-                [self.acapella.scrollview resetContentOffset:NO];
-            }
         }
-        
     }
 }
 
@@ -162,6 +162,25 @@ static NSNotification *_titleTextChangeNotification;
     %orig(arg1);
     
     [self viewDidLayoutSubviews];
+    
+    if (self.acapella){
+        
+        if (self.acapella.tableview){
+            [self.acapella.tableview resetContentOffset:NO];
+        }
+        if (self.acapella.scrollview){
+            [self.acapella.scrollview resetContentOffset:NO];
+        }
+        
+        if ([self progressControl].frame.size.height != self.acapella.acapellaTopAccessoryHeight){
+            self.acapella.acapellaTopAccessoryHeight = [self progressControl].frame.size.height;
+        }
+        
+        if ([self volumeSlider].frame.size.height != self.acapella.acapellaBottomAccessoryHeight){
+            self.acapella.acapellaBottomAccessoryHeight = [self volumeSlider].frame.size.height;
+        }
+        
+    }
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -179,8 +198,6 @@ static NSNotification *_titleTextChangeNotification;
 - (void)viewDidDisappear:(BOOL)arg1
 {
     %orig(arg1);
-    
-    //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:nil];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(int)arg1 duration:(double)arg2
@@ -197,43 +214,113 @@ static NSNotification *_titleTextChangeNotification;
     [self viewDidLayoutSubviews];
 }
 
-#pragma mark Notification
-
-%new
-- (void)onTitleTextDidChangeNotification:(NSNotification *)notification
-{
-//    if (self.acapella && [self.acapella.scrollview page].x != 1){ //1 is the middle page
-//        if ([self trackInformationView] && [self trackInformationView] == notification.object){
-//            [self.acapella.scrollview finishWrapAroundAnimation];
-//        }
-//    }
-}
-
 #pragma mark SWAcapellaDelegate
 
 %new
-- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-    
+    if (tap.state == UIGestureRecognizerStateEnded){
+        
+        CGFloat percentBoundaries = 0.25;
+        
+        if (percentage.x <= percentBoundaries){ //left
+            [%c(AVSystemController) acapellaChangeVolume:-1];
+        } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
+            
+            if (self.player){
+                [self.player togglePlayback];
+            }
+            
+            [UIView animateWithDuration:0.1
+                             animations:^{
+                                 view.scrollview.transform = CGAffineTransformMakeScale(0.9, 0.9);
+                             } completion:^(BOOL finished){
+                                 [UIView animateWithDuration:0.1
+                                                  animations:^{
+                                                      view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  } completion:^(BOOL finished){
+                                                      view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  }];
+                             }];
+            
+        } else if (percentage.x > (1.0 - percentBoundaries)){ //right
+            [%c(AVSystemController) acapellaChangeVolume:1];
+        }
+        
+    }
 }
 
 %new
 - (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
 {
-    
+   if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
+        
+        if (self.player){
+            
+            [view stopWrapAroundFallback]; //we will finish the animation manually once the songs has changed and the UI has been updated
+            
+            long skipDirection = (direction == SW_SCROLL_DIR_LEFT) ? -1 : 1;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.player changePlaybackIndexBy:(int)skipDirection deltaType:0 ignoreElapsedTime:NO allowSkippingUnskippableContent:YES];
+            }];
+            
+        } else {
+            [view finishWrapAroundAnimation];
+        }
+        
+    } else if (direction == SW_SCROLL_DIR_UP){
+        
+    } else {
+        [view finishWrapAroundAnimation];
+    }
 }
 
 %new
-- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
+    MPAVController *p = [self player];
+    CGFloat percentBoundaries = 0.25;
     
+    if (percentage.x <= percentBoundaries){ //left
+        
+        if (longPress.state == UIGestureRecognizerStateBegan){
+            
+            if (p && [p canSeekBackwards]){
+                [p beginSeek:-1];
+            }
+            
+        } else if (longPress.state == UIGestureRecognizerStateEnded){
+            
+            [p endSeek];
+            
+        }
+        
+    } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
+        
+        if (longPress.state == UIGestureRecognizerStateBegan){
+            //_openNowPlayingApp();
+        }
+        
+    } else if (percentage.x > (1.0 - percentBoundaries)){ //right
+        
+        if (longPress.state == UIGestureRecognizerStateBegan){
+            
+            if (p && [p canSeekForwards]){
+                [p beginSeek:1];
+            }
+            
+        } else if (longPress.state == UIGestureRecognizerStateEnded){
+            
+            [p endSeek];
+            
+        }
+        
+    }
 }
 
 %new
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //NSLog(@"Acapella Will Display Cell At Row %ld", (long)indexPath.row);
-    
     if ([self playbackControlsView]){
         
         if (indexPath.section == 0){
@@ -244,68 +331,34 @@ static NSNotification *_titleTextChangeNotification;
                     
                 case 1:
                     
-//                    if ([self volumeView]){
-//                        [[self volumeView] removeFromSuperview];
-//                    }
-//                    
-//                    if ([self timeInformationView]){
-//                        [cell addSubview:[self timeInformationView]];
-//                    }
+                    if ([self volumeSlider]){
+                        [[self volumeSlider] removeFromSuperview];
+                    }
+                    
+                    if ([self progressControl]){
+                        [cell addSubview:[self progressControl]];
+                        [[self progressControl] setFrame:[self progressControl].frame]; //update our frame because are forcing centre in setRect:
+                    }
                     
                     break;
                     
                 case 2:
                     
-                     NSLog(@"PAT TEST TEST %@--%@", NSStringFromCGRect(view.scrollview.frame), NSStringFromCGSize(view.scrollview.contentSize));
-                    
                     [view.scrollview addSubview:[self titlesView]];
-                    [[self titlesView] setFrame:[self titlesView].frame];
-                   // [self titlesView].center = CGPointMake(view.scrollview.contentSize.width / 2,
-                   //                                        view.scrollview.contentSize.height / 2);
-                    
-                    //[self viewDidLayoutSubviews];
-                    
-                    return;
-                    
-                    if ([self titlesView] && view.scrollview){
-                        
-                        
-                        
-                        if ([self titlesView].superview != view.scrollview){
-                            
-                            [self titlesView].alpha = 0.0;
-                            [view.scrollview addSubview:[self titlesView]];
-                            
-//                            [NSTimer scheduledTimerWithTimeInterval:0.5
-//                                                              block:^{
-                            
-                                                                  [self titlesView].center = CGPointMake(view.scrollview.contentSize.width / 2,
-                                                                                                         view.scrollview.contentSize.height / 2);
-                                                                  
-//                                                                  [UIView animateWithDuration:0.3
-//                                                                                   animations:^{
-//                                                                                       [self titlesView].alpha = 1.0;
-//                                                                                   }completion:^(BOOL finished){
-//                                                                                       [self titlesView].alpha = 1.0;
-//                                                                                       [self titlesView].center = CGPointMake(view.scrollview.contentSize.width / 2,
-//                                                                                                                              view.scrollview.contentSize.height / 2);
-//                                                                                   }];
-//                                                              }repeats:NO];
-                            
-                        }
-                    }
+                    [[self titlesView] setFrame:[self titlesView].frame]; //update our frame because are forcing centre in setRect:
                     
                     break;
                     
                 case 3:
                     
-//                    if ([self timeInformationView]){
-//                        [[self timeInformationView] removeFromSuperview];
-//                    }
-//                    
-//                    if ([self volumeView]){
-//                        [cell addSubview:[self volumeView]];
-//                    }
+                    if ([self progressControl]){
+                        [[self progressControl] removeFromSuperview];
+                    }
+                    
+                    if ([self volumeSlider]){
+                        [cell addSubview:[self volumeSlider]];
+                        [[self volumeSlider] setFrame:[self volumeSlider].frame]; //update our frame because are forcing centre in setRect:
+                    }
                     
                     break;
                     
@@ -318,8 +371,6 @@ static NSNotification *_titleTextChangeNotification;
             }
         }
         
-        //[mediaControlsView layoutSubviews];
-        
     }
 }
 
@@ -328,36 +379,64 @@ static NSNotification *_titleTextChangeNotification;
 {
 }
 
+#pragma mark Other
+
+- (void)_updateForCurrentItemAnimated:(BOOL)arg1
+{
+    %orig(NO); //for some reason if we animate our scroll view while the album art change is animating, it is very jumpy
+}
+
 %end
 
 
 
 
-//%hook MPUNowPlayingTitlesView
-//
-//- (void)setFrame:(CGRect)frame{
-//    if ([self.superview isKindOfClass:[UIScrollView class]]){
-//        
-//        UIScrollView *superScrollView = (UIScrollView *)self.superview;
-//        
-//        if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
-//            
-//            SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
-//            
-//            %orig(CGRectMake((superScrollView.contentSize.width / 2) - (frame.size.width / 2),
-//                             (acapella.frame.size.height / 2) - (frame.size.height / 2),
-//                             frame.size.width,
-//                             frame.size.height));
-//            
-//            return;
-//        }
-//        
-//    }
-//    
-//    %orig(frame);
-//}
-//
-//%end
+
+%hook MPDetailSlider
+
+- (void)setFrame:(CGRect)frame
+{
+    //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
+    if ([self.superview isKindOfClass:[UITableViewCell class]] || [self.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")]){
+        
+        %orig(CGRectMake((self.superview.frame.size.width / 2) - (frame.size.width / 2),
+                         (self.superview.frame.size.height / 2) - (frame.size.height / 2),
+                         frame.size.width,
+                         frame.size.height));
+        
+        return;
+        
+    }
+    
+    %orig(frame);
+}
+
+%end
+
+
+
+
+
+%hook MPVolumeSlider
+
+- (void)setFrame:(CGRect)frame
+{
+    //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
+    if ([self.superview isKindOfClass:[UITableViewCell class]] || [self.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")]){
+        
+        %orig(CGRectMake((self.superview.frame.size.width / 2) - (frame.size.width / 2),
+                         (self.superview.frame.size.height / 2) - (frame.size.height / 2),
+                         frame.size.width,
+                         frame.size.height));
+        
+        return;
+        
+    }
+    
+    %orig(frame);
+}
+
+%end
 
 
 

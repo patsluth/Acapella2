@@ -53,15 +53,15 @@
 
 #pragma mark SWAcapellaDelegate
 
-- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-    //NSLog(@"Acapella On Tap %@", NSStringFromCGPoint(percentage));
+    if (tap.state == UIGestureRecognizerStateEnded){
+        
+    }
 }
 
 - (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
 {
-    //NSLog(@"Acapella On Swipe %u", direction);
-    
     if (direction != SW_SCROLL_DIR_NONE){
         
         if (direction == SW_SCROLL_DIR_UP){
@@ -159,14 +159,18 @@
     }
 }
 
-- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
-    //NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
+    if (longPress.state == UIGestureRecognizerStateBegan){
+        
+    } else if (longPress.state == UIGestureRecognizerStateEnded){
+        
+    }
 }
 
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //NSLog(@"Acapella Will Display Cell %@ At Row %@", cell, indexPath.row);
+    
 }
 
 @end

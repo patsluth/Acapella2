@@ -1,0 +1,10 @@
+
+@interface MPVolumeSlider : UIView
+{
+}
+
+@end
+
+
+
+

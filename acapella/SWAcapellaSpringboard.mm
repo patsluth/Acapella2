@@ -10,8 +10,7 @@
 #import "MPUNowPlayingController.h"
 #import "SBCCMediaControlsSectionController.h"
 #import "SBMediaController.h"
-#import "UIApplication+JB.h"
-#import "AVSystemController.h"
+#import "AVSystemController+SW.h"
 #import "SBApplicationController.h"
 
 #import "substrate.h"
@@ -24,70 +23,39 @@
 #pragma mark MPUSystemMediaControlsViewController
 
 static SWAcapellaBase *_acapella;
-static NSNotification *_titleTextChangeNotification;
 
 %hook MPUSystemMediaControlsViewController
 
 #pragma mark Helper
 
 %new
-- (_MPUSystemMediaControlsView *)mediaControlsViewIOS7
+- (UIView *)mediaControlsView
 {
-    return MSHookIvar<_MPUSystemMediaControlsView *>(self, "_mediaControlsView");;
+    return MSHookIvar<UIView *>(self, "_mediaControlsView");
 }
 
 %new
-- (MPUSystemMediaControlsView *)mediaControlsViewIOS8
+- (UIView *)timeInformationView
 {
-    return MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");;
+    return MSHookIvar<UIView *>([self mediaControlsView], "_timeInformationView");
 }
 
 %new
-- (MPUChronologicalProgressView *)timeInformationView
+- (UIView *)trackInformationView
 {
-    if ([SWDeviceInfo iOSVersion_First] == 7){
-        return [self mediaControlsViewIOS7].timeInformationView;
-    } else if ([SWDeviceInfo iOSVersion_First] == 8){
-        return [self mediaControlsViewIOS8].timeInformationView;
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>([self mediaControlsView], "_trackInformationView");
 }
 
 %new
-- (MPUMediaControlsTitlesView *)trackInformationView
+- (UIView *)transportControlsView
 {
-    if ([SWDeviceInfo iOSVersion_First] == 7){
-        return [self mediaControlsViewIOS7].trackInformationView;
-    } else if ([SWDeviceInfo iOSVersion_First] == 8){
-        return [self mediaControlsViewIOS8].trackInformationView;
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>([self mediaControlsView], "_transportControlsView");
 }
 
 %new
-- (MPUTransportControlsView *)transportControlsView
+- (UIView *)volumeView
 {
-    if ([SWDeviceInfo iOSVersion_First] == 7){
-        return [self mediaControlsViewIOS7].transportControlsView;
-    } else if ([SWDeviceInfo iOSVersion_First] == 8){
-        return [self mediaControlsViewIOS8].transportControlsView;
-    }
-    
-    return nil;
-}
-
-%new
-- (MPUMediaControlsVolumeView *)volumeView
-{
-    if ([SWDeviceInfo iOSVersion_First] == 7){
-        return [self mediaControlsViewIOS7].volumeView;
-    } else if ([SWDeviceInfo iOSVersion_First] == 8){
-        return [self mediaControlsViewIOS8].volumeView;
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>([self mediaControlsView], "_volumeView");
 }
 
 %new
@@ -107,11 +75,6 @@ static NSNotification *_titleTextChangeNotification;
 - (void)viewDidLoad
 {
     %orig();
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onTitleTextDidChangeNotification:)
-                                                 name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText"
-                                               object:nil];
 }
 
 - (void)viewDidLayoutSubviews
@@ -175,91 +138,60 @@ static NSNotification *_titleTextChangeNotification;
 - (void)viewDidDisappear:(BOOL)arg1
 {
     %orig(arg1);
-    
-    //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"SWAcapella_MPUNowPlayingTitlesView_setTitleText" object:nil];
-}
-
-#pragma mark Notification
-
-%new
-- (void)onTitleTextDidChangeNotification:(NSNotification *)notification
-{
-    if (self.acapella && [self.acapella.scrollview page].x != 1){ //1 is the middle page
-        if ([self trackInformationView] && [self trackInformationView] == notification.object){
-            [self.acapella.scrollview finishWrapAroundAnimation];
-        }
-    }
 }
 
 #pragma mark SWAcapellaDelegate
 
 %new
-- (void)swAcapella:(SWAcapellaBase *)view onTap:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-    //NSLog(@"Acapella On Tap %@==%@==%@", NSStringFromCGPoint(percentage), self.acapella, view);
-    
-    SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
-    
-    void (^_changeVolume)(long direction) = ^(long direction){
+    if (tap.state == UIGestureRecognizerStateEnded){
         
-        AVSystemController *avsc = [%c(AVSystemController) sharedAVSystemController];
+        CGFloat percentBoundaries = 0.25;
         
-        if (avsc){ //0.0625 = 1 / 16 (number of squares in iOS HUD)
-            [[UIApplication sharedApplication] setSystemVolumeHUDEnabled:NO forAudioCategory:AUDIO_VIDEO_CATEGORY];
-            [avsc changeVolumeBy:0.0625 * direction forCategory:AUDIO_VIDEO_CATEGORY];
-        }
-    };
-    
-    
-    
-    
-    
-    CGFloat percentBoundaries = 0.25;
-    
-   	if (percentage.x <= percentBoundaries){ //left
-        _changeVolume(-1);
-   	} else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
-        
-        if (sbMediaController){
-            [sbMediaController togglePlayPause];
-        }
-        
-        
-        if (self.acapella){
+        if (percentage.x <= percentBoundaries){ //left
+            [%c(AVSystemController) acapellaChangeVolume:-1];
+        } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
+            
+            SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
+            
+            if (sbMediaController){
+                [sbMediaController togglePlayPause];
+            }
+            
+            
             [UIView animateWithDuration:0.1
                              animations:^{
-                                 self.acapella.scrollview.transform = CGAffineTransformMakeScale(0.9, 0.9);
+                                 view.scrollview.transform = CGAffineTransformMakeScale(0.9, 0.9);
                              } completion:^(BOOL finished){
                                  [UIView animateWithDuration:0.1
                                                   animations:^{
-                                                      self.acapella.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   } completion:^(BOOL finished){
-                                                      self.acapella.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }];
                              }];
+            
+        } else if (percentage.x > (1.0 - percentBoundaries)){ //right
+            [%c(AVSystemController) acapellaChangeVolume:1];
         }
         
-   	} else if (percentage.x > (1.0 - percentBoundaries)){ //right
-   	    _changeVolume(1);
-   	}
+    }
 }
 
 %new
 - (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
 {
-    //NSLog(@"Acapella On Swipe %u", direction);
-    
     SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
     
     if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
         
-        [view stopWrapAroundFallback]; //we will finish the animation manually once the songs has changed and the UI has been updated
-        
         if (sbMediaController && [sbMediaController _nowPlayingInfo]){ //make sure something is playing
+            
+            [view stopWrapAroundFallback]; //we will finish the animation manually once the songs has changed and the UI has been updated
             
             long skipDirection = (direction == SW_SCROLL_DIR_LEFT) ? -1 : 1;
             [sbMediaController changeTrack:(int)skipDirection];
-            //our notification above will handle the wrap around
             
         } else {
             [view finishWrapAroundAnimation];
@@ -273,22 +205,23 @@ static NSNotification *_titleTextChangeNotification;
 }
 
 %new
-- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
-    //NSLog(@"Acapella On Long Press %@", NSStringFromCGPoint(percentage));
-    
     void (^_openNowPlayingApp)() = ^(){
         
         MPUNowPlayingController *nowPlayingController = MSHookIvar<MPUNowPlayingController *>(self, "_nowPlayingController");
         
         if (nowPlayingController){
             
-            //NSLog(@"%@", nowPlayingController.nowPlayingAppDisplayID);
-            
             SBApplicationController *sbAppController = [%c(SBApplicationController) sharedInstanceIfExists];
             
             if (sbAppController){
                 SBApplication *nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:nowPlayingController.nowPlayingAppDisplayID];
+                
+                if (!nowPlayingApp){ //fallback
+                    nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:@"com.apple.Music"];
+                }
+                
                 [%c(SWAppLauncher) launchAppLockscreenFriendly:nowPlayingApp];
             }
             
@@ -298,24 +231,56 @@ static NSNotification *_titleTextChangeNotification;
     
     
     
+    void (^_doSeek)(BOOL on, int speed) = ^(BOOL on, int speed){
+        
+        SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
+        
+        if (sbMediaController){
+            
+            if (on){
+                [sbMediaController beginSeek:speed];
+            } else {
+                [sbMediaController endSeek:speed];
+            }
+            
+        }
+        
+    };
     
-    
+        
+        
+        
+        
     CGFloat percentBoundaries = 0.25;
     
     if (percentage.x <= percentBoundaries){ //left
-        _openNowPlayingApp();
+        
+        if (longPress.state == UIGestureRecognizerStateBegan){
+            _doSeek(YES, -1);
+        } else if (longPress.state == UIGestureRecognizerStateEnded){
+            _doSeek(NO, -1);
+        }
+        
     } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
-        _openNowPlayingApp();
+        
+        if (longPress.state == UIGestureRecognizerStateBegan){
+            _openNowPlayingApp();
+        }
+        
     } else if (percentage.x > (1.0 - percentBoundaries)){ //right
-        _openNowPlayingApp();
+        
+        if (longPress.state == UIGestureRecognizerStateBegan){
+            _doSeek(YES, 1);
+        } else if (longPress.state == UIGestureRecognizerStateEnded){
+            _doSeek(NO, 1);
+        }
+        
     }
 }
 
 %new
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //NSLog(@"Acapella Will Display Cell At Row %ld", (long)indexPath.row);
-    
     UIView *mediaControlsView = MSHookIvar<UIView *>(self, "_mediaControlsView");
     
     if (mediaControlsView){
@@ -375,18 +340,6 @@ static NSNotification *_titleTextChangeNotification;
 %new
 - (void)swAcapalle:(SWAcapellaBase *)view didEndDisplayingCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-//    if (indexPath.section == 0){
-//        
-//        if (indexPath.row == 1){
-//            if ([self timeInformationView] && [self timeInformationView].superview == cell){
-//                [[self timeInformationView] removeFromSuperview];
-//            }
-//        } else if (indexPath.row == 3){
-//            if ([self volumeView] && [self volumeView].superview == cell){
-//                [[self volumeView] removeFromSuperview];
-//            }
-//        }
-//    }
 }
 
 %end
@@ -416,73 +369,48 @@ static NSNotification *_titleTextChangeNotification;
 
 
 
-#pragma mark MPUSystemMediaControlsView_iOS7
-%hook _MPUSystemMediaControlsView
+%hook MPUChronologicalProgressView
 
-- (void)layoutSubviews
+- (void)setFrame:(CGRect)frame
 {
-    %orig();
-    
-    if (self.volumeView){
+    //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
+    if ([self.superview isKindOfClass:[UITableViewCell class]] || [self.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")]){
         
-        UIView *acapellaCell;
+        %orig(CGRectMake((self.superview.frame.size.width / 2) - (frame.size.width / 2),
+                         (self.superview.frame.size.height / 2) - (frame.size.height / 2),
+                         frame.size.width,
+                         frame.size.height));
         
-        if ([self.volumeView.superview isKindOfClass:[UIView class]]){
-            acapellaCell = (UIView *)self.volumeView.superview;
-        }
+        return;
         
-        if (acapellaCell){
-            self.volumeView.center = CGPointMake(acapellaCell.frame.size.width / 2, acapellaCell.frame.size.height / 2);
-        }
     }
     
-    if (self.timeInformationView){
-        
-        UIView *acapellaCell;
-        
-        if ([self.timeInformationView.superview isKindOfClass:[UIView class]]){
-            acapellaCell = (UIView *)self.timeInformationView.superview;
-        }
-        
-        if (acapellaCell){
-            self.timeInformationView.center = CGPointMake(acapellaCell.frame.size.width / 2, acapellaCell.frame.size.height / 2);
-        }
-    }
+    %orig(frame);
 }
 
 %end
-#pragma mark MPUSystemMediaControlsView_iOS8
-%hook MPUSystemMediaControlsView
 
-- (void)layoutSubviews
+
+
+
+
+%hook MPUMediaControlsVolumeView
+
+- (void)setFrame:(CGRect)frame
 {
-    %orig();
-    
-    if (self.volumeView){
+    //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
+    if ([self.superview isKindOfClass:[UITableViewCell class]] || [self.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")]){
         
-        UIView *acapellaCell;
+        %orig(CGRectMake((self.superview.frame.size.width / 2) - (frame.size.width / 2),
+                         (self.superview.frame.size.height / 2) - (frame.size.height / 2),
+                         frame.size.width,
+                         frame.size.height));
         
-        if ([self.volumeView.superview isKindOfClass:[UIView class]]){
-            acapellaCell = (UIView *)self.volumeView.superview;
-        }
+        return;
         
-        if (acapellaCell){
-            self.volumeView.center = CGPointMake(acapellaCell.frame.size.width / 2, acapellaCell.frame.size.height / 2);
-        }
     }
     
-    if (self.timeInformationView){
-        
-        UIView *acapellaCell;
-        
-        if ([self.timeInformationView.superview isKindOfClass:[UIView class]]){
-            acapellaCell = (UIView *)self.timeInformationView.superview;
-        }
-        
-        if (acapellaCell){
-            self.timeInformationView.center = CGPointMake(acapellaCell.frame.size.width / 2, acapellaCell.frame.size.height / 2);
-        }
-    }
+    %orig(frame);
 }
 
 %end

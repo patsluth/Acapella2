@@ -1,0 +1,10 @@
+
+@interface MPDetailSlider : UIView
+{
+}
+
+@end
+
+
+
+

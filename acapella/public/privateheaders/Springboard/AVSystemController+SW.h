@@ -16,3 +16,15 @@
 
 
 
+
+@interface AVSystemController(SW)
+{
+}
+
++ (void)acapellaChangeVolume:(long)direction;
+
+@end
+
+
+
+

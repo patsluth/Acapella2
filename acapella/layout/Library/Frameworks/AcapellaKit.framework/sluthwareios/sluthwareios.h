@@ -13,7 +13,6 @@
 #import "SWDeviceInfo.h"
 #import "SWGradientView.h"
 #import "SWMath.h"
-#import "SWSelector.h"
 #import "SWUIAlertView.h"
 #import "UIScrollView+SW.h"
 #import "UIView+SW.h"

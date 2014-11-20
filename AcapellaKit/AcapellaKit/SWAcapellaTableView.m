@@ -35,8 +35,8 @@
         
         self.decelerationRate = UIScrollViewDecelerationRateFast;
         
-        //self.showsHorizontalScrollIndicator = NO;
-        //self.showsVerticalScrollIndicator = NO;
+        self.showsHorizontalScrollIndicator = NO;
+        self.showsVerticalScrollIndicator = NO;
         
         self.bounces = NO;
         self.alwaysBounceHorizontal = NO;
@@ -45,8 +45,8 @@
         self.scrollsToTop = NO;
         
         self.backgroundColor = [UIColor clearColor];
-        //self.separatorColor = [UIColor clearColor];
-        //self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.separatorColor = [UIColor clearColor];
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     
     return self;
@@ -139,22 +139,6 @@
     [self stopWrapAroundFallback];
     
     [self resetContentOffset:YES];
-}
-
-#pragma mark Helper
-
-- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled
-{
-    [super setUserInteractionEnabled:userInteractionEnabled];
-    
-    if (self.delegate){
-        
-        SEL selector = NSSelectorFromString(@"scrollViewUserInteractionEnabledDidChange:");
-        
-        if ([self.delegate respondsToSelector:selector]){
-            SWSuppressPerformSelectorLeakWarning([self.delegate performSelector:selector withObject:self]);
-        }
-    }
 }
 
 @end

@@ -11,10 +11,11 @@
 #import "SBCCMediaControlsSectionController.h"
 #import "SBMediaController.h"
 #import "AVSystemController+SW.h"
-#import "SBApplicationController.h"
 
 #import "substrate.h"
 #import <objc/runtime.h>
+
+#import <Springboard/Springboard.h>
 
 
 
@@ -107,12 +108,15 @@ static SWAcapellaBase *_acapella;
         self.acapella.frame = mediaControlsView.frame;
         [mediaControlsView.superview addSubview:self.acapella];
         
-        if (self.acapella){
-            [self.acapella.tableview resetContentOffset:NO];
-            [self.acapella.scrollview resetContentOffset:NO];
+        [self trackInformationView].userInteractionEnabled = NO;
+        
+        if ([self timeInformationView].frame.size.height * 2.0 != self.acapella.acapellaTopAccessoryHeight){
+            self.acapella.acapellaTopAccessoryHeight = [self timeInformationView].frame.size.height * 2.0;
         }
         
-        [self trackInformationView].userInteractionEnabled = NO;
+        if ([self volumeView].frame.size.height * 2.0 != self.acapella.acapellaBottomAccessoryHeight){
+            self.acapella.acapellaBottomAccessoryHeight = [self volumeView].frame.size.height * 2.0;
+        }
     }
 }
 
@@ -121,6 +125,15 @@ static SWAcapellaBase *_acapella;
     %orig(arg1);
     
     [self viewDidLayoutSubviews];
+    
+    if (self.acapella){
+        if (self.acapella.tableview){
+            [self.acapella.tableview resetContentOffset:NO];
+        }
+        if (self.acapella.scrollview){
+            [self.acapella.scrollview resetContentOffset:NO];
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -128,6 +141,15 @@ static SWAcapellaBase *_acapella;
     %orig(arg1);
     
     [self viewDidLayoutSubviews];
+    
+    if (self.acapella){
+        if (self.acapella.tableview){
+            [self.acapella.tableview resetContentOffset:NO];
+        }
+        if (self.acapella.scrollview){
+            [self.acapella.scrollview resetContentOffset:NO];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)arg1
@@ -162,13 +184,13 @@ static SWAcapellaBase *_acapella;
             
             [UIView animateWithDuration:0.1
                              animations:^{
-                                 view.scrollview.transform = CGAffineTransformMakeScale(0.9, 0.9);
+                                 view.tableview.transform = CGAffineTransformMakeScale(0.9, 0.9);
                              } completion:^(BOOL finished){
                                  [UIView animateWithDuration:0.1
                                                   animations:^{
-                                                      view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      view.tableview.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   } completion:^(BOOL finished){
-                                                      view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      view.tableview.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }];
                              }];
             
@@ -196,8 +218,6 @@ static SWAcapellaBase *_acapella;
         } else {
             [view finishWrapAroundAnimation];
         }
-        
-    } else if (direction == SW_SCROLL_DIR_UP){
         
     } else {
         [view finishWrapAroundAnimation];

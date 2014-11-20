@@ -153,6 +153,15 @@ artworkBottomYOrigin,
 bottomAcapellaYOrigin);
 
 [[self playbackControlsView] addSubview:self.acapella];
+
+if ([self progressControl].frame.size.height * 2.0 != self.acapella.acapellaTopAccessoryHeight){
+self.acapella.acapellaTopAccessoryHeight = [self progressControl].frame.size.height * 2.0;
+}
+
+if ([self volumeSlider].frame.size.height * 2.0 != self.acapella.acapellaBottomAccessoryHeight){
+self.acapella.acapellaBottomAccessoryHeight = [self volumeSlider].frame.size.height * 2.0;
+}
+
 }
 }
 }
@@ -164,22 +173,12 @@ bottomAcapellaYOrigin);
 [self viewDidLayoutSubviews];
 
 if (self.acapella){
-
 if (self.acapella.tableview){
 [self.acapella.tableview resetContentOffset:NO];
 }
 if (self.acapella.scrollview){
 [self.acapella.scrollview resetContentOffset:NO];
 }
-
-if ([self progressControl].frame.size.height != self.acapella.acapellaTopAccessoryHeight){
-self.acapella.acapellaTopAccessoryHeight = [self progressControl].frame.size.height;
-}
-
-if ([self volumeSlider].frame.size.height != self.acapella.acapellaBottomAccessoryHeight){
-self.acapella.acapellaBottomAccessoryHeight = [self volumeSlider].frame.size.height;
-}
-
 }
 }
 
@@ -188,6 +187,15 @@ self.acapella.acapellaBottomAccessoryHeight = [self volumeSlider].frame.size.hei
 %orig(arg1);
 
 [self viewDidLayoutSubviews];
+
+if (self.acapella){
+if (self.acapella.tableview){
+[self.acapella.tableview resetContentOffset:NO];
+}
+if (self.acapella.scrollview){
+[self.acapella.scrollview resetContentOffset:NO];
+}
+}
 }
 
 - (void)viewWillDisappear:(BOOL)arg1
@@ -233,13 +241,13 @@ if (self.player){
 
 [UIView animateWithDuration:0.1
 animations:^{
-view.scrollview.transform = CGAffineTransformMakeScale(0.9, 0.9);
+view.tableview.transform = CGAffineTransformMakeScale(0.9, 0.9);
 } completion:^(BOOL finished){
 [UIView animateWithDuration:0.1
 animations:^{
-view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+view.tableview.transform = CGAffineTransformMakeScale(1.0, 1.0);
 } completion:^(BOOL finished){
-view.scrollview.transform = CGAffineTransformMakeScale(1.0, 1.0);
+view.tableview.transform = CGAffineTransformMakeScale(1.0, 1.0);
 }];
 }];
 
@@ -267,8 +275,6 @@ long skipDirection = (direction == SW_SCROLL_DIR_LEFT) ? -1 : 1;
 } else {
 [view finishWrapAroundAnimation];
 }
-
-} else if (direction == SW_SCROLL_DIR_UP){
 
 } else {
 [view finishWrapAroundAnimation];

@@ -50,13 +50,13 @@
         
 #ifdef DEBUG
         //self.backgroundColor = [UIColor magentaColor];
-//        self.showsHorizontalScrollIndicator = YES;
-//        self.showsVerticalScrollIndicator = YES;
+        //        self.showsHorizontalScrollIndicator = YES;
+        //        self.showsVerticalScrollIndicator = YES;
         
-//        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-//        self.testView.backgroundColor = [UIColor blackColor];
-//        self.testView.alpha = 0.1;
-//        [self addSubview:self.testView];
+        //        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        //        self.testView.backgroundColor = [UIColor blackColor];
+        //        self.testView.alpha = 0.1;
+        //        [self addSubview:self.testView];
 #endif
         
         self.previousScrollOffset = CGPointZero;
@@ -106,6 +106,7 @@
                      animations:^{
                          self.contentOffset = [self defaultContentOffset];
                      }completion:^(BOOL finished){
+                         
                          self.isPerformingWrapAroundAnimation = NO;
                          
                          if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){

@@ -89,10 +89,14 @@
 
 - (void)setFrame:(CGRect)frame
 {
+    CGRect original = self.frame;
+    
     [super setFrame:frame];
     
-    if (self.tableview){
-        [self.tableview reloadData];
+    if (!CGRectEqualToRect(original, frame)){
+        if (self.tableview){
+            [self.tableview reloadData];
+        }
     }
 }
 

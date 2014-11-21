@@ -15,7 +15,10 @@
     //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8
     
     MPUNowPlayingController *_nowPlayingController;
+    BOOL _nowPlayingIsRadioStation;
 }
+
+- (void)_likeBanButtonTapped:(id)arg1;
 
 @end
 
@@ -33,6 +36,8 @@
 - (UIView *)trackInformationView;
 - (UIView *)transportControlsView;
 - (UIView *)volumeView;
+- (UIView *)buyTrackButton;
+- (UIView *)buyAlbumButton;
 
 @end
 

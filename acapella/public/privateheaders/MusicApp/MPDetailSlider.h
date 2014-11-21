@@ -1,5 +1,5 @@
 
-@interface MPDetailSlider : UIView
+@interface MPDetailSlider : UISlider
 {
 }
 

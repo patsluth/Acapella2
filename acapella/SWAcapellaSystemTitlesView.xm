@@ -26,102 +26,107 @@
 //2 - 1 line
 - (id)initWithStyle:(int)arg1
 {
-if ([self isKindOfClass:%c(MusicNowPlayingTitlesView)] && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)){
-return %orig(arg1);
-}
-
-return %orig(1); //force to 2 lines because of our extra room
+    if ([self isKindOfClass:%c(MusicNowPlayingTitlesView)] && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)){
+        return %orig(arg1);
+    }
+    
+    return %orig(1); //force to 2 lines because of our extra room
 }
 
 - (void)setTitleText:(NSString *)arg1
 {
-%orig(arg1);
-
-[self updateDetailText];
-
-if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
-
-UIScrollView *superScrollView = (UIScrollView *)self.superview;
-
-if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
-
-SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
-
-[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-[acapella.scrollview finishWrapAroundAnimation];
-}];
-
-}
-}
+    %orig(arg1);
+    
+    [self updateDetailText];
+    
+    if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
+        
+        UIScrollView *superScrollView = (UIScrollView *)self.superview;
+        
+        if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
+            
+            SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [acapella.scrollview finishWrapAroundAnimation];
+            }];
+            
+        }
+    }
 }
 
 
 - (void)setAlbumText:(id)arg1
 {
-%orig(arg1);
-
-[self updateDetailText];
+    %orig(arg1);
+    
+    [self updateDetailText];
 }
 
 - (void)setArtistText:(id)arg1
 {
-%orig(arg1);
-
-[self updateDetailText];
+    %orig(arg1);
+    
+    [self updateDetailText];
 }
 
 %new
 - (void)updateDetailText
 {
-//make sure only our title text is set. Then see if the title text equals an app name
-if (!self.artistText || [self.artistText isEqualToString:@""]){
-if (!self.albumText || [self.albumText isEqualToString:@""]){
+	//dont affect the music app.
+	if (self.window.rootViewController && [self.window.rootViewController isKindOfClass:NSClassFromString(@"MPHRootViewController")]){
+		return;
+	}
 
-if (self.titleText && ![self.titleText isEqualToString:@""]){
-
-NSDictionary *appList = [%c(ALApplicationList) sharedApplicationList].applications;
-
-if (appList){
-for (NSString *appName in appList){
-if ([self.titleText isEqualToString:[appList valueForKey:appName]]){
-[self setArtistText:@"Tap To Play"];
-[self setAlbumText:@"Acapella"];
-return;
-}
-}
-}
-} else {
-
-//special situtation. If we skep a song and the music stops, the app name no longer shows
-[self setTitleText:@"Tap To Play - Acapella"];
-
-}
-
-}
-}
+    //make sure only our title text is set. Then see if the title text equals an app name
+    if (!self.artistText || [self.artistText isEqualToString:@""]){
+        if (!self.albumText || [self.albumText isEqualToString:@""]){
+            
+            if (self.titleText && ![self.titleText isEqualToString:@""]){
+                
+                NSDictionary *appList = [%c(ALApplicationList) sharedApplicationList].applications;
+                
+                if (appList){
+                    for (NSString *appName in appList){
+                        if ([self.titleText isEqualToString:[appList valueForKey:appName]]){
+                            [self setArtistText:@"Tap To Play"];
+                            [self setAlbumText:@"Acapella"];
+                            return;
+                        }
+                    }
+                }
+            } else {
+                
+                //special situtation. If we skep a song and the music stops, the app name no longer shows
+                [self setTitleText:@"Tap To Play - Acapella"];
+                
+            }
+            
+        }
+    }
 }
 
 - (void)setFrame:(CGRect)frame
 {
-if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
-
-UIScrollView *superScrollView = (UIScrollView *)self.superview;
-
-if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
-
-SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
-
-%orig(CGRectMake((superScrollView.contentSize.width / 2) - (frame.size.width / 2),
-(acapella.frame.size.height / 2) - (frame.size.height / 2),
-frame.size.width,
-frame.size.height));
-
-return;
-}
-
-}
-
-%orig(frame);
+    if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
+        
+        UIScrollView *superScrollView = (UIScrollView *)self.superview;
+        
+        if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
+            
+            SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
+            
+            %orig(CGRectMake((superScrollView.contentSize.width / 2) - (frame.size.width / 2),
+                             (acapella.frame.size.height / 2) - (frame.size.height / 2),
+                             frame.size.width,
+                             frame.size.height));
+            
+            return;
+        }
+        
+    }
+    
+    %orig(frame);
 }
 
 %end

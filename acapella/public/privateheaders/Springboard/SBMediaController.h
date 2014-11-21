@@ -1,7 +1,7 @@
 
 @class SBApplication;
 
-@interface SBMediaController
+@interface SBMediaController : NSObject
 {
     NSDictionary *_nowPlayingInfo;
 }
@@ -29,15 +29,7 @@
 - (BOOL)beginSeek:(int)arg1;
 - (BOOL)changeTrack:(int)arg1;
 
-- (BOOL)skipFifteenSeconds:(int)arg1; //iOS 7 && 8 :) //DOESNT WORK
-- (void)setCurrentTrackTime:(float)arg1; //iOS 7 only
-- (double)trackElapsedTime;
-- (double)trackDuration;
-- (id)nowPlayingAlbum;
-- (id)nowPlayingTitle;
-- (id)nowPlayingArtist;
-
-- (BOOL)isRadioTrack;
+- (BOOL)isRadioTrack; //iOS 7 only
 
 - (id)_nowPlayingInfo;
 

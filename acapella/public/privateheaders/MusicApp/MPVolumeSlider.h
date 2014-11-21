@@ -1,5 +1,5 @@
 
-@interface MPVolumeSlider : UIView
+@interface MPVolumeSlider : UISlider
 {
 }
 

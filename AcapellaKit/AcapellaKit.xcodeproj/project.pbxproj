@@ -14,8 +14,6 @@
 		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
 		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */; };
 		2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75956F19FD49F500001BC7 /* AcapellaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E75959619FD959E00001BC7 /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
-		2E75959819FD95B500001BC7 /* sluthwareios in Resources */ = {isa = PBXBuildFile; fileRef = 2E75959719FD95B500001BC7 /* sluthwareios */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75963D19FDCCA600001BC7 /* AppDelegate.m */; };
 		2E75964119FDCCA600001BC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
 		2E75964419FDCCA600001BC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
@@ -26,8 +24,8 @@
 		2E75967A19FDE0DB00001BC7 /* SWAcapellaActionIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */; };
 		2E82A1C71A00456B00F04CDB /* SWAcapellaActionIndicatorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E82A1C81A00456B00F04CDB /* SWAcapellaActionIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */; };
-		2ECEF5CA1A111E5300CFDE39 /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
 		2ED282FC1A10671C00772295 /* SWAcapellaScrollViewProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2EDAC2F71A264EFF0006E69F /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
 		2EDAE4E71A069CC3006274BA /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDAE4E61A069CC3006274BA /* test.m */; };
 /* End PBXBuildFile section */
 
@@ -90,7 +88,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E75959619FD959E00001BC7 /* libsluthwareios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2ECEF5CA1A111E5300CFDE39 /* libsluthwareios.a in Frameworks */,
+				2EDAC2F71A264EFF0006E69F /* libsluthwareios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,7 +281,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E75959819FD95B500001BC7 /* sluthwareios in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

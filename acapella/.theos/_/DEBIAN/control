@@ -1,0 +1,10 @@
+Package: com.patsluth.swacapella
+Name: Acapella
+Depends: firmware (>= 7.1), firmware (<= 8.1), mobilesubstrate, jp.ashikase.libpackageinfo, com.patsluth.libsw, applist, com.bushe.lockscreengesturecleanup
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Pat Sluth
+Author: Pat Sluth
+Section: Tweaks
+Version: 0.0.1-2
+Installed-Size: 616

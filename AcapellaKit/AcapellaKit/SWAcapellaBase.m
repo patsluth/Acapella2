@@ -46,7 +46,7 @@
         self.backgroundColor = [UIColor clearColor];
         
         [self initGestureRecognizers];
-        
+
         self.acapellaTopAccessoryHeight = 0.0;
         self.acapellaBottomAccessoryHeight = 0.0;
     }
@@ -104,14 +104,41 @@
 {
     _acapellaTopAccessoryHeight = acapellaTopAccessoryHeight;
     
-    [self.tableview reloadData];
+    if (self.tableview){
+        [self.tableview reloadData];
+    }
 }
 
 - (void)setAcapellaBottomAccessoryHeight:(CGFloat)acapellaBottomAccessoryHeight
 {
     _acapellaBottomAccessoryHeight = acapellaBottomAccessoryHeight;
     
-    [self.tableview reloadData];
+    if (self.tableview){
+        [self.tableview reloadData];
+    }
+}
+
+- (void)dealloc
+{
+    [self resetGestureRecognizers];
+    
+    if (self.scrollview){
+        
+        for (UIView *v in self.scrollview.subviews){
+            [v removeFromSuperview];
+        }
+        
+        [self.scrollview removeFromSuperview];
+        self.scrollview = nil;
+    }
+    
+    for (UIView *v in self.subviews){
+        [v removeFromSuperview];
+    }
+    
+    if (self.tableview){
+        self.tableview = nil;
+    }
 }
 
 #pragma mark UITableView
@@ -471,9 +498,13 @@
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     if (self.tableview == scrollView){
-        self.tableview.isPerformingWrapAroundAnimation = NO;
+        if (self.tableview){
+            self.tableview.isPerformingWrapAroundAnimation = NO;
+        }
     } else if (self.scrollview == scrollView){
-        self.tableview.scrollEnabled = YES;
+        if (self.tableview){
+            self.tableview.scrollEnabled = YES;
+        }
     }
 }
 

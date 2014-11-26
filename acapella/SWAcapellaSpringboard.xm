@@ -16,6 +16,7 @@
 
 #import "substrate.h"
 #import <objc/runtime.h>
+#import "dlfcn.h"
 
 #import <Springboard/Springboard.h>
 
@@ -238,11 +239,20 @@ static SWAcapellaBase *_acapella;
             [sbMediaController changeTrack:(int)skipDirection];
             
         } else {
+        
             [view finishWrapAroundAnimation];
         }
         
     } else {
         [view finishWrapAroundAnimation];
+        
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc]
+                                                         initWithActivityItems:@[@"test", @"poop"]
+                                                         applicationActivities:nil];
+                                                         
+            [self presentViewController:activityVC
+                                                                 animated:YES
+                                                               completion:nil];
     }
 }
 
@@ -488,4 +498,10 @@ static SWAcapellaBase *_acapella;
 {
     NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/Frameworks/AcapellaKit.framework"];
     [bundle load];
+    
+    //dlopen("/System/Library/PrivateFrameworks/XPCObjects.framework/XPCObjects", RTLD_LAZY);
 }
+
+
+
+

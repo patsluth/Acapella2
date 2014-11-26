@@ -1,9 +1,9 @@
 THEOS_PACKAGE_DIR_NAME = debs
 
-#USEWIFI = 1 ###COMMENT OUT TO USE USB
+USEWIFI = 1 ###COMMENT OUT TO USE USB
 
 ifdef USEWIFI
-	THEOS_DEVICE_IP = 192.168.1.123
+	THEOS_DEVICE_IP = 192.168.1.149
 	THEOS_DEVICE_PORT = 22
 else
 	THEOS_DEVICE_IP = 127.0.0.1
@@ -18,7 +18,7 @@ Acapella_CFLAGS = -fobjc-arc
 Acapella_LDFLAGS = -ObjC
 Acapella_FILES = AVSystemController.xm SWAcapellaMusicApp.xm SWAcapellaPrefs.xm SWAcapellaSpringboard.xm SWAcapellaSystemTitlesView.xm
 Acapella_FRAMEWORKS = Foundation CoreGraphics UIKit MediaPlayer MessageUI
-Acapella_LIBRARIES = sw packageinfo
+Acapella_LIBRARIES = substrate sw packageinfo
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders

@@ -145,8 +145,7 @@ static SWAcapellaBase *_acapella;
 {
     %orig();
     
-    /*
-if ([self playbackControlsView]){
+    if ([self playbackControlsView]){
     
 		if ([self progressControl] && [self progressControl].superview == [self playbackControlsView]){
             [[self progressControl] removeFromSuperview];
@@ -204,7 +203,6 @@ if ([self playbackControlsView]){
             
         }
     }
-*/
 }
 
 - (void)viewWillAppear:(BOOL)arg1
@@ -447,7 +445,8 @@ if ([self playbackControlsView]){
 /*
 - (void)_updateForCurrentItemAnimated:(BOOL)arg1
 {
-    %orig(arg1); //for some reason if we animate our scroll view while the album art change is animating, it is very jumpy
+	NSLog(@"PAT TEST %@--%@", self, SW_STRING_FROM_BOOL(arg1));
+    %orig(NO); //for some reason if we animate our scroll view while the album art change is animating, it is very jumpy
 }
 */
 

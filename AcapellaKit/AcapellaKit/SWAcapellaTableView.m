@@ -47,6 +47,14 @@
         self.backgroundColor = [UIColor clearColor];
         self.separatorColor = [UIColor clearColor];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+#ifdef DEBUG
+        self.showsHorizontalScrollIndicator = YES;
+        self.showsVerticalScrollIndicator = YES;
+        
+        self.separatorColor = [UIColor blackColor];
+        self.separatorStyle = UITableViewCellSelectionStyleDefault;
+#endif
     }
     
     return self;
@@ -90,20 +98,10 @@
     self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
     
-    self.isPerformingWrapAroundAnimation = (animated && YES);
+    self.isPerformingWrapAroundAnimation = YES;
     
     if (self.numberOfSections == 1 && [self numberOfRowsInSection:0] > 3){
         
-//        [UIView animateWithDuration:animated ? 0.5 : 0.0
-//                              delay:0.0
-//                            options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
-//                         animations:^{
-//                             self.contentOffset = [self defaultContentOffset];
-//                         }completion:^(BOOL finished){
-//                             self.isPerformingWrapAroundAnimation = NO;
-//                         }];
-        
-        //the above way makes the cells have a wierd animation
         [self scrollToRowAtIndexPath:[self defaultIndexPath]
                     atScrollPosition:UITableViewScrollPositionMiddle
                             animated:animated];

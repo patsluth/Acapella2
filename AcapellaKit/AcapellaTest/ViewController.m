@@ -26,7 +26,7 @@
     self.contentView = [[UIView alloc] init];
     self.contentView.frame = CGRectMake(0, 100, 0, 0);
     [self.view addSubview:self.contentView];
-    SW_STRING_FROM_BOOL(YES);
+    
     self.acapella = [[SWAcapellaBase alloc] init];
     self.acapella.delegateAcapella = self;
     [self.contentView addSubview:self.acapella];

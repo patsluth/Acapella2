@@ -49,14 +49,14 @@
         self.backgroundColor = [UIColor clearColor];
         
 #ifdef DEBUG
-        //self.backgroundColor = [UIColor magentaColor];
-        //        self.showsHorizontalScrollIndicator = YES;
-        //        self.showsVerticalScrollIndicator = YES;
+        self.backgroundColor = [UIColor magentaColor];
+        self.showsHorizontalScrollIndicator = YES;
+        self.showsVerticalScrollIndicator = YES;
         
-        //        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-        //        self.testView.backgroundColor = [UIColor blackColor];
-        //        self.testView.alpha = 0.1;
-        //        [self addSubview:self.testView];
+        self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        self.testView.backgroundColor = [UIColor blackColor];
+        self.testView.alpha = 0.1;
+        [self addSubview:self.testView];
 #endif
         
         self.previousScrollOffset = CGPointZero;
@@ -94,26 +94,47 @@
 
 - (void)resetContentOffset:(BOOL)animated
 {
-    //reset
-    self.currentVelocity = CGPointZero;
+    void (^_animationContent)() = ^(){
+        
+        self.contentOffset = [self defaultContentOffset];
+        
+    };
     
-    self.isPerformingWrapAroundAnimation = YES;
+    void (^_postAnimation)() = ^(){
+        
+        self.isPerformingWrapAroundAnimation = NO;
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){
+            [self.delegate scrollViewDidEndScrollingAnimation:self];
+        }
+        
+    };
+    
+    
+    
+    
+    self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
     
-    [UIView animateWithDuration:animated ? 0.5 : 0.0
-                          delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent
-                     animations:^{
-                         self.contentOffset = [self defaultContentOffset];
-                     }completion:^(BOOL finished){
-                         
-                         self.isPerformingWrapAroundAnimation = NO;
-                         
-                         if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){
-                             [self.delegate scrollViewDidEndScrollingAnimation:self];
-                         }
-                         
-                     }];
+    self.isPerformingWrapAroundAnimation = YES;
+    
+    if (animated){
+        
+        [UIView animateWithDuration:0.5
+                              delay:0.0
+                            options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent
+                         animations:^{
+                             _animationContent();
+                         }completion:^(BOOL finished){
+                             _postAnimation();
+                         }];
+        
+    } else {
+        
+        _animationContent();
+        _postAnimation();
+        
+    }
 }
 
 - (void)startWrapAroundFallback

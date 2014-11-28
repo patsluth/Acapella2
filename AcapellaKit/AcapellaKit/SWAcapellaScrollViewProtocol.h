@@ -15,7 +15,6 @@
 - (void)finishWrapAroundAnimation;
 - (void)startWrapAroundFallback;
 - (void)stopWrapAroundFallback;
-@property (readwrite, nonatomic) BOOL isPerformingWrapAroundAnimation;
 
 @optional
 - (CGPoint)defaultContentOffset;

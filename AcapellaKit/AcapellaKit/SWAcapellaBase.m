@@ -497,11 +497,7 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    if (self.tableview == scrollView){
-        if (self.tableview){
-            self.tableview.isPerformingWrapAroundAnimation = NO;
-        }
-    } else if (self.scrollview == scrollView){
+    if (self.scrollview == scrollView){
         if (self.tableview){
             self.tableview.scrollEnabled = YES;
         }

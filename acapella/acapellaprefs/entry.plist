@@ -1,0 +1,10 @@
+{
+    entry = {
+	bundle = AcapellaPrefs;
+	cell = PSLinkCell;
+	detail = AcapellaPrefsListController;
+	icon = AcapellaPrefs.png;
+	isController = 1;
+	label = AcapellaPrefs;
+    };
+}

@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "libsw/sluthwareios/sluthwareios.h"
 #import "test.h"
+#import <objc/objc.h>
 
 @interface ViewController ()
 
@@ -56,7 +57,6 @@
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
     if (tap.state == UIGestureRecognizerStateEnded){
-        
     }
 }
 
@@ -84,77 +84,15 @@
             
         } else {
             [view finishWrapAroundAnimation];
+            [view finishWrapAroundAnimation];
+            [view finishWrapAroundAnimation];
         }
         
         if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
-            
-            /*
-            SWAcapellaActionIndicator *songSkip = [self.acapella.actionIndicatorController
-                                                   actionIndicatorWithIdentifierIfExists:@"songskip"];
-            
-            if (!songSkip){
-                songSkip = [[SWAcapellaActionIndicator alloc] initWithFrame:CGRectMake(0,
-                                                                                       0,
-                                                                                       100,
-                                                                                       self.acapella.actionIndicatorController.frame.size.height)
-                                               andActionIndicatorIdentifier:@"songskip"];
-                songSkip.backgroundColor = [UIColor purpleColor];
-                songSkip.actionIndicatorDisplayTime = 5.0;
-                
-                UILabel *text = [[UILabel alloc] init];
-                text.layer.anchorPoint = CGPointMake(0.5, 0.5);
-                text.textAlignment = NSTextAlignmentCenter;
-                text.text = @"--->";
-                text.textColor = [UIColor whiteColor];
-                [text sizeToFit];
-                [songSkip addSubview:text];
-                [text setCenter:CGPointMake(songSkip.frame.size.width / 2, songSkip.frame.size.height / 2)];
-            }
-            
-            UILabel *lab;
-            
-            for (UILabel *view in songSkip.subviews){
-                lab = view;
-            }
-            
-            if (lab){
-                void (^_applyRotation)(CGAffineTransform tran) = ^(CGAffineTransform tran){
-                    lab.transform = tran;
-                };
-                
-                BOOL animated = songSkip.isShowing || songSkip.isAnimatingToHide;
-                
-                if (animated && direction == SW_DIRECTION_LEFT && !lab.layer.animationKeys){
-                    //we need to set this initially so we will rotate counterclockwise from right to left
-                    _applyRotation(CGAffineTransformMakeRotation(SWDegreesToRadians(-0.001)));
-                }
-                
-                CGFloat animationTime = 0.0;
-                
-                if (songSkip.isShowing){
-                    animationTime = songSkip.actionIndicatorDisplayTime * 0.75; //animate to 75% of the display time, since the timer will be restarted and the view will display for that amount of time
-                //should never hit because of animationToShow, but just in case
-                } else if (songSkip.isAnimatingToHide || songSkip.isAnimatingToShow){
-                    //it will take this ammount of time for the animation to reshow from its current state, so they will be syncronized
-                    animationTime = songSkip.actionIndicatorAnimationInTime;
-                }
-                
-                [UIView animateWithDuration:(animated) ? animationTime : 0.0
-                                      delay:0.0
-                                    options:(UIViewAnimationOptionBeginFromCurrentState |
-                                             UIViewAnimationOptionAllowUserInteraction |
-                                             UIViewAnimationOptionCurveEaseInOut)
-                                 animations:^{
-                                     
-                                     CGFloat deg = (direction == SW_DIRECTION_LEFT) ? 180.0 : 0.0;
-                                     _applyRotation(CGAffineTransformMakeRotation(SWDegreesToRadians(deg)));
-                                     
-                                 }
-                                 completion:nil];
-            }
-            
-            [self.acapella.actionIndicatorController addActionIndicatorToQueue:songSkip];
-             */
+            [view stopWrapAroundFallback];
+            [view finishWrapAroundAnimation];
+            [view finishWrapAroundAnimation];
+            [view finishWrapAroundAnimation];
         }
     }
 }

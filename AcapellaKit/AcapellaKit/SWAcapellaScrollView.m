@@ -27,8 +27,6 @@
 
 @implementation SWAcapellaScrollView
 
-@synthesize isPerformingWrapAroundAnimation = _isPerformingWrapAroundAnimation;
-
 #pragma mark Init
 
 - (id)init
@@ -102,8 +100,6 @@
     
     void (^_postAnimation)() = ^(){
         
-        self.isPerformingWrapAroundAnimation = NO;
-        
         if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){
             [self.delegate scrollViewDidEndScrollingAnimation:self];
         }
@@ -115,8 +111,6 @@
     
     self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
-    
-    self.isPerformingWrapAroundAnimation = YES;
     
     if (animated){
         
@@ -158,10 +152,6 @@
 
 - (void)finishWrapAroundAnimation
 {
-    if (self.isPerformingWrapAroundAnimation){
-        return;
-    }
-    
     [self stopWrapAroundFallback];
     
     SWPage page = [self page];

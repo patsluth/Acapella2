@@ -23,8 +23,6 @@
 
 @implementation SWAcapellaTableView
 
-@synthesize isPerformingWrapAroundAnimation = _isPerformingWrapAroundAnimation;
-
 #pragma mark Init
 
 - (id)init
@@ -98,8 +96,6 @@
     self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
     
-    self.isPerformingWrapAroundAnimation = YES;
-    
     if (self.numberOfSections == 1 && [self numberOfRowsInSection:0] > 3){
         
         [self scrollToRowAtIndexPath:[self defaultIndexPath]
@@ -130,10 +126,6 @@
 
 - (void)finishWrapAroundAnimation
 {
-    if (self.isPerformingWrapAroundAnimation){
-        return;
-    }
-    
     [self stopWrapAroundFallback];
     
     [self resetContentOffset:YES];

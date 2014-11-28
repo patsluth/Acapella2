@@ -11,7 +11,6 @@
 #import "MPUChronologicalProgressView.h"
 #import "MPUMediaControlsVolumeView.h"
 #import "SBCCMediaControlsSectionController.h"
-#import "SBMediaController.h"
 #import "AVSystemController+SW.h"
 
 #import "substrate.h"
@@ -27,6 +26,7 @@
 #pragma mark MPUSystemMediaControlsViewController
 
 static SWAcapellaBase *_acapella;
+static UIActivityViewController *_currentAcapellaActivityViewController;
 
 %hook MPUSystemMediaControlsViewController
 
@@ -35,7 +35,7 @@ static SWAcapellaBase *_acapella;
 %new
 - (UIView *)mediaControlsView
 {
-    return MSHookIvar<UIView *>(self, "_mediaControlsView");
+   return MSHookIvar<UIView *>(self, "_mediaControlsView");
 }
 
 %new
@@ -65,13 +65,21 @@ static SWAcapellaBase *_acapella;
 %new
 - (UIView *)buyTrackButton
 {
-	return MSHookIvar<UIView *>([self mediaControlsView], "_buyTrackButton");
+    if (!SW_OBJ_CONTAINS_IVAR([self mediaControlsView], "_buyTrackButton")){
+        return nil;
+    }
+    
+    return MSHookIvar<UIView *>([self mediaControlsView], "_buyTrackButton");
 }
 
 %new
 - (UIView *)buyAlbumButton
 {
-	return MSHookIvar<UIView *>([self mediaControlsView], "_buyAlbumButton");
+    if (!SW_OBJ_CONTAINS_IVAR([self mediaControlsView], "_buyAlbumButton")){
+        return nil;
+    }
+    
+    return MSHookIvar<UIView *>([self mediaControlsView], "_buyAlbumButton");
 }
 
 %new
@@ -97,7 +105,7 @@ static SWAcapellaBase *_acapella;
 {
     %orig();
     
-    UIView *mediaControlsView = MSHookIvar<UIView *>(self, "_mediaControlsView");
+    UIView *mediaControlsView = [self mediaControlsView];
     
     if (mediaControlsView){
         
@@ -133,12 +141,11 @@ static SWAcapellaBase *_acapella;
             self.acapella.acapellaBottomAccessoryHeight = [self volumeView].frame.size.height * 2.0;
         }
         
-        
         if ([self buyTrackButton]){
-        	[mediaControlsView.superview addSubview:[self buyTrackButton]];
+            [mediaControlsView.superview addSubview:[self buyTrackButton]];
         }
         if ([self buyAlbumButton]){
-       		[mediaControlsView.superview addSubview:[self buyAlbumButton]];
+            [mediaControlsView.superview addSubview:[self buyAlbumButton]];
         }
     }
 }
@@ -156,6 +163,15 @@ static SWAcapellaBase *_acapella;
         if (self.acapella.scrollview){
             [self.acapella.scrollview resetContentOffset:NO];
         }
+    }
+    
+    if (_currentAcapellaActivityViewController){
+    
+    	NSLog(@"666666 %@", _currentAcapellaActivityViewController.view.window);
+    	NSLog(@"%@", self.view.window);
+	    //[_currentAcapellaActivityViewController removeFromParentViewController];
+	    //_currentAcapellaActivityViewController.completionHandler = nil;
+	   // _currentAcapellaActivityViewController = nil;
     }
 }
 
@@ -178,6 +194,13 @@ static SWAcapellaBase *_acapella;
 - (void)viewWillDisappear:(BOOL)arg1
 {
     %orig(arg1);
+    
+    if (_currentAcapellaActivityViewController){ //make sure we clean this up, so we can display it again later
+    	[_currentAcapellaActivityViewController.view.window.rootViewController dismissViewControllerAnimated:NO completion:^{
+    		_currentAcapellaActivityViewController.completionHandler = nil;
+        	_currentAcapellaActivityViewController = nil;
+        }];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)arg1
@@ -190,6 +213,10 @@ static SWAcapellaBase *_acapella;
 %new
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
+	[UIApplication sharedApplication].idleTimerDisabled = ![UIApplication sharedApplication].idleTimerDisabled;
+	
+	NSLog(@"%@===%@", [UIApplication sharedApplication], SW_STRING_FROM_BOOL([UIApplication sharedApplication].idleTimerDisabled));
+
     if (tap.state == UIGestureRecognizerStateEnded){
         
         CGFloat percentBoundaries = 0.25;
@@ -239,20 +266,40 @@ static SWAcapellaBase *_acapella;
             [sbMediaController changeTrack:(int)skipDirection];
             
         } else {
-        
+            
             [view finishWrapAroundAnimation];
         }
         
     } else {
-        [view finishWrapAroundAnimation];
+    
+    	[view stopWrapAroundFallback];
         
-        UIActivityViewController *activityVC = [[UIActivityViewController alloc]
-                                                         initWithActivityItems:@[@"test", @"poop"]
-                                                         applicationActivities:nil];
-                                                         
-            [self presentViewController:activityVC
-                                                                 animated:YES
-                                                               completion:nil];
+        SBDeviceLockController *deviceLC = (SBDeviceLockController *)[%c(SBDeviceLockController) sharedController];
+        
+        if (deviceLC && deviceLC.isPasscodeLocked){
+        
+        	[[[SWUIAlertView alloc] initWithTitle:@"Uh Oh!"
+                                  message:@"Your device must be unlocked to bring up the sharing screen. Unlock device and try again."
+                       clickedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex){
+                       }
+                          didDismissBlock:^(UIAlertView *alert, NSInteger buttonIndex){
+                          }
+                        cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+        
+        } else {
+            
+            _currentAcapellaActivityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[@"test", @"poop"]
+                                                                                 applicationActivities:nil];
+        
+			[self presentViewController:_currentAcapellaActivityViewController
+                           		animated:YES
+						   		completion:nil];
+        
+			_currentAcapellaActivityViewController.completionHandler = ^(NSString *activityType, BOOL completed){
+				[view finishWrapAroundAnimation];
+			};
+            
+        }
     }
 }
 
@@ -262,22 +309,22 @@ static SWAcapellaBase *_acapella;
     void (^_openNowPlayingApp)() = ^(){
         
         MPUNowPlayingController *nowPlayingController = MSHookIvar<MPUNowPlayingController *>(self, "_nowPlayingController");
-        
-        if (nowPlayingController){
             
-            SBApplicationController *sbAppController = [%c(SBApplicationController) sharedInstanceIfExists];
-            
-            if (sbAppController){
-                SBApplication *nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:nowPlayingController.nowPlayingAppDisplayID];
+            if (nowPlayingController){
                 
-                if (!nowPlayingApp){ //fallback
-                    nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:@"com.apple.Music"];
+                SBApplicationController *sbAppController = [%c(SBApplicationController) sharedInstanceIfExists];
+                
+                if (sbAppController){
+                    SBApplication *nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:nowPlayingController.nowPlayingAppDisplayID];
+                    
+                    if (!nowPlayingApp){ //fallback
+                        nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:@"com.apple.Music"];
+                    }
+                    
+                    [%c(SWAppLauncher) launchAppLockscreenFriendly:nowPlayingApp];
                 }
                 
-                [%c(SWAppLauncher) launchAppLockscreenFriendly:nowPlayingApp];
             }
-            
-        }
         
     };
     
@@ -299,10 +346,10 @@ static SWAcapellaBase *_acapella;
         
     };
     
-        
-        
-        
-        
+    
+    
+    
+    
     CGFloat percentBoundaries = 0.25;
     
     if (percentage.x <= percentBoundaries){ //left
@@ -316,28 +363,29 @@ static SWAcapellaBase *_acapella;
     } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
         
         if (longPress.state == UIGestureRecognizerStateBegan){
-        
-        		SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
-        		
-        		if (sbMediaController){
-        		
-        			if ([sbMediaController respondsToSelector:@selector(isRadioTrack)]){ //iOS 7 only
-	        			if ([sbMediaController isRadioTrack]){
-		        			[self _likeBanButtonTapped:nil];
-	        			} else {
-	        				_openNowPlayingApp();
-	        			}
-        			} else {
-        				if (MSHookIvar<BOOL>(self, "_nowPlayingIsRadioStation")){
-	        				[self _likeBanButtonTapped:nil];
-        				} else {
-	        				_openNowPlayingApp();
-        				}
-        			}
-        			
-        		} else {
-	        		_openNowPlayingApp();
-        		}
+            
+            SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
+            
+            if (sbMediaController){
+                
+                if ([sbMediaController respondsToSelector:@selector(isRadioTrack)]){ //iOS 7 only
+                    if ([sbMediaController isRadioTrack]){
+                        [self _likeBanButtonTapped:nil];
+                    } else {
+                        _openNowPlayingApp();
+                    }
+                } else {
+                    
+                    if (MSHookIvar<BOOL>(self, "_nowPlayingIsRadioStation")){
+                        [self _likeBanButtonTapped:nil];
+                    } else {
+                        _openNowPlayingApp();
+                    }
+                }
+                
+            } else {
+                _openNowPlayingApp();
+            }
         }
         
     } else if (percentage.x > (1.0 - percentBoundaries)){ //right
@@ -354,7 +402,7 @@ static SWAcapellaBase *_acapella;
 %new
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    UIView *mediaControlsView = MSHookIvar<UIView *>(self, "_mediaControlsView");
+    UIView *mediaControlsView = [self mediaControlsView];
     
     if (mediaControlsView){
         
@@ -484,6 +532,74 @@ static SWAcapellaBase *_acapella;
     }
     
     %orig(frame);
+}
+
+%end
+
+
+
+
+
+#pragma mark LockScreen ScrollView
+
+%hook SBLockScreenScrollView
+
+%new
+- (UIImageView *)mediaArtworkView
+{
+    UIImageView *artworkView = nil;
+    
+    for (UIView *x in self.subviews){
+        for (UIView *y in x.subviews){
+            if ([y isKindOfClass:NSClassFromString(@"_NowPlayingArtView")]){
+                for (UIView *z in y.subviews){
+                    if ([z isKindOfClass:[UIImageView class]]){
+                        artworkView = (UIImageView *)z;
+                    }
+                }
+            }
+        }
+    }
+    
+    return artworkView;
+}
+
+%end
+
+%hook SBLockScreenViewController
+
+- (void)viewDidLayoutSubviews
+{
+    %orig();
+    
+    if ([self lockScreenScrollView] && [[self lockScreenScrollView] isKindOfClass:%c(SBLockScreenScrollView)]){
+        
+        SBLockScreenScrollView *lsScrollView = ( SBLockScreenScrollView *)[self lockScreenScrollView];
+        
+        UIImageView *lsMediaArtworkView = [lsScrollView mediaArtworkView];
+        
+        if (lsMediaArtworkView){
+            
+            if ([self mediaControlsViewController]){
+                
+                CGFloat newArtworkYValue = 20; //status bar height
+                //we add our Acapella view to the superview, so we will use that view to calulate
+                newArtworkYValue += [[self mediaControlsViewController] mediaControlsView].superview.frame.origin.x +
+                [[self mediaControlsViewController] mediaControlsView].superview.frame.size.height;
+                //[[self mediaControlsViewController] mediaControlsView].superview.backgroundColor = [UIColor redColor];
+                
+                [lsMediaArtworkView setOriginY:newArtworkYValue];
+            }
+            
+        }
+        
+    }
+}
+
+%new
+- (MPUSystemMediaControlsViewController *)mediaControlsViewController
+{
+   return MSHookIvar<MPUSystemMediaControlsViewController *>(self, "_mediaControlsViewController"); 
 }
 
 %end

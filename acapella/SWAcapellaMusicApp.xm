@@ -29,7 +29,7 @@ static SWAcapellaBase *_acapella;
 %new
 - (UIView *)playbackControlsView
 {
-    return MSHookIvar<UIView *>(self, "_playbackControlsView");
+	return MSHookIvar<UIView *>(self, "_playbackControlsView");
 }
 
 %new
@@ -75,13 +75,13 @@ static SWAcapellaBase *_acapella;
 %new
 - (UIView *)ratingControl
 {
-    return MSHookIvar<UIView *>(self, "_ratingControl");
+	return MSHookIvar<UIView *>(self, "_ratingControl");
 }
 
 %new
 - (UIView *)titlesView
 {
-    return MSHookIvar<UIView *>(self, "_titlesView");
+	return MSHookIvar<UIView *>(self, "_titlesView");
 }
 
 %new
@@ -97,7 +97,7 @@ static SWAcapellaBase *_acapella;
 %new
 - (UIImageView *)artworkView
 {
-    UIView *artwork = MSHookIvar<UIView *>(self, "_contentView");
+	UIView *artwork = MSHookIvar<UIView *>(self, "_contentView");
     
     if (artwork && [artwork isKindOfClass:[UIImageView class]]){
         return (UIImageView *)artwork;
@@ -115,7 +115,7 @@ static SWAcapellaBase *_acapella;
 %new
 - (UIButton *)likeOrBanButton
 {
-	if ([self playbackControlsView]){
+	if ([self transportControls]){
     	return MSHookIvar<UIButton *>([self transportControls], "_likeOrBanButton");
 	}
 	
@@ -348,7 +348,7 @@ static SWAcapellaBase *_acapella;
         if (longPress.state == UIGestureRecognizerStateBegan){
         
         	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-				if ([self mpavItem].isRadioItem){
+				if ([self mpavItem] && [self mpavItem].isRadioItem){
 	        
 					if ([self likeOrBanButton]){
 						[[self likeOrBanButton] sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -452,8 +452,8 @@ static SWAcapellaBase *_acapella;
 
 #pragma mark Rating
 
-BOOL didTouchRatingControl = NO;
-NSTimer *hideRatingTimer;
+static BOOL _didTouchRatingControl = NO;
+static NSTimer *_hideRatingTimer;
 
 - (void)_setShowingRatings:(BOOL)arg1 animated:(BOOL)arg2
 {
@@ -462,9 +462,9 @@ NSTimer *hideRatingTimer;
 	if (arg1){
         [self startRatingShouldHideTimer];
     } else {
-        if (hideRatingTimer){
-            [hideRatingTimer invalidate];
-            hideRatingTimer = nil;
+        if (_hideRatingTimer){
+            [_hideRatingTimer invalidate];
+            _hideRatingTimer = nil;
         }
     }
 }
@@ -474,16 +474,16 @@ NSTimer *hideRatingTimer;
 {
 	BOOL isShowingRating = MSHookIvar<BOOL>(self, "_isShowingRatings");
     
-    if (hideRatingTimer){
-        [hideRatingTimer invalidate];
-        hideRatingTimer = nil;
+    if (_hideRatingTimer){
+        [_hideRatingTimer invalidate];
+        _hideRatingTimer = nil;
     }
     
     if (!isShowingRating){
         return;
     }
     
-    hideRatingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0
+    _hideRatingTimer = [NSTimer scheduledTimerWithTimeInterval:2.0
                                                        target:self
                                                      selector:@selector(hideRatingControlWithTimer)
                                                      userInfo:nil
@@ -496,18 +496,18 @@ NSTimer *hideRatingTimer;
 	BOOL isShowingRating = MSHookIvar<BOOL>(self, "_isShowingRatings");
     
     if (!isShowingRating){
-        didTouchRatingControl = NO;
+        _didTouchRatingControl = NO;
         return;
     }
     
-    if (didTouchRatingControl){
-        didTouchRatingControl = NO;
+    if (_didTouchRatingControl){
+        _didTouchRatingControl = NO;
         [self startRatingShouldHideTimer];
         return;
     }
     
     [self _setShowingRatings:NO animated:YES];
-    didTouchRatingControl = NO;
+    _didTouchRatingControl = NO;
 }
 
 %end
@@ -521,14 +521,14 @@ NSTimer *hideRatingTimer;
 {
     %orig(arg1);
     
-    didTouchRatingControl = YES;
+    _didTouchRatingControl = YES;
 }
 
 - (void)_handleTapGesture:(id)arg1
 {
     %orig(arg1);
     
-    didTouchRatingControl = YES;
+    _didTouchRatingControl = YES;
 }
 
 %end

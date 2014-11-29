@@ -1,11 +1,17 @@
-include theos/makefiles/common.mk
+ARCHS = armv7 armv7s arm64
+TARGET = iphone:clang:latest:7.0
 
 BUNDLE_NAME = AcapellaPrefs
-AcapellaPrefs_FILES = AcapellaPrefs.mm
+AcapellaPrefs_CFLAGS = -fobjc-arc
+AcapellaPrefs_FILES = SWAcapellaPrefs.mm SWAcapellaPrefsHeaderView.m
 AcapellaPrefs_INSTALL_PATH = /Library/PreferenceBundles
 AcapellaPrefs_FRAMEWORKS = UIKit
 AcapellaPrefs_PRIVATE_FRAMEWORKS = Preferences
+AcapellaPrefs_LIBRARIES = sw packageinfo
 
+ADDITIONAL_CFLAGS = -Ipublic
+
+include theos/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/bundle.mk
 
 internal-stage::

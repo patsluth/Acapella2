@@ -30,6 +30,7 @@
 }
 
 @property (strong, nonatomic) SWAcapellaBase *acapella;
+@property (strong, nonatomic) UIActivityViewController *acapellaSharingActivityView;
 
 - (UIView *)mediaControlsView;
 - (UIView *)timeInformationView;

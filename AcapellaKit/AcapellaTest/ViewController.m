@@ -16,6 +16,9 @@
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) SWAcapellaBase *acapella;
 
+@property (strong, nonatomic) UITableView *tableview;
+@property (strong, nonatomic) UIImageView *stretchableTableViewHeader;
+
 @end
 
 @implementation ViewController
@@ -23,6 +26,40 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableview = [[UITableView alloc] init];
+    self.tableview.backgroundColor = [UIColor clearColor];
+    
+    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    [self.view addSubview:self.tableview];
+    
+    self.tableview.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20);
+    self.tableview.delegate = self;
+    self.tableview.dataSource = self;
+
+    self.tableview.showsHorizontalScrollIndicator = YES;
+    self.tableview.showsVerticalScrollIndicator = YES;
+    
+    
+    
+    
+    UIView *tableViewHeader = [[UIView alloc] init];
+    tableViewHeader.backgroundColor = [UIColor clearColor];
+    tableViewHeader.frame = CGRectMake(0, 0, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
+    self.tableview.tableHeaderView = tableViewHeader;
+    
+    self.stretchableTableViewHeader = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"banner"]];
+    self.stretchableTableViewHeader.backgroundColor = [UIColor blueColor];
+    self.stretchableTableViewHeader.contentMode = UIViewContentModeScaleAspectFill;
+    self.stretchableTableViewHeader.frame = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
+    [self.view addSubview:self.stretchableTableViewHeader];
+    
+    [self.view bringSubviewToFront:self.tableview];
+    
+    
+    return;
     
     self.contentView = [[UIView alloc] init];
     self.contentView.frame = CGRectMake(0, 100, 0, 0);
@@ -108,7 +145,71 @@
 
 - (void)swAcapalle:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark Table View Tests
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat delta = 0.0f;
+    CGRect rect = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
     
+    delta = fabs(MIN(0.0f, self.tableview.contentOffset.y));
+    
+    if (self.tableview.contentOffset.y > 0.0f){
+        rect.origin.y -= self.tableview.contentOffset.y;
+    }
+    
+    rect.size.height += delta;
+    
+    self.stretchableTableViewHeader.frame = rect;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 15;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cellIdentifier = @"pat";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
+        //cell.alpha = 0.1;
+    }
+    
+    return cell;
 }
 
 @end

@@ -16,7 +16,7 @@
 @class SWAcapellaTableView;
 @class SWAcapellaScrollView;
 
-@protocol SWAcapellaDelegate <NSObject>
+@protocol SWAcapellaDelegate <NSObject, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @required
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage;

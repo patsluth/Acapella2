@@ -3,6 +3,8 @@
 #import <AcapellaKit/AcapellaKit.h>
 #import <libsw/sluthwareios/sluthwareios.h>
 
+#import <MediaRemote/MediaRemote.h>
+
 #import "MusicNowPlayingViewController+SW.h"
 #import "MPAVController.h"
 #import "MPAVItem.h"
@@ -320,6 +322,10 @@ static SWAcapellaBase *_acapella;
         
     } else {
         [view finishWrapAroundAnimation];
+        
+        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+        		NSLog(@"PAT TEST %@", result);
+        	});
     }
 }
 

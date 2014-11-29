@@ -1,0 +1,148 @@
+
+#import "SWAcapellaPrefsBundle.h"
+#import "SWAcapellaPrefsHeaderView.h"
+
+#import <libsw/sluthwareios/sluthwareios.h>
+#import <libpackageinfo/libpackageinfo.h>
+
+#import <Preferences/Preferences.h>
+
+#define SW_ACAPELLA_HEADER_HEIGHT 200
+#define SW_ACAPELLA_PREFERENCES_PATH @"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"
+
+@interface SWAcapellaPrefsListController: PSListController <UIScrollViewDelegate>
+{
+}
+
+@property (strong, nonatomic) SWAcapellaPrefsHeaderView *acapellaPrefsHeaderView;
+@property (strong, nonatomic) PIDebianPackage *packageDEB;
+
+@end
+
+@implementation SWAcapellaPrefsListController
+
+#pragma mark Init
+
+- (id)specifiers
+{
+	if(_specifiers == nil){
+		_specifiers = [self loadSpecifiersFromPlistName:@"AcapellaPrefs" target:self];
+	}
+	return _specifiers;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
+    dispatch_async(queue, ^{
+        
+        self.packageDEB = [PIDebianPackage packageForFile:SW_ACAPELLA_PREFS_BUNDLE_PATH];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            
+            PSSpecifier *spec = [self specifierForID:@"Version"];
+            if (spec){
+                [self reloadSpecifier:spec animated:YES];
+            }
+            
+        });
+    });
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[super viewWillAppear:animated];
+	
+	self.table.backgroundColor = [UIColor clearColor];
+	
+	UIView *tableViewHeader = [[UIView alloc] init];
+    tableViewHeader.frame = CGRectMake(self.table.frame.origin.x, self.table.frame.origin.y, self.table.frame.size.width, SW_ACAPELLA_HEADER_HEIGHT);
+    self.table.tableHeaderView = tableViewHeader;
+    
+    
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:SW_ACAPELLA_PREFS_BUNDLE_PATH];
+    
+    if (bundle){
+    	self.acapellaPrefsHeaderView = [[SWAcapellaPrefsHeaderView alloc] initWithImage:[UIImage
+    																imageWithContentsOfFile:[bundle
+    																	pathForResource:@"Acapella_Prefs_Banner_Background" ofType:@"png"]]];
+    	self.acapellaPrefsHeaderView.frame = tableViewHeader.frame;
+		[self.table.superview insertSubview:self.acapellaPrefsHeaderView belowSubview:self.table];
+    }
+}
+
+#pragma mark UIScrollView
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{	
+	if (self.acapellaPrefsHeaderView && self.table == scrollView){
+	
+		CGFloat delta = 0.0f;
+	   	CGRect stretchedFrame = CGRectMake(self.table.frame.origin.x, self.table.frame.origin.y, self.table.frame.size.width, SW_ACAPELLA_HEADER_HEIGHT);
+    
+	   	delta = fabs(MIN(0.0f, self.table.contentOffset.y));
+    
+	   	if (self.table.contentOffset.y > 0.0f){
+        	stretchedFrame.origin.y -= self.table.contentOffset.y;
+		}
+    
+		stretchedFrame.size.height += delta;
+	   	self.acapellaPrefsHeaderView.frame = stretchedFrame;
+	}
+}
+
+#pragma mark Helper
+
+- (id)getVersionNumberForSpecifier:(PSSpecifier *)specifier
+{
+    if (self.packageDEB){
+        return self.packageDEB.version;
+    }
+    
+    return @"...";
+}
+
+- (void)_returnKeyPressed:(id)pressed
+{
+    [super _returnKeyPressed:pressed];
+    
+    //this will dismiss the keyboard and save the preferences for the selected text field
+    if ([self isKindOfClass:[UIViewController class]]){
+        UIViewController *vcSelf = (UIViewController *)self;
+        [vcSelf.view endEditing:YES];
+    }
+}
+
+- (id)readPreferenceValue:(PSSpecifier *)specifier
+{
+	NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:SW_ACAPELLA_PREFERENCES_PATH];
+	
+	if (!acapellaPrefs[specifier.properties[@"key"]]){
+		if (acapellaPrefs[specifier.properties[@"placeholder"]]){
+			return specifier.properties[@"placeholder"];
+		}
+		
+		return specifier.properties[@"default"];
+	}
+	
+	return acapellaPrefs[specifier.properties[@"key"]];
+}
+ 
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier
+{
+	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
+	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:SW_ACAPELLA_PREFERENCES_PATH]];
+	[defaults setObject:value forKey:specifier.properties[@"key"]];
+	[defaults writeToFile:SW_ACAPELLA_PREFERENCES_PATH atomically:YES];
+	CFStringRef mikotoPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), mikotoPost, NULL, NULL, YES);
+}
+
+@end
+
+
+
+

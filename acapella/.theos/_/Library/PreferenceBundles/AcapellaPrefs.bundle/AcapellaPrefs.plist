@@ -8,22 +8,52 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>AcapellaPrefs First Page</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.patsluth.acapellaprefs</string>
-			<key>key</key>
-			<string>AwesomeSwitch1</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Awesome Switch 1</string>
+			<string></string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>key</key>
+			<string>sharingHashtag</string>
+			<key>label</key>
+			<string>#</string>
+			<key>default</key>
+			<string></string>
+			<key>placeholder</key>
+			<string>acapella</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>isStaticText</key>
+			<true/>
+			<key>label</key>
+			<string></string>
+			<key>footerText</key>
+			<string>© 2014 Pat Sluth</string>
+		</dict>
+		<dict>
+			<key>key</key>
+			<string>version</string>
+			<key>cell</key>
+			<string>PSTitleValueCell</string>
+			<key>get</key>
+			<string>getVersionNumberForSpecifier:</string>
+			<key>label</key>
+			<string>Version</string>
 		</dict>
 	</array>
 	<key>title</key>
-	<string>AcapellaPrefs</string>
+	<string>Acapella</string>
 </dict>
 </plist>

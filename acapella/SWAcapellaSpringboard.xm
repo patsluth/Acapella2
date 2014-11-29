@@ -3,6 +3,11 @@
 #import <AcapellaKit/AcapellaKit.h>
 #import <libsw/sluthwareios/sluthwareios.h>
 #import <libsw/SWAppLauncher.h>
+#import "SWAcapellaSharingFormatter.h"
+#import "SWAcapellaPrefsBridge.h"
+
+#import <Springboard/Springboard.h>
+#import <MediaRemote/MediaRemote.h>
 
 #import "MPUSystemMediaControlsViewController.h"
 #import "_MPUSystemMediaControlsView.h" //iOS 7
@@ -17,8 +22,6 @@
 #import <objc/runtime.h>
 #import "dlfcn.h"
 
-#import <Springboard/Springboard.h>
-
 
 
 
@@ -26,7 +29,7 @@
 #pragma mark MPUSystemMediaControlsViewController
 
 static SWAcapellaBase *_acapella;
-static UIActivityViewController *_currentAcapellaActivityViewController;
+static UIActivityViewController *_acapellaSharingActivityView;
 
 %hook MPUSystemMediaControlsViewController
 
@@ -92,6 +95,18 @@ static UIActivityViewController *_currentAcapellaActivityViewController;
 - (void)setAcapella:(SWAcapellaBase *)acapella
 {
     objc_setAssociatedObject(self, &_acapella, acapella, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+%new
+- (UIActivityViewController *)acapellaSharingActivityView
+{
+    return objc_getAssociatedObject(self, &_acapellaSharingActivityView);
+}
+
+%new
+- (void)setAcapellaSharingActivityView:(UIActivityViewController *)acapellaSharingActivityView
+{
+    objc_setAssociatedObject(self, &_acapellaSharingActivityView, acapellaSharingActivityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark Init
@@ -164,15 +179,6 @@ static UIActivityViewController *_currentAcapellaActivityViewController;
             [self.acapella.scrollview resetContentOffset:NO];
         }
     }
-    
-    if (_currentAcapellaActivityViewController){
-    
-    	NSLog(@"666666 %@", _currentAcapellaActivityViewController.view.window);
-    	NSLog(@"%@", self.view.window);
-	    //[_currentAcapellaActivityViewController removeFromParentViewController];
-	    //_currentAcapellaActivityViewController.completionHandler = nil;
-	   // _currentAcapellaActivityViewController = nil;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -195,12 +201,13 @@ static UIActivityViewController *_currentAcapellaActivityViewController;
 {
     %orig(arg1);
     
-    if (_currentAcapellaActivityViewController){ //make sure we clean this up, so we can display it again later
-    	[_currentAcapellaActivityViewController.view.window.rootViewController dismissViewControllerAnimated:NO completion:^{
-    		_currentAcapellaActivityViewController.completionHandler = nil;
-        	_currentAcapellaActivityViewController = nil;
-        }];
-    }
+     //make sure we clean this up, so we can display it again later
+    [self.view.window.rootViewController dismissViewControllerAnimated:NO completion:^{
+    	if (self.acapellaSharingActivityView){
+    		self.acapellaSharingActivityView.completionHandler = nil;
+        	self.acapellaSharingActivityView = nil;
+		}
+    }];
 }
 
 - (void)viewDidDisappear:(BOOL)arg1
@@ -213,11 +220,7 @@ static UIActivityViewController *_currentAcapellaActivityViewController;
 %new
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-	[UIApplication sharedApplication].idleTimerDisabled = ![UIApplication sharedApplication].idleTimerDisabled;
-	
-	NSLog(@"%@===%@", [UIApplication sharedApplication], SW_STRING_FROM_BOOL([UIApplication sharedApplication].idleTimerDisabled));
-
-    if (tap.state == UIGestureRecognizerStateEnded){
+	if (tap.state == UIGestureRecognizerStateEnded){
         
         CGFloat percentBoundaries = 0.25;
         
@@ -278,27 +281,54 @@ static UIActivityViewController *_currentAcapellaActivityViewController;
         
         if (deviceLC && deviceLC.isPasscodeLocked){
         
-        	[[[SWUIAlertView alloc] initWithTitle:@"Uh Oh!"
-                                  message:@"Your device must be unlocked to bring up the sharing screen. Unlock device and try again."
+        	[[[SWUIAlertView alloc] initWithTitle:@"Acapella"
+                                  message:@"Your device must be unlocked to bring up the activity screen for security reasons. Unlock device and try again."
                        clickedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex){
                        }
                           didDismissBlock:^(UIAlertView *alert, NSInteger buttonIndex){
+							  [view finishWrapAroundAnimation];
                           }
-                        cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+                        cancelButtonTitle:@":(-+--<" otherButtonTitles:nil] show];
         
         } else {
-            
-            _currentAcapellaActivityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[@"test", @"poop"]
-                                                                                 applicationActivities:nil];
         
-			[self presentViewController:_currentAcapellaActivityViewController
-                           		animated:YES
-						   		completion:nil];
-        
-			_currentAcapellaActivityViewController.completionHandler = ^(NSString *activityType, BOOL completed){
-				[view finishWrapAroundAnimation];
-			};
-            
+        	MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+        		if (result){
+        		
+        			NSDictionary *resultDict = (__bridge NSDictionary *)result;
+        		
+        			NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+        			NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
+        			NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
+        			NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag"];
+        			
+        			if (!sharingHashtag || [sharingHashtag isEqualToString:@""]){
+	        			sharingHashtag = @"acapella";
+        			}
+        			
+					NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
+																								mediaArtist:mediaArtist
+																								mediaArtworkData:mediaArtworkData
+																								sharingHashtag:sharingHashtag];
+																								
+					if (shareData){
+						[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        		
+							self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:shareData applicationActivities:nil];
+							[self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
+							self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
+								[view finishWrapAroundAnimation];
+							};
+        				
+						}];
+					} else {
+						[view finishWrapAroundAnimation];
+					}
+        		
+        		} else {
+	        		[view finishWrapAroundAnimation];
+        		}
+        	});
         }
     }
 }
@@ -614,8 +644,6 @@ static UIActivityViewController *_currentAcapellaActivityViewController;
 {
     NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/Frameworks/AcapellaKit.framework"];
     [bundle load];
-    
-    //dlopen("/System/Library/PrivateFrameworks/XPCObjects.framework/XPCObjects", RTLD_LAZY);
 }
 
 

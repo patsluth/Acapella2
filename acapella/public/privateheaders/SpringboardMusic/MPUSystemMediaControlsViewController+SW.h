@@ -38,6 +38,7 @@
 - (UIView *)volumeView;
 - (UIView *)buyTrackButton;
 - (UIView *)buyAlbumButton;
+- (UIView *)skipLimitView;
 
 - (BOOL)nowPlayingTrackIsRadioTrack;
 

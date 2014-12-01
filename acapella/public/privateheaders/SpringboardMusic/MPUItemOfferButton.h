@@ -1,0 +1,10 @@
+
+@interface MPUItemOfferButton : UIView
+{
+}
+
+@end
+
+
+
+

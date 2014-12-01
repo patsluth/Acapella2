@@ -9,6 +9,7 @@
     
     //MPUItemOfferButton *_buyTrackButton;
     //MPUItemOfferButton *_buyAlbumButton;
+    //MPUSkipLimitView *_skipLimitView;
 }
 
 - (id)initWithStyle:(int)arg1; //changes color of items, not line numbers

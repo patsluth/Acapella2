@@ -4,7 +4,7 @@ Depends: firmware (>= 7.1), firmware (<= 8.1.1), mobilesubstrate, preferenceload
 Conflicts:com.patsluth.swgesturemusiccontrols, org.thebigboss.gesturemusiccontrols
 Version: 1.0
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Elegant, gesture based enhancements to the default iOS Music controls.
 Maintainer: Pat Sluth
 Author: Pat Sluth
 Section: Tweaks

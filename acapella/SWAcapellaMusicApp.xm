@@ -358,6 +358,23 @@ static UIActivityViewController *_acapellaSharingActivityView;
                 [self.player changePlaybackIndexBy:(int)skipDirection deltaType:0 ignoreElapsedTime:NO allowSkippingUnskippableContent:YES];
             }];
             
+            if (skipDirection == -1){
+	            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+                if (result){
+                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
+                    double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+                    NSString *mediaRadioStationID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRadioStationIdentifier];
+                    
+                    //since the song doesnt change, it just starts over if its this far into the song (trial and error)
+                    if (mediaCurrentElapsedDuration >= 3.0 || mediaRadioStationID != nil){ 
+                    	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+	                    	[view finishWrapAroundAnimation];
+	                    }];
+                    }
+                }
+            });
+            }
+            
         } else {
             [view finishWrapAroundAnimation];
         }

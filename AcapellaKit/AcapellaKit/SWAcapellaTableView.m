@@ -109,7 +109,7 @@
 {
     [self stopWrapAroundFallback];
     
-    self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:0.8
+    self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                                target:self
                                                              selector:@selector(finishWrapAroundAnimation)
                                                              userInfo:nil

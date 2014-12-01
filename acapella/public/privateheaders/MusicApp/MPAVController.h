@@ -17,11 +17,6 @@
 @property(readonly) MPMediaItem *currentMediaItem;
 @property(readonly) MPMediaQuery *currentMediaQuery;
 
-- (void)applyRepeatSettings;
-- (void)applyShuffleSettings;
-- (void)setRepeatType:(unsigned int)arg1;
-- (void)setShuffleType:(unsigned int)arg1;
-
 - (void)changePlaybackIndexBy:(long)arg1
                     deltaType:(int)arg2
             ignoreElapsedTime:(BOOL)arg3

@@ -16,6 +16,7 @@
 #import "MPUChronologicalProgressView.h"
 #import "MPUMediaControlsTitlesView.h"
 #import "MPUMediaControlsVolumeView.h"
+#import "MPUItemOfferButton.h"
 #import "SBCCMediaControlsSectionController.h"
 #import "AVSystemController+SW.h"
 
@@ -99,7 +100,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 %new
 - (UIView *)buyTrackButton
 {
-    if (!SW_OBJ_CONTAINS_IVAR([self mediaControlsView], "_buyTrackButton")){
+    if ([SWDeviceInfo iOSVersion_First] != 8){
         return nil;
     }
     
@@ -109,11 +110,21 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 %new
 - (UIView *)buyAlbumButton
 {
-    if (!SW_OBJ_CONTAINS_IVAR([self mediaControlsView], "_buyAlbumButton")){
+    if ([SWDeviceInfo iOSVersion_First] != 8){
         return nil;
     }
     
     return MSHookIvar<UIView *>([self mediaControlsView], "_buyAlbumButton");
+}
+
+%new
+- (UIView *)skipLimitView
+{
+    if ([SWDeviceInfo iOSVersion_First] != 8){
+        return nil;
+    }
+    
+    return MSHookIvar<UIView *>([self mediaControlsView], "_skipLimitView");
 }
 
 %new

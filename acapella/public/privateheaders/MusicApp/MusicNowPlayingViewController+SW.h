@@ -45,9 +45,6 @@
 - (MPAVItem *)mpavItem;
 - (UIButton *)likeOrBanButton;
 
-- (void)startRatingShouldHideTimer;
-- (void)hideRatingControlWithTimer;
-
 @end
 
 

@@ -6,5 +6,6 @@ Description: An awesome MobileSubstrate tweak!
 Maintainer: Pat Sluth
 Author: Pat Sluth
 Section: Tweaks
-Version: 0.0.1-114
-Installed-Size: 1324
+Icon: file:///Library/Application Support/AcapellaSupport.bundle/Icon.png
+Version: 0.0.1-179
+Installed-Size: 896

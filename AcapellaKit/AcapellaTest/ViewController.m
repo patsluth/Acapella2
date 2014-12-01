@@ -10,6 +10,8 @@
 #import "libsw/sluthwareios/sluthwareios.h"
 #import "test.h"
 #import <objc/objc.h>
+#import <Foundation/Foundation.h>
+#import <CoreText/CoreText.h>
 
 @interface ViewController ()
 
@@ -27,39 +29,39 @@
 {
     [super viewDidLoad];
     
-    self.tableview = [[UITableView alloc] init];
-    self.tableview.backgroundColor = [UIColor clearColor];
-    
-    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    [self.view addSubview:self.tableview];
-    
-    self.tableview.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20);
-    self.tableview.delegate = self;
-    self.tableview.dataSource = self;
-
-    self.tableview.showsHorizontalScrollIndicator = YES;
-    self.tableview.showsVerticalScrollIndicator = YES;
-    
-    
-    
-    
-    UIView *tableViewHeader = [[UIView alloc] init];
-    tableViewHeader.backgroundColor = [UIColor clearColor];
-    tableViewHeader.frame = CGRectMake(0, 0, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
-    self.tableview.tableHeaderView = tableViewHeader;
-    
-    self.stretchableTableViewHeader = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"banner"]];
-    self.stretchableTableViewHeader.backgroundColor = [UIColor blueColor];
-    self.stretchableTableViewHeader.contentMode = UIViewContentModeScaleAspectFill;
-    self.stretchableTableViewHeader.frame = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
-    [self.view addSubview:self.stretchableTableViewHeader];
-    
-    [self.view bringSubviewToFront:self.tableview];
-    
-    
-    return;
+//    self.tableview = [[UITableView alloc] init];
+//    self.tableview.backgroundColor = [UIColor clearColor];
+//    
+//    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    
+//    [self.view addSubview:self.tableview];
+//    
+//    self.tableview.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20);
+//    self.tableview.delegate = self;
+//    self.tableview.dataSource = self;
+//
+//    self.tableview.showsHorizontalScrollIndicator = YES;
+//    self.tableview.showsVerticalScrollIndicator = YES;
+//    
+//    
+//    
+//    
+//    UIView *tableViewHeader = [[UIView alloc] init];
+//    tableViewHeader.backgroundColor = [UIColor clearColor];
+//    tableViewHeader.frame = CGRectMake(0, 0, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
+//    self.tableview.tableHeaderView = tableViewHeader;
+//    
+//    self.stretchableTableViewHeader = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"banner"]];
+//    self.stretchableTableViewHeader.backgroundColor = [UIColor blueColor];
+//    self.stretchableTableViewHeader.contentMode = UIViewContentModeScaleAspectFill;
+//    self.stretchableTableViewHeader.frame = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
+//    [self.view addSubview:self.stretchableTableViewHeader];
+//    
+//    [self.view bringSubviewToFront:self.tableview];
+//    
+//    
+//    return;
     
     self.contentView = [[UIView alloc] init];
     self.contentView.frame = CGRectMake(0, 100, 0, 0);
@@ -116,8 +118,6 @@
                                cancelButtonTitle:@"P"
                                 otherButtonTitles:nil] show];
         } else if (direction == SW_SCROLL_DIR_LEFT) {
-            
-            [view finishWrapAroundAnimation];
             
         } else {
             [view finishWrapAroundAnimation];

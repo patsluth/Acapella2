@@ -24,6 +24,8 @@
 		2E75967A19FDE0DB00001BC7 /* SWAcapellaActionIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */; };
 		2E82A1C71A00456B00F04CDB /* SWAcapellaActionIndicatorController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E82A1C81A00456B00F04CDB /* SWAcapellaActionIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */; };
+		2EB46E4F1A2BF20900BE29A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EB46E4E1A2BF20900BE29A4 /* Foundation.framework */; };
+		2EB46E511A2BF21100BE29A4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EB46E501A2BF21100BE29A4 /* CoreText.framework */; };
 		2ED282FC1A10671C00772295 /* SWAcapellaScrollViewProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2EDAC2F71A264EFF0006E69F /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
 		2EDAE4E71A069CC3006274BA /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDAE4E61A069CC3006274BA /* test.m */; };
@@ -78,6 +80,8 @@
 		2E75967819FDE0DB00001BC7 /* SWAcapellaActionIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaActionIndicator.m; sourceTree = "<group>"; };
 		2E82A1C51A00456B00F04CDB /* SWAcapellaActionIndicatorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaActionIndicatorController.h; sourceTree = "<group>"; };
 		2E82A1C61A00456B00F04CDB /* SWAcapellaActionIndicatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaActionIndicatorController.m; sourceTree = "<group>"; };
+		2EB46E4E1A2BF20900BE29A4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2EB46E501A2BF21100BE29A4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollViewProtocol.h; sourceTree = "<group>"; };
 		2EDAE4E51A069CC3006274BA /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		2EDAE4E61A069CC3006274BA /* test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EB46E511A2BF21100BE29A4 /* CoreText.framework in Frameworks */,
+				2EB46E4F1A2BF20900BE29A4 /* Foundation.framework in Frameworks */,
 				2EDAC2F71A264EFF0006E69F /* libsluthwareios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,6 +158,8 @@
 		2E75959419FD958600001BC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2EB46E501A2BF21100BE29A4 /* CoreText.framework */,
+				2EB46E4E1A2BF20900BE29A4 /* Foundation.framework */,
 				2E75959719FD95B500001BC7 /* sluthwareios */,
 				2E75959519FD959E00001BC7 /* libsluthwareios.a */,
 			);

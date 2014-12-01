@@ -55,22 +55,26 @@
 {
 	[super viewWillAppear:animated];
 	
-	self.table.backgroundColor = [UIColor clearColor];
+	if ([SWDeviceInfo iOSVersion_First] == 8){
 	
-	UIView *tableViewHeader = [[UIView alloc] init];
-    tableViewHeader.frame = CGRectMake(self.table.frame.origin.x, self.table.frame.origin.y, self.table.frame.size.width, SW_ACAPELLA_HEADER_HEIGHT);
-    self.table.tableHeaderView = tableViewHeader;
-    
-    
-    
-    NSBundle *bundle = [NSBundle bundleWithPath:SW_ACAPELLA_PREFS_BUNDLE_PATH];
-    
-    if (bundle){
-    	self.acapellaPrefsHeaderView = [[SWAcapellaPrefsHeaderView alloc] initWithImage:[UIImage
-    																imageWithContentsOfFile:[bundle
-    																	pathForResource:@"Acapella_Prefs_Banner_Background" ofType:@"png"]]];
-    	self.acapellaPrefsHeaderView.frame = tableViewHeader.frame;
-		[self.table.superview insertSubview:self.acapellaPrefsHeaderView belowSubview:self.table];
+		self.table.backgroundColor = [UIColor clearColor];
+	
+		UIView *tableViewHeader = [[UIView alloc] init];
+	    tableViewHeader.frame = CGRectMake(self.table.frame.origin.x, self.table.frame.origin.y, self.table.frame.size.width, SW_ACAPELLA_HEADER_HEIGHT);
+	    self.table.tableHeaderView = tableViewHeader;
+	    
+	    
+	    
+	    NSBundle *bundle = [NSBundle bundleWithPath:SW_ACAPELLA_PREFS_BUNDLE_PATH];
+	    
+	    if (bundle){
+	    	self.acapellaPrefsHeaderView = [[SWAcapellaPrefsHeaderView alloc] initWithImage:[UIImage
+	    																imageWithContentsOfFile:[bundle
+	    																	pathForResource:@"Acapella_Prefs_Banner_Background" ofType:@"png"]]];
+	    	self.acapellaPrefsHeaderView.frame = tableViewHeader.frame;
+			[self.table.superview insertSubview:self.acapellaPrefsHeaderView belowSubview:self.table];
+	    }
+	
     }
 }
 
@@ -111,8 +115,7 @@
     
     //this will dismiss the keyboard and save the preferences for the selected text field
     if ([self isKindOfClass:[UIViewController class]]){
-        UIViewController *vcSelf = (UIViewController *)self;
-        [vcSelf.view endEditing:YES];
+        [((UIViewController *)self).view endEditing:YES];
     }
 }
 

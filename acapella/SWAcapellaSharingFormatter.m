@@ -28,7 +28,11 @@
         [shareString appendString:hashtag];
     }
     
-    return @[shareString, (data) ? [[UIImage alloc] initWithData:data] : nil];
+    if (data && [data length] != 0){
+	    return @[shareString, [[UIImage alloc] initWithData:data]];
+    } else {
+	    return @[shareString];
+    }
 }
 
 @end

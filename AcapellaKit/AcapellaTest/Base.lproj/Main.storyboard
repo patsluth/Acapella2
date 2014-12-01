@@ -25,6 +25,18 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.094187393499999994" green="0.1942645053" blue="0.66666666669999997" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Acapella_Prefs_Banner_Background" id="CsE-f2-UvL">
+                                <rect key="frame" x="0.0" y="150" width="325" height="190"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WGu-on-Vqg">
+                                <rect key="frame" x="16" y="385" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" red="0.67459753789999999" green="0.032286569850000002" blue="0.033319610409999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -34,6 +46,9 @@
             <point key="canvasLocation" x="-78" y="335"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Acapella_Prefs_Banner_Background" width="1" height="200"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

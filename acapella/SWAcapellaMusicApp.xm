@@ -2,6 +2,8 @@
 
 #import <AcapellaKit/AcapellaKit.h>
 #import <libsw/sluthwareios/sluthwareios.h>
+#import "SWAcapellaSharingFormatter.h"
+#import "SWAcapellaPrefsBridge.h"
 
 #import <MediaRemote/MediaRemote.h>
 
@@ -23,6 +25,26 @@
 #pragma mark MusicNowPlayingViewController
 
 static SWAcapellaBase *_acapella;
+static UIActivityViewController *_acapellaSharingActivityView;
+
+
+
+
+
+@interface MusicNowPlayingViewController()
+{
+}
+
+@property (strong, nonatomic) UIActivityViewController *acapellaSharingActivityView;
+
+- (void)startRatingShouldHideTimer;
+- (void)hideRatingControlWithTimer;
+
+@end
+
+
+
+
 
 %hook MusicNowPlayingViewController
 
@@ -136,6 +158,18 @@ static SWAcapellaBase *_acapella;
     objc_setAssociatedObject(self, &_acapella, acapella, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+%new
+- (UIActivityViewController *)acapellaSharingActivityView
+{
+    return objc_getAssociatedObject(self, &_acapellaSharingActivityView);
+}
+
+%new
+- (void)setAcapellaSharingActivityView:(UIActivityViewController *)acapellaSharingActivityView
+{
+    objc_setAssociatedObject(self, &_acapellaSharingActivityView, acapellaSharingActivityView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 #pragma mark Init
 
 - (void)viewDidLoad
@@ -242,6 +276,14 @@ static SWAcapellaBase *_acapella;
 - (void)viewWillDisappear:(BOOL)arg1
 {
     %orig(arg1);
+    
+    //make sure we clean this up, so we can display it again later
+    [self.view.window.rootViewController dismissViewControllerAnimated:NO completion:^{
+    	if (self.acapellaSharingActivityView){
+    		self.acapellaSharingActivityView.completionHandler = nil;
+        	self.acapellaSharingActivityView = nil;
+		}
+    }];
 }
 
 - (void)viewDidDisappear:(BOOL)arg1
@@ -321,32 +363,64 @@ static SWAcapellaBase *_acapella;
         }
         
     } else {
-        [view finishWrapAroundAnimation];
+    
+        [view stopWrapAroundFallback];
         
         MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
-        		NSLog(@"PAT TEST %@", result);
-        	});
+    		if (result){
+    		
+    			NSDictionary *resultDict = (__bridge NSDictionary *)result;
+    		
+    			NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+    			NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
+    			NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
+    			NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag"];
+    			
+    			if (!sharingHashtag || [sharingHashtag isEqualToString:@""]){
+        			sharingHashtag = @"acapella";
+    			}
+    			
+				NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
+																							mediaArtist:mediaArtist
+																							mediaArtworkData:mediaArtworkData
+																							sharingHashtag:sharingHashtag];
+																							
+				if (shareData){
+					[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    		
+						self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:shareData applicationActivities:nil];
+						[self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
+						self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
+							[view finishWrapAroundAnimation];
+						};
+    				
+					}];
+				} else {
+					[view finishWrapAroundAnimation];
+				}
+    		
+    		} else {
+        		[view finishWrapAroundAnimation];
+    		}
+    	});
     }
 }
 
 %new
 - (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
- 	MPAVController *p = [self player];
-    CGFloat percentBoundaries = 0.25;
+ 	CGFloat percentBoundaries = 0.25;
     
     if (percentage.x <= percentBoundaries){ //left
         
         if (longPress.state == UIGestureRecognizerStateBegan){
-            
-            if (p && [p canSeekBackwards]){
-                [p beginSeek:-1];
-            }
-            
-        } else if (longPress.state == UIGestureRecognizerStateEnded){
-            
-            [p endSeek];
-            
+            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+	    		if (result){
+	    			NSDictionary *resultDict = (__bridge NSDictionary *)result;
+	    			double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+	    			MRMediaRemoteSetElapsedTime(mediaCurrentElapsedDuration - 20.0);
+	    		}
+	    	});
         }
         
     } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
@@ -369,16 +443,14 @@ static SWAcapellaBase *_acapella;
         
     } else if (percentage.x > (1.0 - percentBoundaries)){ //right
         
-        if (longPress.state == UIGestureRecognizerStateBegan){
-            
-            if (p && [p canSeekForwards]){
-                [p beginSeek:1];
-            }
-            
-        } else if (longPress.state == UIGestureRecognizerStateEnded){
-            
-            [p endSeek];
-            
+		if (longPress.state == UIGestureRecognizerStateBegan){
+            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+	    		if (result){
+	    			NSDictionary *resultDict = (__bridge NSDictionary *)result;
+	    			double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+	    			MRMediaRemoteSetElapsedTime(mediaCurrentElapsedDuration + 20.0);
+	    		}
+	    	});
         }
         
     }

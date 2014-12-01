@@ -612,10 +612,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 {
 }
 
-
-
-
-
 #pragma mark Repeat/Shuffle
 
 %new

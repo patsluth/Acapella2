@@ -14,7 +14,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string></string>
+			<string>Sharing Hashtag</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -31,6 +31,58 @@
 			<string>com.patsluth.AcapellaPrefs</string>
 			<key>PostNotification</key>
 			<string>com.patsluth.AcapellaPrefs.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>Acapella_Prefs_Tutorial_Icon.png</string>
+			<key>action</key>
+			<string>viewTutorialVideo:</string>
+			<key>label</key>
+			<string>Tutorial Video</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>isStaticText</key>
+			<true/>
+			<key>label</key>
+			<string></string>
+			<key>footerText</key>
+			<string>With a special thanks to @smileytechguy!</string>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>SWPSTwitterCell</string>
+			<key>username</key>
+			<string>patsluth</string>
+			<key>secondaryText</key>
+			<string>Developer</string>
+			<key>imagePath</key>
+			<string>/Library/PreferenceBundles/AcapellaPrefs.bundle/Developer_Twitter_Profile.jpeg</string>
+			<key>action</key>
+			<string>viewTwitterProfile:</string>
+			<key>height</key>
+			<integer>80</integer>
+		</dict>
+		<dict>
+			<key>cellClass</key>
+			<string>SWPSTwitterCell</string>
+			<key>username</key>
+			<string>stijn_d3sign</string>
+			<key>secondaryText</key>
+			<string>Designer</string>
+			<key>imagePath</key>
+			<string>/Library/PreferenceBundles/AcapellaPrefs.bundle/Designer_Twitter_Profile.png</string>
+			<key>action</key>
+			<string>viewTwitterProfile:</string>
+			<key>height</key>
+			<integer>80</integer>
 		</dict>
 		<dict>
 			<key>cell</key>

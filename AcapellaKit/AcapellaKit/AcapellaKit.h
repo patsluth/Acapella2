@@ -23,8 +23,6 @@ FOUNDATION_EXPORT const unsigned char AcapellaKitVersionString[]; //! Project ve
 #import <AcapellaKit/SWAcapellaScrollViewProtocol.h>
 #import <AcapellaKit/SWAcapellaTableView.h>
 #import <AcapellaKit/SWAcapellaScrollView.h>
-#import <AcapellaKit/SWAcapellaActionIndicator.h>
-#import <AcapellaKit/SWAcapellaActionIndicatorController.h>
 
 
 

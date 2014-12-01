@@ -209,6 +209,8 @@
         //cell.alpha = 0.1;
     }
     
+    [cell setSelected:YES];
+    
     return cell;
 }
 

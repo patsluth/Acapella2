@@ -3,12 +3,17 @@
 #import "SWAcapellaPrefsHeaderView.h"
 
 #import <libsw/sluthwareios/sluthwareios.h>
+#import <libsw/SWPSTwitterCell.h>
 #import <libpackageinfo/libpackageinfo.h>
 
 #import <Preferences/Preferences.h>
 
+#import "dlfcn.h"
+
 #define SW_ACAPELLA_HEADER_HEIGHT 200
 #define SW_ACAPELLA_PREFERENCES_PATH @"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"
+
+void *handle;
 
 @interface SWAcapellaPrefsListController: PSListController <UIScrollViewDelegate>
 {
@@ -22,6 +27,17 @@
 @implementation SWAcapellaPrefsListController
 
 #pragma mark Init
+
+-(id)init
+{
+     self = [super init];
+     
+     if(self){
+         handle = dlopen("/usr/lib/libsw.dylib", RTLD_NOW | RTLD_GLOBAL);
+     }
+     
+     return self;
+}
 
 - (id)specifiers
 {
@@ -98,6 +114,63 @@
 	}
 }
 
+#pragma mark Tutorial Video
+
+- (void)viewTutorialVideo:(PSSpecifier *)specifier
+{
+    //random string so php doesnt cache
+    NSInteger randomStringLength = 200;
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:randomStringLength];
+    for (int i = 0; i < randomStringLength; i++){
+        [randomString appendFormat:@"%C", (unichar)('a' + arc4random_uniform(25))];
+    }
+    
+    NSString *url = [NSString stringWithFormat:@"%@%@",
+                     @"http://sluthware.com/SluthwareApps/SWAcapellaTutorialVideoURL.php?",
+                     randomString];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
+                                    initWithURL:[NSURL URLWithString:url]];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[[NSOperationQueue alloc] init]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
+                                if (connectionError){
+                                    //NSLog(@"SW Error - %@", connectionError);
+                                    [[[UIAlertView alloc] initWithTitle:@"Error"
+                                                                message:@"Could not retrive Video URL"
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil, nil] show];
+                                } else {
+                                    NSString *result = [[NSString alloc] initWithData:data
+                                                                             encoding:NSUTF8StringEncoding];
+                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:result]];
+                                }
+                           }];
+}
+
+#pragma mark Twitter
+
+- (void)viewTwitterProfile:(PSSpecifier *)specifier
+{
+	if (!specifier.properties[@"username"]){
+		return;
+	}
+	
+	NSURL *tweetbotURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", @"tweetbot:///user_profile/", specifier.properties[@"username"]]];
+    NSURL *twitterURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", @"twitter://user?screen_name=", specifier.properties[@"username"]]];
+    
+    if ([[UIApplication sharedApplication] canOpenURL:tweetbotURL]){
+        [[UIApplication sharedApplication] openURL:tweetbotURL];
+        return;
+    } else if ([[UIApplication sharedApplication] canOpenURL:twitterURL]){
+        [[UIApplication sharedApplication] openURL:twitterURL];
+        return;
+    }
+    
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", @"https://twitter.com/", specifier.properties[@"username"]]]];
+}
+
 #pragma mark Helper
 
 - (id)getVersionNumberForSpecifier:(PSSpecifier *)specifier
@@ -142,6 +215,11 @@
 	[defaults writeToFile:SW_ACAPELLA_PREFERENCES_PATH atomically:YES];
 	CFStringRef mikotoPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), mikotoPost, NULL, NULL, YES);
+}
+
+- (void)dealloc
+{
+	dlclose(handle);
 }
 
 @end

@@ -31,6 +31,7 @@
         self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0001, 0.0001);
         [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(animate) userInfo:nil repeats:NO];
     }
+    
     return self;
 }
 

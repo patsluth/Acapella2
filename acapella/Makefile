@@ -31,12 +31,12 @@ ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Shared
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Springboard
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/SpringboardMusic
 
+SUBPROJECTS += acapellaprefs
+
 include theos/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/bundle.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
+include $(THEOS_MAKE_PATH)/aggregate.mk
 
 after-install::
 	@install.exec "killall -9 SpringBoard"
-	
-SUBPROJECTS += acapellaprefs
-include $(THEOS_MAKE_PATH)/aggregate.mk

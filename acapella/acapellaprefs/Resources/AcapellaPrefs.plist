@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>title</key>
+	<string>Acapella</string>
 	<key>items</key>
 	<array>
 		<dict>
@@ -13,8 +15,18 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>label</key>
+			<key>footerText</key>
 			<string>Sharing Hashtag</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAcapellaPrefsActionsListController</string>
+			<key>label</key>
+			<string>Actions</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -105,7 +117,5 @@
 			<string>Version</string>
 		</dict>
 	</array>
-	<key>title</key>
-	<string>Acapella</string>
 </dict>
 </plist>

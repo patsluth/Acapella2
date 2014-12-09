@@ -23,6 +23,6 @@
 	<key>MinimumOSVersion</key>
 	<string>3.0</string>
 	<key>NSPrincipalClass</key>
-	<string>AcapellaPrefsListController</string>
+	<string>SWAcapellaPrefsListController</string>
 </dict>
 </plist>

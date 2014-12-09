@@ -2,7 +2,9 @@
 @class MPAVController;
 @class MPAVItem;
 
-@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate>
+#import "SWAcapellaActionProtocol.h"
+
+@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol>
 {
     //MPAVController *_player; //iOS 8 only
                                 //we can use the same variable on _playbackControlsView

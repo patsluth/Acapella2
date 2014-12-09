@@ -1,0 +1,84 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		2EE53F041A36BCE900BEED8F /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		2EE53F051A36BCEE00BEED8F /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		2EE53F061A36BD0300BEED8F /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2EE53F071A36BD0900BEED8F /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entry.plist; sourceTree = "<group>"; };
+		2EE53F081A36BD1400BEED8F /* SWAcapellaPrefsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController.mm; sourceTree = "<group>"; };
+		2EE53F091A36BD1800BEED8F /* SWAcapellaPrefsHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaPrefsHeaderView.m; sourceTree = "<group>"; };
+		2EE53F0B1A36D09100BEED8F /* SWAcapellaPrefsActionsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsActionsListController.mm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2EE53EFD1A36BCBB00BEED8F = {
+			isa = PBXGroup;
+			children = (
+				2EE53F041A36BCE900BEED8F /* public */,
+				2EE53F051A36BCEE00BEED8F /* Resources */,
+				2EE53F061A36BD0300BEED8F /* Makefile */,
+				2EE53F071A36BD0900BEED8F /* entry.plist */,
+				2EE53F0B1A36D09100BEED8F /* SWAcapellaPrefsActionsListController.mm */,
+				2EE53F091A36BD1800BEED8F /* SWAcapellaPrefsHeaderView.m */,
+				2EE53F081A36BD1400BEED8F /* SWAcapellaPrefsListController.mm */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		2EE53EFE1A36BCBB00BEED8F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+			};
+			buildConfigurationList = 2EE53F011A36BCBB00BEED8F /* Build configuration list for PBXProject "acapellaprefs" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2EE53EFD1A36BCBB00BEED8F;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		2EE53F021A36BCBB00BEED8F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		2EE53F031A36BCBB00BEED8F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2EE53F011A36BCBB00BEED8F /* Build configuration list for PBXProject "acapellaprefs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EE53F021A36BCBB00BEED8F /* Debug */,
+				2EE53F031A36BCBB00BEED8F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2EE53EFE1A36BCBB00BEED8F /* Project object */;
+}

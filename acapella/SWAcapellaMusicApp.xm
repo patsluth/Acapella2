@@ -383,7 +383,7 @@ static UIActivityViewController *_acapellaSharingActivityView;
     
         [view stopWrapAroundFallback];
         
-        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
     		if (result){
     		
     			NSDictionary *resultDict = (__bridge NSDictionary *)result;
@@ -431,7 +431,7 @@ static UIActivityViewController *_acapellaSharingActivityView;
     if (percentage.x <= percentBoundaries){ //left
         
         if (longPress.state == UIGestureRecognizerStateBegan){
-            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
 	    		if (result){
 	    			NSDictionary *resultDict = (__bridge NSDictionary *)result;
 	    			double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
@@ -461,7 +461,7 @@ static UIActivityViewController *_acapellaSharingActivityView;
     } else if (percentage.x > (1.0 - percentBoundaries)){ //right
         
 		if (longPress.state == UIGestureRecognizerStateBegan){
-            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
 	    		if (result){
 	    			NSDictionary *resultDict = (__bridge NSDictionary *)result;
 	    			double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
@@ -533,17 +533,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
 - (void)swAcapalle:(SWAcapellaBase *)view didEndDisplayingCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
 }
-
-
-#pragma mark Other
-
-/*
-- (void)_updateForCurrentItemAnimated:(BOOL)arg1
-{
-	NSLog(@"PAT TEST %@--%@", self, SW_STRING_FROM_BOOL(arg1));
-    %orig(NO); //for some reason if we animate our scroll view while the album art change is animating, it is very jumpy
-}
-*/
 
 #pragma mark Rating
 

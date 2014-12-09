@@ -33,6 +33,8 @@
 #define SW_ACAPELLA_REPEATSHUFFLE_Y_PADDING 5
 #define SW_ACAPELLA_REPEATSHUFFLE_X_PADDING 10
 
+#define SW_ACAPELLA_LEFTRIGHT_VIEW_BOUNDARY_PERCENTAGE 0.25
+
 static SWAcapellaBase *_acapella;
 static UIActivityViewController *_acapellaSharingActivityView;
 static UIButton *_acapellaRepeatButton;
@@ -57,7 +59,11 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 - (void)startHideRepeatAndShuffleButtonTimer;
 - (void)stopHideRepeatAndShuffleButtonTimer;
 
+//actions
+- (void)attemptToOpenNowPlayingApp;
+
 @end
+
 
 
 
@@ -125,22 +131,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     }
     
     return MSHookIvar<UIView *>([self mediaControlsView], "_skipLimitView");
-}
-
-%new
-- (BOOL)nowPlayingTrackIsRadioTrack
-{
-	SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
-            
-    if (sbMediaController && [sbMediaController respondsToSelector:@selector(isRadioTrack)]){ //iOS 7 only
-    	return [sbMediaController isRadioTrack];
-    } else {
-    	if ([SWDeviceInfo iOSVersion_First] == 8){ //iOS 8 only
-    		return MSHookIvar<BOOL>(self, "_nowPlayingIsRadioStation");
-    	} else {
-    		return NO;
-    	}
-    }
 }
 
 %new
@@ -319,18 +309,15 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 {
     if (tap.state == UIGestureRecognizerStateEnded){
         
-        CGFloat percentBoundaries = 0.25;
+        swAcapellaAction action;
+        
+        CGFloat percentBoundaries = SW_ACAPELLA_LEFTRIGHT_VIEW_BOUNDARY_PERCENTAGE;
         
         if (percentage.x <= percentBoundaries){ //left
-            [%c(AVSystemController) acapellaChangeVolume:-1];
+            action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"leftTapAction" defaultValue:@10]];
         } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
             
-            SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
-            
-            if (sbMediaController){
-                [sbMediaController togglePlayPause];
-            }
-            
+            action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"centreTapAction" defaultValue:@1]];
             
             [UIView animateWithDuration:0.1
                              animations:^{
@@ -345,7 +332,11 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                              }];
             
         } else if (percentage.x > (1.0 - percentBoundaries)){ //right
-            [%c(AVSystemController) acapellaChangeVolume:1];
+            action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"rightTapAction" defaultValue:@11]];
+        }
+        
+        if (action){
+            action();
         }
         
     }
@@ -354,208 +345,69 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 %new
 - (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
 {
-    SBMediaController *sbMediaController = [%c(SBMediaController) sharedInstance];
+    swAcapellaAction action;
+    
+    [view stopWrapAroundFallback];
     
     if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
         
-        if (sbMediaController && [sbMediaController _nowPlayingInfo]){ //make sure something is playing
-            
-            [view stopWrapAroundFallback]; //we will finish the animation manually once the songs has changed and the UI has been updated
-            
-            long skipDirection = (direction == SW_SCROLL_DIR_LEFT) ? -1 : 1;
-            [sbMediaController changeTrack:(int)skipDirection];
-            
-        } else {
-            
-            [view finishWrapAroundAnimation];
-        }
+        [view stopWrapAroundFallback];
+        
+        action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:(direction == SW_SCROLL_DIR_LEFT) ?
+                                        @"swipeLeftAction" : @"swipeRightAction"
+                                                             defaultValue:(direction == SW_SCROLL_DIR_LEFT) ?
+                                        @2 : @3]];
         
     } else if (direction == SW_SCROLL_DIR_UP) {
         
-        [view stopWrapAroundFallback];
+        action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"swipeUpAction" defaultValue:@6]];
         
-        SBDeviceLockController *deviceLC = (SBDeviceLockController *)[%c(SBDeviceLockController) sharedController];
-        
-        if (deviceLC && deviceLC.isPasscodeLocked){
-            
-            [[[SWUIAlertView alloc] initWithTitle:@"Acapella"
-                                          message:@"Your device must be unlocked to bring up the activity screen for security reasons. Unlock device and try again."
-                               clickedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex){
-                               }
-                                  didDismissBlock:^(UIAlertView *alert, NSInteger buttonIndex){
-                                      [view finishWrapAroundAnimation];
-                                  }
-                                cancelButtonTitle:@":(-+--<" otherButtonTitles:nil] show];
-            
-        } else {
-            
-            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
-                if (result){
-                    
-                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
-                    
-                    NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
-                    NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
-                    NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
-                    NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag"];
-                    
-                    if (!sharingHashtag || [sharingHashtag isEqualToString:@""]){
-                        sharingHashtag = @"acapella";
-                    }
-                    
-                    NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
-                                                                                               mediaArtist:mediaArtist
-                                                                                          mediaArtworkData:mediaArtworkData
-                                                                                            sharingHashtag:sharingHashtag];
-                    
-                    if (shareData){
-                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                            
-                            self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:shareData applicationActivities:nil];
-                            [self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
-                            self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
-                                [view finishWrapAroundAnimation];
-                            };
-                            
-                        }];
-                    } else {
-                        [view finishWrapAroundAnimation];
-                    }
-                    
-                } else {
-                    [view finishWrapAroundAnimation];
-                }
-            });
-        }
     } else if (direction == SW_SCROLL_DIR_DOWN) {
         
-        if (![self nowPlayingTrackIsRadioTrack] && (!self.acapellaRepeatButton && !self.acapellaShuffleButton)){
-            
-            self.acapellaRepeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            [[self.acapellaRepeatButton layer] setMasksToBounds:YES];
-            [[self.acapellaRepeatButton layer] setCornerRadius:5.0f];
-            [self.acapellaRepeatButton addTarget:self action:@selector(acapellaRepeatButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-            
-            self.acapellaShuffleButton = [UIButton buttonWithType:UIButtonTypeSystem];
-            [self.acapellaShuffleButton addTarget:self action:@selector(acapellaShuffleButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-            [[self.acapellaShuffleButton layer] setMasksToBounds:YES];
-            [[self.acapellaShuffleButton layer] setCornerRadius:5.0f];
-            
-            
-            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
-                if (result){
-                    
-                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
-                    int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
-                    int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
-                    
-                    [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
-                    [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
-                    
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        
-                        [self.acapellaRepeatButton setOrigin:CGPointMake((self.acapella.scrollview.contentSize.width /
-                                                                          [self.acapella.scrollview pagesAvailable].x) +
-                                                                          SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-                                                                         (self.acapella.scrollview.contentSize.height /
-                                                                          [self.acapella.scrollview pagesAvailable].y) - 																													self.acapellaRepeatButton.frame.size.height -
-                                                                          SW_ACAPELLA_REPEATSHUFFLE_Y_PADDING)];
-                        
-                        [self.acapella.scrollview addSubview:self.acapellaRepeatButton];
-                        
-                        
-                        [self.acapellaShuffleButton setOrigin:CGPointMake(((self.acapella.scrollview.contentSize.width /
-                                                                            [self.acapella.scrollview pagesAvailable].x) +
-                                                                           self.acapella.scrollview.frame.size.width) -
-                                                                          self.acapellaShuffleButton.frame.size.width - SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-                                                                          self.acapellaRepeatButton.frame.origin.y)];
-                        
-                        [self.acapella.scrollview addSubview:self.acapellaShuffleButton];
-                        
-                        
-                        
-                        [view finishWrapAroundAnimation];
-                        [self startHideRepeatAndShuffleButtonTimer];
-                    }];
-                } else {
-	                
-	                [self cleanupRepeatAndShuffleButtons];
-					[view finishWrapAroundAnimation];
-	                
-                }
-            });
-        } else {
-            
-            [self cleanupRepeatAndShuffleButtons];
-            [view finishWrapAroundAnimation];
-            
-        }
+        action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"swipeDownAction" defaultValue:@7]];
         
+    }
+    
+    if (action){
+        action();
     }
 }
 
 %new
 - (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
-    void (^_openNowPlayingApp)() = ^(){
-        
-        MPUNowPlayingController *nowPlayingController = MSHookIvar<MPUNowPlayingController *>(self, "_nowPlayingController");
-        
-        if (nowPlayingController){
-            
-            SBApplicationController *sbAppController = [%c(SBApplicationController) sharedInstanceIfExists];
-            
-            if (sbAppController){
-                SBApplication *nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:nowPlayingController.nowPlayingAppDisplayID];
-                
-                if (!nowPlayingApp){ //fallback
-                    nowPlayingApp = [sbAppController applicationWithDisplayIdentifier:@"com.apple.Music"];
-                }
-                
-                [%c(SWAppLauncher) launchAppLockscreenFriendly:nowPlayingApp];
-            }
-            
-        }
-        
-    };
+    CGFloat percentBoundaries = SW_ACAPELLA_LEFTRIGHT_VIEW_BOUNDARY_PERCENTAGE;
     
-    CGFloat percentBoundaries = 0.25;
+    swAcapellaAction action;
     
     if (percentage.x <= percentBoundaries){ //left
         
         if (longPress.state == UIGestureRecognizerStateBegan){
-            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
-                if (result){
-                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
-                    double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-                    MRMediaRemoteSetElapsedTime(mediaCurrentElapsedDuration - 20.0);
-                }
-            });
+            
+            action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"leftPressAction" defaultValue:@4]];
+            
         }
         
     } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
         
         if (longPress.state == UIGestureRecognizerStateBegan){
-        
-        	if ([self nowPlayingTrackIsRadioTrack]){
-	        	[self _likeBanButtonTapped:nil];
-        	} else {
-	        	_openNowPlayingApp();
-        	}
+            
+            action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"centrePressAction" defaultValue:@9]];
+            
         }
         
     } else if (percentage.x > (1.0 - percentBoundaries)){ //right
         
         if (longPress.state == UIGestureRecognizerStateBegan){
-            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
-                if (result){
-                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
-                    double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-                    MRMediaRemoteSetElapsedTime(mediaCurrentElapsedDuration + 20.0);
-                }
-            });
+            
+            action = [self methodForAction:[SWAcapellaPrefsBridge valueForKey:@"rightPressAction" defaultValue:@5]];
+            
         }
         
+    }
+    
+    if (action){
+        action();
     }
 }
 
@@ -621,6 +473,321 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 %new
 - (void)swAcapalle:(SWAcapellaBase *)view didEndDisplayingCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+}
+
+#pragma mark Actions
+
+%new
+- (swAcapellaAction)methodForAction:(NSNumber *)action
+{
+    if ([action isEqualToNumber:@1]){
+        return ^(){
+            [self action_PlayPause];
+        };
+    } else if ([action isEqualToNumber:@2]){
+        return ^(){
+            [self action_PreviousSong];
+        };
+    } else if ([action isEqualToNumber:@3]){
+        return ^(){
+            [self action_NextSong];
+        };
+    } else if ([action isEqualToNumber:@4]){
+        return ^(){
+            [self action_SkipBackward];
+        };
+    } else if ([action isEqualToNumber:@5]){
+        return ^(){
+            [self action_SkipForward];
+        };
+    } else if ([action isEqualToNumber:@6]){
+        return ^(){
+            [self action_OpenActivity];
+        };
+    } else if ([action isEqualToNumber:@7]){
+        return ^(){
+            [self action_ShowPlaylistOptions];
+        };
+    } else if ([action isEqualToNumber:@8]){
+        return ^(){
+            [self action_OpenAppShowRatings];
+        };
+    } else if ([action isEqualToNumber:@9]){
+        return ^(){
+            [self action_ShowRatingsOpenApp];
+        };
+    } else if ([action isEqualToNumber:@10]){
+        return ^(){
+            [self action_DecreaseVolume];
+        };
+    } else if ([action isEqualToNumber:@11]){
+        return ^(){
+            [self action_IncreaseVolume];
+        };
+    }
+    
+    return nil;
+}
+
+%new
+- (void)action_PlayPause
+{
+    MRMediaRemoteSendCommand(kMRTogglePlayPause, nil);
+}
+
+%new
+- (void)action_PreviousSong
+{
+    [self skipSongInDirection:-1];
+}
+
+%new
+- (void)action_NextSong
+{
+    [self skipSongInDirection:1];
+}
+
+%new
+- (void)skipSongInDirection:(int)direction
+{
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            if (!result){ //nothing playing
+                if (self.acapella && self.acapella.scrollview){
+                    [self.acapella.scrollview finishWrapAroundAnimation];
+                }
+            } else {
+                MRMediaRemoteSendCommand((direction <= -1) ? kMRPreviousTrack : kMRNextTrack, nil);
+            }
+        }];
+    });
+}
+
+%new
+- (void)action_SkipBackward
+{
+    [self changeSongTimeBySeconds:-20];
+}
+
+%new
+- (void)action_SkipForward
+{
+    [self changeSongTimeBySeconds:20];
+}
+
+%new
+- (void)changeSongTimeBySeconds:(double)seconds
+{
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        if (result){
+            NSDictionary *resultDict = (__bridge NSDictionary *)result;
+            double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+            MRMediaRemoteSetElapsedTime(mediaCurrentElapsedDuration + seconds);
+        }
+    });
+}
+
+%new
+- (void)action_OpenActivity
+{
+    SBDeviceLockController *deviceLC = (SBDeviceLockController *)[%c(SBDeviceLockController) sharedController];
+    
+    if (deviceLC && deviceLC.isPasscodeLocked){
+        
+        __block SWAcapellaTableView *blockTableView = self.acapella.tableview;
+        
+        [[[SWUIAlertView alloc] initWithTitle:@"Acapella"
+                                      message:@"Your device must be unlocked to bring up the activity screen for security reasons. Unlock device and try again."
+                           clickedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex){
+                           }
+                              didDismissBlock:^(UIAlertView *alert, NSInteger buttonIndex){
+                                  if (blockTableView){
+                                      [blockTableView finishWrapAroundAnimation];
+                                  }
+                              }
+                            cancelButtonTitle:@":(-+--<" otherButtonTitles:nil] show];
+        
+    } else {
+        
+        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+            if (result){
+                
+                NSDictionary *resultDict = (__bridge NSDictionary *)result;
+                
+                NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+                NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
+                NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
+                NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag" defaultValue:@"acapella"];
+                
+                NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
+                                                                                           mediaArtist:mediaArtist
+                                                                                      mediaArtworkData:mediaArtworkData
+                                                                                        sharingHashtag:sharingHashtag];
+                
+                if (shareData){
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        
+                        self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:shareData applicationActivities:nil];
+                        [self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
+                        
+                        __block SWAcapellaTableView *blockTableView = self.acapella.tableview;
+                        
+                        self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
+                            if (blockTableView){
+                                [blockTableView finishWrapAroundAnimation];
+                            }
+                        };
+                        
+                    }];
+                } else {
+                    [self.acapella.tableview finishWrapAroundAnimation];
+                }
+                
+            } else {
+                [self.acapella.tableview finishWrapAroundAnimation];
+            }
+        });
+    }
+}
+
+%new
+- (void)action_ShowPlaylistOptions
+{
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        if (result){
+            
+            NSDictionary *resultDict = (__bridge NSDictionary *)result;
+            NSString *mediaRadioStationID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRadioStationIdentifier];
+            
+            if (!mediaRadioStationID && (!self.acapellaRepeatButton && !self.acapellaShuffleButton)){
+                
+                self.acapellaRepeatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                [[self.acapellaRepeatButton layer] setMasksToBounds:YES];
+                [[self.acapellaRepeatButton layer] setCornerRadius:5.0f];
+                [self.acapellaRepeatButton addTarget:self action:@selector(acapellaRepeatButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+                
+                self.acapellaShuffleButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                [self.acapellaShuffleButton addTarget:self action:@selector(acapellaShuffleButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+                [[self.acapellaShuffleButton layer] setMasksToBounds:YES];
+                [[self.acapellaShuffleButton layer] setCornerRadius:5.0f];
+                
+                NSDictionary *resultDict = (__bridge NSDictionary *)result;
+                int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+                int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+                
+                [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+                [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+                
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    
+                    [self.acapellaRepeatButton setOrigin:CGPointMake((self.acapella.scrollview.contentSize.width /
+                                                                      [self.acapella.scrollview pagesAvailable].x) +
+                                                                     SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
+                                                                     (self.acapella.scrollview.contentSize.height /
+                                                                      [self.acapella.scrollview pagesAvailable].y) - 																													self.acapellaRepeatButton.frame.size.height -
+                                                                     SW_ACAPELLA_REPEATSHUFFLE_Y_PADDING)];
+                    
+                    [self.acapella.scrollview addSubview:self.acapellaRepeatButton];
+                    
+                    
+                    [self.acapellaShuffleButton setOrigin:CGPointMake(((self.acapella.scrollview.contentSize.width /
+                                                                        [self.acapella.scrollview pagesAvailable].x) +
+                                                                       self.acapella.scrollview.frame.size.width) -
+                                                                      self.acapellaShuffleButton.frame.size.width - SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
+                                                                      self.acapellaRepeatButton.frame.origin.y)];
+                    
+                    [self.acapella.scrollview addSubview:self.acapellaShuffleButton];
+                    
+                    
+                    
+                    [self.acapella.scrollview stopWrapAroundFallback];
+                    [self.acapella.scrollview resetContentOffset:NO];
+                    [self.acapella.tableview finishWrapAroundAnimation];
+                    [self startHideRepeatAndShuffleButtonTimer];
+                }];
+                
+            } else {
+                
+                [self cleanupRepeatAndShuffleButtons];
+                [self.acapella.tableview finishWrapAroundAnimation];
+                
+            }
+            
+        } else {
+            
+            [self cleanupRepeatAndShuffleButtons];
+            [self.acapella.tableview finishWrapAroundAnimation];
+            
+        }
+    });
+}
+
+%new
+- (void)action_OpenAppShowRatings
+{
+    [self attemptToOpenNowPlayingApp];
+}
+
+%new
+- (void)action_ShowRatingsOpenApp
+{
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            if (result){
+                
+                NSDictionary *resultDict = (__bridge NSDictionary *)result;
+                NSString *mediaRadioStationID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRadioStationIdentifier];
+                
+                if (mediaRadioStationID){
+                    [self _likeBanButtonTapped:nil];
+                } else {
+                    [self attemptToOpenNowPlayingApp];
+                }
+                
+            } else {
+                
+                [self attemptToOpenNowPlayingApp];
+                
+            }
+            
+        }];
+    });
+}
+
+%new
+- (void)attemptToOpenNowPlayingApp
+{
+    MRMediaRemoteGetNowPlayingApplicationPID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(int PID){
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            SBApplication *nowPlayingApp = [[%c(SBApplicationController) sharedInstance] applicationWithPid:PID];
+            
+            if (!nowPlayingApp){ //fallback
+                nowPlayingApp = [[%c(SBApplicationController) sharedInstance] applicationWithDisplayIdentifier:@"com.apple.Music"];
+            }
+            
+            [%c(SWAppLauncher) launchAppLockscreenFriendly:nowPlayingApp];
+            
+        }];
+    });
+}
+
+%new
+- (void)action_DecreaseVolume
+{
+    [%c(AVSystemController) acapellaChangeVolume:-1];
+}
+
+%new
+- (void)action_IncreaseVolume
+{
+    [%c(AVSystemController) acapellaChangeVolume:1];
 }
 
 #pragma mark Repeat/Shuffle
@@ -728,7 +895,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 {
     [self startHideRepeatAndShuffleButtonTimer]; //reset timer
     
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
         if (result){
             NSDictionary *resultDict = (__bridge NSDictionary *)result;
             int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
@@ -746,7 +913,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 {
     [self startHideRepeatAndShuffleButtonTimer]; //reset timer
     
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^(CFDictionaryRef result){
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
         if (result){
             NSDictionary *resultDict = (__bridge NSDictionary *)result;
             int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];

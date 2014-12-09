@@ -1,7 +1,7 @@
 
 #import "SWAcapellaPrefsHeaderView.h"
 
-#import "SWAcapellaPrefsBundle.h"
+#import "SWAcapellaPrefsHelper.h"
 #import <libsw/sluthwareios/sluthwareios.h>
 
 @interface SWAcapellaPrefsHeaderView()

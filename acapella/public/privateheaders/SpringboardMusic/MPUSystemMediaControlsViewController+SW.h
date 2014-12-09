@@ -9,7 +9,9 @@
 
 @class MPUNowPlayingController;
 
-@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate>
+#import "SWAcapellaActionProtocol.h"
+
+@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol>
 {
     //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
     //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8
@@ -39,8 +41,6 @@
 - (UIView *)buyTrackButton;
 - (UIView *)buyAlbumButton;
 - (UIView *)skipLimitView;
-
-- (BOOL)nowPlayingTrackIsRadioTrack;
 
 @end
 

@@ -14,13 +14,20 @@ static NSDictionary *_swAcapellaPreferences;
 	return _swAcapellaPreferences;
 }
 
-+ (id)valueForKey:(NSString *)key
++ (id)valueForKey:(NSString *)key defaultValue:(id)defaultValue
 {
 	if (_swAcapellaPreferences && _swAcapellaPreferences[key]){
+        
+        id prefValue = _swAcapellaPreferences[key];
+        
+        if ([prefValue isKindOfClass:[NSString class]] && [prefValue isEqualToString:@""]){
+            return defaultValue;
+        }
+        
     	return _swAcapellaPreferences[key];
     }
     
-   return nil;
+   return defaultValue;
 }
 
 @end

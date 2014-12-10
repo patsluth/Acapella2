@@ -255,8 +255,8 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegateAcapella){
-        if ([self.delegateAcapella respondsToSelector:@selector(swAcapalle:willDisplayCell:atIndexPath:)]){
-            [self.delegateAcapella swAcapalle:self willDisplayCell:cell atIndexPath:indexPath];
+        if ([self.delegateAcapella respondsToSelector:@selector(swAcapella:willDisplayCell:atIndexPath:)]){
+            [self.delegateAcapella swAcapella:self willDisplayCell:cell atIndexPath:indexPath];
         }
     }
 }
@@ -264,8 +264,8 @@
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegateAcapella){
-        if ([self.delegateAcapella respondsToSelector:@selector(swAcapalle:didEndDisplayingCell:atIndexPath:)]){
-            [self.delegateAcapella swAcapalle:self didEndDisplayingCell:cell atIndexPath:indexPath];
+        if ([self.delegateAcapella respondsToSelector:@selector(swAcapella:didEndDisplayingCell:atIndexPath:)]){
+            [self.delegateAcapella swAcapella:self didEndDisplayingCell:cell atIndexPath:indexPath];
         }
     }
 }

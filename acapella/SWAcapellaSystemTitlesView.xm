@@ -39,20 +39,20 @@
     
     [self updateDetailText];
     
-    if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
-        
-        UIScrollView *superScrollView = (UIScrollView *)self.superview;
-        
-        if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
-            
-            SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
-            
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [acapella.scrollview finishWrapAroundAnimation];
-            }];
-            
-        }
-    }
+//    if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
+//        
+//        UIScrollView *superScrollView = (UIScrollView *)self.superview;
+//        
+//        if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
+//            
+//            SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
+//            
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                [acapella.scrollview finishWrapAroundAnimation];
+//            }];
+//            
+//        }
+//    }
 }
 
 

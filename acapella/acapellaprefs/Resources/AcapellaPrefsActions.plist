@@ -94,7 +94,7 @@
 			<key>key</key>
 			<string>swipeLeftAction</string>
 			<key>default</key>
-			<integer>2</integer>
+			<integer>3</integer>
 			<key>label</key>
 			<string>Left</string>
 			<key>valuesDataSource</key>
@@ -114,7 +114,7 @@
 			<key>key</key>
 			<string>swipeRightAction</string>
 			<key>default</key>
-			<integer>3</integer>
+			<integer>2</integer>
 			<key>label</key>
 			<string>Right</string>
 			<key>valuesDataSource</key>

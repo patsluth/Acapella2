@@ -11,6 +11,8 @@
 
 @interface SWAcapellaScrollView : UIScrollView <SWAcapellaScrollViewProtocol>
 
+@property (readwrite, nonatomic) BOOL isAnimating;
+
 @end
 
 

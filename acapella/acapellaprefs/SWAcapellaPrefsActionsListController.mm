@@ -26,7 +26,7 @@
              @"Forward 20s", //5
              @"Open Activity", //6
              @"Show Playlist Options", //7
-             @"Open App/Show Ratings", //8
+             @"Open App", //8
              @"Show Ratings/Open App", //9
              @"Decrease Volume", //10
              @"Increase Volume"]; //11

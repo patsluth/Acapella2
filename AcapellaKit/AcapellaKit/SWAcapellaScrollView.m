@@ -58,6 +58,7 @@
 #endif
         
         self.previousScrollOffset = CGPointZero;
+        self.isAnimating = NO;
     }
     
     return self;
@@ -104,6 +105,8 @@
             [self.delegate scrollViewDidEndScrollingAnimation:self];
         }
         
+        self.isAnimating = NO;
+        
     };
     
     
@@ -111,6 +114,8 @@
     
     self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
+    
+    self.isAnimating = animated;
     
     if (animated){
         
@@ -153,6 +158,10 @@
 - (void)finishWrapAroundAnimation
 {
     [self stopWrapAroundFallback];
+    
+    if (self.isAnimating || self.isTracking){
+        return;
+    }
     
     SWPage page = [self page];
     

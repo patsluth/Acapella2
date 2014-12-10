@@ -9,7 +9,7 @@
 
 @class MPUNowPlayingController;
 
-#import "SWAcapellaActionProtocol.h"
+#import "SWAcapellaActionsHelper.h"
 
 @interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol>
 {

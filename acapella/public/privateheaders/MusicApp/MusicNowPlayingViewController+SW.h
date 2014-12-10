@@ -2,7 +2,7 @@
 @class MPAVController;
 @class MPAVItem;
 
-#import "SWAcapellaActionProtocol.h"
+#import "SWAcapellaActionsHelper.h"
 
 @interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol>
 {
@@ -43,6 +43,8 @@
 - (UIView *)ratingControl;
 - (UIView *)titlesView;
 - (UIView *)repeatButton;
+- (UIView *)shuffleButton;
+- (UIView *)geniusButton;
 - (UIImageView *)artworkView;
 - (MPAVItem *)mpavItem;
 - (UIButton *)likeOrBanButton;

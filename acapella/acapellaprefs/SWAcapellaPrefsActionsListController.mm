@@ -1,8 +1,6 @@
 
 #import "SWAcapellaPrefsActionsListController.h"
 
-#import "SWAcapellaPrefsHelper.h"
-
 @implementation SWAcapellaPrefsActionsListController
 
 #pragma mark Init
@@ -57,7 +55,7 @@
 
 - (id)readPreferenceValue:(PSSpecifier *)specifier
 {
-    NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:SW_ACAPELLA_PREFERENCES_PATH];
+    NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"];
     
     if (!acapellaPrefs[specifier.properties[@"key"]]){
         if (acapellaPrefs[specifier.properties[@"placeholder"]]){
@@ -73,9 +71,9 @@
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier
 {
     NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-    [defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:SW_ACAPELLA_PREFERENCES_PATH]];
+    [defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"]];
     [defaults setObject:value forKey:specifier.properties[@"key"]];
-    [defaults writeToFile:SW_ACAPELLA_PREFERENCES_PATH atomically:YES];
+    [defaults writeToFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist" atomically:YES];
     CFStringRef mikotoPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), mikotoPost, NULL, NULL, YES);
 }

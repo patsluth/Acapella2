@@ -145,6 +145,8 @@
 
 - (void)swAcapella:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
 }
 
 

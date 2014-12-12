@@ -267,10 +267,10 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         }
     }
     
-    MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul));
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(nowPlayingInfoDidChangeNotification)
-                                                 name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
+//    MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul));
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(nowPlayingInfoDidChangeNotification)
+//                                                 name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -301,7 +301,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         }
     }];
     
-    MRMediaRemoteUnregisterForNowPlayingNotifications();
+    //MRMediaRemoteUnregisterForNowPlayingNotifications();
 }
 
 - (void)viewDidDisappear:(BOOL)arg1
@@ -379,6 +379,8 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     
     if (action){
         action();
+    } else {
+        [view finishWrapAroundAnimation];
     }
 }
 
@@ -495,36 +497,36 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 %new
 - (void)nowPlayingInfoDidChangeNotification
 {
-    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-        
-        NSDictionary *resultDict = object;
-        
-        if (self.lastNowPlayingInfo && self.acapella && self.acapella.scrollview){
-            
-            NSNumber *lastTrackUniqueID = [self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
-            NSNumber *newTrackUniqueID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
-            
-            if (lastTrackUniqueID && newTrackUniqueID && [lastTrackUniqueID isEqualToNumber:newTrackUniqueID]){
-                
-                //double lastTrackElapsedTime = [[self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-                //double newTrackElapsedTime = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-                
-                //double trackDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDuration] doubleValue];
-                
-                //CGFloat percentageDifference = fabs((lastTrackElapsedTime / trackDuration) - (newTrackElapsedTime / trackDuration));
-                
-                [self.acapella.scrollview finishWrapAroundAnimation];
-                
-            } else {
-                [self.acapella.scrollview finishWrapAroundAnimation];
-            }
-            
-        } else {
-        }
-        
-        self.lastNowPlayingInfo = resultDict;
-        
-    }];
+//    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
+//        
+//        NSDictionary *resultDict = object;
+//        
+//        if (self.lastNowPlayingInfo && self.acapella && self.acapella.scrollview){
+//            
+//            NSNumber *lastTrackUniqueID = [self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
+//            NSNumber *newTrackUniqueID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
+//            
+//            if (lastTrackUniqueID && newTrackUniqueID && [lastTrackUniqueID isEqualToNumber:newTrackUniqueID]){
+//                
+//                //double lastTrackElapsedTime = [[self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+//                //double newTrackElapsedTime = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+//                
+//                //double trackDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDuration] doubleValue];
+//                
+//                //CGFloat percentageDifference = fabs((lastTrackElapsedTime / trackDuration) - (newTrackElapsedTime / trackDuration));
+//                
+//                [self.acapella.scrollview finishWrapAroundAnimation];
+//                
+//            } else {
+//                [self.acapella.scrollview finishWrapAroundAnimation];
+//            }
+//            
+//        } else {
+//        }
+//        
+//        self.lastNowPlayingInfo = resultDict;
+//        
+//    }];
 }
 
 %new
@@ -553,11 +555,11 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     [SWAcapellaActionsHelper action_PreviousSong:^(BOOL successful, id object){
         [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
             if (successful){
-                [self nowPlayingInfoDidChangeNotification]; //make sure we wrap around on iTunes Radio
+                [self.acapella.scrollview finishWrapAroundAnimation]; //make sure we wrap around on iTunes Radio
             }
         }];
         
-        self.lastNowPlayingInfo = object;
+        //self.lastNowPlayingInfo = object;
     }];
 }
 
@@ -565,7 +567,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 - (void)action_NextSong
 {
     [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
-        self.lastNowPlayingInfo = object;
+        //self.lastNowPlayingInfo = object;
     }];
 }
 

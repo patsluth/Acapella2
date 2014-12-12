@@ -1,5 +1,4 @@
 
-#import "SWAcapellaPrefsHelper.h"
 #import "SWAcapellaPrefsHeaderView.h"
 
 #import <libsw/sluthwareios/sluthwareios.h>
@@ -60,7 +59,7 @@ void *handle;
 	    
 	    
 	    
-	    NSBundle *bundle = [NSBundle bundleWithPath:SW_ACAPELLA_PREFS_BUNDLE_PATH];
+	    NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/AcapellaPrefs.bundle"];
 	    
 	    if (bundle){
 	    	self.acapellaPrefsHeaderView = [[SWAcapellaPrefsHeaderView alloc] initWithImage:[UIImage
@@ -75,7 +74,7 @@ void *handle;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
     dispatch_async(queue, ^{
         
-        self.packageDEB = [PIDebianPackage packageForFile:SW_ACAPELLA_PREFS_BUNDLE_PATH];
+        self.packageDEB = [PIDebianPackage packageForFile:@"/Library/PreferenceBundles/AcapellaPrefs.bundle"];
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             
@@ -86,6 +85,11 @@ void *handle;
             
         });
     });
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
     [self scrollViewDidScroll:self.table]; //update our stretch header so it is in correct position
 }
@@ -202,7 +206,7 @@ void *handle;
 
 - (id)readPreferenceValue:(PSSpecifier *)specifier
 {
-	NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:SW_ACAPELLA_PREFERENCES_PATH];
+	NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"];
 	
 	if (!acapellaPrefs[specifier.properties[@"key"]]){
 		if (acapellaPrefs[specifier.properties[@"placeholder"]]){
@@ -218,9 +222,9 @@ void *handle;
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier
 {
 	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:SW_ACAPELLA_PREFERENCES_PATH]];
+	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"]];
 	[defaults setObject:value forKey:specifier.properties[@"key"]];
-	[defaults writeToFile:SW_ACAPELLA_PREFERENCES_PATH atomically:YES];
+	[defaults writeToFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist" atomically:YES];
 	CFStringRef mikotoPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), mikotoPost, NULL, NULL, YES);
 }

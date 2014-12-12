@@ -1,7 +1,6 @@
 
 #import "SWAcapellaPrefsHeaderView.h"
 
-#import "SWAcapellaPrefsHelper.h"
 #import <libsw/sluthwareios/sluthwareios.h>
 
 @interface SWAcapellaPrefsHeaderView()
@@ -27,7 +26,7 @@
 	
 		self.contentMode = UIViewContentModeScaleToFill;
 		
-		NSBundle *bundle = [NSBundle bundleWithPath:SW_ACAPELLA_PREFS_BUNDLE_PATH];
+		NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/AcapellaPrefs.bundle"];
     
 		if (bundle){
     		self.acapellaImage = [[UIImageView alloc] initWithImage:[UIImage
@@ -57,7 +56,7 @@
 	//stretch our views
 	self.acapellaText.font = [UIFont systemFontOfSize:self.frame.size.height / 5];
 	[self.acapellaText sizeToFit];
-	[self.acapellaText setOriginY:self.frame.size.height - self.acapellaText.frame.size.height - 10]; //10 pixel padding
+	[self.acapellaText setOriginY:self.frame.size.height - self.acapellaText.frame.size.height - 10];
 	[self.acapellaText setCenterX:self.frame.size.width / 2];
 	
 	[self.acapellaImage setOriginY:self.acapellaText.frame.origin.y - self.acapellaImage.frame.size.height];

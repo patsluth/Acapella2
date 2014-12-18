@@ -13,6 +13,9 @@
 		2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
 		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */; };
+		2E242EF01A41D0AE00864588 /* SWAcapellaPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E242EEE1A41D0AE00864588 /* SWAcapellaPullToRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2E242EF11A41D0AE00864588 /* SWAcapellaPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E242EEF1A41D0AE00864588 /* SWAcapellaPullToRefresh.m */; };
+		2E242EF21A41D2E200864588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
 		2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75956F19FD49F500001BC7 /* AcapellaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75963D19FDCCA600001BC7 /* AppDelegate.m */; };
 		2E75964119FDCCA600001BC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
@@ -57,6 +60,8 @@
 		2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTableView.m; sourceTree = "<group>"; };
 		2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollView.h; sourceTree = "<group>"; };
 		2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaScrollView.m; sourceTree = "<group>"; };
+		2E242EEE1A41D0AE00864588 /* SWAcapellaPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPullToRefresh.h; sourceTree = "<group>"; };
+		2E242EEF1A41D0AE00864588 /* SWAcapellaPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaPullToRefresh.m; sourceTree = "<group>"; };
 		2E75956A19FD49F500001BC7 /* AcapellaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AcapellaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75956E19FD49F500001BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75956F19FD49F500001BC7 /* AcapellaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AcapellaKit.h; sourceTree = "<group>"; };
@@ -129,6 +134,8 @@
 				2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */,
 				2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */,
 				2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */,
+				2E242EEE1A41D0AE00864588 /* SWAcapellaPullToRefresh.h */,
+				2E242EEF1A41D0AE00864588 /* SWAcapellaPullToRefresh.m */,
 				2E75956D19FD49F500001BC7 /* Supporting Files */,
 			);
 			path = AcapellaKit;
@@ -188,8 +195,9 @@
 				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
 				2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */,
 				2ED282FC1A10671C00772295 /* SWAcapellaScrollViewProtocol.h in Headers */,
-				2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */,
 				2E1DFE6E1A0EA3AD000DCF1E /* SWAcapellaTableView.h in Headers */,
+				2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */,
+				2E242EF01A41D0AE00864588 /* SWAcapellaPullToRefresh.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */,
+				2E242EF21A41D2E200864588 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +304,7 @@
 				2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */,
 				2E1DFE6F1A0EA3AD000DCF1E /* SWAcapellaTableView.m in Sources */,
 				2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */,
+				2E242EF11A41D0AE00864588 /* SWAcapellaPullToRefresh.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

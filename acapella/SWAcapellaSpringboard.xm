@@ -184,18 +184,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     objc_setAssociatedObject(self, &_acapellaHideRepeatAndShuffleButtonsTimer, acapellaHideRepeatAndShuffleButtonsTimer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-%new
-- (NSDictionary *)lastNowPlayingInfo
-{
-    return objc_getAssociatedObject(self, &_lastNowPlayingInfo);
-}
-
-%new
-- (void)setLastNowPlayingInfo:(NSDictionary *)lastNowPlayingInfo
-{
-    objc_setAssociatedObject(self, &_lastNowPlayingInfo, lastNowPlayingInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
 #pragma mark Init
 
 - (void)viewDidLoad
@@ -235,14 +223,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         
         [self trackInformationView].userInteractionEnabled = NO;
         
-        if ([self timeInformationView].frame.size.height * 3.0 != self.acapella.acapellaTopAccessoryHeight){
-            self.acapella.acapellaTopAccessoryHeight = [self timeInformationView].frame.size.height * 3.0;
-        }
-        
-        if ([self volumeView].frame.size.height * 2.0 != self.acapella.acapellaBottomAccessoryHeight){
-            self.acapella.acapellaBottomAccessoryHeight = [self volumeView].frame.size.height * 2.0;
-        }
-        
         if ([self buyTrackButton]){
             [mediaControlsView.superview addSubview:[self buyTrackButton]];
         }
@@ -266,11 +246,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
             [self.acapella.scrollview resetContentOffset:NO];
         }
     }
-    
-//    MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul));
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(nowPlayingInfoDidChangeNotification)
-//                                                 name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -300,8 +275,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
             self.acapellaSharingActivityView = nil;
         }
     }];
-    
-    //MRMediaRemoteUnregisterForNowPlayingNotifications();
 }
 
 - (void)viewDidDisappear:(BOOL)arg1
@@ -313,6 +286,38 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 }
 
 #pragma mark SWAcapellaDelegate
+
+%new
+- (UIImage *)swAcapellaImageForPullToRefreshControl
+{
+    UIImage *returnVal;
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/Application Support/AcapellaSupport.bundle"];
+    
+    if (bundle){
+        returnVal = [UIImage
+                     imageWithContentsOfFile:[bundle
+                                              pathForResource:@"Acapella_Pull_To_Refresh_Image" ofType:@"png"]];
+        returnVal = [returnVal imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    
+    return returnVal;
+}
+
+%new
+- (UIColor *)swAcapellaTintColorForPullToRefreshControl
+{
+    UIColor *returnVal = [UIColor yellowColor];
+    
+    if ([self trackInformationView] && [[self trackInformationView] isKindOfClass:%c(MPUMediaControlsTitlesView)]){
+        
+        MPUMediaControlsTitlesView *titles = (MPUMediaControlsTitlesView *)[self trackInformationView];
+        returnVal = [titles _titleLabel].textColor;
+        
+    }
+    
+    return returnVal;
+}
 
 %new
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
@@ -351,11 +356,11 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 {
     swAcapellaAction action;
     
-    [view stopWrapAroundFallback];
+    if ([view respondsToSelector:@selector(stopWrapAroundFallback)]){
+        [view stopWrapAroundFallback];
+    }
     
     if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
-        
-        [view stopWrapAroundFallback];
         
         action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge valueForKey:(direction == SW_SCROLL_DIR_LEFT) ?
                                                            @"swipeLeftAction" : @"swipeRightAction"
@@ -380,7 +385,9 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     if (action){
         action();
     } else {
-        [view finishWrapAroundAnimation];
+        if ([view respondsToSelector:@selector(finishWrapAroundAnimation)]){
+            [view finishWrapAroundAnimation];
+        }
     }
 }
 
@@ -436,14 +443,10 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     if (mediaControlsView){
         
         if (indexPath.section == 0){
-            switch (indexPath.row) {
+            switch (indexPath.row){
                 case 0:
                     
-                    break;
-                    
-                case 1:
-                    
-                    if ([self volumeView]){
+                    if ([self volumeView].superview == cell){
                         [[self volumeView] removeFromSuperview];
                     }
                     
@@ -453,7 +456,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                     
                     break;
                     
-                case 2:
+                case 1:
                     
                     if ([self trackInformationView] && view.scrollview){
                         [view.scrollview addSubview:[self trackInformationView]];
@@ -461,19 +464,15 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                     
                     break;
                     
-                case 3:
+                case 2:
                     
-                    if ([self timeInformationView]){
+                    if ([self timeInformationView].superview == cell){
                         [[self timeInformationView] removeFromSuperview];
                     }
                     
                     if ([self volumeView]){
                         [cell addSubview:[self volumeView]];
                     }
-                    
-                    break;
-                    
-                case 4:
                     
                     break;
                     
@@ -493,41 +492,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 }
 
 #pragma mark Actions
-
-%new
-- (void)nowPlayingInfoDidChangeNotification
-{
-//    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-//        
-//        NSDictionary *resultDict = object;
-//        
-//        if (self.lastNowPlayingInfo && self.acapella && self.acapella.scrollview){
-//            
-//            NSNumber *lastTrackUniqueID = [self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
-//            NSNumber *newTrackUniqueID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
-//            
-//            if (lastTrackUniqueID && newTrackUniqueID && [lastTrackUniqueID isEqualToNumber:newTrackUniqueID]){
-//                
-//                //double lastTrackElapsedTime = [[self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-//                //double newTrackElapsedTime = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-//                
-//                //double trackDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDuration] doubleValue];
-//                
-//                //CGFloat percentageDifference = fabs((lastTrackElapsedTime / trackDuration) - (newTrackElapsedTime / trackDuration));
-//                
-//                [self.acapella.scrollview finishWrapAroundAnimation];
-//                
-//            } else {
-//                [self.acapella.scrollview finishWrapAroundAnimation];
-//            }
-//            
-//        } else {
-//        }
-//        
-//        self.lastNowPlayingInfo = resultDict;
-//        
-//    }];
-}
 
 %new
 - (void)action_PlayPause
@@ -558,8 +522,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                 [self.acapella.scrollview finishWrapAroundAnimation]; //make sure we wrap around on iTunes Radio
             }
         }];
-        
-        //self.lastNowPlayingInfo = object;
     }];
 }
 
@@ -567,7 +529,6 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 - (void)action_NextSong
 {
     [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
-        //self.lastNowPlayingInfo = object;
     }];
 }
 
@@ -598,13 +559,13 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                                    }
                                       didDismissBlock:^(UIAlertView *alert, NSInteger buttonIndex){
                                           if (blockTableView){
-                                              [blockTableView finishWrapAroundAnimation];
+                                              [blockTableView resetContentOffset:YES];
                                           }
                                       }
                                     cancelButtonTitle:@":(-+--<" otherButtonTitles:nil] show];
                 
             } else {
-                [self.acapella.tableview finishWrapAroundAnimation];
+                [self.acapella.tableview resetContentOffset:YES];
             }
         } else {
             
@@ -615,7 +576,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
             
             self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
                 if (blockTableView){
-                    [blockTableView finishWrapAroundAnimation];
+                    [blockTableView resetContentOffset:YES];
                 }
             };
             
@@ -674,21 +635,21 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                     
                     [self.acapella.scrollview stopWrapAroundFallback];
                     [self.acapella.scrollview resetContentOffset:NO];
-                    [self.acapella.tableview finishWrapAroundAnimation];
+                    [self.acapella.tableview resetContentOffset:YES];
                     [self startHideRepeatAndShuffleButtonTimer];
                 }];
                 
             } else {
                 
                 [self cleanupPlaylistOptionButtons];
-                [self.acapella.tableview finishWrapAroundAnimation];
+                [self.acapella.tableview resetContentOffset:YES];
                 
             }
             
         } else {
             
             [self cleanupPlaylistOptionButtons];
-            [self.acapella.tableview finishWrapAroundAnimation];
+            [self.acapella.tableview resetContentOffset:YES];
             
         }
         

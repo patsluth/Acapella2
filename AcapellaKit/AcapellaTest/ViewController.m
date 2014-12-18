@@ -93,6 +93,18 @@
 
 #pragma mark SWAcapellaDelegate
 
+- (UIImage *)swAcapellaImageForPullToRefreshControl
+{
+    UIImage *returnVal = [UIImage imageNamed:@"Acapella_Pull_To_Refresh_Image"];
+    returnVal = [returnVal imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    return returnVal;
+}
+
+- (UIColor *)swAcapellaTintColorForPullToRefreshControl
+{
+    return [UIColor redColor];
+}
+
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
     if (tap.state == UIGestureRecognizerStateEnded){
@@ -105,24 +117,20 @@
         
         if (direction == SW_SCROLL_DIR_UP){
             
-            [view stopWrapAroundFallback];
-            
             [[[SWUIAlertView alloc] initWithTitle:@"a"
                                          message:@"B"
                               clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
                                   
                               }
                                  didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-                                     [view finishWrapAroundAnimation];
+                                     [view resetContentOffset:YES];
                                  }
                                cancelButtonTitle:@"P"
                                 otherButtonTitles:nil] show];
         } else if (direction == SW_SCROLL_DIR_LEFT) {
             
-        } else {
-            [view finishWrapAroundAnimation];
-            [view finishWrapAroundAnimation];
-            [view finishWrapAroundAnimation];
+        } else if (direction == SW_SCROLL_DIR_DOWN) {
+            [view resetContentOffset:YES];
         }
         
         if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
@@ -172,7 +180,7 @@
     CGFloat delta = 0.0f;
     CGRect rect = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
     
-    delta = fabs(MIN(0.0f, self.tableview.contentOffset.y));
+    delta = fabsf(MIN(0.0f, self.tableview.contentOffset.y));
     
     if (self.tableview.contentOffset.y > 0.0f){
         rect.origin.y -= self.tableview.contentOffset.y;

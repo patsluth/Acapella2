@@ -6,11 +6,15 @@
 	<dict>
 		<key>Headers/AcapellaKit.h</key>
 		<data>
-		1Il8NJJAe53SxefUMpU9bbLJ+5w=
+		sNh9zl41jdtBkE8BlP2i8xwrAsY=
 		</data>
 		<key>Headers/SWAcapellaBase.h</key>
 		<data>
-		ieMbtXXYx014/tBl/6iLHL02mnQ=
+		YbqqvKyDsSp/nAecQUdVeqfsEH8=
+		</data>
+		<key>Headers/SWAcapellaPullToRefresh.h</key>
+		<data>
+		AVTRK3YNDkqNRiT1U7qcqGaPlU0=
 		</data>
 		<key>Headers/SWAcapellaScrollView.h</key>
 		<data>
@@ -18,7 +22,7 @@
 		</data>
 		<key>Headers/SWAcapellaScrollViewProtocol.h</key>
 		<data>
-		lseZ9R8jnXCj953DC7FTvODfb6E=
+		X25QHSfvImrdPezJbcdmD+U5p2c=
 		</data>
 		<key>Headers/SWAcapellaTableView.h</key>
 		<data>
@@ -37,11 +41,15 @@
 	<dict>
 		<key>Headers/AcapellaKit.h</key>
 		<data>
-		1Il8NJJAe53SxefUMpU9bbLJ+5w=
+		sNh9zl41jdtBkE8BlP2i8xwrAsY=
 		</data>
 		<key>Headers/SWAcapellaBase.h</key>
 		<data>
-		ieMbtXXYx014/tBl/6iLHL02mnQ=
+		YbqqvKyDsSp/nAecQUdVeqfsEH8=
+		</data>
+		<key>Headers/SWAcapellaPullToRefresh.h</key>
+		<data>
+		AVTRK3YNDkqNRiT1U7qcqGaPlU0=
 		</data>
 		<key>Headers/SWAcapellaScrollView.h</key>
 		<data>
@@ -49,7 +57,7 @@
 		</data>
 		<key>Headers/SWAcapellaScrollViewProtocol.h</key>
 		<data>
-		lseZ9R8jnXCj953DC7FTvODfb6E=
+		X25QHSfvImrdPezJbcdmD+U5p2c=
 		</data>
 		<key>Headers/SWAcapellaTableView.h</key>
 		<data>

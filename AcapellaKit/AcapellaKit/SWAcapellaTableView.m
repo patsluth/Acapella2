@@ -36,9 +36,9 @@
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
         
-        self.bounces = NO;
+        self.bounces = YES;
         self.alwaysBounceHorizontal = NO;
-        self.alwaysBounceVertical = NO;
+        self.alwaysBounceVertical = YES;
         
         self.scrollsToTop = NO;
         
@@ -87,48 +87,26 @@
 
 - (NSIndexPath *)defaultIndexPath;
 {
-    return [NSIndexPath indexPathForRow:2 inSection:0];
+    return [NSIndexPath indexPathForRow:1 inSection:0];
 }
 
 - (void)resetContentOffset:(BOOL)animated
 {
+    if (self.isTracking){
+        return;
+    }
+    
     //reset
     self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
     
-    if (self.numberOfSections == 1 && [self numberOfRowsInSection:0] > 3){
+    if (self.numberOfSections == 1 && [self numberOfRowsInSection:0] > [self defaultIndexPath].row){
         
         [self scrollToRowAtIndexPath:[self defaultIndexPath]
                     atScrollPosition:UITableViewScrollPositionMiddle
                             animated:animated];
         
     }
-}
-
-- (void)startWrapAroundFallback
-{
-    [self stopWrapAroundFallback];
-    
-    self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                               target:self
-                                                             selector:@selector(finishWrapAroundAnimation)
-                                                             userInfo:nil
-                                                              repeats:NO];
-}
-
-- (void)stopWrapAroundFallback
-{
-    if (self.wrapAroundFallback){
-        [self.wrapAroundFallback invalidate];
-        self.wrapAroundFallback = nil;
-    }
-}
-
-- (void)finishWrapAroundAnimation
-{
-    [self stopWrapAroundFallback];
-    
-    [self resetContentOffset:YES];
 }
 
 @end

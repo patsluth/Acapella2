@@ -263,15 +263,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
             }
             
             [[self playbackControlsView] addSubview:self.acapella];
-            
-            if ([self progressControl].frame.size.height * 1.5 != self.acapella.acapellaTopAccessoryHeight){
-                self.acapella.acapellaTopAccessoryHeight = [self progressControl].frame.size.height * 1.5;
-            }
-            
-            if ([self volumeSlider].frame.size.height * 2.0 != self.acapella.acapellaBottomAccessoryHeight){
-                self.acapella.acapellaBottomAccessoryHeight = [self volumeSlider].frame.size.height * 2.0;
-            }
-            
         }
     }
 }
@@ -351,6 +342,36 @@ static UIActivityViewController *_acapellaSharingActivityView;
 
 #pragma mark SWAcapellaDelegate
 
+%new
+- (UIImage *)swAcapellaImageForPullToRefreshControl
+{
+    UIImage *returnVal;
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/Application Support/AcapellaSupport.bundle"];
+    
+    if (bundle){
+        returnVal = [UIImage
+                     imageWithContentsOfFile:[bundle
+                                              pathForResource:@"Acapella_Pull_To_Refresh_Image" ofType:@"png"]];
+        returnVal = [returnVal imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    return returnVal;
+}
+
+%new
+- (UIColor *)swAcapellaTintColorForPullToRefreshControl
+{
+    UIColor *returnVal = [UIColor yellowColor];
+    
+    if ([self titlesView] && [[self titlesView] isKindOfClass:%c(MPUNowPlayingTitlesView)]){
+        
+        MPUNowPlayingTitlesView *titles = (MPUNowPlayingTitlesView *)[self titlesView];
+        returnVal = [titles _titleLabel].textColor;
+        
+    }
+    
+    return returnVal;
+}
 
 %new
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
@@ -389,11 +410,11 @@ static UIActivityViewController *_acapellaSharingActivityView;
 {
     swAcapellaAction action;
     
-    [view stopWrapAroundFallback];
+    if ([view respondsToSelector:@selector(stopWrapAroundFallback)]){
+        [view stopWrapAroundFallback];
+    }
     
     if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
-        
-        [view stopWrapAroundFallback];
         
         action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge valueForKey:(direction == SW_SCROLL_DIR_LEFT) ?
                                                            @"swipeLeftAction" : @"swipeRightAction"
@@ -418,54 +439,10 @@ static UIActivityViewController *_acapellaSharingActivityView;
     if (action){
         action();
     } else {
-        [view finishWrapAroundAnimation];
+        if ([view respondsToSelector:@selector(finishWrapAroundAnimation)]){
+            [view finishWrapAroundAnimation];
+        }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    //	if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
-    //
-    //        if (self.player){
-    //
-    //            [view stopWrapAroundFallback]; //we will finish the animation manually once the songs has changed and the UI has been updated
-    //
-    //            long skipDirection = (direction == SW_SCROLL_DIR_LEFT) ? -1 : 1;
-    //            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    //                [self.player changePlaybackIndexBy:(int)skipDirection deltaType:0 ignoreElapsedTime:NO allowSkippingUnskippableContent:YES];
-    //            }];
-    //
-    //            if (skipDirection == -1){
-    //	            MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
-    //                if (result){
-    //                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
-    //                    double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-    //                    NSString *mediaRadioStationID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRadioStationIdentifier];
-    //
-    //                    //since the song doesnt change, it just starts over if its this far into the song (trial and error)
-    //                    if (mediaCurrentElapsedDuration >= 3.0 || mediaRadioStationID != nil){
-    //                    	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    //	                    	[view finishWrapAroundAnimation];
-    //	                    }];
-    //                    }
-    //                }
-    //            });
-    //            }
-    //
-    //        } else {
-    //            [view finishWrapAroundAnimation];
-    //        }
-    //
-    //    } else {
-    //
-    //        [view stopWrapAroundFallback];
-    //
-    ////
-    //    }
 }
 
 %new
@@ -518,14 +495,10 @@ static UIActivityViewController *_acapellaSharingActivityView;
     if ([self playbackControlsView]){
         
         if (indexPath.section == 0){
-            switch (indexPath.row) {
+            switch (indexPath.row){
                 case 0:
                     
-                    break;
-                    
-                case 1:
-                    
-                    if ([self volumeSlider]){
+                    if ([self volumeSlider].superview == cell){
                         [[self volumeSlider] removeFromSuperview];
                     }
                     
@@ -536,16 +509,16 @@ static UIActivityViewController *_acapellaSharingActivityView;
                     
                     break;
                     
-                case 2:
+                case 1:
                     
                     [view.scrollview addSubview:[self titlesView]];
                     [[self titlesView] setFrame:[self titlesView].frame]; //update our frame because are forcing centre in setRect:
                     
                     break;
                     
-                case 3:
+                case 2:
                     
-                    if ([self progressControl]){
+                    if ([self progressControl].superview == cell){
                         [[self progressControl] removeFromSuperview];
                     }
                     
@@ -553,10 +526,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
                         [cell addSubview:[self volumeSlider]];
                         [[self volumeSlider] setFrame:[self volumeSlider].frame]; //update our frame because are forcing centre in setRect:
                     }
-                    
-                    break;
-                    
-                case 4:
                     
                     break;
                     
@@ -594,7 +563,7 @@ static UIActivityViewController *_acapellaSharingActivityView;
 //                
 //                //double trackDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDuration] doubleValue];
 //                
-//                //CGFloat percentageDifference = fabs((lastTrackElapsedTime / trackDuration) - (newTrackElapsedTime / trackDuration));
+//                //CGFloat percentageDifference = fabsf((lastTrackElapsedTime / trackDuration) - (newTrackElapsedTime / trackDuration));
 //                
 //                [self.acapella.scrollview finishWrapAroundAnimation];
 //                
@@ -696,12 +665,12 @@ static UIActivityViewController *_acapellaSharingActivityView;
             
             self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
                 if (blockTableView){
-                    [blockTableView finishWrapAroundAnimation];
+                    [blockTableView resetContentOffset:YES];
                 }
             };
             
         } else {
-            [self.acapella.tableview finishWrapAroundAnimation];
+            [self.acapella.tableview resetContentOffset:YES];
         }
     }];
 }
@@ -709,7 +678,7 @@ static UIActivityViewController *_acapellaSharingActivityView;
 %new
 - (void)action_ShowPlaylistOptions
 {
-    [self.acapella.tableview finishWrapAroundAnimation];
+    [self.acapella.tableview resetContentOffset:YES];
     
     //    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
     //

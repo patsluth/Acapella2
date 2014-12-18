@@ -115,7 +115,7 @@ void *handle;
 		CGFloat delta = 0.0f;
 	   	CGRect stretchedFrame = CGRectMake(self.table.frame.origin.x, self.table.frame.origin.y, self.table.frame.size.width, SW_ACAPELLA_HEADER_HEIGHT);
     
-	   	delta = fabs(MIN(0.0f, self.table.contentOffset.y));
+	   	delta = fabsf(MIN(0.0f, self.table.contentOffset.y));
     
 	   	if (self.table.contentOffset.y > 0.0f){
         	stretchedFrame.origin.y -= self.table.contentOffset.y;

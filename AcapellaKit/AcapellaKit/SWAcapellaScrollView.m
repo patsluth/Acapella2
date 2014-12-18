@@ -112,6 +112,10 @@
     
     
     
+    if (self.isTracking){
+        return;
+    }
+    
     self.currentVelocity = CGPointZero;
     self.userInteractionEnabled = YES;
     

@@ -11,6 +11,9 @@
 #import "SWAcapellaScrollViewProtocol.h"
 #import "SWAcapellaTableView.h"
 #import "SWAcapellaScrollView.h"
+#import "SWAcapellaPullToRefresh.h"
+
+#import "libsw/sluthwareios/sluthwareios.h"
 
 @interface SWAcapellaBase()
 {
@@ -19,6 +22,7 @@
 //gesture recognizers
 @property (strong, nonatomic) UITapGestureRecognizer *oneFingerTap;
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
+@property (strong, nonatomic) SWAcapellaPullToRefresh *pullToRefresh;
 
 @end
 
@@ -46,9 +50,6 @@
         self.backgroundColor = [UIColor clearColor];
         
         [self initGestureRecognizers];
-
-        self.acapellaTopAccessoryHeight = 0.0;
-        self.acapellaBottomAccessoryHeight = 0.0;
     }
     
     return self;
@@ -94,27 +95,14 @@
     [super setFrame:frame];
     
     if (!CGRectEqualToRect(original, frame)){
+        
         if (self.tableview){
             [self.tableview reloadData];
         }
-    }
-}
-
-- (void)setAcapellaTopAccessoryHeight:(CGFloat)acapellaTopAccessoryHeight
-{
-    _acapellaTopAccessoryHeight = acapellaTopAccessoryHeight;
-    
-    if (self.tableview){
-        [self.tableview reloadData];
-    }
-}
-
-- (void)setAcapellaBottomAccessoryHeight:(CGFloat)acapellaBottomAccessoryHeight
-{
-    _acapellaBottomAccessoryHeight = acapellaBottomAccessoryHeight;
-    
-    if (self.tableview){
-        [self.tableview reloadData];
+        
+        CGFloat newPullToRefreshHeight = self.frame.size.height * VIEW_HEIGHT_PERCENTAGE_TO_ACTIVATE;
+        [self.pullToRefresh setSize:CGSizeMake(newPullToRefreshHeight, newPullToRefreshHeight)];
+        [self.pullToRefresh setCenterX:self.tableview.frame.size.width / 2];
     }
 }
 
@@ -151,7 +139,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0){
-        return 5;
+        return 3;
     }
     
     return 0;
@@ -162,23 +150,15 @@
     if (indexPath.section == 0){
         switch (indexPath.row) {
             case 0:
-                return self.frame.size.height * 3;
+                return self.frame.size.height * VIEW_HEIGHT_PERCENTAGE_TO_ACTIVATE;
                 break;
                 
             case 1:
-                return (self.acapellaTopAccessoryHeight <= 0.0) ? self.frame.size.height * 0.4 : self.acapellaTopAccessoryHeight;
-                break;
-                
-            case 2:
                 return self.frame.size.height;
                 break;
                 
-            case 3:
-                return (self.acapellaBottomAccessoryHeight <= 0.0) ? self.frame.size.height * 0.4 : self.acapellaBottomAccessoryHeight;
-                break;
-                
-            case 4:
-                return self.frame.size.height * 3;
+            case 2:
+                return self.frame.size.height * VIEW_HEIGHT_PERCENTAGE_TO_ACTIVATE;
                 break;
                 
             default:
@@ -194,23 +174,15 @@
     if (indexPath.section == 0){
         switch (indexPath.row) {
             case 0:
-                return @"swacapella_edge_of_the_world";
+                return @"swacapella_accessory";
                 break;
                 
             case 1:
-                return @"swacapella_accessory";
-                break;
-                
-            case 2:
                 return @"swacapella_main";
                 break;
                 
-            case 3:
+            case 2:
                 return @"swacapella_accessory";
-                break;
-                
-            case 4:
-                return @"swacapella_edge_of_the_world";
                 break;
                 
             default:
@@ -230,12 +202,21 @@
     if (!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        
         cell.backgroundColor = [UIColor clearColor];
+        
+#ifdef DEBUG
+        CGFloat hue = ( arc4random() % 256 / 256.0 );
+        CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;
+        CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;
+        cell.backgroundColor = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
+#endif
+        
         cell.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         if (indexPath.section == 0){
-            if (indexPath.row == 2){
+            if (indexPath.row == 1){
                 
                 if (!self.scrollview){
                     self.scrollview = [[SWAcapellaScrollView alloc] init];
@@ -308,6 +289,10 @@
     }
     
     scrollView.previousScrollOffset = scrollView.contentOffset;
+    
+    if (self.tableview == scrollView){
+        [self.pullToRefresh scrollViewDidScroll:scrollView];
+    }
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
@@ -318,109 +303,35 @@
     
     if (self.tableview == scrollView){
         
-        if (velocity.y > 0.2){
-            //return;
-        }
+        CGRect topAccessoryRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        CGRect mainContentRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+        CGRect bottomAccessoryRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
         
-        NSIndexPath *targetIndexPath = [self.tableview indexPathForRowAtPoint:*targetContentOffset];
-        
-        if (targetIndexPath.section != 0){
-            return;
-        }
-        
-        //auto set to the top and bottom of these so we snap nicely
-        if (targetIndexPath.row == 0){
-            CGRect edgeOfWorldTopRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-            *targetContentOffset = CGPointMake(edgeOfWorldTopRect.origin.x,
-                                               (edgeOfWorldTopRect.origin.y + edgeOfWorldTopRect.size.height) -
-                                               self.tableview.frame.size.height);
-            return;
-        } else if (targetIndexPath.row == 4){
-            *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]].origin;
-            return;
-        }
-        
-        
-        
-        CGFloat contentOffsetCenterY = targetContentOffset->y + (self.frame.size.height / 2);
-        
-        if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
-            contentOffsetCenterY = targetContentOffset->y + self.frame.size.height;
-        } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
-            contentOffsetCenterY = targetContentOffset->y;
-        }
-        
-        NSIndexPath *centredIndexPath = [self.tableview indexPathForRowAtPoint:CGPointMake(self.tableview.frame.size.width / 2,
-                                                                                            contentOffsetCenterY)];
-        CGRect centredIndexPathFrame = [self.tableview rectForRowAtIndexPath:centredIndexPath];
-        
-        
-        
-        
-        
-        switch (centredIndexPath.row) {
-            case 0:
-                *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]].origin;
-                break;
-                
-            case 1:
-                *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]].origin;
-                break;
-                
-            case 2:
-            {
-                NSIndexPath *aboveCentredIndexPath = [NSIndexPath indexPathForRow:centredIndexPath.row - 1 inSection:0];
-                NSIndexPath *belowCentredIndexPath = [NSIndexPath indexPathForRow:centredIndexPath.row + 1 inSection:0];
-                CGRect aboveCentredIndexPathFrame = [self.tableview rectForRowAtIndexPath:aboveCentredIndexPath];
-                CGRect belowCentredIndexPathFrame = [self.tableview rectForRowAtIndexPath:belowCentredIndexPath];
-                
-                //these two variables are so we can calucalate the percentage of the accessory view on screen
-                CGFloat distToTopAccessory = targetContentOffset->y -
-                (aboveCentredIndexPathFrame.origin.y + aboveCentredIndexPathFrame.size.height);
-                CGFloat distToBottomAccessory = (targetContentOffset->y + centredIndexPathFrame.size.height) -
-                (belowCentredIndexPathFrame.origin.y);
-                
-                if (distToTopAccessory < 0.0 && fabs(distToTopAccessory) > aboveCentredIndexPathFrame.size.height * 0.50){ //25%
-                    
-                    //move to top accessory
-                    *targetContentOffset = aboveCentredIndexPathFrame.origin;
-                    
-                } else if (distToBottomAccessory > 0.0 && fabs(distToBottomAccessory) > belowCentredIndexPathFrame.size.height * 0.50){
-                    
-                    //move to bottom accessory
-                    *targetContentOffset = CGPointMake(belowCentredIndexPathFrame.origin.x,
-                                                       centredIndexPathFrame.origin.y + belowCentredIndexPathFrame.size.height);
-                } else {
-                    
-                    //stay centered
-                    *targetContentOffset = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]].origin;
-                    
-                }
+        if (CGRectContainsPoint(topAccessoryRect, scrollView.contentOffset)){ //top accessory
+            
+            if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
+                *targetContentOffset = mainContentRect.origin;
+            } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_DOWN){
+                *targetContentOffset = topAccessoryRect.origin;
             }
-                break;
-                
-            case 3:
-            {
-                CGRect mainCellFrame = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-                CGRect bottomAccessoryCellFrame = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:0]];
-                *targetContentOffset = CGPointMake(mainCellFrame.origin.x,
-                                                   mainCellFrame.origin.y + bottomAccessoryCellFrame.size.height);
+            
+        } else if (CGRectContainsPoint(bottomAccessoryRect, CGPointMake(scrollView.contentOffset.x, scrollView.contentOffset.y + scrollView.frame.size.height))){
+            
+            if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){ //bottom accessory
+                *targetContentOffset = CGPointMake(scrollView.contentOffset.x, (NSInteger)(scrollView.contentSize.height - scrollView.frame.size.height));
+            } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_DOWN){
+                *targetContentOffset = mainContentRect.origin;
             }
-                break;
-                
-            case 4:
-                *targetContentOffset = centredIndexPathFrame.origin;
-                break;
-                
-            default:
-                *targetContentOffset = centredIndexPathFrame.origin;
-                break;
+            
         }
     }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    if (self.tableview == scrollView){
+        [self.pullToRefresh scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -457,40 +368,8 @@
         
     } else if (self.tableview == scrollView){
         
-        scrollView.userInteractionEnabled = NO;
-        
-        CGFloat contentOffsetCenterY;
-        
-        if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
-            contentOffsetCenterY = self.tableview.contentOffset.y + self.frame.size.height - 5;
-        } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_DOWN){
-            contentOffsetCenterY = self.tableview.contentOffset.y + 5;
-        }
-        
-        NSIndexPath *centredIndexPath = [self.tableview indexPathForRowAtPoint:CGPointMake(self.tableview.contentOffset.x,
-                                                                                          contentOffsetCenterY)];
-        
-        if (centredIndexPath.section == 0){
-            
-            if (centredIndexPath.row == 0 || centredIndexPath.row == [self.tableview numberOfRowsInSection:0] - 1){
-                
-                [self.tableview startWrapAroundFallback];
-                
-                if (self.delegateAcapella){
-                    [self.delegateAcapella swAcapella:self.tableview
-                                              onSwipe:(centredIndexPath.row == 0) ? SW_SCROLL_DIR_DOWN : SW_SCROLL_DIR_UP];
-                }
-                
-            } else {
-                
-                self.tableview.userInteractionEnabled = YES;
-                
-            }
-            
-        } else {
-            
-            [self.tableview resetContentOffset:NO];
-            
+        if (self.pullToRefresh){
+            [self.pullToRefresh scrollViewDidEndDecelerating:scrollView];
         }
     }
 }
@@ -508,22 +387,54 @@
 
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-    CGFloat xPercentage = [tap locationInView:self].x / self.frame.size.width;
-    CGFloat yPercentage = [tap locationInView:self].y / self.frame.size.height;
-    
     if (self.delegateAcapella){
+        
+        CGFloat xPercentage = [tap locationInView:self].x / self.frame.size.width;
+        CGFloat yPercentage = [tap locationInView:self].y / self.frame.size.height;
+        
         [self.delegateAcapella swAcapella:self onTap:tap percentage:CGPointMake(xPercentage, yPercentage)];
     }
 }
 
 - (void)onPress:(UILongPressGestureRecognizer *)longPress
 {
-    CGFloat xPercentage = [longPress locationInView:self].x / self.frame.size.width;
-    CGFloat yPercentage = [longPress locationInView:self].y / self.frame.size.height;
-    
     if (self.delegateAcapella){
+        
+        CGFloat xPercentage = [longPress locationInView:self].x / self.frame.size.width;
+        CGFloat yPercentage = [longPress locationInView:self].y / self.frame.size.height;
+        
         [self.delegateAcapella swAcapella:self onLongPress:longPress percentage:CGPointMake(xPercentage, yPercentage)];
     }
+}
+
+#pragma mark Pull To Refresh
+
+- (void)pullToRefreshActivated:(SWAcapellaPullToRefresh *)control
+{
+    if (self.delegateAcapella){
+        if (control.swaState == 1){
+            [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_UP];
+        } else if (control.swaState == 2){
+            [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_DOWN];
+        }
+    }
+}
+
+- (SWAcapellaPullToRefresh *)pullToRefresh
+{
+    if (!_pullToRefresh){
+        _pullToRefresh = [[SWAcapellaPullToRefresh alloc] init];
+        
+        if (self.delegateAcapella){
+            _pullToRefresh.image = [self.delegateAcapella swAcapellaImageForPullToRefreshControl];
+            _pullToRefresh.tintColor = [self.delegateAcapella swAcapellaTintColorForPullToRefreshControl];
+        }
+        
+        [_pullToRefresh addTarget:self action:@selector(pullToRefreshActivated:) forControlEvents:UIControlEventApplicationReserved];
+        [self.tableview addSubview:_pullToRefresh];
+    }
+    
+    return _pullToRefresh;
 }
 
 @end

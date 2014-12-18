@@ -10,13 +10,11 @@
 
 @protocol SWAcapellaScrollViewProtocol <NSObject>
 
-@required
+@optional
 - (void)resetContentOffset:(BOOL)animated;
 - (void)finishWrapAroundAnimation;
 - (void)startWrapAroundFallback;
 - (void)stopWrapAroundFallback;
-
-@optional
 - (CGPoint)defaultContentOffset;
 - (NSIndexPath *)defaultIndexPath;
 

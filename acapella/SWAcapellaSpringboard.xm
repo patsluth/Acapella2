@@ -4,6 +4,7 @@
 #import <libsw/sluthwareios/sluthwareios.h>
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
+#import "SWAcapellaPlaylistOptions.h"
 #import "SWAcapellaGlobalDefines.h"
 
 #import <Springboard/Springboard.h>
@@ -31,9 +32,7 @@
 
 static SWAcapellaBase *_acapella;
 static UIActivityViewController *_acapellaSharingActivityView;
-static UIButton *_acapellaRepeatButton;
-static UIButton *_acapellaShuffleButton;
-static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
+static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 
 
@@ -43,15 +42,10 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 }
 
 @property (strong, nonatomic) UIActivityViewController *acapellaSharingActivityView;
-@property (strong, nonatomic) UIButton *acapellaRepeatButton;
-@property (strong, nonatomic) UIButton *acapellaShuffleButton;
-@property (strong, nonatomic) NSTimer *acapellaHideRepeatAndShuffleButtonsTimer;
+@property (strong, nonatomic) SWAcapellaPlaylistOptions *acapellaPlaylistOptions;
 
-- (void)cleanupPlaylistOptionButtons;
 - (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode;
 - (void)updateShuffleButtonToMediaShuffleMode:(int)shuffleMode;
-- (void)startHideRepeatAndShuffleButtonTimer;
-- (void)stopHideRepeatAndShuffleButtonTimer;
 
 @end
 
@@ -149,39 +143,15 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 }
 
 %new
-- (UIButton *)acapellaRepeatButton
+- (SWAcapellaPlaylistOptions *)acapellaPlaylistOptions
 {
-    return objc_getAssociatedObject(self, &_acapellaRepeatButton);
+    return objc_getAssociatedObject(self, &_acapellaPlaylistOptions);
 }
 
 %new
-- (void)setAcapellaRepeatButton:(UIButton *)acapellaRepeatButton
+- (void)setAcapellaPlaylistOptions:(SWAcapellaPlaylistOptions *)acapellaPlaylistOptions
 {
-    objc_setAssociatedObject(self, &_acapellaRepeatButton, acapellaRepeatButton, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-%new
-- (UIButton *)acapellaShuffleButton
-{
-    return objc_getAssociatedObject(self, &_acapellaShuffleButton);
-}
-
-%new
-- (void)setAcapellaShuffleButton:(UIButton *)acapellaShuffleButton
-{
-    objc_setAssociatedObject(self, &_acapellaShuffleButton, acapellaShuffleButton, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-%new
-- (NSTimer *)acapellaHideRepeatAndShuffleButtonsTimer
-{
-    return objc_getAssociatedObject(self, &_acapellaHideRepeatAndShuffleButtonsTimer);
-}
-
-%new
-- (void)setAcapellaHideRepeatAndShuffleButtonsTimer:(UIButton *)acapellaHideRepeatAndShuffleButtonsTimer
-{
-    objc_setAssociatedObject(self, &_acapellaHideRepeatAndShuffleButtonsTimer, acapellaHideRepeatAndShuffleButtonsTimer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &_acapellaPlaylistOptions, acapellaPlaylistOptions, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark Init
@@ -216,6 +186,11 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         if (!self.acapella){
             self.acapella = [[%c(SWAcapellaBase) alloc] init];
             self.acapella.delegateAcapella = self;
+        }
+        
+        if (!self.acapellaPlaylistOptions){
+            self.acapellaPlaylistOptions = [[%c(SWAcapellaPlaylistOptions) alloc] init];
+            self.acapellaPlaylistOptions.delegate = self;
         }
         
         self.acapella.frame = mediaControlsView.frame;
@@ -281,8 +256,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 {
     %orig(arg1);
     
-    [self stopHideRepeatAndShuffleButtonTimer];
-    [self cleanupPlaylistOptionButtons];
+    [self.acapellaPlaylistOptions cleanup];
 }
 
 #pragma mark SWAcapellaDelegate
@@ -446,7 +420,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
             switch (indexPath.row){
                 case 0:
                     
-                    if ([self volumeView].superview == cell){
+                    if ([self volumeView].superview){
                         [[self volumeView] removeFromSuperview];
                     }
                     
@@ -466,7 +440,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
                     
                 case 2:
                     
-                    if ([self timeInformationView].superview == cell){
+                    if ([self timeInformationView].superview){
                         [[self timeInformationView] removeFromSuperview];
                     }
                     
@@ -591,64 +565,24 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         
         NSDictionary *resultDict = object;
         
-        if (!successful && resultDict){
+        if (resultDict && self.acapellaPlaylistOptions && ![self.acapellaPlaylistOptions created]){
             
-            if (!self.acapellaRepeatButton && !self.acapellaShuffleButton){
-                
-                self.acapellaRepeatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                [[self.acapellaRepeatButton layer] setMasksToBounds:YES];
-                [[self.acapellaRepeatButton layer] setCornerRadius:5.0f];
-                [self.acapellaRepeatButton addTarget:self action:@selector(acapellaRepeatButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-                
-                self.acapellaShuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self.acapellaShuffleButton addTarget:self action:@selector(acapellaShuffleButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-                [[self.acapellaShuffleButton layer] setMasksToBounds:YES];
-                [[self.acapellaShuffleButton layer] setCornerRadius:5.0f];
-                
-                int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
-                int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
-                
-                [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
-                [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
-                
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    
-                    [self.acapellaRepeatButton setOrigin:CGPointMake((self.acapella.scrollview.contentSize.width /
-                                                                      [self.acapella.scrollview pagesAvailable].x) +
-                                                                     SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-                                                                     (self.acapella.scrollview.contentSize.height /
-                                                                      [self.acapella.scrollview pagesAvailable].y) - 																													self.acapellaRepeatButton.frame.size.height -
-                                                                     SW_ACAPELLA_REPEATSHUFFLE_Y_PADDING)];
-                    
-                    [self.acapella.scrollview addSubview:self.acapellaRepeatButton];
-                    
-                    
-                    [self.acapellaShuffleButton setOrigin:CGPointMake(((self.acapella.scrollview.contentSize.width /
-                                                                        [self.acapella.scrollview pagesAvailable].x) +
-                                                                       self.acapella.scrollview.frame.size.width) -
-                                                                      self.acapellaShuffleButton.frame.size.width - SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-                                                                      self.acapellaRepeatButton.frame.origin.y)];
-                    
-                    [self.acapella.scrollview addSubview:self.acapellaShuffleButton];
-                    
-                    
-                    
-                    [self.acapella.scrollview stopWrapAroundFallback];
-                    [self.acapella.scrollview resetContentOffset:NO];
-                    [self.acapella.tableview resetContentOffset:YES];
-                    [self startHideRepeatAndShuffleButtonTimer];
-                }];
-                
-            } else {
-                
-                [self cleanupPlaylistOptionButtons];
-                [self.acapella.tableview resetContentOffset:YES];
-                
-            }
+            int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+            int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+            
+            [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+            [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+            
+            [self.acapellaPlaylistOptions create];
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
+            [self.acapella.scrollview stopWrapAroundFallback];
+            [self.acapella.scrollview resetContentOffset:NO];
+            [self.acapella.tableview resetContentOffset:YES];
+            [self.acapellaPlaylistOptions startHideTimer];
             
         } else {
-            
-            [self cleanupPlaylistOptionButtons];
+        
+            [self.acapellaPlaylistOptions cleanup];
             [self.acapella.tableview resetContentOffset:YES];
             
         }
@@ -686,23 +620,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     [SWAcapellaActionsHelper action_IncreaseVolume:nil];
 }
 
-#pragma mark Repeat/Shuffle
-
-%new
-- (void)cleanupPlaylistOptionButtons
-{
-	[self stopHideRepeatAndShuffleButtonTimer];
-
-    if (self.acapellaRepeatButton){
-        [self.acapellaRepeatButton removeFromSuperview];
-        self.acapellaRepeatButton = nil;
-    }
-    
-    if (self.acapellaShuffleButton){
-        [self.acapellaShuffleButton removeFromSuperview];
-        self.acapellaShuffleButton = nil;
-    }
-}
+#pragma mark SWAcapellaPlaylistOptions
 
 %new
 - (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode
@@ -714,36 +632,30 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             NSString *newText;
+            UIColor *newButtonColor = [UIColor clearColor];
             UIColor *newTextColor = [UIColor clearColor];
             
             if (repeatMode == 0){
                 newText = @" Repeat Off ";
-                self.acapellaRepeatButton.backgroundColor = [UIColor clearColor];
+                newButtonColor = [UIColor clearColor];
                 newTextColor = [titles _titleLabel].textColor;
             } else if (repeatMode == 1){
                 newText = @" Repeat One ";
-                self.acapellaRepeatButton.backgroundColor = [titles _titleLabel].textColor;
+                newButtonColor = [titles _titleLabel].textColor;
                 newTextColor = [titles _detailLabel].textColor;
             } else if (repeatMode == 2){
                 newText = @" Repeat All ";
-                self.acapellaRepeatButton.backgroundColor = [titles _titleLabel].textColor;
+                newButtonColor = [titles _titleLabel].textColor;
                 newTextColor = [titles _detailLabel].textColor;
             }
             
-            [self.acapellaRepeatButton setAttributedTitle:[[NSAttributedString alloc] initWithString:newText
-                                                                                          attributes:@{NSForegroundColorAttributeName:newTextColor,
-                                                                                                       NSFontAttributeName:[titles _detailLabel].font}]
-                                                 forState:UIControlStateNormal];
+            [self.acapellaPlaylistOptions updateButtonAtIndex:0
+                                                         text:newText
+                                                         font:[titles _detailLabel].font
+                                                 buttonColour:newButtonColor
+                                                   textColour:newTextColor];
             
-            [self.acapellaRepeatButton sizeToFit];
-            
-            [self.acapellaRepeatButton setOrigin:CGPointMake((self.acapella.scrollview.contentSize.width /
-                                                              [self.acapella.scrollview pagesAvailable].x) +
-                                                             SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-                                                             (self.acapella.scrollview.contentSize.height /
-                                                              [self.acapella.scrollview pagesAvailable].y) -
-                                                             self.acapellaRepeatButton.frame.size.height -
-                                                             SW_ACAPELLA_REPEATSHUFFLE_Y_PADDING)];
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
             
         }];
     }
@@ -759,104 +671,57 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             NSString *newText;
+            UIColor *newButtonColor = [UIColor clearColor];
             UIColor *newTextColor = [UIColor clearColor];
             
             if (shuffleMode == 0){
                 newText = @" Shuffle ";
-                self.acapellaShuffleButton.backgroundColor = [UIColor clearColor];
+                newButtonColor = [UIColor clearColor];
                 newTextColor = [titles _titleLabel].textColor;
             } else if (shuffleMode == 2){
                 newText = @" Shuffle All ";
-                self.acapellaShuffleButton.backgroundColor = [titles _titleLabel].textColor;
+                newButtonColor = [titles _titleLabel].textColor;
                 newTextColor = [titles _detailLabel].textColor;
             }
             
-            [self.acapellaShuffleButton setAttributedTitle:[[NSAttributedString alloc] initWithString:newText
-                                                                                          attributes:@{NSForegroundColorAttributeName:newTextColor,
-                                                                                                       NSFontAttributeName:[titles _detailLabel].font}]
-                                                 forState:UIControlStateNormal];
+            [self.acapellaPlaylistOptions updateButtonAtIndex:2
+                                                         text:newText
+                                                         font:[titles _detailLabel].font
+                                                 buttonColour:newButtonColor
+                                                   textColour:newTextColor];
             
-            [self.acapellaShuffleButton sizeToFit];
-            
-            [self.acapellaShuffleButton setOrigin:CGPointMake(((self.acapella.scrollview.contentSize.width /
-                                                                [self.acapella.scrollview pagesAvailable].x) +
-                                                               self.acapella.scrollview.frame.size.width) -
-                                                              self.acapellaShuffleButton.frame.size.width - SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-                                                              self.acapellaRepeatButton.frame.origin.y)];
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
             
         }];
     }
 }
 
+#pragma mark SWAcapellaPlaylistOptionsDelegate
 %new
-- (void)acapellaRepeatButtonTapped:(UIButton *)button
+- (void)swAcapellaPlaylistOptions:(SWAcapellaPlaylistOptions *)view buttonTapped:(UIButton *)button withIndex:(NSInteger)index
 {
-    [self startHideRepeatAndShuffleButtonTimer]; //reset timer
-    
     MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
         if (result){
             NSDictionary *resultDict = (__bridge NSDictionary *)result;
-            int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
             
-            mediaRepeatMode = ((mediaRepeatMode + 1) > 2) ? 0 : mediaRepeatMode + 1;
-            MRMediaRemoteSetRepeatMode(mediaRepeatMode);
+            if (index == 0){
+                
+                int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+                mediaRepeatMode = ((mediaRepeatMode + 1) > 2) ? 0 : mediaRepeatMode + 1;
+                MRMediaRemoteSetRepeatMode(mediaRepeatMode);
+                [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+                
+            } else if (index == 2){
+                
+                int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+                mediaShuffleMode = (mediaShuffleMode == 0) ? 2 : 0; //0 is off, 2 is on
+                MRMediaRemoteSetShuffleMode(mediaShuffleMode);
+                [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+                
+            }
             
-            [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
         }
     });
-}
-
-%new
-- (void)acapellaShuffleButtonTapped:(UIButton *)button
-{
-    [self startHideRepeatAndShuffleButtonTimer]; //reset timer
-    
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
-        if (result){
-            NSDictionary *resultDict = (__bridge NSDictionary *)result;
-            int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
-           
-			mediaShuffleMode = (mediaShuffleMode == 0) ? 2 : 0; //0 is off, 2 is on
-            MRMediaRemoteSetShuffleMode(mediaShuffleMode);
-            
-            [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
-        }
-    });
-}
-
-%new
-- (void)startHideRepeatAndShuffleButtonTimer
-{
-    [self stopHideRepeatAndShuffleButtonTimer];
-    
-    self.acapellaHideRepeatAndShuffleButtonsTimer = [NSTimer scheduledTimerWithTimeInterval:4.0
-                                                                                      block:^{
-                                                                                          if (self.acapellaRepeatButton && self.acapellaShuffleButton){
-                                                                                              [UIView animateWithDuration:0.4
-                                                                                                                    delay:0.0
-                                                                                                                  options:UIViewAnimationOptionCurveEaseInOut
-                                                                                                               animations:^{
-                                                                                                                   self.acapellaRepeatButton.alpha = 0.0;
-                                                                                                                   self.acapellaShuffleButton.alpha = 0.0;
-                                                                                                               }
-                                                                                                               completion:^(BOOL finished){
-                                                                                                                   
-                                                                                                                   [self cleanupPlaylistOptionButtons];
-                                                                                                                   
-                                                                                                               }];
-                                                                                          } else {
-	                                                                                          [self cleanupPlaylistOptionButtons];
-                                                                                          }
-                                                                                      }repeats:NO];
-}
-
-%new
-- (void)stopHideRepeatAndShuffleButtonTimer
-{
-    if (self.acapellaHideRepeatAndShuffleButtonsTimer){
-        [self.acapellaHideRepeatAndShuffleButtonsTimer invalidate];
-        self.acapellaHideRepeatAndShuffleButtonsTimer = nil;
-    }
 }
 
 %end
@@ -874,7 +739,7 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
     CGSize original = %orig(arg1);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
-        return CGSizeMake(original.width, original.height * 0.80);
+        return CGSizeMake(original.width, original.height * 0.90);
     }
     
     return original;
@@ -886,48 +751,64 @@ static NSTimer *_acapellaHideRepeatAndShuffleButtonsTimer;
 
 
 
-%hook MPUChronologicalProgressView
+#pragma mark MPUSystemMediaControlsView
 
-- (void)setFrame:(CGRect)frame
+%hook _MPUSystemMediaControlsView
+
+- (void)layoutSubviews
 {
+    %orig();
+    
+    UIView *time = MSHookIvar<UIView *>(self, "_timeInformationView");
+    UIView *volume = MSHookIvar<UIView *>(self, "_volumeView");
+    
     //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
-    if ([self.superview isKindOfClass:[UITableViewCell class]] || [self.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")]){
+    if (time && ([time.superview isKindOfClass:[UITableViewCell class]] ||
+                   [time.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")])){
         
-        %orig(CGRectMake((self.superview.frame.size.width / 2) - (frame.size.width / 2),
-                         (self.superview.frame.size.height / 2) - (frame.size.height / 2),
-                         frame.size.width,
-                         frame.size.height));
-        
-        return;
+        [time setCenter:CGPointMake(time.superview.frame.size.width / 2,
+                                    time.superview.frame.size.height / 2)];
         
     }
     
-    %orig(frame);
+    //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
+    if (volume && ([volume.superview isKindOfClass:[UITableViewCell class]] ||
+                   [volume.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")])){
+        
+        [volume setCenter:CGPointMake(volume.superview.frame.size.width / 2,
+                                      volume.superview.frame.size.height / 2)];
+        
+    }
 }
 
 %end
 
+%hook MPUSystemMediaControlsView
 
-
-
-
-%hook MPUMediaControlsVolumeView
-
-- (void)setFrame:(CGRect)frame
+- (void)layoutSubviews
 {
+    %orig();
+    
+    UIView *time = MSHookIvar<UIView *>(self, "_timeInformationView");
+    UIView *volume = MSHookIvar<UIView *>(self, "_volumeView");
+    
     //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
-    if ([self.superview isKindOfClass:[UITableViewCell class]] || [self.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")]){
+    if (time && time.superview && ([time.superview isKindOfClass:[UITableViewCell class]] ||
+                                   [time.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")])){
         
-        %orig(CGRectMake((self.superview.frame.size.width / 2) - (frame.size.width / 2),
-                         (self.superview.frame.size.height / 2) - (frame.size.height / 2),
-                         frame.size.width,
-                         frame.size.height));
-        
-        return;
+        [time setCenter:CGPointMake(time.superview.frame.size.width / 2,
+                                    time.superview.frame.size.height / 2)];
         
     }
     
-    %orig(frame);
+    //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
+    if (volume  && volume.superview && ([volume.superview isKindOfClass:[UITableViewCell class]] ||
+                                        [volume.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")])){
+        
+        [volume setCenter:CGPointMake(volume.superview.frame.size.width / 2,
+                                      volume.superview.frame.size.height / 2)];
+        
+    }
 }
 
 %end

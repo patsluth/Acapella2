@@ -11,7 +11,7 @@
 
 #import "SWAcapellaActionsHelper.h"
 
-@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol>
+@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol, SWAcapellaPlaylistOptionsDelegate>
 {
     //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
     //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8

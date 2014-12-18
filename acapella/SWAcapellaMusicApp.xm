@@ -4,6 +4,7 @@
 #import <libsw/sluthwareios/sluthwareios.h>
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
+#import "SWAcapellaPlaylistOptions.h"
 #import "SWAcapellaGlobalDefines.h"
 
 #import <MediaRemote/MediaRemote.h>
@@ -25,10 +26,8 @@
 #pragma mark MusicNowPlayingViewController
 
 static SWAcapellaBase *_acapella;
-static UIButton *_acapellaRepeatButton;
-static UIButton *_acapellaGeniusButton;
-static UIButton *_acapellaShuffleButton;
 static UIActivityViewController *_acapellaSharingActivityView;
+static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 
 
@@ -39,6 +38,11 @@ static UIActivityViewController *_acapellaSharingActivityView;
 }
 
 @property (strong, nonatomic) UIActivityViewController *acapellaSharingActivityView;
+@property (strong, nonatomic) SWAcapellaPlaylistOptions *acapellaPlaylistOptions;
+
+- (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode;
+- (void)updateCreateButton;
+- (void)updateShuffleButtonToMediaShuffleMode:(int)shuffleMode;
 
 - (void)startRatingShouldHideTimer;
 - (void)hideRatingControlWithTimer;
@@ -122,20 +126,30 @@ static UIActivityViewController *_acapellaSharingActivityView;
 }
 
 %new
-- (UIView *)shuffleButton
+- (UIView *)geniusButton
 {
     if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_shuffleButton");
+        return MSHookIvar<UIView *>([self playbackControlsView], "_geniusButton");
     }
     
     return nil;
 }
 
 %new
-- (UIView *)geniusButton
+- (UIButton *)createButton
 {
     if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_geniusButton");
+        return MSHookIvar<UIButton *>([self playbackControlsView], "_createButton");
+    }
+    
+    return nil;
+}
+
+%new
+- (UIView *)shuffleButton
+{
+    if ([self playbackControlsView]){
+        return MSHookIvar<UIView *>([self playbackControlsView], "_shuffleButton");
     }
     
     return nil;
@@ -194,15 +208,15 @@ static UIActivityViewController *_acapellaSharingActivityView;
 }
 
 %new
-- (NSDictionary *)lastNowPlayingInfo
+- (SWAcapellaPlaylistOptions *)acapellaPlaylistOptions
 {
-    return objc_getAssociatedObject(self, &_lastNowPlayingInfo);
+    return objc_getAssociatedObject(self, &_acapellaPlaylistOptions);
 }
 
 %new
-- (void)setLastNowPlayingInfo:(NSDictionary *)lastNowPlayingInfo
+- (void)setAcapellaPlaylistOptions:(SWAcapellaPlaylistOptions *)acapellaPlaylistOptions
 {
-    objc_setAssociatedObject(self, &_lastNowPlayingInfo, lastNowPlayingInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &_acapellaPlaylistOptions, acapellaPlaylistOptions, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark Init
@@ -234,6 +248,22 @@ static UIActivityViewController *_acapellaSharingActivityView;
             [[self titlesView] removeFromSuperview];
         }
         
+        if ([self repeatButton]){
+            [[self repeatButton] removeFromSuperview];
+        }
+        
+        if ([self geniusButton]){
+            [[self geniusButton] removeFromSuperview];
+        }
+        
+        if ([self createButton]){
+            [self createButton].alpha = 0.0;
+        }
+        
+        if ([self shuffleButton]){
+            [[self shuffleButton] removeFromSuperview];
+        }
+        
         if ([self artworkView]){
             
             if (!self.acapella){
@@ -241,16 +271,17 @@ static UIActivityViewController *_acapellaSharingActivityView;
                 self.acapella.delegateAcapella = self;
             }
             
-            if (([self progressControl] && [self progressControl].isTracking) || ([self volumeSlider] && [self volumeSlider].isTracking)){
-                return;
+            if (!self.acapellaPlaylistOptions){
+                self.acapellaPlaylistOptions = [[%c(SWAcapellaPlaylistOptions) alloc] init];
+                self.acapellaPlaylistOptions.delegate = self;
+                self.acapellaPlaylistOptions.shouldShowGeniusButton = YES;
             }
             
             CGFloat artworkBottomYOrigin = [self artworkView].frame.origin.y + [self artworkView].frame.size.height;
             //set the bottom acapella origin to the top of the repeat button. Set it to the bottom of the view if repeat button hasnt been set up yet.
-            CGFloat bottomAcapellaYOrigin = (([self repeatButton].frame.origin.y <= 0.0) ?
-                                             [self playbackControlsView].frame.origin.y + [self playbackControlsView].frame.size.height :
-                                             [self repeatButton].frame.origin.y)
-            - artworkBottomYOrigin;
+            CGFloat bottomAcapellaYOrigin = [self playbackControlsView].frame.origin.y +
+                                             [self playbackControlsView].frame.size.height
+                                             - artworkBottomYOrigin;
             
             self.acapella.frame = CGRectMake([self playbackControlsView].frame.origin.x,
                                              artworkBottomYOrigin,
@@ -263,6 +294,21 @@ static UIActivityViewController *_acapellaSharingActivityView;
             }
             
             [[self playbackControlsView] addSubview:self.acapella];
+            [[self playbackControlsView] bringSubviewToFront:[self createButton]];
+            
+            if (self.acapella.tableview){
+                if ([self.acapella.tableview numberOfSections] > 0 && [self.acapella.tableview numberOfRowsInSection:0] > 2){
+                    
+                    [self.acapella.tableview beginUpdates];
+                    
+                    [self.acapella.tableview reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],
+                                                                      [NSIndexPath indexPathForRow:2 inSection:0]]
+                                                   withRowAnimation:UITableViewRowAnimationNone];
+                    
+                    [self.acapella.tableview endUpdates];
+                    
+                }
+            }
         }
     }
 }
@@ -281,11 +327,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
             [self.acapella.scrollview resetContentOffset:NO];
         }
     }
-    
-//    MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul));
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(nowPlayingInfoDidChangeNotification)
-//                                                 name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -320,8 +361,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
 - (void)viewDidDisappear:(BOOL)arg1
 {
     %orig(arg1);
-    
-   // MRMediaRemoteUnregisterForNowPlayingNotifications();
 }
 
 /*
@@ -361,16 +400,7 @@ static UIActivityViewController *_acapellaSharingActivityView;
 %new
 - (UIColor *)swAcapellaTintColorForPullToRefreshControl
 {
-    UIColor *returnVal = [UIColor yellowColor];
-    
-    if ([self titlesView] && [[self titlesView] isKindOfClass:%c(MPUNowPlayingTitlesView)]){
-        
-        MPUNowPlayingTitlesView *titles = (MPUNowPlayingTitlesView *)[self titlesView];
-        returnVal = [titles _titleLabel].textColor;
-        
-    }
-    
-    return returnVal;
+    return self.navigationController.navigationBar.tintColor;;
 }
 
 %new
@@ -498,13 +528,13 @@ static UIActivityViewController *_acapellaSharingActivityView;
             switch (indexPath.row){
                 case 0:
                     
-                    if ([self volumeSlider].superview == cell){
+                    if ([self volumeSlider].superview){
                         [[self volumeSlider] removeFromSuperview];
                     }
                     
                     if ([self progressControl]){
                         [cell addSubview:[self progressControl]];
-                        [[self progressControl] setFrame:[self progressControl].frame]; //update our frame because are forcing centre in setRect:
+                        [[self progressControl] setFrame:[self progressControl].frame];
                     }
                     
                     break;
@@ -512,19 +542,19 @@ static UIActivityViewController *_acapellaSharingActivityView;
                 case 1:
                     
                     [view.scrollview addSubview:[self titlesView]];
-                    [[self titlesView] setFrame:[self titlesView].frame]; //update our frame because are forcing centre in setRect:
+                    [[self titlesView] setFrame:[self titlesView].frame];
                     
                     break;
                     
                 case 2:
                     
-                    if ([self progressControl].superview == cell){
+                    if ([self progressControl].superview){
                         [[self progressControl] removeFromSuperview];
                     }
                     
                     if ([self volumeSlider]){
                         [cell addSubview:[self volumeSlider]];
-                        [[self volumeSlider] setFrame:[self volumeSlider].frame]; //update our frame because are forcing centre in setRect:
+                        [[self volumeSlider] setFrame:[self volumeSlider].frame];
                     }
                     
                     break;
@@ -543,42 +573,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
 }
 
 #pragma mark Actions
-
-%new
-- (void)nowPlayingInfoDidChangeNotification
-{
-//    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-//        
-//        NSDictionary *resultDict = object;
-//        
-//        if (self.lastNowPlayingInfo && self.acapella && self.acapella.scrollview){
-//            
-//            NSNumber *lastTrackUniqueID = [self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
-//            NSNumber *newTrackUniqueID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
-//            
-//            if (lastTrackUniqueID && newTrackUniqueID && [lastTrackUniqueID isEqualToNumber:newTrackUniqueID]){
-//                
-//                //double lastTrackElapsedTime = [[self.lastNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-//                //double newTrackElapsedTime = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-//                
-//                //double trackDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDuration] doubleValue];
-//                
-//                //CGFloat percentageDifference = fabsf((lastTrackElapsedTime / trackDuration) - (newTrackElapsedTime / trackDuration));
-//                
-//                [self.acapella.scrollview finishWrapAroundAnimation];
-//                
-//            } else {
-//                [self.acapella.scrollview finishWrapAroundAnimation];
-//            }
-//            
-//        } else {
-//            //[self.acapella.scrollview resetContentOffset:NO];
-//        }
-//        
-//        self.lastNowPlayingInfo = resultDict;
-//        
-//    }];
-}
 
 %new
 - (void)action_PlayPause
@@ -626,8 +620,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
                 });
             }
         }];
-        
-        //self.lastNowPlayingInfo = object;
     }];
 }
 
@@ -635,7 +627,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
 - (void)action_NextSong
 {
     [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
-        //self.lastNowPlayingInfo = object;
     }];
 }
 
@@ -678,75 +669,34 @@ static UIActivityViewController *_acapellaSharingActivityView;
 %new
 - (void)action_ShowPlaylistOptions
 {
-    [self.acapella.tableview resetContentOffset:YES];
-    
-    //    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-    //
-    //        NSDictionary *resultDict = object;
-    //
-    //        if (!successful && resultDict){
-    //
-    //            if (!self.acapellaRepeatButton && !self.acapellaShuffleButton){
-    //
-    //                self.acapellaRepeatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    //                [[self.acapellaRepeatButton layer] setMasksToBounds:YES];
-    //                [[self.acapellaRepeatButton layer] setCornerRadius:5.0f];
-    //                [self.acapellaRepeatButton addTarget:self action:@selector(acapellaRepeatButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    //
-    //                self.acapellaShuffleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    //                [self.acapellaShuffleButton addTarget:self action:@selector(acapellaShuffleButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    //                [[self.acapellaShuffleButton layer] setMasksToBounds:YES];
-    //                [[self.acapellaShuffleButton layer] setCornerRadius:5.0f];
-    //
-    //                int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
-    //                int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
-    //
-    //                [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
-    //                [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
-    //
-    //                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    //
-    //                    [self.acapellaRepeatButton setOrigin:CGPointMake((self.acapella.scrollview.contentSize.width /
-    //                                                                      [self.acapella.scrollview pagesAvailable].x) +
-    //                                                                     SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-    //                                                                     (self.acapella.scrollview.contentSize.height /
-    //                                                                      [self.acapella.scrollview pagesAvailable].y) - 																													self.acapellaRepeatButton.frame.size.height -
-    //                                                                     SW_ACAPELLA_REPEATSHUFFLE_Y_PADDING)];
-    //
-    //                    [self.acapella.scrollview addSubview:self.acapellaRepeatButton];
-    //
-    //
-    //                    [self.acapellaShuffleButton setOrigin:CGPointMake(((self.acapella.scrollview.contentSize.width /
-    //                                                                        [self.acapella.scrollview pagesAvailable].x) +
-    //                                                                       self.acapella.scrollview.frame.size.width) -
-    //                                                                      self.acapellaShuffleButton.frame.size.width - SW_ACAPELLA_REPEATSHUFFLE_X_PADDING,
-    //                                                                      self.acapellaRepeatButton.frame.origin.y)];
-    //
-    //                    [self.acapella.scrollview addSubview:self.acapellaShuffleButton];
-    //
-    //
-    //
-    //                    [self.acapella.scrollview stopWrapAroundFallback];
-    //                    [self.acapella.scrollview resetContentOffset:NO];
-    //                    [self.acapella.tableview finishWrapAroundAnimation];
-    //                    [self startHideRepeatAndShuffleButtonTimer];
-    //                }];
-    //
-    //            } else {
-    //
-    //                [self cleanupPlaylistOptionButtons];
-    //                [self.acapella.tableview finishWrapAroundAnimation];
-    //
-    //            }
-    //
-    //        } else {
-    //
-    //            [self cleanupPlaylistOptionButtons];
-    //            [self.acapella.tableview finishWrapAroundAnimation];
-    //
-    //        }
-    //
-    //    }];
+    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
+        
+        NSDictionary *resultDict = object;
+        
+        if (!successful && resultDict && self.acapellaPlaylistOptions && ![self.acapellaPlaylistOptions created]){
+            
+            int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+            int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+            
+            [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+            [self updateCreateButton];
+            [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+            
+            [self.acapellaPlaylistOptions create];
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
+            [self.acapella.scrollview stopWrapAroundFallback];
+            [self.acapella.scrollview resetContentOffset:NO];
+            [self.acapella.tableview resetContentOffset:YES];
+            [self.acapellaPlaylistOptions startHideTimer];
+            
+        } else {
+            
+            [self.acapellaPlaylistOptions cleanup];
+            [self.acapella.tableview resetContentOffset:YES];
+            
+        }
+        
+    }];
 }
 
 %new
@@ -779,6 +729,144 @@ static UIActivityViewController *_acapellaSharingActivityView;
 - (void)action_IncreaseVolume
 {
     [SWAcapellaActionsHelper action_IncreaseVolume:nil];
+}
+
+#pragma mark SWAcapellaPlaylistOptions
+
+%new
+- (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode
+{
+    if ([self titlesView] && [[self titlesView] isKindOfClass:%c(MPUNowPlayingTitlesView)]){
+        
+        MPUNowPlayingTitlesView *titles = (MPUNowPlayingTitlesView *)[self titlesView];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            NSString *newText;
+            UIColor *newButtonColor = [UIColor clearColor];
+            UIColor *newTextColor = [UIColor clearColor];
+            
+            if (repeatMode == 0){
+                newText = @" Repeat Off ";
+                newButtonColor = [UIColor clearColor];
+                newTextColor = [titles _titleLabel].textColor;
+            } else if (repeatMode == 1){
+                newText = @" Repeat One ";
+                newButtonColor = self.navigationController.navigationBar.tintColor;
+                newTextColor = [UIColor blackColor];
+            } else if (repeatMode == 2){
+                newText = @" Repeat All ";
+                newButtonColor = self.navigationController.navigationBar.tintColor;
+                newTextColor = [UIColor blackColor];
+            }
+            
+            [self.acapellaPlaylistOptions updateButtonAtIndex:0
+                                                         text:newText
+                                                         font:[titles _detailLabel].font
+                                                 buttonColour:newButtonColor
+                                                   textColour:newTextColor];
+            
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
+            
+        }];
+    }
+}
+
+%new
+- (void)updateCreateButton
+{
+    if ([self titlesView] && [[self titlesView] isKindOfClass:%c(MPUNowPlayingTitlesView)]){
+        
+        MPUNowPlayingTitlesView *titles = (MPUNowPlayingTitlesView *)[self titlesView];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            [self.acapellaPlaylistOptions updateButtonAtIndex:1
+                                                         text:@"Create"
+                                                         font:[titles _detailLabel].font
+                                                 buttonColour:[UIColor clearColor]
+                                                   textColour:[titles _titleLabel].textColor];
+            
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
+        }];
+    }
+}
+
+%new
+- (void)updateShuffleButtonToMediaShuffleMode:(int)shuffleMode
+{
+    if ([self titlesView] && [[self titlesView] isKindOfClass:%c(MPUNowPlayingTitlesView)]){
+        
+        MPUNowPlayingTitlesView *titles = (MPUNowPlayingTitlesView *)[self titlesView];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            
+            NSString *newText;
+            UIColor *newButtonColor = [UIColor clearColor];
+            UIColor *newTextColor = [UIColor clearColor];
+            
+            if (shuffleMode == 0){
+                newText = @" Shuffle ";
+                newButtonColor = [UIColor clearColor];
+                newTextColor = [titles _titleLabel].textColor;
+            } else if (shuffleMode == 2){
+                newText = @" Shuffle All ";
+                newButtonColor = self.navigationController.navigationBar.tintColor;
+                newTextColor = [UIColor blackColor];
+            }
+            
+            [self.acapellaPlaylistOptions updateButtonAtIndex:2
+                                                         text:newText
+                                                         font:[titles _detailLabel].font
+                                                 buttonColour:newButtonColor
+                                                   textColour:newTextColor];
+            
+            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
+            
+        }];
+    }
+}
+
+#pragma mark SWAcapellaPlaylistOptionsDelegate
+%new
+- (void)swAcapellaPlaylistOptions:(SWAcapellaPlaylistOptions *)view buttonTapped:(UIButton *)button withIndex:(NSInteger)index
+{
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        if (result){
+            NSDictionary *resultDict = (__bridge NSDictionary *)result;
+            
+            if (index == 0){
+                
+                int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+                mediaRepeatMode = ((mediaRepeatMode + 1) > 2) ? 0 : mediaRepeatMode + 1;
+                MRMediaRemoteSetRepeatMode(mediaRepeatMode);
+                [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+                
+            } else if (index == 1){
+                
+                SEL createSelector = NSSelectorFromString(@"_createAction:");
+                
+                if ([[self playbackControlsView] respondsToSelector:createSelector]){
+                    [[self playbackControlsView] performSelectorOnMainThread:createSelector
+                                                                  withObject:[self createButton]
+                                                               waitUntilDone:NO];
+                    
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        [self.acapellaPlaylistOptions cleanup];
+                    }];
+                }
+                
+            } else if (index == 2){
+                
+                int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+                mediaShuffleMode = (mediaShuffleMode == 0) ? 2 : 0; //0 is off, 2 is on
+                MRMediaRemoteSetShuffleMode(mediaShuffleMode);
+                [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+                
+            }
+            
+        }
+    });
 }
 
 #pragma mark Rating
@@ -868,6 +956,8 @@ static NSTimer *_hideRatingTimer;
 
 
 
+#pragma mark MPDetailSlider
+
 %hook MPDetailSlider
 
 - (void)setFrame:(CGRect)frame
@@ -892,6 +982,8 @@ static NSTimer *_hideRatingTimer;
 
 
 
+
+#pragma mark MPVolumeSlider
 
 %hook MPVolumeSlider
 

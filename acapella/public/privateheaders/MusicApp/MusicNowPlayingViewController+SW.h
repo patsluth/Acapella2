@@ -3,8 +3,9 @@
 @class MPAVItem;
 
 #import "SWAcapellaActionsHelper.h"
+#import "SWAcapellaPlaylistOptions.h"
 
-@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol>
+@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol, SWAcapellaPlaylistOptionsDelegate>
 {
     //MPAVController *_player; //iOS 8 only
                                 //we can use the same variable on _playbackControlsView
@@ -43,8 +44,9 @@
 - (UIView *)ratingControl;
 - (UIView *)titlesView;
 - (UIView *)repeatButton;
-- (UIView *)shuffleButton;
 - (UIView *)geniusButton;
+- (UIButton *)createButton;
+- (UIView *)shuffleButton;
 - (UIImageView *)artworkView;
 - (MPAVItem *)mpavItem;
 - (UIButton *)likeOrBanButton;

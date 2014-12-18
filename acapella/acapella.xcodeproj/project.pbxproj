@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		2E96F84A1A374530002A9D7D /* SWAcapellaActionsHelper.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaActionsHelper.xm; sourceTree = "<group>"; };
+		2EBCC96C1A431ED600F01709 /* SWAcapellaPlaylistOptions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaPlaylistOptions.m; sourceTree = "<group>"; };
 		2EE53EF21A36BC3B00BEED8F /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
 		2EE53EF31A36BC4900BEED8F /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		2EE53EF41A36BC4E00BEED8F /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
@@ -33,6 +34,7 @@
 				2EE53EF71A36BC6600BEED8F /* AVSystemController.xm */,
 				2E96F84A1A374530002A9D7D /* SWAcapellaActionsHelper.xm */,
 				2EE53EF81A36BC6A00BEED8F /* SWAcapellaMusicApp.xm */,
+				2EBCC96C1A431ED600F01709 /* SWAcapellaPlaylistOptions.m */,
 				2EE53EF91A36BC6D00BEED8F /* SWAcapellaPrefsBridge.xm */,
 				2EE53EFA1A36BC7100BEED8F /* SWAcapellaSharingFormatter.m */,
 				2EE53EFB1A36BC7500BEED8F /* SWAcapellaSpringboard.xm */,

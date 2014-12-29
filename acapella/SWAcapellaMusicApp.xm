@@ -156,15 +156,9 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 }
 
 %new
-- (UIImageView *)artworkView
+- (UIView *)artworkView
 {
-    UIView *artwork = MSHookIvar<UIView *>(self, "_contentView");
-    
-    if (artwork && [artwork isKindOfClass:[UIImageView class]]){
-        return (UIImageView *)artwork;
-    }
-    
-    return nil;
+    return MSHookIvar<UIView *>(self, "_contentView");
 }
 
 %new
@@ -610,7 +604,7 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
                     if (resultDict){
                         double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
                         
-                        if (mediaCurrentElapsedDuration >= 2.5 || mediaCurrentElapsedDuration <= 0.0){
+                        if (mediaCurrentElapsedDuration >= 2.0 || mediaCurrentElapsedDuration <= 0.0){
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                 [self.acapella.scrollview finishWrapAroundAnimation];
                             }];
@@ -647,21 +641,31 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 {
     [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
         
-        if (successful){
+        if (successful && object){
             
-            self.acapellaSharingActivityView = object;
+            self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:object applicationActivities:nil];
+            
+            self.acapellaSharingActivityView.excludedActivityTypes = @[UIActivityTypePrint,
+                                                                       UIActivityTypeAssignToContact,
+                                                                       UIActivityTypeSaveToCameraRoll,
+                                                                       UIActivityTypeAddToReadingList,
+                                                                       @"com.linkedin.LinkedIn.ShareExtension",
+                                                                       @"com.6wunderkinder.wunderlistmobile.sharingextension",
+                                                                       @"com.flexibits.fantastical2.iphone.add"];
+            
             [self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
             
-            __block SWAcapellaTableView *blockTableView = self.acapella.tableview;
+            __block MusicNowPlayingViewController *blockSelf = self;
             
             self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
-                if (blockTableView){
-                    [blockTableView resetContentOffset:YES];
+                
+                if (blockSelf){
+                    
+                    [blockSelf.acapella.tableview resetContentOffset:YES];
+                    
                 }
             };
             
-        } else {
-            [self.acapella.tableview resetContentOffset:YES];
         }
     }];
 }

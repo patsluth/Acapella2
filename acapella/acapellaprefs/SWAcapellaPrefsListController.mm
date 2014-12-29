@@ -48,6 +48,9 @@ void *handle;
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+    
+    self.table.showsHorizontalScrollIndicator = NO;
+    self.table.showsVerticalScrollIndicator = NO;
 	
 	if ([SWDeviceInfo iOSVersion_First] == 8){
 	

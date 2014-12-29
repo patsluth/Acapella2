@@ -108,6 +108,7 @@
 - (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
     if (tap.state == UIGestureRecognizerStateEnded){
+        
     }
 }
 

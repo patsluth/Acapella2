@@ -47,7 +47,7 @@
 - (UIView *)geniusButton;
 - (UIButton *)createButton;
 - (UIView *)shuffleButton;
-- (UIImageView *)artworkView;
+- (UIView *)artworkView;
 - (MPAVItem *)mpavItem;
 - (UIButton *)likeOrBanButton;
 

@@ -133,51 +133,40 @@
 {
     SBDeviceLockController *deviceLC = [%c(SBDeviceLockController) sharedController];
     
-    if (deviceLC && deviceLC.isPasscodeLocked){
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
         
-        if (completion){
-            completion(NO, deviceLC);
+        NSDictionary *resultDict = (__bridge NSDictionary *)result;
+        
+        if (resultDict){
+            
+            NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+            NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
+            NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
+            NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag" defaultValue:@"acapella"];
+            
+            NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
+                                                                                       mediaArtist:mediaArtist
+                                                                                  mediaArtworkData:mediaArtworkData
+                                                                                    sharingHashtag:sharingHashtag];
+            
+            if (shareData){
+                
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    
+                    if (completion){
+                        completion(!(deviceLC && deviceLC.isPasscodeLocked), shareData);
+                    }
+                }];
+                
+                return;
+            }
         }
         
-    } else {
+        if (completion){
+            completion(NO, nil);
+        }
         
-        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
-            
-            NSDictionary *resultDict = (__bridge NSDictionary *)result;
-            
-            if (resultDict){
-                
-                NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
-                NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
-                NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
-                NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag" defaultValue:@"acapella"];
-                
-                NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
-                                                                                           mediaArtist:mediaArtist
-                                                                                      mediaArtworkData:mediaArtworkData
-                                                                                        sharingHashtag:sharingHashtag];
-                
-                if (shareData){
-                    
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        
-                        UIActivityViewController *sharingVC = [[UIActivityViewController alloc] initWithActivityItems:shareData applicationActivities:nil];
-                        
-                        if (completion){
-                            completion(YES, sharingVC);
-                        }
-                    }];
-                    
-                    return;
-                }
-            }
-            
-            if (completion){
-                completion(NO, nil);
-            }
-            
-        });
-    }
+    });
 }
 
 + (void)action_OpenApp:(SWAcapellaActionsCompletionBlock)completion

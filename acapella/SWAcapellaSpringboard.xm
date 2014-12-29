@@ -5,6 +5,7 @@
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
 #import "SWAcapellaPlaylistOptions.h"
+#import "SWAcapellaShowEEActivity.h"
 #import "SWAcapellaGlobalDefines.h"
 
 #import <Springboard/Springboard.h>
@@ -35,8 +36,6 @@ static UIActivityViewController *_acapellaSharingActivityView;
 static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 
-
-
 @interface MPUSystemMediaControlsViewController()
 {
 }
@@ -49,6 +48,11 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 @end
 
+@interface UIWindow(SW)
+
+- (void)_setSecure:(BOOL)secure;
+
+@end
 
 
 
@@ -492,7 +496,7 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 {
     [SWAcapellaActionsHelper action_PreviousSong:^(BOOL successful, id object){
         [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-            if (successful){
+            if (successful || !object){
                 [self.acapella.scrollview finishWrapAroundAnimation]; //make sure we wrap around on iTunes Radio
             }
         }];
@@ -503,6 +507,9 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 - (void)action_NextSong
 {
     [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
+        if (!object){
+            [self.acapella.scrollview finishWrapAroundAnimation];
+        }
     }];
 }
 
@@ -522,35 +529,94 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 - (void)action_OpenActivity
 {
     [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
-        if (!successful){
-            if (object && [object isKindOfClass:%c(SBDeviceLockController)]){
-                
-                __block SWAcapellaTableView *blockTableView = self.acapella.tableview;
-                
-                [[[SWUIAlertView alloc] initWithTitle:@"Acapella"
-                                              message:@"Your device must be unlocked to bring up the activity screen for security reasons. Unlock device and try again."
-                                   clickedButtonBlock:^(UIAlertView *alert, NSInteger buttonIndex){
-                                   }
-                                      didDismissBlock:^(UIAlertView *alert, NSInteger buttonIndex){
-                                          if (blockTableView){
-                                              [blockTableView resetContentOffset:YES];
-                                          }
-                                      }
-                                    cancelButtonTitle:@":(-+--<" otherButtonTitles:nil] show];
-                
-            } else {
-                [self.acapella.tableview resetContentOffset:YES];
-            }
-        } else {
+        
+        if (object){
             
-            self.acapellaSharingActivityView = object;
+//            CGFloat highestWindowLevel = 0.0;
+//            UIWindow *highestWindow;
+//            UIWindow *root;
+//            
+//            for (id x in [[UIApplication sharedApplication] windows]){
+//                if ([x isKindOfClass:NSClassFromString(@"FBRootWindow")]){
+//                    root = x;
+//                }
+//                
+//                UIWindow *win = (UIWindow *)x;
+//                CGFloat winLevel = (CGFloat)win.windowLevel;
+//                
+//                if (winLevel > highestWindowLevel){
+//                    highestWindowLevel = winLevel;
+//                    highestWindow = win;
+//                }
+//            }
+//            
+//            static UIWindow *winwin;
+//            static UIViewController *concon;
+//            
+//            winwin = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//            winwin.alpha = 0.5;
+//            [winwin _setSecure:YES];
+//            winwin.windowLevel = 9999;
+//            winwin.backgroundColor = [UIColor redColor];
+//            concon = [[UIViewController alloc] init];
+//            winwin.rootViewController = concon;
+//            [winwin makeKeyAndVisible];
+            
+            
+            
+            SWAcapellaShowEEActivity *showEE;
+            
+            if ([self.view.superview isKindOfClass:NSClassFromString(@"SBEqualizerScrollView")]){
+                showEE = [[SWAcapellaShowEEActivity alloc] init];
+            }
+            
+            self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:object
+                                                                                 applicationActivities:(showEE != nil) ? @[showEE] : nil];
+            
+            NSMutableArray *excludedActivityTypes = [[NSMutableArray alloc] init];
+            
+            [excludedActivityTypes addObjectsFromArray:@[UIActivityTypePrint,
+                                                         UIActivityTypeAssignToContact,
+                                                         UIActivityTypeSaveToCameraRoll,
+                                                         UIActivityTypeAddToReadingList,
+                                                         @"com.linkedin.LinkedIn.ShareExtension",
+                                                         @"com.6wunderkinder.wunderlistmobile.sharingextension",
+                                                         @"com.flexibits.fantastical2.iphone.add"]];
+            
+            if (!successful){ //device is locked
+                
+                                [excludedActivityTypes addObjectsFromArray:@[UIActivityTypePostToFacebook,
+                                                                             UIActivityTypePostToTwitter,
+                                                                             UIActivityTypePostToWeibo,
+                                                                             UIActivityTypeMessage,
+                                                                             UIActivityTypeMail,
+                                                                             UIActivityTypePostToFlickr,
+                                                                             UIActivityTypePostToVimeo,
+                                                                             UIActivityTypePostToTencentWeibo]];
+            }
+            
+            self.acapellaSharingActivityView.excludedActivityTypes = excludedActivityTypes;
+            
             [self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
             
-            __block SWAcapellaTableView *blockTableView = self.acapella.tableview;
+            __block MPUSystemMediaControlsViewController *blockSelf = self;
             
             self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
-                if (blockTableView){
-                    [blockTableView resetContentOffset:YES];
+                
+                if (blockSelf){
+                    
+                    if ([activityType isEqualToString:SWAcapellaShowEEActivityType]){
+                        
+                        [blockSelf.acapella.tableview resetContentOffset:NO];
+                        UIScrollView *eeScrollView = (UIScrollView *)blockSelf.view.superview;
+                        [eeScrollView setContentOffset:CGPointMake(eeScrollView.frame.size.width, 0.0)];
+                        
+                    } else {
+                        
+                        [blockSelf.acapella.tableview resetContentOffset:YES];
+                        
+                    }
+                    
                 }
             };
             
@@ -746,12 +812,6 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 }
 
 %end
-
-
-
-
-
-#pragma mark MPUSystemMediaControlsView
 
 %hook _MPUSystemMediaControlsView
 

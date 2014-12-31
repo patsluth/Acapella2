@@ -413,9 +413,9 @@
 {
     if (self.delegateAcapella){
         if (control.swaState == 1){
-            [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_UP];
-        } else if (control.swaState == 2){
             [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_DOWN];
+        } else if (control.swaState == 2){
+            [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_UP];
         }
     }
 }

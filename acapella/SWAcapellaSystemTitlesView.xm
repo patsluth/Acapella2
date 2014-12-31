@@ -3,7 +3,9 @@
 
 #import "MusicNowPlayingTitlesView.h" //needed to distinguish between music app labels and system media control labels
 
+#import <MediaRemote/MediaRemote.h>
 #import <AppList/ALApplicationList.h>
+#import <Springboard/Springboard.h>
 
 
 
@@ -38,21 +40,6 @@
     %orig(arg1);
     
     [self updateDetailText];
-    
-    if (self.superview && [self.superview isKindOfClass:[UIScrollView class]]){
-        
-        UIScrollView *superScrollView = (UIScrollView *)self.superview;
-        
-        if (superScrollView.delegate && [superScrollView.delegate isKindOfClass:%c(SWAcapellaBase)]){
-            
-            SWAcapellaBase *acapella = (SWAcapellaBase *)superScrollView.delegate;
-            
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [acapella.scrollview finishWrapAroundAnimation];
-            }];
-            
-        }
-    }
 }
 
 
@@ -73,11 +60,11 @@
 %new
 - (void)updateDetailText
 {
-	//dont affect the music app.
-	if (self.window.rootViewController && [self.window.rootViewController isKindOfClass:NSClassFromString(@"MPHRootViewController")]){
-		return;
-	}
-
+    //dont affect the music app.
+    if (self.window.rootViewController && [self.window.rootViewController isKindOfClass:NSClassFromString(@"MPHRootViewController")]){
+        return;
+    }
+    
     //make sure only our title text is set. Then see if the title text equals an app name
     if (!self.artistText || [self.artistText isEqualToString:@""]){
         if (!self.albumText || [self.albumText isEqualToString:@""]){
@@ -98,7 +85,37 @@
             } else {
                 
                 //special situtation. If we skep a song and the music stops, the app name no longer shows
-                [self setTitleText:@"Tap To Play - Acapella"];
+                //APPLE BUG
+                MRMediaRemoteGetNowPlayingApplicationPID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(int pid){
+                    
+                    SBApplicationController *sbAppController = [%c(SBApplicationController) sharedInstanceIfExists];
+                    
+                    if (sbAppController){
+                        
+                        SBApplication *nowPlayingApp = [sbAppController applicationWithPid:pid];
+                        
+                        if (nowPlayingApp){
+                            
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                [self setTitleText:nowPlayingApp.displayName];
+                                [self setArtistText:@"Tap To Play"];
+                                [self setAlbumText:@"Acapella"];
+                                [self sizeToFit];
+                                [self layoutSubviews];
+                            }];
+                            
+                            return;
+                            
+                        }
+                        
+                    }
+                    
+//                    //fallback
+//                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                        [self setTitleText:@"Tap To Play - Acapella"];
+//                    }];
+                    
+                });
                 
             }
             

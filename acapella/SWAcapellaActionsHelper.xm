@@ -37,11 +37,11 @@
             };
         } else if ([action isEqualToNumber:@6]){
             return ^(){
-                [acapellaDel action_OpenActivity];
+                [acapellaDel action_ShowPlaylistOptions];
             };
         } else if ([action isEqualToNumber:@7]){
             return ^(){
-                [acapellaDel action_ShowPlaylistOptions];
+                [acapellaDel action_OpenActivity];
             };
         } else if ([action isEqualToNumber:@8]){
             return ^(){
@@ -90,12 +90,19 @@
         
         NSDictionary *resultDict = (__bridge NSDictionary *)result;
         
+        NSString *itemTitle;
+        
+        if (resultDict){
+            itemTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+        }
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             MRMediaRemoteSendCommand((direction <= -1) ? kMRPreviousTrack : kMRNextTrack, nil);
             
             if (completion){
-                completion(resultDict ? YES : NO, resultDict);
+                //sometimes when nothing is playing, there is still a result dict with a few empty keys.
+                completion(resultDict ? YES : NO, itemTitle ? resultDict : nil);
             }
             
         }];
@@ -199,17 +206,22 @@
     MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
         
         NSDictionary *resultDict = (__bridge NSDictionary *)result;
-        NSString *mediaRadioStationID = nil;
+        
+        NSString *itemTitle;
+        NSString *mediaRadioStationID;
         
         if (resultDict){
+            itemTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
             mediaRadioStationID = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRadioStationIdentifier];
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (completion){
-                completion(mediaRadioStationID ? YES : NO, resultDict);
+                //sometimes when nothing is playing, there is still a result dict with a few empty keys.
+                completion(mediaRadioStationID ? YES : NO, itemTitle ? resultDict : nil);
             }
         }];
+        
     });
 }
 

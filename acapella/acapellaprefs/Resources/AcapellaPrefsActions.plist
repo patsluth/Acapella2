@@ -134,7 +134,7 @@
 			<key>key</key>
 			<string>swipeUpAction</string>
 			<key>default</key>
-			<integer>6</integer>
+			<integer>7</integer>
 			<key>label</key>
 			<string>Up</string>
 			<key>valuesDataSource</key>
@@ -154,7 +154,7 @@
 			<key>key</key>
 			<string>swipeDownAction</string>
 			<key>default</key>
-			<integer>7</integer>
+			<integer>6</integer>
 			<key>label</key>
 			<string>Down</string>
 			<key>valuesDataSource</key>

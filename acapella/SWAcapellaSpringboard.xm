@@ -8,18 +8,19 @@
 #import "SWAcapellaShowEEActivity.h"
 #import "SWAcapellaGlobalDefines.h"
 
+
 #import <Springboard/Springboard.h>
 #import <MediaRemote/MediaRemote.h>
+
 
 #import "MPUSystemMediaControlsViewController+SW.h"
 #import "_MPUSystemMediaControlsView.h" //iOS 7
 #import "MPUSystemMediaControlsView.h" //iOS 8
-#import "MPUNowPlayingController.h"
-#import "MPUChronologicalProgressView.h"
 #import "MPUMediaControlsTitlesView.h"
 #import "MPUMediaControlsVolumeView.h"
 #import "MPUItemOfferButton.h"
 #import "SBCCMediaControlsSectionController.h"
+
 
 #import "substrate.h"
 #import <objc/runtime.h>
@@ -35,6 +36,11 @@ static SWAcapellaBase *_acapella;
 static UIActivityViewController *_acapellaSharingActivityView;
 static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
+static NSDictionary *_previousNowPlayingInfo;
+
+
+
+
 
 @interface MPUSystemMediaControlsViewController()
 {
@@ -43,16 +49,18 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 @property (strong, nonatomic) UIActivityViewController *acapellaSharingActivityView;
 @property (strong, nonatomic) SWAcapellaPlaylistOptions *acapellaPlaylistOptions;
 
+@property (strong, nonatomic) NSDictionary *previousNowPlayingInfo;
+
 - (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode;
 - (void)updateShuffleButtonToMediaShuffleMode:(int)shuffleMode;
 
 @end
 
-@interface UIWindow(SW)
-
-- (void)_setSecure:(BOOL)secure;
-
-@end
+//@interface UIWindow(SW)
+//
+//- (void)_setSecure:(BOOL)secure;
+//
+//@end
 
 
 
@@ -158,6 +166,18 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
     objc_setAssociatedObject(self, &_acapellaPlaylistOptions, acapellaPlaylistOptions, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+%new
+- (NSDictionary *)previousNowPlayingInfo
+{
+    return objc_getAssociatedObject(self, &_previousNowPlayingInfo);
+}
+
+%new
+- (void)setPreviousNowPlayingInfo:(NSDictionary *)previousNowPlayingInfo
+{
+    objc_setAssociatedObject(self, &_previousNowPlayingInfo, previousNowPlayingInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 #pragma mark Init
 
 - (void)viewDidLoad
@@ -225,6 +245,13 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
             [self.acapella.scrollview resetContentOffset:NO];
         }
     }
+    
+    MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_main_queue());
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(mediaRemoteNowPlayingInfoDidChangeNotification)
+                                                 name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)arg1
@@ -261,6 +288,107 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
     %orig(arg1);
     
     [self.acapellaPlaylistOptions cleanup];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
+                                                  object:nil];
+    
+    MRMediaRemoteUnregisterForNowPlayingNotifications();
+}
+
+#pragma mark MediaRemote
+
+%new
+- (void)mediaRemoteNowPlayingInfoDidChangeNotification
+{
+    if (!self.view.window){
+        return;
+    }
+    
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        NSDictionary *resultDict = (__bridge NSDictionary *)result;
+        
+        if (resultDict){
+            
+            NSNumber *uid = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
+            NSNumber *previousUID;
+            
+            if (self.previousNowPlayingInfo){
+                previousUID = [self.previousNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoUniqueIdentifier];
+            }
+            
+            if (uid){
+                if (!previousUID || (previousUID && ![uid isEqualToNumber:previousUID])){ //new song
+                    
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        if (!self.acapella.scrollview.isAnimating){
+                            [self.acapella.scrollview finishWrapAroundAnimation];
+                        }
+                    }];
+                    
+                } else {
+                    
+                    NSNumber *elapsedTime = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime];
+                    
+                    if (elapsedTime && [elapsedTime doubleValue] <= 0.0){ //restarted the song
+                        
+                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                            if (!self.acapella.scrollview.isAnimating){
+                                [self.acapella.scrollview finishWrapAroundAnimation];
+                            }
+                        }];
+                        
+                    }
+                    
+                }
+            } else { //3rd party apps, which have no UID's
+                
+                NSString *itemTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+                NSString *previousItemTitle;
+                
+                if (self.previousNowPlayingInfo){
+                    previousItemTitle = [self.previousNowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+                }
+                
+                if (!previousItemTitle || (previousItemTitle && ![itemTitle isEqualToString:previousItemTitle])){ //new song
+                    
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        if (!self.acapella.scrollview.isAnimating){
+                            [self.acapella.scrollview finishWrapAroundAnimation];
+                        }
+                    }];
+                    
+                } else {
+                    
+                    NSNumber *elapsedTime = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime];
+                    
+                    if (elapsedTime && [elapsedTime doubleValue] <= 0.0){ //restarted the song
+                        
+                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                            if (!self.acapella.scrollview.isAnimating){
+                                [self.acapella.scrollview finishWrapAroundAnimation];
+                            }
+                        }];
+                        
+                    }
+                    
+                }
+                
+            }
+        } else {
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                if (!self.acapella.scrollview.isAnimating){
+                    [self.acapella.scrollview finishWrapAroundAnimation];
+                }
+            }];
+            
+        }
+        
+        self.previousNowPlayingInfo = resultDict;
+        
+    });
 }
 
 #pragma mark SWAcapellaDelegate
@@ -349,13 +477,13 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
     } else if (direction == SW_SCROLL_DIR_UP) {
         
         action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                           valueForKey:@"swipeUpAction" defaultValue:@6]
+                                                           valueForKey:@"swipeUpAction" defaultValue:@7]
                                              withDelegate:self];
         
     } else if (direction == SW_SCROLL_DIR_DOWN) {
         
         action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                           valueForKey:@"swipeDownAction" defaultValue:@7]
+                                                           valueForKey:@"swipeDownAction" defaultValue:@6]
                                              withDelegate:self];
         
     }
@@ -498,6 +626,9 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
         [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
             if (successful || !object){
                 [self.acapella.scrollview finishWrapAroundAnimation]; //make sure we wrap around on iTunes Radio
+            } else {
+                //fallback for some third party apps not wrapping around when you cant skip to the previous song
+                [self.acapella.scrollview startWrapAroundFallback];
             }
         }];
     }];
@@ -509,6 +640,8 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
     [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
         if (!object){
             [self.acapella.scrollview finishWrapAroundAnimation];
+        } else {
+            [self.acapella.scrollview startWrapAroundFallback];
         }
     }];
 }
@@ -619,6 +752,10 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
                     
                 }
             };
+            
+        } else {
+            
+            [self.acapella.tableview resetContentOffset:YES];
             
         }
     }];
@@ -946,6 +1083,15 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 
 #pragma mark logos
+
+//%hook SLComposeServiceViewController
+//
+//- (void)viewWillAppear:(BOOL)arg1
+//{
+//    %orig(arg1);
+//}
+//
+//%end
 
 %ctor
 {

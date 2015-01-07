@@ -38,6 +38,8 @@ static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 static NSDictionary *_previousNowPlayingInfo;
 
+static UIColor *_acapellaTintColor;
+
 
 
 
@@ -50,6 +52,8 @@ static NSDictionary *_previousNowPlayingInfo;
 @property (strong, nonatomic) SWAcapellaPlaylistOptions *acapellaPlaylistOptions;
 
 @property (strong, nonatomic) NSDictionary *previousNowPlayingInfo;
+
+@property (strong, nonatomic) UIColor *acapellaTintColor;
 
 - (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode;
 - (void)updateShuffleButtonToMediaShuffleMode:(int)shuffleMode;
@@ -79,30 +83,50 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (UIView *)timeInformationView
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     return MSHookIvar<UIView *>([self mediaControlsView], "_timeInformationView");
 }
 
 %new
 - (UIView *)trackInformationView
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     return MSHookIvar<UIView *>([self mediaControlsView], "_trackInformationView");
 }
 
 %new
 - (UIView *)transportControlsView
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     return MSHookIvar<UIView *>([self mediaControlsView], "_transportControlsView");
 }
 
 %new
 - (UIView *)volumeView
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     return MSHookIvar<UIView *>([self mediaControlsView], "_volumeView");
 }
 
 %new
 - (UIView *)buyTrackButton
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     if ([SWDeviceInfo iOSVersion_First] != 8){
         return nil;
     }
@@ -113,6 +137,10 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (UIView *)buyAlbumButton
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     if ([SWDeviceInfo iOSVersion_First] != 8){
         return nil;
     }
@@ -123,6 +151,10 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (UIView *)skipLimitView
 {
+    if (![self mediaControlsView]){
+        return nil;
+    }
+    
     if ([SWDeviceInfo iOSVersion_First] != 8){
         return nil;
     }
@@ -176,6 +208,24 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)setPreviousNowPlayingInfo:(NSDictionary *)previousNowPlayingInfo
 {
     objc_setAssociatedObject(self, &_previousNowPlayingInfo, previousNowPlayingInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+%new
+- (UIColor *)acapellaTintColor
+{
+    UIColor *atc = objc_getAssociatedObject(self, &_acapellaTintColor);
+    
+    if (!atc){
+        return self.view.window.tintColor;
+    }
+    
+    return atc;
+}
+
+%new
+- (void)setAcapellaTintColor:(UIColor *)acapellaTintColor
+{
+    objc_setAssociatedObject(self, &_acapellaTintColor, acapellaTintColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark Init
@@ -246,11 +296,23 @@ static NSDictionary *_previousNowPlayingInfo;
         }
     }
     
+    [self revertUI:nil]; //set colours to default
+    
     MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_main_queue());
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(mediaRemoteNowPlayingInfoDidChangeNotification)
                                                  name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
+                                               object:nil];
+    
+    //ColorFlow
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(revertUI:)
+                                                 name:@"ColorFlowLockScreenColorReversionNotification"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(colorizeUI:)
+                                                 name:@"ColorFlowLockScreenColorizationNotification"
                                                object:nil];
 }
 
@@ -294,6 +356,73 @@ static NSDictionary *_previousNowPlayingInfo;
                                                   object:nil];
     
     MRMediaRemoteUnregisterForNowPlayingNotifications();
+    
+    //ColorFlow
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ColorFlowLockScreenColorReversionNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ColorFlowLockScreenColorizationNotification" object:nil];
+}
+
+#pragma mark ColorFlow
+
+%new
+- (void)revertUI:(NSNotification *)notification
+{
+    if ([self trackInformationView] && [[self trackInformationView] isKindOfClass:%c(MPUMediaControlsTitlesView)]){
+        
+        MPUMediaControlsTitlesView *titles = (MPUMediaControlsTitlesView *)[self trackInformationView];
+        self.acapellaTintColor = [titles _titleLabel].textColor;
+        
+    } else {
+        
+        self.acapellaTintColor = [UIColor blackColor];
+        
+    }
+}
+
+%new
+- (void)colorizeUI:(NSNotification *)notification
+{
+    if ([self.view.window.rootViewController isKindOfClass:%c(SBControlCenterController)]){
+        
+        if ([self trackInformationView] && [[self trackInformationView] isKindOfClass:%c(MPUMediaControlsTitlesView)]){
+            
+            MPUMediaControlsTitlesView *titles = (MPUMediaControlsTitlesView *)[self trackInformationView];
+            self.acapellaTintColor = [titles _titleLabel].textColor;
+            
+        }
+        
+        return;
+        
+    }
+    
+    if (!notification || !notification.userInfo){
+        [self revertUI:nil];
+        return;
+    }
+    
+    //UIColor *backgroundColor = userInfo[@"BackgroundColor"];
+    //UIColor *primaryColor = userInfo[@"PrimaryColor"];
+    //UIColor *secondaryColor = userInfo[@"SecondaryColor"];
+    //BOOL isBackgroundDark = [userInfo[@"IsBackgroundDark"] boolValue];
+    
+    self.acapellaTintColor = notification.userInfo[@"PrimaryColor"];
+    
+    //update to the new colours if we are showing
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        NSDictionary *resultDict = (__bridge NSDictionary *)result;
+        
+        if (resultDict && self.acapellaPlaylistOptions && [self.acapellaPlaylistOptions created]){
+            
+            int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+            int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+            
+            [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+            [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+            
+        }
+        
+    });
 }
 
 #pragma mark MediaRemote
@@ -413,16 +542,7 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (UIColor *)swAcapellaTintColorForPullToRefreshControl
 {
-    UIColor *returnVal = [UIColor yellowColor];
-    
-    if ([self trackInformationView] && [[self trackInformationView] isKindOfClass:%c(MPUMediaControlsTitlesView)]){
-        
-        MPUMediaControlsTitlesView *titles = (MPUMediaControlsTitlesView *)[self trackInformationView];
-        returnVal = [titles _titleLabel].textColor;
-        
-    }
-    
-    return returnVal;
+    return self.acapellaTintColor;
 }
 
 %new
@@ -841,15 +961,15 @@ static NSDictionary *_previousNowPlayingInfo;
             if (repeatMode == 0){
                 newText = @" Repeat Off ";
                 newButtonColor = [UIColor clearColor];
-                newTextColor = [titles _titleLabel].textColor;
+                newTextColor = self.acapellaTintColor;
             } else if (repeatMode == 1){
                 newText = @" Repeat One ";
-                newButtonColor = [titles _titleLabel].textColor;
-                newTextColor = [titles _detailLabel].textColor;
+                newButtonColor = self.acapellaTintColor;
+                newTextColor = [UIColor blackColor];
             } else if (repeatMode == 2){
                 newText = @" Repeat All ";
-                newButtonColor = [titles _titleLabel].textColor;
-                newTextColor = [titles _detailLabel].textColor;
+                newButtonColor = self.acapellaTintColor;
+                newTextColor = [UIColor blackColor];
             }
             
             [self.acapellaPlaylistOptions updateButtonAtIndex:0
@@ -880,11 +1000,11 @@ static NSDictionary *_previousNowPlayingInfo;
             if (shuffleMode == 0){
                 newText = @" Shuffle ";
                 newButtonColor = [UIColor clearColor];
-                newTextColor = [titles _titleLabel].textColor;
+                newTextColor = self.self.acapellaTintColor;
             } else if (shuffleMode == 2){
                 newText = @" Shuffle All ";
-                newButtonColor = [titles _titleLabel].textColor;
-                newTextColor = [titles _detailLabel].textColor;
+                newButtonColor = self.acapellaTintColor;
+                newTextColor = [UIColor blackColor];
             }
             
             [self.acapellaPlaylistOptions updateButtonAtIndex:2

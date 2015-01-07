@@ -425,13 +425,13 @@
     if (!_pullToRefresh){
         _pullToRefresh = [[SWAcapellaPullToRefresh alloc] init];
         
-        if (self.delegateAcapella){
-            _pullToRefresh.image = [self.delegateAcapella swAcapellaImageForPullToRefreshControl];
-            _pullToRefresh.tintColor = [self.delegateAcapella swAcapellaTintColorForPullToRefreshControl];
-        }
-        
         [_pullToRefresh addTarget:self action:@selector(pullToRefreshActivated:) forControlEvents:UIControlEventApplicationReserved];
         [self.tableview addSubview:_pullToRefresh];
+    }
+    
+    if (self.delegateAcapella){
+        _pullToRefresh.image = [self.delegateAcapella swAcapellaImageForPullToRefreshControl];
+        _pullToRefresh.tintColor = [self.delegateAcapella swAcapellaTintColorForPullToRefreshControl];
     }
     
     return _pullToRefresh;

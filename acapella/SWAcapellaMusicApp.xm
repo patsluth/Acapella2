@@ -19,7 +19,7 @@
 #import "substrate.h"
 #import <objc/runtime.h>
 
-
+#import <Springboard/SBApplicationController.h>
 
 
 
@@ -30,6 +30,8 @@ static UIActivityViewController *_acapellaSharingActivityView;
 static SWAcapellaPlaylistOptions *_acapellaPlaylistOptions;
 
 static NSDictionary *_previousNowPlayingInfo;
+
+static UIColor *_acapellaTintColor;
 
 
 
@@ -43,6 +45,10 @@ static NSDictionary *_previousNowPlayingInfo;
 @property (strong, nonatomic) SWAcapellaPlaylistOptions *acapellaPlaylistOptions;
 
 @property (strong, nonatomic) NSDictionary *previousNowPlayingInfo;
+
+@property (strong, nonatomic) UIColor *acapellaTintColor;
+
+- (void)appDidBecomeActive:(NSNotification *)notification;
 
 - (void)updateRepeatButtonToMediaRepeatMode:(int)repeatMode;
 - (void)updateCreateButton;
@@ -70,41 +76,41 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (MPAVController *)player
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<MPAVController *>([self playbackControlsView], "_player");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<MPAVController *>([self playbackControlsView], "_player");
 }
 
 %new
 - (UISlider *)progressControl
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UISlider *>([self playbackControlsView], "_progressControl");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UISlider *>([self playbackControlsView], "_progressControl");
 }
 
 %new
 - (UIView *)transportControls
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_transportControls");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_transportControls");
 }
 
 %new
 - (UISlider *)volumeSlider
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UISlider *>([self playbackControlsView], "_volumeSlider");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UISlider *>([self playbackControlsView], "_volumeSlider");
 }
 
 %new
@@ -122,41 +128,41 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (UIView *)repeatButton
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_repeatButton");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_repeatButton");
 }
 
 %new
 - (UIView *)geniusButton
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_geniusButton");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_geniusButton");
 }
 
 %new
 - (UIButton *)createButton
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIButton *>([self playbackControlsView], "_createButton");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UIButton *>([self playbackControlsView], "_createButton");
 }
 
 %new
 - (UIView *)shuffleButton
 {
-    if ([self playbackControlsView]){
-        return MSHookIvar<UIView *>([self playbackControlsView], "_shuffleButton");
+    if (![self playbackControlsView]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UIView *>([self playbackControlsView], "_shuffleButton");
 }
 
 %new
@@ -174,11 +180,11 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (UIButton *)likeOrBanButton
 {
-    if ([self transportControls]){
-        return MSHookIvar<UIButton *>([self transportControls], "_likeOrBanButton");
+    if (![self transportControls]){
+        return nil;
     }
     
-    return nil;
+    return MSHookIvar<UIButton *>([self transportControls], "_likeOrBanButton");
 }
 
 %new
@@ -227,6 +233,24 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)setPreviousNowPlayingInfo:(NSDictionary *)previousNowPlayingInfo
 {
     objc_setAssociatedObject(self, &_previousNowPlayingInfo, previousNowPlayingInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+%new
+- (UIColor *)acapellaTintColor
+{
+    UIColor *atc = objc_getAssociatedObject(self, &_acapellaTintColor);
+    
+    if (!atc){
+        return self.view.window.tintColor;
+    }
+    
+    return atc;
+}
+
+%new
+- (void)setAcapellaTintColor:(UIColor *)acapellaTintColor
+{
+    objc_setAssociatedObject(self, &_acapellaTintColor, acapellaTintColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark Init
@@ -338,11 +362,31 @@ static NSDictionary *_previousNowPlayingInfo;
         }
     }
     
+    [self revertUI:nil]; //set colours to default
+    
+    //make sure we call this, incase we arent registered for notifications yet
+    [self appDidBecomeActive:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(appDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
     MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_main_queue());
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(mediaRemoteNowPlayingInfoDidChangeNotification)
                                                  name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
+                                               object:nil];
+    
+    //ColorFlow
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(revertUI:)
+                                                 name:@"ColorFlowMusicAppColorReversionNotification"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(colorizeUI:)
+                                                 name:@"ColorFlowMusicAppColorizationNotification"
                                                object:nil];
 }
 
@@ -385,7 +429,13 @@ static NSDictionary *_previousNowPlayingInfo;
                                                     name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
                                                   object:nil];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     MRMediaRemoteUnregisterForNowPlayingNotifications();
+    
+    //ColorFlow
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ColorFlowMusicAppColorReversionNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"ColorFlowMusicAppColorizationNotification" object:nil];
 }
 
 /*
@@ -403,6 +453,75 @@ static NSDictionary *_previousNowPlayingInfo;
  [self viewDidLayoutSubviews];
  }
  */
+
+%new
+- (void)appDidBecomeActive:(NSNotification *)notification
+{
+    //sometimes third party app is still playing when we open the Music App, so using Acapella will control the third party
+    //app instead of the Music App. This ensures the Music app gets set as the now playing application
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        NSDictionary *resultDict = (__bridge NSDictionary *)result;
+        
+        if (resultDict){
+            
+            BOOL isMusicApp = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoIsMusicApp] boolValue];
+            
+            if (!isMusicApp){ //reset to music app, so thats what we control
+                
+                if ([self player]){
+                    [[self player] play];
+                    [[self player] pause];
+                }
+                
+            }
+            
+        }
+        
+    });
+}
+
+#pragma mark ColorFlow
+
+%new
+- (void)revertUI:(NSNotification *)notification
+{
+    self.acapellaTintColor = self.view.window.tintColor;
+}
+
+%new
+- (void)colorizeUI:(NSNotification *)notification
+{
+    if (!notification || !notification.userInfo){
+        [self revertUI:nil];
+        return;
+    }
+    
+    //UIColor *backgroundColor = userInfo[@"BackgroundColor"];
+    //UIColor *primaryColor = userInfo[@"PrimaryColor"];
+    //UIColor *secondaryColor = userInfo[@"SecondaryColor"];
+    //BOOL isBackgroundDark = [userInfo[@"IsBackgroundDark"] boolValue];
+    
+    self.acapellaTintColor = notification.userInfo[@"PrimaryColor"];
+    
+    //update to the new colours if we are showing
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+        
+        NSDictionary *resultDict = (__bridge NSDictionary *)result;
+        
+        if (resultDict && self.acapellaPlaylistOptions && [self.acapellaPlaylistOptions created]){
+            
+            int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+            int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+            
+            [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
+            [self updateCreateButton];
+            [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
+            
+        }
+        
+    });
+}
 
 #pragma mark MediaRemote
 
@@ -481,13 +600,14 @@ static NSDictionary *_previousNowPlayingInfo;
                                               pathForResource:@"Acapella_Pull_To_Refresh_Image" ofType:@"png"]];
         returnVal = [returnVal imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
+    
     return returnVal;
 }
 
 %new
 - (UIColor *)swAcapellaTintColorForPullToRefreshControl
 {
-    return self.navigationController.navigationBar.tintColor;;
+    return self.acapellaTintColor;
 }
 
 %new
@@ -775,11 +895,12 @@ static NSDictionary *_previousNowPlayingInfo;
             int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
             int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
             
+            [self.acapellaPlaylistOptions create];
+            
             [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
             [self updateCreateButton];
             [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
             
-            [self.acapellaPlaylistOptions create];
             [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
             [self.acapella.scrollview stopWrapAroundFallback];
             [self.acapella.scrollview resetContentOffset:NO];
@@ -846,14 +967,14 @@ static NSDictionary *_previousNowPlayingInfo;
             if (repeatMode == 0){
                 newText = @" Repeat Off ";
                 newButtonColor = [UIColor clearColor];
-                newTextColor = [titles _titleLabel].textColor;
+                newTextColor = self.acapellaTintColor;
             } else if (repeatMode == 1){
                 newText = @" Repeat One ";
-                newButtonColor = self.navigationController.navigationBar.tintColor;
+                newButtonColor = self.acapellaTintColor;
                 newTextColor = [UIColor blackColor];
             } else if (repeatMode == 2){
                 newText = @" Repeat All ";
-                newButtonColor = self.navigationController.navigationBar.tintColor;
+                newButtonColor = self.acapellaTintColor;
                 newTextColor = [UIColor blackColor];
             }
             
@@ -882,7 +1003,7 @@ static NSDictionary *_previousNowPlayingInfo;
                                                          text:@"Create"
                                                          font:[titles _detailLabel].font
                                                  buttonColour:[UIColor clearColor]
-                                                   textColour:[titles _titleLabel].textColor];
+                                                   textColour:self.acapellaTintColor];
             
             [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
         }];
@@ -905,10 +1026,10 @@ static NSDictionary *_previousNowPlayingInfo;
             if (shuffleMode == 0){
                 newText = @" Shuffle ";
                 newButtonColor = [UIColor clearColor];
-                newTextColor = [titles _titleLabel].textColor;
+                newTextColor = self.self.acapellaTintColor;
             } else if (shuffleMode == 2){
                 newText = @" Shuffle All ";
-                newButtonColor = self.navigationController.navigationBar.tintColor;
+                newButtonColor = self.acapellaTintColor;
                 newTextColor = [UIColor blackColor];
             }
             

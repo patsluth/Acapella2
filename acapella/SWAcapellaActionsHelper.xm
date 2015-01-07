@@ -37,11 +37,11 @@
             };
         } else if ([action isEqualToNumber:@6]){
             return ^(){
-                [acapellaDel action_ShowPlaylistOptions];
+                [acapellaDel action_OpenActivity];
             };
         } else if ([action isEqualToNumber:@7]){
             return ^(){
-                [acapellaDel action_OpenActivity];
+                [acapellaDel action_ShowPlaylistOptions];
             };
         } else if ([action isEqualToNumber:@8]){
             return ^(){

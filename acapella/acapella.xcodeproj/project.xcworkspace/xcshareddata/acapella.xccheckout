@@ -16,20 +16,20 @@
 		<string>https://bitbucket.org/patsluth/acapella.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>acapella/acapella.xcodeproj</string>
+	<string>acapella/acapella/acapella.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>486BE6F979FF35EF0B2073FFD8DB44C43FC9E803</key>
 		<string>../../../..</string>
 		<key>9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE</key>
-		<string>../../..</string>
+		<string>../../../..Acapella</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://bitbucket.org/patsluth/acapella.git</string>
+	<string>https://bitbucket.org/patsluth/i-see-stars.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE</string>
+	<string>486BE6F979FF35EF0B2073FFD8DB44C43FC9E803</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -38,7 +38,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>486BE6F979FF35EF0B2073FFD8DB44C43FC9E803</string>
 			<key>IDESourceControlWCCName</key>
-			<string></string>
+			<string>iOS</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
@@ -46,7 +46,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE</string>
 			<key>IDESourceControlWCCName</key>
-			<string>acapella</string>
+			<string>iOSAcapella</string>
 		</dict>
 	</array>
 </dict>

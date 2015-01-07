@@ -30,7 +30,17 @@
 
 - (UIImage *)activityImage
 {
-    return nil;
+    UIImage *returnVal;
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/Application Support/AcapellaSupport.bundle"];
+    
+    if (bundle){
+        returnVal = [UIImage
+                     imageWithContentsOfFile:[bundle
+                                              pathForResource:@"Acapella_Activity_EE" ofType:@"png"]];
+    }
+    
+    return returnVal;
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems

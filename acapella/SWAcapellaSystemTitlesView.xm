@@ -61,7 +61,8 @@
 - (void)updateDetailText
 {
     //dont affect the music app.
-    if (self.window.rootViewController && [self.window.rootViewController isKindOfClass:NSClassFromString(@"MPHRootViewController")]){
+    if (self.window.rootViewController &&
+        [self.window.rootViewController isKindOfClass:NSClassFromString(@"MPHRootViewController")]){
         return;
     }
     
@@ -76,13 +77,27 @@
                 if (appList){
                     for (NSString *appName in appList){
                         if ([self.titleText isEqualToString:[appList valueForKey:appName]]){
-                            [self setArtistText:@"Tap To Play"];
-                            [self setAlbumText:@"Acapella"];
+                            
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                self.superview.backgroundColor = [UIColor clearColor];
+                                [self setArtistText:@"Tap To Play"];
+                                [self setAlbumText:@"Acapella"];
+                                [self sizeToFit];
+                                [self layoutSubviews];
+                            }];
+                            
                             return;
                         }
                     }
                 }
             } else {
+                
+                void (^_test)() = ^(){
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        //[self setTitleText:@"Tap To Play - Acapella"];
+                        self.superview.backgroundColor = [UIColor redColor];
+                    }];
+                };
                 
                 //special situtation. If we skep a song and the music stops, the app name no longer shows
                 //APPLE BUG
@@ -97,6 +112,7 @@
                         if (nowPlayingApp){
                             
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                self.superview.backgroundColor = [UIColor clearColor];
                                 [self setTitleText:nowPlayingApp.displayName];
                                 [self setArtistText:@"Tap To Play"];
                                 [self setAlbumText:@"Acapella"];
@@ -104,16 +120,14 @@
                                 [self layoutSubviews];
                             }];
                             
-                            return;
-                            
+                        } else {
+                            //_test();
                         }
                         
+                    } else {
+                        //fallback
+                        _test();
                     }
-                    
-//                    //fallback
-//                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//                        [self setTitleText:@"Tap To Play - Acapella"];
-//                    }];
                     
                 });
                 

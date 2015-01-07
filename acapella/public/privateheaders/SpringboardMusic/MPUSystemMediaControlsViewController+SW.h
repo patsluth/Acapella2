@@ -11,7 +11,9 @@
 
 #import "SWAcapellaActionsHelper.h"
 
-@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol, SWAcapellaPlaylistOptionsDelegate>
+#import <ColorFlow/ColorFlowProtocol.h>
+
+@interface MPUSystemMediaControlsViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol, SWAcapellaPlaylistOptionsDelegate, ColorFlowProtocol>
 {
     //_MPUSystemMediaControlsView *_mediaControlsView; //iOS 7
     //MPUSystemMediaControlsView *_mediaControlsView; //iOS 8

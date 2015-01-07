@@ -5,7 +5,9 @@
 #import "SWAcapellaActionsHelper.h"
 #import "SWAcapellaPlaylistOptions.h"
 
-@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol, SWAcapellaPlaylistOptionsDelegate>
+#import <ColorFlow/ColorFlowProtocol.h>
+
+@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, SWAcapellaActionProtocol, SWAcapellaPlaylistOptionsDelegate, ColorFlowProtocol>
 {
     //MPAVController *_player; //iOS 8 only
                                 //we can use the same variable on _playbackControlsView

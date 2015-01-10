@@ -114,7 +114,7 @@
                         } else {
                             
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                [self setTitleText:@"App"];
+                                [self setTitleText:@"Music"];
                                 [self setArtistText:@"Tap To Play"];
                                 [self setAlbumText:@"Acapella"];
                                 [self sizeToFit];

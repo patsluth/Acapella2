@@ -79,7 +79,6 @@
                         if ([self.titleText isEqualToString:[appList valueForKey:appName]]){
                             
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                self.superview.backgroundColor = [UIColor clearColor];
                                 [self setArtistText:@"Tap To Play"];
                                 [self setAlbumText:@"Acapella"];
                                 [self sizeToFit];
@@ -91,13 +90,6 @@
                     }
                 }
             } else {
-                
-                void (^_test)() = ^(){
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        //[self setTitleText:@"Tap To Play - Acapella"];
-                        self.superview.backgroundColor = [UIColor redColor];
-                    }];
-                };
                 
                 //special situtation. If we skep a song and the music stops, the app name no longer shows
                 //APPLE BUG
@@ -112,8 +104,7 @@
                         if (nowPlayingApp){
                             
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                self.superview.backgroundColor = [UIColor clearColor];
-                                [self setTitleText:nowPlayingApp.displayName];
+                                //[self setTitleText:nowPlayingApp.displayName];
                                 [self setArtistText:@"Tap To Play"];
                                 [self setAlbumText:@"Acapella"];
                                 [self sizeToFit];
@@ -121,12 +112,18 @@
                             }];
                             
                         } else {
-                            //_test();
+                            
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                [self setTitleText:@"App"];
+                                [self setArtistText:@"Tap To Play"];
+                                [self setAlbumText:@"Acapella"];
+                                [self sizeToFit];
+                                [self layoutSubviews];
+                            }];
                         }
                         
                     } else {
-                        //fallback
-                        _test();
+                        //fallback?
                     }
                     
                 });

@@ -13,8 +13,6 @@
 #import "SWAcapellaScrollView.h"
 #import "SWAcapellaPullToRefresh.h"
 
-#import "libsw/sluthwareios/sluthwareios.h"
-
 @interface SWAcapellaBase()
 {
 }

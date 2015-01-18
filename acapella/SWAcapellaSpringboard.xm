@@ -60,16 +60,6 @@ static UIColor *_acapellaTintColor;
 
 @end
 
-//@interface UIWindow(SW)
-//
-//- (void)_setSecure:(BOOL)secure;
-//
-//@end
-
-
-
-
-
 %hook MPUSystemMediaControlsViewController
 
 #pragma mark Helper
@@ -784,38 +774,6 @@ static UIColor *_acapellaTintColor;
     [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
         
         if (object){
-            
-//            CGFloat highestWindowLevel = 0.0;
-//            UIWindow *highestWindow;
-//            UIWindow *root;
-//            
-//            for (id x in [[UIApplication sharedApplication] windows]){
-//                if ([x isKindOfClass:NSClassFromString(@"FBRootWindow")]){
-//                    root = x;
-//                }
-//                
-//                UIWindow *win = (UIWindow *)x;
-//                CGFloat winLevel = (CGFloat)win.windowLevel;
-//                
-//                if (winLevel > highestWindowLevel){
-//                    highestWindowLevel = winLevel;
-//                    highestWindow = win;
-//                }
-//            }
-//            
-//            static UIWindow *winwin;
-//            static UIViewController *concon;
-//            
-//            winwin = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//            winwin.alpha = 0.5;
-//            [winwin _setSecure:YES];
-//            winwin.windowLevel = 9999;
-//            winwin.backgroundColor = [UIColor redColor];
-//            concon = [[UIViewController alloc] init];
-//            winwin.rootViewController = concon;
-//            [winwin makeKeyAndVisible];
-            
-            
             
             SWAcapellaShowEEActivity *showEE;
             

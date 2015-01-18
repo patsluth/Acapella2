@@ -87,7 +87,7 @@
     self.contentView.frame = CGRectMake(0, 100, self.view.frame.size.width, 200);
     [NSTimer scheduledTimerWithTimeInterval:2.0
                                       block:^{
-                                          //self.acapella.acapellaTopAccessoryHeight = 200;
+                                          NSLog(@"I LOVE ASS");
     }repeats:NO];
 }
 

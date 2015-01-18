@@ -18,22 +18,22 @@
 		<string>git://github.com/DHowett/theos.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>acapella/AcapellaKit/AcapellaKit.xcodeproj</string>
+	<string>AcapellaKit/AcapellaKit.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>486BE6F979FF35EF0B2073FFD8DB44C43FC9E803</key>
 		<string>../../../..</string>
 		<key>9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE</key>
-		<string>../../../..Acapella</string>
+		<string>../../..</string>
 		<key>E2811579280C8FC45DBD8A3EB086096BA7A2E580</key>
-		<string>../../../../../opt/theos</string>
+		<string>../../../../opt/theos</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://bitbucket.org/patsluth/i-see-stars.git</string>
+	<string>https://bitbucket.org/patsluth/acapella.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>486BE6F979FF35EF0B2073FFD8DB44C43FC9E803</string>
+	<string>9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -42,7 +42,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>486BE6F979FF35EF0B2073FFD8DB44C43FC9E803</string>
 			<key>IDESourceControlWCCName</key>
-			<string>iOS</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
@@ -50,7 +50,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE</string>
 			<key>IDESourceControlWCCName</key>
-			<string>iOSAcapella</string>
+			<string>acapella</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

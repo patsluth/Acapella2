@@ -8,109 +8,245 @@
 
 #import "SWAcapellaBase.h"
 
-#import "SWAcapellaScrollViewProtocol.h"
-#import "SWAcapellaTableView.h"
-#import "SWAcapellaScrollView.h"
-#import "SWAcapellaPullToRefresh.h"
+#import "UIScrollView+SW.h"
+
+
+
+
 
 @interface SWAcapellaBase()
 {
 }
 
-//gesture recognizers
-@property (strong, nonatomic) UITapGestureRecognizer *oneFingerTap;
-@property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
-@property (strong, nonatomic) SWAcapellaPullToRefresh *pullToRefresh;
+@property (readwrite, strong, nonatomic) SWAcapellaScrollView *scrollview;
 
 @end
 
+
+
+
+
 @implementation SWAcapellaBase
+
+#pragma mark - Init
 
 - (id)init
 {
     self = [super init];
     
-    if (self){
+    if (self) {
         
-        self.tableview = [[SWAcapellaTableView alloc] init];
-        
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
-        [self addSubview:self.tableview];
-        
-        self.tableview.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        self.tableview.delegate = self;
-        self.tableview.dataSource = self;
-        
-        [self.tableview reloadData];
+        self.clipsToBounds = YES;
+        self.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.backgroundColor = [UIColor clearColor];
+        self.alpha = 0.3;
         
-        [self initGestureRecognizers];
+        if (self.scrollview){}
+        
+        UITapGestureRecognizer *oneFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                       action:@selector(onTap:)];
+        oneFingerTap.cancelsTouchesInView = YES;
+        [self addGestureRecognizer:oneFingerTap];
+        
+        
+        
+        
+        
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                action:@selector(onPress:)];
+        longPress.minimumPressDuration = 0.7;
+        [self addGestureRecognizer:longPress];
+        
     }
     
     return self;
 }
 
-- (void)initGestureRecognizers
+#pragma mark - UIScrollView
+
+- (void)scrollViewWillBeginDragging:(SWAcapellaScrollView *)scrollView
 {
-    [self resetGestureRecognizers];
-    
-    self.oneFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                action:@selector(onTap:)];
-    self.oneFingerTap.cancelsTouchesInView = YES;
-    [self addGestureRecognizer:self.oneFingerTap];
-    
-    
-    
-    
-    
-    self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                   action:@selector(onPress:)];
-    self.longPress.minimumPressDuration = 0.7;
-    [self addGestureRecognizer:self.longPress];
 }
 
-- (void)resetGestureRecognizers
+- (void)scrollViewDidScroll:(SWAcapellaScrollView *)scrollView
 {
-    if (self.oneFingerTap){
-        [self.oneFingerTap removeTarget:self action:@selector(onTap:)];
-        [self removeGestureRecognizer:self.oneFingerTap];
-        self.oneFingerTap = nil;
-    }
-    if (self.longPress){
-        [self.longPress removeTarget:self action:@selector(onPress:)];
-        [self removeGestureRecognizer:self.longPress];
-        self.longPress = nil;
-    }
-}
-
-- (void)setFrame:(CGRect)frame
-{
-    CGRect original = self.frame;
+    ScrollDirection scrollDirection = [self determineScrollDirectionAxis:scrollView];
     
-    [super setFrame:frame];
-    
-    if (!CGRectEqualToRect(original, frame)){
+    if (scrollDirection == ScrollDirectionVertical) {
         
-        if (self.tableview){
-            [self.tableview reloadData];
+    } else if (scrollDirection == ScrollDirectionHorizontal) {
+        
+    } else {
+       if (fabs(scrollView.contentOffset.x) != fabs(scrollView.defaultContentOffset.x)) {
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, scrollView.defaultContentOffset.y);
+        } else {
+            scrollView.contentOffset = CGPointMake(scrollView.defaultContentOffset.x, scrollView.contentOffset.y);
+        }
+    }
+    
+    if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(scrollViewDidScroll:)]) {
+            [self.delegate performSelector:@selector(scrollViewDidScroll:) withObject:scrollView];
+        }
+    }
+}
+
+- (ScrollDirection)determineScrollDirection:(SWAcapellaScrollView *)scrollView
+{
+    ScrollDirection scrollDirection;
+    
+    if (scrollView.defaultContentOffset.x != scrollView.contentOffset.x &&
+        scrollView.defaultContentOffset.y != scrollView.contentOffset.y) {
+        scrollDirection = ScrollDirectionCrazy;
+    } else {
+        if (scrollView.defaultContentOffset.x > scrollView.contentOffset.x) {
+            scrollDirection = ScrollDirectionLeft;
+        } else if (scrollView.defaultContentOffset.x < scrollView.contentOffset.x) {
+            scrollDirection = ScrollDirectionRight;
+        } else if (scrollView.defaultContentOffset.y > scrollView.contentOffset.y) {
+            scrollDirection = ScrollDirectionUp;
+        } else if (scrollView.defaultContentOffset.y < scrollView.contentOffset.y) {
+            scrollDirection = ScrollDirectionDown;
+        } else {
+            scrollDirection = ScrollDirectionNone;
+        }
+    }
+    
+    return scrollDirection;
+}
+
+- (ScrollDirection)determineScrollDirectionAxis:(SWAcapellaScrollView *)scrollView
+{
+    ScrollDirection scrollDirection = [self determineScrollDirection:scrollView];
+    
+    switch (scrollDirection) {
+        case ScrollDirectionLeft:
+        case ScrollDirectionRight:
+            return ScrollDirectionHorizontal;
+            
+        case ScrollDirectionUp:
+        case ScrollDirectionDown:
+            return ScrollDirectionVertical;
+            
+        default:
+            return ScrollDirectionNone;
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (self.scrollview == scrollView) {
+        
+        SWPage page = [self.scrollview page];
+        
+        ScrollDirection direction = ScrollDirectionNone;
+        
+        if (page.x == 0 && page.y == 1) {
+            direction = ScrollDirectionRight;
+        } else if (page.x == 2 && page.y == 1) {
+            direction = ScrollDirectionLeft;
+        } else if (page.x == 1 && page.y == 0) {
+            direction = ScrollDirectionDown;
+        } else if (page.x == 1 && page.y == 2) {
+            direction = ScrollDirectionUp;
         }
         
-        CGFloat newPullToRefreshHeight = self.frame.size.height * VIEW_HEIGHT_PERCENTAGE_TO_ACTIVATE;
-        [self.pullToRefresh setSize:CGSizeMake(newPullToRefreshHeight, newPullToRefreshHeight)];
-        [self.pullToRefresh setCenterX:self.tableview.frame.size.width / 2];
+        if (direction == ScrollDirectionRight ||
+            direction == ScrollDirectionLeft ||
+            direction == ScrollDirectionDown ||
+            direction == ScrollDirectionUp) {
+            
+            [self.scrollview startWrapAroundFallback];
+            
+            if (self.delegate) {
+                if ([self.delegate respondsToSelector:@selector(swAcapella:onSwipe:)]) {
+                    [self.delegate swAcapella:self.scrollview onSwipe:direction];
+                }
+            }
+        }
     }
+}
+
+#pragma mark - Gesture Recognizers
+
+- (void)onTap:(UITapGestureRecognizer *)tap
+{
+    if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(swAcapella:onTap:percentage:)]) {
+            
+            CGFloat xPercentage = [tap locationInView:self].x / self.bounds.size.width;
+            CGFloat yPercentage = [tap locationInView:self].y / self.bounds.size.height;
+            
+            [self.delegate swAcapella:self onTap:tap percentage:CGPointMake(xPercentage, yPercentage)];
+        }
+    }
+}
+
+- (void)onPress:(UILongPressGestureRecognizer *)longPress
+{
+    if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(swAcapella:onLongPress:percentage:)]) {
+            
+            CGFloat xPercentage = [longPress locationInView:self].x / self.bounds.size.width;
+            CGFloat yPercentage = [longPress locationInView:self].y / self.bounds.size.height;
+            
+            [self.delegate swAcapella:self onLongPress:longPress percentage:CGPointMake(xPercentage, yPercentage)];
+        }
+    }
+}
+
+#pragma mark - Internal
+
+- (void)layoutIfNeeded
+{
+    [super layoutIfNeeded];
+    [self.scrollview layoutIfNeeded];
+}
+
+- (SWAcapellaScrollView *)scrollview
+{
+    if (!_scrollview) {
+        
+        _scrollview = [[SWAcapellaScrollView alloc] init];
+        _scrollview.delegate = self;
+        
+        [self addSubview:_scrollview];
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
+                                                         attribute:NSLayoutAttributeWidth
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeWidth
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
+                                                         attribute:NSLayoutAttributeHeight
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeHeight
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
+                                                         attribute:NSLayoutAttributeTop
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeTop
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        
+        [self layoutIfNeeded];
+        
+    }
+    
+    return _scrollview;
 }
 
 - (void)dealloc
 {
-    [self resetGestureRecognizers];
-    
-    if (self.scrollview){
+    if (self.scrollview) {
         
-        for (UIView *v in self.scrollview.subviews){
+        for (UIView *v in self.scrollview.subviews) {
             [v removeFromSuperview];
         }
         
@@ -118,321 +254,9 @@
         self.scrollview = nil;
     }
     
-    for (UIView *v in self.subviews){
+    for (UIView *v in self.subviews) {
         [v removeFromSuperview];
     }
-    
-    if (self.tableview){
-        self.tableview = nil;
-    }
-}
-
-#pragma mark UITableView
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == 0){
-        return 3;
-    }
-    
-    return 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0){
-        switch (indexPath.row) {
-            case 0:
-                return self.frame.size.height * VIEW_HEIGHT_PERCENTAGE_TO_ACTIVATE;
-                break;
-                
-            case 1:
-                return self.frame.size.height;
-                break;
-                
-            case 2:
-                return self.frame.size.height * VIEW_HEIGHT_PERCENTAGE_TO_ACTIVATE;
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
-    return 0;
-}
-
-- (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0){
-        switch (indexPath.row) {
-            case 0:
-                return @"swacapella_accessory";
-                break;
-                
-            case 1:
-                return @"swacapella_main";
-                break;
-                
-            case 2:
-                return @"swacapella_accessory";
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
-    return @"default";
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        
-        cell.backgroundColor = [UIColor clearColor];
-        
-#ifdef DEBUG
-        CGFloat hue = ( arc4random() % 256 / 256.0 );
-        CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;
-        CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;
-        cell.backgroundColor = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
-#endif
-        
-        cell.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        if (indexPath.section == 0){
-            if (indexPath.row == 1){
-                
-                if (!self.scrollview){
-                    self.scrollview = [[SWAcapellaScrollView alloc] init];
-                }
-                
-                self.scrollview.delegate = self;
-                self.scrollview.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
-                
-                [cell.contentView addSubview:self.scrollview];
-            }
-        }
-    }
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.delegateAcapella){
-        if ([self.delegateAcapella respondsToSelector:@selector(swAcapella:willDisplayCell:atIndexPath:)]){
-            [self.delegateAcapella swAcapella:self willDisplayCell:cell atIndexPath:indexPath];
-        }
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.delegateAcapella){
-        if ([self.delegateAcapella respondsToSelector:@selector(swAcapella:didEndDisplayingCell:atIndexPath:)]){
-            [self.delegateAcapella swAcapella:self didEndDisplayingCell:cell atIndexPath:indexPath];
-        }
-    }
-}
-
-#pragma mark UIScrollView
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (self.scrollview == scrollView){
-        self.tableview.scrollEnabled = NO;
-    }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.contentOffset.x >= scrollView.previousScrollOffset.x &&
-        scrollView.contentOffset.y == scrollView.previousScrollOffset.y){
-        
-        scrollView.currentScrollDirection = SW_SCROLL_DIR_LEFT;
-        
-    } else if (scrollView.contentOffset.x < scrollView.previousScrollOffset.x &&
-               scrollView.contentOffset.y == scrollView.previousScrollOffset.y){
-        
-        scrollView.currentScrollDirection = SW_SCROLL_DIR_RIGHT;
-        
-    } else if (scrollView.contentOffset.x == scrollView.previousScrollOffset.x &&
-               scrollView.contentOffset.y >= scrollView.previousScrollOffset.y){
-        
-        scrollView.currentScrollDirection = SW_SCROLL_DIR_UP;
-        
-    } else if (scrollView.contentOffset.x == scrollView.previousScrollOffset.x &&
-               scrollView.contentOffset.y <= scrollView.previousScrollOffset.y){
-        
-        scrollView.currentScrollDirection = SW_SCROLL_DIR_DOWN;
-        
-    } else {
-        
-        scrollView.currentScrollDirection = SW_SCROLL_DIR_NONE;
-        
-    }
-    
-    scrollView.previousScrollOffset = scrollView.contentOffset;
-    
-    if (self.tableview == scrollView){
-        [self.pullToRefresh scrollViewDidScroll:scrollView];
-    }
-}
-
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
-                     withVelocity:(CGPoint)velocity
-              targetContentOffset:(inout CGPoint *)targetContentOffset
-{
-    scrollView.currentVelocity = velocity;
-    
-    if (self.tableview == scrollView){
-        
-        CGRect topAccessoryRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        CGRect mainContentRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-        CGRect bottomAccessoryRect = [self.tableview rectForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-        
-        if (CGRectContainsPoint(topAccessoryRect, scrollView.contentOffset)){ //top accessory
-            
-            if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){
-                *targetContentOffset = mainContentRect.origin;
-            } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_DOWN){
-                *targetContentOffset = topAccessoryRect.origin;
-            }
-            
-        } else if (CGRectContainsPoint(bottomAccessoryRect, CGPointMake(scrollView.contentOffset.x, scrollView.contentOffset.y + scrollView.frame.size.height))){
-            
-            if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_UP){ //bottom accessory
-                *targetContentOffset = CGPointMake(scrollView.contentOffset.x, (NSInteger)(scrollView.contentSize.height - scrollView.frame.size.height));
-            } else if (self.tableview.currentScrollDirection == SW_SCROLL_DIR_DOWN){
-                *targetContentOffset = mainContentRect.origin;
-            }
-            
-        }
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (self.tableview == scrollView){
-        [self.pullToRefresh scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (self.scrollview == scrollView){
-        
-        SWPage page = [self.scrollview page];
-        
-        BOOL shouldAnimate = (page.x != [self.scrollview pageInCentre].x); //centered already
-        
-        if (shouldAnimate){
-            
-            scrollView.userInteractionEnabled = NO;
-            
-            SW_SCROLL_DIRECTION direction = SW_SCROLL_DIR_NONE;
-            
-            if (page.x == 0 && page.y == 0){
-                direction = SW_SCROLL_DIR_RIGHT;
-            } else if (page.x == 2 && page.y == 0) {
-                direction = SW_SCROLL_DIR_LEFT;
-            }
-            
-            [self.scrollview startWrapAroundFallback];
-            
-            if (self.delegateAcapella){
-                [self.delegateAcapella swAcapella:self.scrollview onSwipe:direction];
-            }
-            
-        } else {
-            
-            [self.scrollview resetContentOffset:NO];
-            
-        }
-        
-    } else if (self.tableview == scrollView){
-        
-        if (self.pullToRefresh){
-            [self.pullToRefresh scrollViewDidEndDecelerating:scrollView];
-        }
-    }
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-    if (self.scrollview == scrollView){
-        if (self.tableview){
-            self.tableview.scrollEnabled = YES;
-        }
-    }
-}
-
-#pragma mark Gesture Recognizers
-
-- (void)onTap:(UITapGestureRecognizer *)tap
-{
-    if (self.delegateAcapella){
-        
-        CGFloat xPercentage = [tap locationInView:self].x / self.frame.size.width;
-        CGFloat yPercentage = [tap locationInView:self].y / self.frame.size.height;
-        
-        [self.delegateAcapella swAcapella:self onTap:tap percentage:CGPointMake(xPercentage, yPercentage)];
-    }
-}
-
-- (void)onPress:(UILongPressGestureRecognizer *)longPress
-{
-    if (self.delegateAcapella){
-        
-        CGFloat xPercentage = [longPress locationInView:self].x / self.frame.size.width;
-        CGFloat yPercentage = [longPress locationInView:self].y / self.frame.size.height;
-        
-        [self.delegateAcapella swAcapella:self onLongPress:longPress percentage:CGPointMake(xPercentage, yPercentage)];
-    }
-}
-
-#pragma mark Pull To Refresh
-
-- (void)pullToRefreshActivated:(SWAcapellaPullToRefresh *)control
-{
-    if (self.delegateAcapella){
-        if (control.swaState == 1){
-            [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_DOWN];
-        } else if (control.swaState == 2){
-            [self.delegateAcapella swAcapella:self.tableview onSwipe:SW_SCROLL_DIR_UP];
-        }
-    }
-}
-
-- (SWAcapellaPullToRefresh *)pullToRefresh
-{
-    if (!_pullToRefresh){
-        _pullToRefresh = [[SWAcapellaPullToRefresh alloc] init];
-        
-        [_pullToRefresh addTarget:self action:@selector(pullToRefreshActivated:) forControlEvents:UIControlEventApplicationReserved];
-        [self.tableview addSubview:_pullToRefresh];
-    }
-    
-    if (self.delegateAcapella){
-        _pullToRefresh.image = [self.delegateAcapella swAcapellaImageForPullToRefreshControl];
-        _pullToRefresh.tintColor = [self.delegateAcapella swAcapellaTintColorForPullToRefreshControl];
-    }
-    
-    return _pullToRefresh;
 }
 
 @end

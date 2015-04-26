@@ -8,25 +8,30 @@
 
 /* Begin PBXBuildFile section */
 		2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E1DFE6E1A0EA3AD000DCF1E /* SWAcapellaTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE6C1A0EA3AD000DCF1E /* SWAcapellaTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E1DFE6F1A0EA3AD000DCF1E /* SWAcapellaTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */; };
 		2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
 		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */; };
-		2E242EF01A41D0AE00864588 /* SWAcapellaPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E242EEE1A41D0AE00864588 /* SWAcapellaPullToRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E242EF11A41D0AE00864588 /* SWAcapellaPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E242EEF1A41D0AE00864588 /* SWAcapellaPullToRefresh.m */; };
 		2E242EF21A41D2E200864588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
+		2E334F551AE8524D002046A1 /* libSluthware.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F4D1AE8524D002046A1 /* libSluthware.h */; };
+		2E334F561AE8524D002046A1 /* NSTimer+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F4E1AE8524D002046A1 /* NSTimer+SW.h */; };
+		2E334F571AE8524D002046A1 /* SWMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F4F1AE8524D002046A1 /* SWMCircle.h */; };
+		2E334F581AE8524D002046A1 /* SWMLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F501AE8524D002046A1 /* SWMLine.h */; };
+		2E334F591AE8524D002046A1 /* SWMQuadratic.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F511AE8524D002046A1 /* SWMQuadratic.h */; };
+		2E334F5A1AE8524D002046A1 /* UIColor+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F521AE8524D002046A1 /* UIColor+SW.h */; };
+		2E334F5B1AE8524D002046A1 /* UIScrollView+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F531AE8524D002046A1 /* UIScrollView+SW.h */; };
+		2E334F5C1AE8524D002046A1 /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F541AE8524D002046A1 /* libSluthware.a */; };
+		2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
+		2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
+		2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F621AE857FC002046A1 /* CoreGraphics.framework */; };
+		2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F641AE85822002046A1 /* UIKit.framework */; };
+		2E51F4131AEC63DA00854158 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E51F4121AEC63DA00854158 /* Social.framework */; };
+		2E73C39F1AE858A5008EA808 /* AcapellaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; };
+		2E73C3A01AE85C6F008EA808 /* AcapellaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75956F19FD49F500001BC7 /* AcapellaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75963D19FDCCA600001BC7 /* AppDelegate.m */; };
 		2E75964119FDCCA600001BC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
 		2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964519FDCCA600001BC7 /* Images.xcassets */; };
 		2E75966719FDCD5D00001BC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75966519FDCD5D00001BC7 /* main.m */; };
-		2E75966B19FDCDD900001BC7 /* AcapellaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2EB46E4F1A2BF20900BE29A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EB46E4E1A2BF20900BE29A4 /* Foundation.framework */; };
-		2EB46E511A2BF21100BE29A4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EB46E501A2BF21100BE29A4 /* CoreText.framework */; };
-		2ED282FC1A10671C00772295 /* SWAcapellaScrollViewProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2EDAC2F71A264EFF0006E69F /* libsluthwareios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75959519FD959E00001BC7 /* libsluthwareios.a */; };
-		2EDAE4E71A069CC3006274BA /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDAE4E61A069CC3006274BA /* test.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +51,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2E75966B19FDCDD900001BC7 /* AcapellaKit.framework in Embed Frameworks */,
+				2E73C3A01AE85C6F008EA808 /* AcapellaKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -56,17 +61,23 @@
 /* Begin PBXFileReference section */
 		2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaBase.h; sourceTree = "<group>"; };
 		2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaBase.m; sourceTree = "<group>"; };
-		2E1DFE6C1A0EA3AD000DCF1E /* SWAcapellaTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTableView.h; sourceTree = "<group>"; };
-		2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTableView.m; sourceTree = "<group>"; };
 		2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollView.h; sourceTree = "<group>"; };
 		2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaScrollView.m; sourceTree = "<group>"; };
-		2E242EEE1A41D0AE00864588 /* SWAcapellaPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPullToRefresh.h; sourceTree = "<group>"; };
-		2E242EEF1A41D0AE00864588 /* SWAcapellaPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaPullToRefresh.m; sourceTree = "<group>"; };
+		2E334F4D1AE8524D002046A1 /* libSluthware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
+		2E334F4E1AE8524D002046A1 /* NSTimer+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+SW.h"; sourceTree = "<group>"; };
+		2E334F4F1AE8524D002046A1 /* SWMCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMCircle.h; sourceTree = "<group>"; };
+		2E334F501AE8524D002046A1 /* SWMLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMLine.h; sourceTree = "<group>"; };
+		2E334F511AE8524D002046A1 /* SWMQuadratic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMQuadratic.h; sourceTree = "<group>"; };
+		2E334F521AE8524D002046A1 /* UIColor+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
+		2E334F531AE8524D002046A1 /* UIScrollView+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
+		2E334F541AE8524D002046A1 /* libSluthware.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSluthware.a; path = "../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware.a"; sourceTree = "<group>"; };
+		2E334F5F1AE85701002046A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2E334F641AE85822002046A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2E51F4121AEC63DA00854158 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		2E75956A19FD49F500001BC7 /* AcapellaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AcapellaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75956E19FD49F500001BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75956F19FD49F500001BC7 /* AcapellaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AcapellaKit.h; sourceTree = "<group>"; };
-		2E75959519FD959E00001BC7 /* libsluthwareios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsluthwareios.a; path = ../../../../../../opt/theos/lib/libsluthwareios.a; sourceTree = "<group>"; };
-		2E75959719FD95B500001BC7 /* sluthwareios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sluthwareios; path = ../../../../../../opt/theos/include/libsw/sluthwareios; sourceTree = "<group>"; };
 		2E75963619FDCCA600001BC7 /* AcapellaTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcapellaTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75963C19FDCCA600001BC7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E75963D19FDCCA600001BC7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -76,11 +87,6 @@
 		2E75964519FDCCA600001BC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2E75966419FDCD5D00001BC7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75966519FDCD5D00001BC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2EB46E4E1A2BF20900BE29A4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		2EB46E501A2BF21100BE29A4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollViewProtocol.h; sourceTree = "<group>"; };
-		2EDAE4E51A069CC3006274BA /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
-		2EDAE4E61A069CC3006274BA /* test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */,
+				2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */,
+				2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */,
+				2E334F5C1AE8524D002046A1 /* libSluthware.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,15 +105,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EB46E511A2BF21100BE29A4 /* CoreText.framework in Frameworks */,
-				2EB46E4F1A2BF20900BE29A4 /* Foundation.framework in Frameworks */,
-				2EDAC2F71A264EFF0006E69F /* libsluthwareios.a in Frameworks */,
+				2E51F4131AEC63DA00854158 /* Social.framework in Frameworks */,
+				2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */,
+				2E73C39F1AE858A5008EA808 /* AcapellaKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E334F4C1AE8524D002046A1 /* libSluthware */ = {
+			isa = PBXGroup;
+			children = (
+				2E334F4D1AE8524D002046A1 /* libSluthware.h */,
+				2E334F4E1AE8524D002046A1 /* NSTimer+SW.h */,
+				2E334F4F1AE8524D002046A1 /* SWMCircle.h */,
+				2E334F501AE8524D002046A1 /* SWMLine.h */,
+				2E334F511AE8524D002046A1 /* SWMQuadratic.h */,
+				2E334F521AE8524D002046A1 /* UIColor+SW.h */,
+				2E334F531AE8524D002046A1 /* UIScrollView+SW.h */,
+			);
+			name = libSluthware;
+			path = "../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware";
+			sourceTree = "<group>";
+		};
 		2E75956019FD49F500001BC7 = {
 			isa = PBXGroup;
 			children = (
@@ -129,13 +154,8 @@
 				2E75956F19FD49F500001BC7 /* AcapellaKit.h */,
 				2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */,
 				2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */,
-				2ED282FA1A10671C00772295 /* SWAcapellaScrollViewProtocol.h */,
-				2E1DFE6C1A0EA3AD000DCF1E /* SWAcapellaTableView.h */,
-				2E1DFE6D1A0EA3AD000DCF1E /* SWAcapellaTableView.m */,
 				2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */,
 				2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */,
-				2E242EEE1A41D0AE00864588 /* SWAcapellaPullToRefresh.h */,
-				2E242EEF1A41D0AE00864588 /* SWAcapellaPullToRefresh.m */,
 				2E75956D19FD49F500001BC7 /* Supporting Files */,
 			);
 			path = AcapellaKit;
@@ -152,10 +172,12 @@
 		2E75959419FD958600001BC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2EB46E501A2BF21100BE29A4 /* CoreText.framework */,
-				2EB46E4E1A2BF20900BE29A4 /* Foundation.framework */,
-				2E75959719FD95B500001BC7 /* sluthwareios */,
-				2E75959519FD959E00001BC7 /* libsluthwareios.a */,
+				2E51F4121AEC63DA00854158 /* Social.framework */,
+				2E334F4C1AE8524D002046A1 /* libSluthware */,
+				2E334F541AE8524D002046A1 /* libSluthware.a */,
+				2E334F621AE857FC002046A1 /* CoreGraphics.framework */,
+				2E334F5F1AE85701002046A1 /* Foundation.framework */,
+				2E334F641AE85822002046A1 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -170,8 +192,6 @@
 				2E75964219FDCCA600001BC7 /* Main.storyboard */,
 				2E75964519FDCCA600001BC7 /* Images.xcassets */,
 				2E75963819FDCCA600001BC7 /* Supporting Files */,
-				2EDAE4E51A069CC3006274BA /* test.h */,
-				2EDAE4E61A069CC3006274BA /* test.m */,
 			);
 			path = AcapellaTest;
 			sourceTree = "<group>";
@@ -192,12 +212,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E334F581AE8524D002046A1 /* SWMLine.h in Headers */,
 				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
+				2E334F561AE8524D002046A1 /* NSTimer+SW.h in Headers */,
 				2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */,
-				2ED282FC1A10671C00772295 /* SWAcapellaScrollViewProtocol.h in Headers */,
-				2E1DFE6E1A0EA3AD000DCF1E /* SWAcapellaTableView.h in Headers */,
+				2E334F5A1AE8524D002046A1 /* UIColor+SW.h in Headers */,
+				2E334F591AE8524D002046A1 /* SWMQuadratic.h in Headers */,
+				2E334F551AE8524D002046A1 /* libSluthware.h in Headers */,
 				2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */,
-				2E242EF01A41D0AE00864588 /* SWAcapellaPullToRefresh.h in Headers */,
+				2E334F5B1AE8524D002046A1 /* UIScrollView+SW.h in Headers */,
+				2E334F571AE8524D002046A1 /* SWMCircle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,7 +271,7 @@
 		2E75956119FD49F500001BC7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Pat Sluth";
 				TargetAttributes = {
 					2E75956919FD49F500001BC7 = {
@@ -304,9 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */,
-				2E1DFE6F1A0EA3AD000DCF1E /* SWAcapellaTableView.m in Sources */,
 				2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */,
-				2E242EF11A41D0AE00864588 /* SWAcapellaPullToRefresh.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,7 +337,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E75964119FDCCA600001BC7 /* ViewController.m in Sources */,
-				2EDAE4E71A069CC3006274BA /* test.m in Sources */,
 				2E75966719FDCD5D00001BC7 /* main.m in Sources */,
 				2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */,
 			);
@@ -347,10 +368,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-				);
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -384,7 +401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = /opt/theos/lib;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -406,10 +423,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-				);
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -437,7 +450,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = /opt/theos/lib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
@@ -460,8 +473,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+				);
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -473,14 +490,16 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = AcapellaKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/theos/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 			};
@@ -490,8 +509,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+				);
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -503,14 +526,16 @@
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				INFOPLIST_FILE = AcapellaKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/theos/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 			};
@@ -522,6 +547,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pat Sluth (P5B3H5K98V)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pat Sluth (P5B3H5K98V)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -531,11 +558,12 @@
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				GCC_WARN_PEDANTIC = NO;
 				INFOPLIST_FILE = AcapellaTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/theos/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
@@ -550,17 +578,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pat Sluth (P5B3H5K98V)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pat Sluth (P5B3H5K98V)";
 				COPY_PHASE_STRIP = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
 				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
 				GCC_WARN_PEDANTIC = NO;
 				INFOPLIST_FILE = AcapellaTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/theos/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";

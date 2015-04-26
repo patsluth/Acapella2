@@ -7,19 +7,15 @@
 //
 
 #import "ViewController.h"
-#import "libsw/sluthwareios/sluthwareios.h"
-#import "test.h"
-#import <objc/objc.h>
-#import <Foundation/Foundation.h>
-#import <CoreText/CoreText.h>
+#import "NSTimer+SW.h"
+
+@import Social;
+@import Foundation;
 
 @interface ViewController ()
 
-@property (strong, nonatomic) UIView *contentView;
+@property (strong, nonatomic) IBOutlet UIView *acapellaContainer;
 @property (strong, nonatomic) SWAcapellaBase *acapella;
-
-@property (strong, nonatomic) UITableView *tableview;
-@property (strong, nonatomic) UIImageView *stretchableTableViewHeader;
 
 @end
 
@@ -29,200 +25,143 @@
 {
     [super viewDidLoad];
     
-//    self.tableview = [[UITableView alloc] init];
-//    self.tableview.backgroundColor = [UIColor clearColor];
-//    
-//    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//    self.tableview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//    
-//    [self.view addSubview:self.tableview];
-//    
-//    self.tableview.frame = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20);
-//    self.tableview.delegate = self;
-//    self.tableview.dataSource = self;
-//
-//    self.tableview.showsHorizontalScrollIndicator = YES;
-//    self.tableview.showsVerticalScrollIndicator = YES;
-//    
-//    
-//    
-//    
-//    UIView *tableViewHeader = [[UIView alloc] init];
-//    tableViewHeader.backgroundColor = [UIColor clearColor];
-//    tableViewHeader.frame = CGRectMake(0, 0, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
-//    self.tableview.tableHeaderView = tableViewHeader;
-//    
-//    self.stretchableTableViewHeader = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"banner"]];
-//    self.stretchableTableViewHeader.backgroundColor = [UIColor blueColor];
-//    self.stretchableTableViewHeader.contentMode = UIViewContentModeScaleAspectFill;
-//    self.stretchableTableViewHeader.frame = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
-//    [self.view addSubview:self.stretchableTableViewHeader];
-//    
-//    [self.view bringSubviewToFront:self.tableview];
-//    
-//    
-//    return;
+    if (self.acapella){}
     
-    self.contentView = [[UIView alloc] init];
-    self.contentView.frame = CGRectMake(0, 100, 0, 0);
-    [self.view addSubview:self.contentView];
-    
-    self.acapella = [[SWAcapellaBase alloc] init];
-    self.acapella.delegateAcapella = self;
-    [self.contentView addSubview:self.acapella];
-    [NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
-    
-    test *tester = [[test alloc] initWithFrame:CGRectMake(50, 50, 50, 50)];
-    [self.view addSubview:tester];
-    [self.view bringSubviewToFront:self.contentView];
+    //[NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
 }
 
 - (void)resizeA
 {
-    self.contentView.frame = CGRectMake(40, 100, self.view.frame.size.width - 80, 500);
+    self.acapellaContainer.frame = CGRectMake(40, 100, self.view.frame.size.width - 80, 200);
+    [self.acapellaContainer layoutIfNeeded];
 }
 
 - (void)resizeB
 {
-    self.contentView.frame = CGRectMake(0, 100, self.view.frame.size.width, 200);
+    self.acapellaContainer.frame = CGRectMake(0, 100, self.view.frame.size.width, 100);
+    [self.acapellaContainer layoutIfNeeded];
     [NSTimer scheduledTimerWithTimeInterval:2.0
                                       block:^{
-                                          NSLog(@"I LOVE ASS");
+                                          [self resizeA];
     }repeats:NO];
 }
 
-#pragma mark SWAcapellaDelegate
+#pragma mark - SWAcapellaDelegate
 
-- (UIImage *)swAcapellaImageForPullToRefreshControl
+- (void)swAcapella:(SWAcapellaBase *)swAcapella onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-    UIImage *returnVal = [UIImage imageNamed:@"Acapella_Pull_To_Refresh_Image"];
-    returnVal = [returnVal imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    return returnVal;
-}
-
-- (UIColor *)swAcapellaTintColorForPullToRefreshControl
-{
-    return [UIColor redColor];
-}
-
-- (void)swAcapella:(SWAcapellaBase *)view onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
-{
-    if (tap.state == UIGestureRecognizerStateEnded){
+    if (tap.state == UIGestureRecognizerStateEnded) {
         
-    }
-}
-
-- (void)swAcapella:(id<SWAcapellaScrollViewProtocol>)view onSwipe:(SW_SCROLL_DIRECTION)direction
-{
-    if (direction != SW_SCROLL_DIR_NONE){
-        
-        if (direction == SW_SCROLL_DIR_UP){
+        if (NSClassFromString(@"UIAlertController")){
             
-            [[[SWUIAlertView alloc] initWithTitle:@"a"
-                                         message:@"B"
-                              clickedButtonBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-                                  
-                              }
-                                 didDismissBlock:^(UIAlertView *uiAlert, NSInteger buttonIndex){
-                                     [view resetContentOffset:YES];
-                                 }
-                               cancelButtonTitle:@"P"
-                                otherButtonTitles:nil] show];
-        } else if (direction == SW_SCROLL_DIR_LEFT) {
+            UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Share" message:nil preferredStyle:UIAlertControllerStyleAlert];
             
-        } else if (direction == SW_SCROLL_DIR_DOWN) {
-            [view resetContentOffset:YES];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                NSLog(@"%@", action);
+            }];
+            
+            [c addAction:cancel];
+            
+            
+            UIAlertActionStyle hasTwitter = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
+            
+            UIAlertAction *tweet = [UIAlertAction actionWithTitle:@"twitter" style:hasTwitter handler:^(UIAlertAction *action) {
+                SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                
+                compose.completionHandler = ^(SLComposeViewControllerResult result) {
+                    NSLog(@"PAT");
+                };
+                
+                [self presentViewController:compose animated:YES completion:nil];
+            }];
+            
+            [c addAction:tweet];
+            
+            
+            
+            UIAlertActionStyle hasFacebook = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
+            
+            UIAlertAction *facebook = [UIAlertAction actionWithTitle:@"facebook" style:hasFacebook handler:^(UIAlertAction *action) {
+                SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                [self presentViewController:compose animated:YES completion:nil];
+            }];
+            
+            [c addAction:facebook];
+            
+            [self presentViewController:c animated:YES completion:nil];
+            
         }
         
-        if (direction == SW_SCROLL_DIR_LEFT || direction == SW_SCROLL_DIR_RIGHT){
-            [view stopWrapAroundFallback];
-            [view finishWrapAroundAnimation];
-            [view finishWrapAroundAnimation];
-            [view finishWrapAroundAnimation];
-        }
     }
 }
 
-- (void)swAcapella:(SWAcapellaBase *)view onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
+- (void)swAcapella:(SWAcapellaScrollView *)swAcapella onSwipe:(ScrollDirection)direction
 {
-    if (longPress.state == UIGestureRecognizerStateBegan){
+    [swAcapella stopWrapAroundFallback];
+    [swAcapella finishWrapAroundAnimation];
+    [swAcapella finishWrapAroundAnimation];
+    [swAcapella finishWrapAroundAnimation];
+}
+
+- (void)swAcapella:(SWAcapellaBase *)swAcapella onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
+{
+    if (longPress.state == UIGestureRecognizerStateBegan) {
         
-    } else if (longPress.state == UIGestureRecognizerStateEnded){
+    } else if (longPress.state == UIGestureRecognizerStateEnded) {
         
     }
 }
 
-- (void)swAcapella:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+#pragma mark - Internal
+
+- (SWAcapellaBase *)acapella
 {
-    
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma mark Table View Tests
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat delta = 0.0f;
-    CGRect rect = CGRectMake(self.tableview.frame.origin.x, self.tableview.frame.origin.y, self.tableview.frame.size.width, [UIImage imageNamed:@"banner"].size.height / 2);
-    
-    delta = fabsf(MIN(0.0f, self.tableview.contentOffset.y));
-    
-    if (self.tableview.contentOffset.y > 0.0f){
-        rect.origin.y -= self.tableview.contentOffset.y;
+    if (!_acapella){
+        
+        _acapella = [[SWAcapellaBase alloc] init];
+        _acapella.delegate = self;
+        
+        [self.acapellaContainer addSubview:_acapella];
+        
+        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
+                                                         attribute:NSLayoutAttributeTop
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self.acapellaContainer
+                                                         attribute:NSLayoutAttributeTop
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
+                                                         attribute:NSLayoutAttributeLeading
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self.acapellaContainer
+                                                         attribute:NSLayoutAttributeLeft
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
+                                                         attribute:NSLayoutAttributeBottom
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self.acapellaContainer
+                                                         attribute:NSLayoutAttributeBottom
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
+                                                         attribute:NSLayoutAttributeTrailing
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self.acapellaContainer
+                                                         attribute:NSLayoutAttributeRight
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        
+        [self.acapellaContainer layoutIfNeeded];
+        [self.acapella layoutIfNeeded];
+        
     }
     
-    rect.size.height += delta;
-    
-    self.stretchableTableViewHeader.frame = rect;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 15;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 60;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cellIdentifier = @"pat";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.backgroundColor = [UIColor clearColor];
-        //cell.alpha = 0.1;
-    }
-    
-    [cell setSelected:YES];
-    
-    return cell;
+    return _acapella;
 }
 
 @end
+
+
+
+

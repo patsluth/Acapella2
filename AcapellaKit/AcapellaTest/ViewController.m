@@ -52,6 +52,26 @@
 {
     if (tap.state == UIGestureRecognizerStateEnded) {
         
+        
+        
+        
+        
+        
+        
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        [dict setValue:@"x" forKey:@"x"];
+        [dict setValue:@"x" forKey:@"x"];
+        [dict setValue:@"x" forKey:@"x"];
+        
+        if ([dict valueForKey:@""]){
+            
+        }
+        
+        
+        
+        
+        
+        
         if (NSClassFromString(@"UIAlertController")){
             
             UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Share" message:nil preferredStyle:UIAlertControllerStyleAlert];

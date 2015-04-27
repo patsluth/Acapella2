@@ -158,12 +158,12 @@ static NSDictionary *_previousNowPlayingInfo;
         UIView *mediaControlsView = [self mediaControlsView];
         
         if (mediaControlsView) {
-        
+            
             //make sure views are all setup for constraints
             if (!([self timeInformationView] &&
-                [self trackInformationView] &&
-                [self transportControlsView] &&
-                [self volumeView])){
+                  [self trackInformationView] &&
+                  [self transportControlsView] &&
+                  [self volumeView])){
                 return nil;
             }
             
@@ -175,33 +175,33 @@ static NSDictionary *_previousNowPlayingInfo;
             
             //acapella constraints
             [mediaControlsView addConstraint:[NSLayoutConstraint constraintWithItem:a
-                                                                               attribute:NSLayoutAttributeTop
-                                                                               relatedBy:NSLayoutRelationEqual
-                                                                                  toItem:mediaControlsView
-                                                                               attribute:NSLayoutAttributeTop
-                                                                              multiplier:1.0
-                                                                                     constant:0.0]];
+                                                                          attribute:NSLayoutAttributeTop
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:mediaControlsView
+                                                                          attribute:NSLayoutAttributeTop
+                                                                         multiplier:1.0
+                                                                           constant:0.0]];
             [mediaControlsView addConstraint:[NSLayoutConstraint constraintWithItem:a
-                                                                                    attribute:NSLayoutAttributeBottom
-                                                                                    relatedBy:NSLayoutRelationEqual
-                                                                                       toItem:mediaControlsView
-                                                                                    attribute:NSLayoutAttributeBottom
-                                                                                   multiplier:1.0
-                                                                                     constant:0.0]];
+                                                                          attribute:NSLayoutAttributeBottom
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:mediaControlsView
+                                                                          attribute:NSLayoutAttributeBottom
+                                                                         multiplier:1.0
+                                                                           constant:0.0]];
             [mediaControlsView addConstraint:[NSLayoutConstraint constraintWithItem:a
-                                                                               attribute:NSLayoutAttributeLeading
-                                                                               relatedBy:NSLayoutRelationEqual
-                                                                                  toItem:mediaControlsView
-                                                                               attribute:NSLayoutAttributeLeft
-                                                                              multiplier:1.0
-                                                                                constant:0.0]];
+                                                                          attribute:NSLayoutAttributeLeading
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:mediaControlsView
+                                                                          attribute:NSLayoutAttributeLeft
+                                                                         multiplier:1.0
+                                                                           constant:0.0]];
             [mediaControlsView addConstraint:[NSLayoutConstraint constraintWithItem:a
-                                                                               attribute:NSLayoutAttributeTrailing
-                                                                               relatedBy:NSLayoutRelationEqual
-                                                                                  toItem:mediaControlsView
-                                                                               attribute:NSLayoutAttributeRight
-                                                                              multiplier:1.0
-                                                                                constant:0.0]];
+                                                                          attribute:NSLayoutAttributeTrailing
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:mediaControlsView
+                                                                          attribute:NSLayoutAttributeRight
+                                                                         multiplier:1.0
+                                                                           constant:0.0]];
             
             [mediaControlsView.superview layoutIfNeeded];
             [mediaControlsView layoutIfNeeded];
@@ -269,8 +269,6 @@ static NSDictionary *_previousNowPlayingInfo;
         [self.acapella.scrollview resetContentOffset:NO];
         [self.acapella scrollViewDidScroll:self.acapella.scrollview];
         
-        //[[self trackInformationView] addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-        
     }
     
     
@@ -310,31 +308,11 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     %orig(arg1);
     
-    //re add, to make sure we can remove them
-//    [[self trackInformationView] addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
-//    [[self trackInformationView] removeObserver:self forKeyPath:@"frame"];
-    
-    
-    
-    
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
                                                   object:nil];
-
+    
     MRMediaRemoteUnregisterForNowPlayingNotifications();
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (object == [self trackInformationView]){
-        
-        if ([keyPath isEqualToString:@"frame"]){
-            //re-call the delegate method to center the titles
-            [self.acapella scrollViewDidScroll:self.acapella.scrollview];
-        }
-        
-    }
 }
 
 #pragma mark - MediaRemote
@@ -575,7 +553,7 @@ static NSDictionary *_previousNowPlayingInfo;
                                                   }];
                              }];
         }
-   }];
+    }];
 }
 
 %new
@@ -622,7 +600,11 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
         
-        if (object){
+        if (successful && object){
+            
+            
+            NSDictionary *shareData = (NSDictionary *)object;
+            
             
             if (NSClassFromString(@"UIAlertController")){
                 
@@ -630,30 +612,36 @@ static NSDictionary *_previousNowPlayingInfo;
                                                                            message:nil
                                                                     preferredStyle:UIAlertControllerStyleAlert];
                 
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"cancel"
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
                                                                  style:UIAlertActionStyleCancel
                                                                handler:^(UIAlertAction *action) {
-                    [self.acapella.scrollview finishWrapAroundAnimation];
-                }];
+                                                                   [self.acapella.scrollview finishWrapAroundAnimation];
+                                                               }];
                 
                 [c addAction:cancel];
                 
                 
                 UIAlertActionStyle hasTwitter = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
                 
-                UIAlertAction *tweet = [UIAlertAction actionWithTitle:@"twitter"
+                UIAlertAction *tweet = [UIAlertAction actionWithTitle:@"Twitter"
                                                                 style:hasTwitter
                                                               handler:^(UIAlertAction *action) {
-                    
+                                                                  
                                                                   SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                                                                  
+                                                                  if ([shareData valueForKey:@"shareString"]){
+                                                                      [compose setInitialText:[shareData valueForKey:@"shareString"]];
+                                                                  }
+                                                                  if ([shareData valueForKey:@"shareImage"]){
+                                                                      [compose addImage:[shareData valueForKey:@"shareImage"]];
+                                                                  }
                                                                   
                                                                   compose.completionHandler = ^(SLComposeViewControllerResult result) {
                                                                       [self.acapella.scrollview finishWrapAroundAnimation];
                                                                   };
                                                                   
                                                                   [self presentViewController:compose animated:YES completion:nil];
-                                                                  
-                }];
+                                                              }];
                 
                 [c addAction:tweet];
                 
@@ -661,17 +649,24 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 UIAlertActionStyle hasFacebook = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
                 
-                UIAlertAction *facebook = [UIAlertAction actionWithTitle:@"facebook"
+                UIAlertAction *facebook = [UIAlertAction actionWithTitle:@"Facebook"
                                                                    style:hasFacebook
                                                                  handler:^(UIAlertAction *action) {
                                                                      SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                                                                     
+                                                                     if ([shareData valueForKey:@"shareString"]){
+                                                                         [compose setInitialText:[shareData valueForKey:@"shareString"]];
+                                                                     }
+                                                                     if ([shareData valueForKey:@"shareImage"]){
+                                                                         [compose addImage:[shareData valueForKey:@"shareImage"]];
+                                                                     }
                                                                      
                                                                      compose.completionHandler = ^(SLComposeViewControllerResult result) {
                                                                          [self.acapella.scrollview finishWrapAroundAnimation];
                                                                      };
                                                                      
                                                                      [self presentViewController:compose animated:YES completion:nil];
-                }];
+                                                                 }];
                 
                 [c addAction:facebook];
                 
@@ -687,72 +682,6 @@ static NSDictionary *_previousNowPlayingInfo;
             
         }
     }];
-    
-    
-    
-//
-//            SWAcapellaShowEEActivity *showEE;
-//            
-//            if ([self.view.superview isKindOfClass:NSClassFromString(@"SBEqualizerScrollView")]){
-//                showEE = [[SWAcapellaShowEEActivity alloc] init];
-//            }
-//            
-//            self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:object
-//                                                                                 applicationActivities:(showEE != nil) ? @[showEE] : nil];
-//            
-//            NSMutableArray *excludedActivityTypes = [[NSMutableArray alloc] init];
-//            
-//            [excludedActivityTypes addObjectsFromArray:@[UIActivityTypePrint,
-//                                                         UIActivityTypeAssignToContact,
-//                                                         UIActivityTypeSaveToCameraRoll,
-//                                                         UIActivityTypeAddToReadingList,
-//                                                         @"com.linkedin.LinkedIn.ShareExtension",
-//                                                         @"com.6wunderkinder.wunderlistmobile.sharingextension",
-//                                                         @"com.flexibits.fantastical2.iphone.add"]];
-//            
-//            if (!successful){ //device is locked
-//                
-//                                [excludedActivityTypes addObjectsFromArray:@[UIActivityTypePostToFacebook,
-//                                                                             UIActivityTypePostToTwitter,
-//                                                                             UIActivityTypePostToWeibo,
-//                                                                             UIActivityTypeMessage,
-//                                                                             UIActivityTypeMail,
-//                                                                             UIActivityTypePostToFlickr,
-//                                                                             UIActivityTypePostToVimeo,
-//                                                                             UIActivityTypePostToTencentWeibo]];
-//            }
-//            
-//            self.acapellaSharingActivityView.excludedActivityTypes = excludedActivityTypes;
-//            
-//            [self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
-//            
-//            __block MPUSystemMediaControlsViewController *blockSelf = self;
-//            
-//            self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
-//                
-//                if (blockSelf){
-//                    
-//                    if ([activityType isEqualToString:SWAcapellaShowEEActivityType]){
-//                        
-//                        [blockSelf.acapella.tableview resetContentOffset:NO];
-//                        UIScrollView *eeScrollView = (UIScrollView *)blockSelf.view.superview;
-//                        [eeScrollView setContentOffset:CGPointMake(eeScrollView.frame.size.width, 0.0)];
-//                        
-//                    } else {
-//                        
-//                        [blockSelf.acapella.tableview resetContentOffset:YES];
-//                        
-//                    }
-//                    
-//                }
-//            };
-//            
-//        } else {
-//            
-//            [self.acapella.tableview resetContentOffset:YES];
-//            
-//        }
-//    }];
 }
 
 %new
@@ -767,21 +696,17 @@ static NSDictionary *_previousNowPlayingInfo;
             //int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
             //int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
             
-            
-            
-            
-            
             if (NSClassFromString(@"UIAlertController")){
                 
                 UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Playlist Options"
                                                                            message:nil
                                                                     preferredStyle:UIAlertControllerStyleAlert];
                 
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"cancel"
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
                                                                  style:UIAlertActionStyleCancel
                                                                handler:^(UIAlertAction *action) {
-                    [self.acapella.scrollview finishWrapAroundAnimation];
-                }];
+                                                                   [self.acapella.scrollview finishWrapAroundAnimation];
+                                                               }];
                 
                 [c addAction:cancel];
                 
@@ -794,6 +719,7 @@ static NSDictionary *_previousNowPlayingInfo;
                                                                    handler:^(UIAlertAction *action) {
                                                                        
                                                                        MRMediaRemoteSetRepeatMode(x);
+                                                                       [self.acapella.scrollview finishWrapAroundAnimation];
                                                                        
                                                                    }];
                     
@@ -811,6 +737,7 @@ static NSDictionary *_previousNowPlayingInfo;
                                                                         handler:^(UIAlertAction *action) {
                                                                             
                                                                             MRMediaRemoteSetShuffleMode(x);
+                                                                            [self.acapella.scrollview finishWrapAroundAnimation];
                                                                             
                                                                         }];
                         
@@ -940,7 +867,6 @@ static void mpuPostLayoutSubviews(UIView *mpu)
         if (!resultDict){
             [self setArtistText:@"Tap To Play"];
             [self setAlbumText:@"Acapella"];
-            [self layoutSubviews];
         }
     });
 }

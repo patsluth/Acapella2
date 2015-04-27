@@ -5,10 +5,10 @@
 
 @implementation SWAcapellaSharingFormatter
 
-+ (NSArray *)formattedShareArrayWithMediaTitle:(NSString *)title
-                                    mediaArtist:(NSString *)artist
-                              mediaArtworkData:(NSData *)data
-                                sharingHashtag:(NSString *)hashtag
++ (NSDictionary *)formattedShareDictionaryWithMediaTitle:(NSString *)title
+                                             mediaArtist:(NSString *)artist
+                                        mediaArtworkData:(NSData *)data
+                                          sharingHashtag:(NSString *)hashtag
 {
     if (!title){
         return nil;
@@ -28,11 +28,14 @@
         [shareString appendString:hashtag];
     }
     
+    NSMutableDictionary *shareDictionary = [[NSMutableDictionary alloc] init];
+    [shareDictionary setValue:shareString forKey:@"shareString"];
+    
     if (data && [data length] != 0){
-	    return @[shareString, [[UIImage alloc] initWithData:data]];
-    } else {
-	    return @[shareString];
+        [shareDictionary setValue:[[UIImage alloc] initWithData:data] forKey:@"shareImage"];
     }
+    
+    return shareDictionary;
 }
 
 @end

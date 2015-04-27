@@ -19,7 +19,7 @@ SW_INLINE NSString *NSStringForRepeatMode(int repeatMode)
 SW_INLINE NSString *NSStringForShuffleMode(int shuffleMode)
 {
     if (shuffleMode == 0){
-        return @"Shuffle";
+        return @"Shuffle Off";
     } else if (shuffleMode == 2){
         return @"Shuffle All";
     }

@@ -150,10 +150,10 @@
             NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
             NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag" defaultValue:@"acapella"];
             
-            NSArray *shareData = [%c(SWAcapellaSharingFormatter) formattedShareArrayWithMediaTitle:mediaTitle
-                                                                                       mediaArtist:mediaArtist
-                                                                                  mediaArtworkData:mediaArtworkData
-                                                                                    sharingHashtag:sharingHashtag];
+            NSDictionary *shareData = [%c(SWAcapellaSharingFormatter) formattedShareDictionaryWithMediaTitle:mediaTitle
+                                                                                            mediaArtist:mediaArtist
+                                                                                       mediaArtworkData:mediaArtworkData
+                                                                                         sharingHashtag:sharingHashtag];
             
             if (shareData){
                 

@@ -262,13 +262,10 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     %orig(arg1);
     
-    if (self.acapella && self.acapella.scrollview){
-        
-        [self.acapella.superview sendSubviewToBack:self.acapella];
-        
-        [self.acapella.scrollview resetContentOffset:NO];
-        [self.acapella scrollViewDidScroll:self.acapella.scrollview];
-        
+    if (self.acapella){
+        if (self.acapella.scrollview){
+            [self.acapella.scrollview resetContentOffset:NO];
+        }
     }
     
     
@@ -290,7 +287,6 @@ static NSDictionary *_previousNowPlayingInfo;
     if (self.acapella){
         if (self.acapella.scrollview){
             [self.acapella.scrollview resetContentOffset:NO];
-            [self.acapella scrollViewDidScroll:self.acapella.scrollview];
         }
     }
 }
@@ -415,8 +411,10 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (void)scrollViewDidScroll:(SWAcapellaScrollView *)scrollView
 {
-    [self trackInformationView].center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
-                                                     (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
+    if ([self trackInformationView]){
+        [self trackInformationView].center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
+                                                         (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
+    }
 }
 
 %new

@@ -55,7 +55,7 @@
         
         self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
         self.testView.backgroundColor = [UIColor blackColor];
-        self.testView.alpha = 0.1;
+        self.testView.alpha = 0.7;
         [self addSubview:self.testView];
 #endif
         
@@ -69,15 +69,21 @@
 {
     [super layoutIfNeeded];
     
-    self.contentSize = CGSizeMake(self.bounds.size.width * 3, self.bounds.size.height * 3);
+    CGSize newSize = CGSizeMake(self.bounds.size.width * 3, self.bounds.size.height * 3);
     
+    if (!CGSizeEqualToSize(self.contentSize, newSize)){ //only update on changed size
+        
+        self.contentSize = newSize;
+        
 #ifdef DEBUG
-    if (self.testView) {
-        self.testView.center = CGPointMake(self.contentSize.width / 2, self.contentSize.height / 2);
-    }
+        if (self.testView) {
+            self.testView.center = CGPointMake(self.contentSize.width / 2, self.contentSize.height / 2);
+        }
 #endif
-    
-    [self resetContentOffset:NO];
+        
+        [self resetContentOffset:NO];
+        
+    }
 }
 
 #pragma mark - SWAcapellaScrollViewProtocol

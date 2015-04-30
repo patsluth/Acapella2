@@ -53,19 +53,7 @@
     if (tap.state == UIGestureRecognizerStateEnded) {
         
         
-        
-        
-        
-        
-        
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setValue:@"x" forKey:@"x"];
-        [dict setValue:@"x" forKey:@"x"];
-        [dict setValue:@"x" forKey:@"x"];
-        
-        if ([dict valueForKey:@""]){
-            
-        }
+      
         
         
         

@@ -299,6 +299,10 @@ static NSDictionary *_previousNowPlayingInfo;
                                                                                  constant:0.0]];
             [self.acapella.superview layoutIfNeeded];
             [self.acapella layoutIfNeeded];
+            
+            if ([self titlesView]){
+                [mediaControlsView sendSubviewToBack:[self titlesView]];
+            }
         }
     }
 }
@@ -435,11 +439,7 @@ static NSDictionary *_previousNowPlayingInfo;
             if (uid){
                 if (!previousUID || (previousUID && ![uid isEqualToNumber:previousUID])){
                     
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        if (!self.acapella.scrollview.isAnimating){
-                            [self.acapella.scrollview finishWrapAroundAnimation];
-                        }
-                    });
+                    [self.acapella.scrollview finishWrapAroundAnimation];
                 
                 } else {
                     
@@ -447,20 +447,12 @@ static NSDictionary *_previousNowPlayingInfo;
                     
                     if (elapsedTime && [elapsedTime doubleValue] <= 0.0){ //restarted the song
                         
-                        dispatch_async(dispatch_get_main_queue(), ^(void){
-                            if (!self.acapella.scrollview.isAnimating){
-                                [self.acapella.scrollview finishWrapAroundAnimation];
-                            }
-                        });
+                        [self.acapella.scrollview finishWrapAroundAnimation];
                     }
                 }
             } else {
                 
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    if (!self.acapella.scrollview.isAnimating){
-                        [self.acapella.scrollview finishWrapAroundAnimation];
-                    }
-                });
+                [self.acapella.scrollview finishWrapAroundAnimation];
             
             }
         }
@@ -477,11 +469,14 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     if ([self titlesView]){
         
+        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) / CGRectGetMidY(scrollView.frame));
+        
         CGPoint center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
                                      (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
         
         center = [self.view convertPoint:center fromView:self.acapella];
         
+        [self titlesView].alpha = alpha;
         [self titlesView].center = center;
     }
 }
@@ -678,73 +673,166 @@ static NSDictionary *_previousNowPlayingInfo;
     [SWAcapellaActionsHelper action_SkipForward:nil];
 }
 
-//%new
-//- (void)action_OpenActivity
-//{
-//    [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
-//        
-//        if (successful && object){
-//            
-//            self.acapellaSharingActivityView = [[UIActivityViewController alloc] initWithActivityItems:object applicationActivities:nil];
-//            
-//            self.acapellaSharingActivityView.excludedActivityTypes = @[UIActivityTypePrint,
-//                                                                       UIActivityTypeAssignToContact,
-//                                                                       UIActivityTypeSaveToCameraRoll,
-//                                                                       UIActivityTypeAddToReadingList,
-//                                                                       @"com.linkedin.LinkedIn.ShareExtension",
-//                                                                       @"com.6wunderkinder.wunderlistmobile.sharingextension",
-//                                                                       @"com.flexibits.fantastical2.iphone.add"];
-//            
-//            [self presentViewController:self.acapellaSharingActivityView animated:YES completion:nil];
-//            
-//            __block MusicNowPlayingViewController *blockSelf = self;
-//            
-//            self.acapellaSharingActivityView.completionHandler = ^(NSString *activityType, BOOL completed){
-//                
-//                if (blockSelf){
-//                    
-//                    [blockSelf.acapella.tableview resetContentOffset:YES];
-//                    
-//                }
-//            };
-//            
-//        }
-//    }];
-//}
-//
-//%new
-//- (void)action_ShowPlaylistOptions
-//{
-//    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-//        
-//        NSDictionary *resultDict = object;
-//        
-//        if (!successful && resultDict && self.acapellaPlaylistOptions && ![self.acapellaPlaylistOptions created]){
-//            
-//            int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
-//            int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
-//            
-//            [self.acapellaPlaylistOptions create];
-//            
-//            [self updateRepeatButtonToMediaRepeatMode:mediaRepeatMode];
-//            [self updateCreateButton];
-//            [self updateShuffleButtonToMediaShuffleMode:mediaShuffleMode];
-//            
-//            [self.acapellaPlaylistOptions layoutToScrollView:self.acapella.scrollview];
-//            [self.acapella.scrollview stopWrapAroundFallback];
-//            [self.acapella.scrollview resetContentOffset:NO];
-//            [self.acapella.tableview resetContentOffset:YES];
-//            [self.acapellaPlaylistOptions startHideTimer];
-//            
-//        } else {
-//            
-//            [self.acapellaPlaylistOptions cleanup];
-//            [self.acapella.tableview resetContentOffset:YES];
-//            
-//        }
-//        
-//    }];
-//}
+%new
+- (void)action_OpenActivity
+{
+    [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
+        
+        if (successful && object){
+            
+            NSDictionary *shareData = (NSDictionary *)object;
+            
+            if (NSClassFromString(@"UIAlertController")){
+                
+                UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Share"
+                                                                           message:nil
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                 style:UIAlertActionStyleCancel
+                                                               handler:^(UIAlertAction *action) {
+                                                                   [self.acapella.scrollview finishWrapAroundAnimation];
+                                                               }];
+                
+                [c addAction:cancel];
+                
+                
+                UIAlertActionStyle hasTwitter = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
+                
+                UIAlertAction *tweet = [UIAlertAction actionWithTitle:@"Twitter"
+                                                                style:hasTwitter
+                                                              handler:^(UIAlertAction *action) {
+                                                                  
+                                                                  SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                                                                  
+                                                                  if ([shareData valueForKey:@"shareString"]){
+                                                                      [compose setInitialText:[shareData valueForKey:@"shareString"]];
+                                                                  }
+                                                                  if ([shareData valueForKey:@"shareImage"]){
+                                                                      [compose addImage:[shareData valueForKey:@"shareImage"]];
+                                                                  }
+                                                                  
+                                                                  compose.completionHandler = ^(SLComposeViewControllerResult result) {
+                                                                      [self.acapella.scrollview finishWrapAroundAnimation];
+                                                                  };
+                                                                  
+                                                                  [self presentViewController:compose animated:YES completion:nil];
+                                                              }];
+                
+                [c addAction:tweet];
+                
+                
+                
+                UIAlertActionStyle hasFacebook = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
+                
+                UIAlertAction *facebook = [UIAlertAction actionWithTitle:@"Facebook"
+                                                                   style:hasFacebook
+                                                                 handler:^(UIAlertAction *action) {
+                                                                     SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                                                                     
+                                                                     if ([shareData valueForKey:@"shareString"]){
+                                                                         [compose setInitialText:[shareData valueForKey:@"shareString"]];
+                                                                     }
+                                                                     if ([shareData valueForKey:@"shareImage"]){
+                                                                         [compose addImage:[shareData valueForKey:@"shareImage"]];
+                                                                     }
+                                                                     
+                                                                     compose.completionHandler = ^(SLComposeViewControllerResult result) {
+                                                                         [self.acapella.scrollview finishWrapAroundAnimation];
+                                                                     };
+                                                                     
+                                                                     [self presentViewController:compose animated:YES completion:nil];
+                                                                 }];
+                
+                [c addAction:facebook];
+                
+                
+                
+                [self presentViewController:c animated:YES completion:nil];
+                
+            }
+            
+        } else {
+            
+            [self.acapella.scrollview finishWrapAroundAnimation];
+            
+        }
+    }];
+}
+
+%new
+- (void)action_ShowPlaylistOptions
+{
+    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
+        
+        NSDictionary *resultDict = object;
+        
+        if (resultDict){
+            
+            //int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
+            //int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
+            
+            if (NSClassFromString(@"UIAlertController")){
+                
+                UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Playlist Options"
+                                                                           message:nil
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
+                                                                 style:UIAlertActionStyleCancel
+                                                               handler:^(UIAlertAction *action) {
+                                                                   [self.acapella.scrollview finishWrapAroundAnimation];
+                                                               }];
+                
+                [c addAction:cancel];
+                
+                
+                
+                for (NSUInteger x = 0; x < 3; x++){
+                    
+                    UIAlertAction *repeat = [UIAlertAction actionWithTitle:NSStringForRepeatMode(x)
+                                                                     style:UIAlertActionStyleDefault
+                                                                   handler:^(UIAlertAction *action) {
+                                                                       
+                                                                       MRMediaRemoteSetRepeatMode(x);
+                                                                       [self.acapella.scrollview finishWrapAroundAnimation];
+                                                                       
+                                                                   }];
+                    
+                    [c addAction:repeat];
+                    
+                }
+                
+                
+                for (NSUInteger x = 0; x < 3; x++){
+                    
+                    if (x != 1){ //1 isnt a valid shuffle mode
+                        
+                        UIAlertAction *shuffle = [UIAlertAction actionWithTitle:NSStringForShuffleMode(x)
+                                                                          style:UIAlertActionStyleDefault
+                                                                        handler:^(UIAlertAction *action) {
+                                                                            
+                                                                            MRMediaRemoteSetShuffleMode(x);
+                                                                            [self.acapella.scrollview finishWrapAroundAnimation];
+                                                                            
+                                                                        }];
+                        
+                        [c addAction:shuffle];
+                        
+                    }
+                }
+                
+                
+                
+                [self presentViewController:c animated:YES completion:nil];
+                
+            }
+            
+        } else {
+            [self.acapella.scrollview finishWrapAroundAnimation];
+        }
+    }];
+}
 
 %new
 - (void)action_OpenApp
@@ -868,22 +956,34 @@ static NSTimer *_hideRatingTimer;
 
 #pragma mark - MPPlaybackControlsView
 
+static void mpPlaybackControlsPostLayout(UIView *mpu)
+{
+    UIView *transport = MSHookIvar<UIView *>(mpu, "_transportControls");
+    [transport removeFromSuperview];
+    
+    //this will update the text center
+    for (UIView *v in mpu.subviews){
+        if ([v isKindOfClass:%c(SWAcapellaBase)]){
+            SWAcapellaBase *acapella = (SWAcapellaBase *)v;
+            [acapella scrollViewDidScroll:acapella.scrollview];
+        }
+    }
+}
+
 %hook MPPlaybackControlsView
 
 - (void)layoutIfNeeded
 {
     %orig();
     
-    UIView *transport = MSHookIvar<UIView *>(self, "_transportControls");
-    [transport removeFromSuperview];
+    mpPlaybackControlsPostLayout(self);
+}
+
+- (void)layoutSubviews
+{
+    %orig();
     
-    //this will update the text center
-    for (UIView *v in self.subviews){
-        if ([v isKindOfClass:%c(SWAcapellaBase)]){
-            SWAcapellaBase *acapella = (SWAcapellaBase *)v;
-            [acapella scrollViewDidScroll:acapella.scrollview];
-        }
-    }
+    mpPlaybackControlsPostLayout(self);
 }
 
 %end

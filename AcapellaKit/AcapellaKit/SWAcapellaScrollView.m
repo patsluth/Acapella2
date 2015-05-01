@@ -10,6 +10,10 @@
 
 #import "UIScrollView+SW.h"
 
+
+
+
+
 @interface SWAcapellaScrollView()
 {
 }
@@ -49,7 +53,6 @@
         self.backgroundColor = [UIColor clearColor];
         
 #ifdef DEBUG
-        //self.backgroundColor = [UIColor magentaColor];
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;
         
@@ -123,7 +126,7 @@
         
         [UIView animateWithDuration:0.5
                               delay:0.0
-                            options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent
+                            options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState
                          animations:^{
                              _animationContent();
                          }completion:^(BOOL finished) {
@@ -159,6 +162,11 @@
 
 - (void)finishWrapAroundAnimation
 {
+    if (![NSThread isMainThread]){
+        [self performSelectorOnMainThread:@selector(finishWrapAroundAnimation) withObject:nil waitUntilDone:NO];
+        return;
+    }
+    
     [self stopWrapAroundFallback];
     
     if (self.isAnimating || self.isTracking) {

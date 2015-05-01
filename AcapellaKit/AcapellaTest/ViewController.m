@@ -51,55 +51,6 @@
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
     if (tap.state == UIGestureRecognizerStateEnded) {
-        
-        
-      
-        
-        
-        
-        
-        
-        
-        if (NSClassFromString(@"UIAlertController")){
-            
-            UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Share" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                NSLog(@"%@", action);
-            }];
-            
-            [c addAction:cancel];
-            
-            
-            UIAlertActionStyle hasTwitter = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
-            
-            UIAlertAction *tweet = [UIAlertAction actionWithTitle:@"twitter" style:hasTwitter handler:^(UIAlertAction *action) {
-                SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-                
-                compose.completionHandler = ^(SLComposeViewControllerResult result) {
-                    NSLog(@"PAT");
-                };
-                
-                [self presentViewController:compose animated:YES completion:nil];
-            }];
-            
-            [c addAction:tweet];
-            
-            
-            
-            UIAlertActionStyle hasFacebook = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
-            
-            UIAlertAction *facebook = [UIAlertAction actionWithTitle:@"facebook" style:hasFacebook handler:^(UIAlertAction *action) {
-                SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-                [self presentViewController:compose animated:YES completion:nil];
-            }];
-            
-            [c addAction:facebook];
-            
-            [self presentViewController:c animated:YES completion:nil];
-            
-        }
-        
     }
 }
 

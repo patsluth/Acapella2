@@ -78,10 +78,13 @@
     } else if (scrollDirection == ScrollDirectionHorizontal) {
         
     } else {
-       if (fabs(scrollView.contentOffset.x) != fabs(scrollView.defaultContentOffset.x)) {
+        
+        if (scrollView.contentOffset.x != scrollView.defaultContentOffset.x && scrollView.contentOffset.y == scrollView.defaultContentOffset.y) {
             scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, scrollView.defaultContentOffset.y);
-        } else {
+        } else if (scrollView.contentOffset.x == scrollView.defaultContentOffset.x && scrollView.contentOffset.y != scrollView.defaultContentOffset.y) {
             scrollView.contentOffset = CGPointMake(scrollView.defaultContentOffset.x, scrollView.contentOffset.y);
+        } else {
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, scrollView.defaultContentOffset.y);
         }
     }
     

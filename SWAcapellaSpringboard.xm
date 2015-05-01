@@ -254,6 +254,10 @@ static NSDictionary *_previousNowPlayingInfo;
             [mediaControlsView.superview layoutIfNeeded];
             [self.acapella layoutIfNeeded];
             
+            if ([self trackInformationView]){
+                [mediaControlsView sendSubviewToBack:[self trackInformationView]];
+            }
+            
         }
     }
 }
@@ -336,11 +340,7 @@ static NSDictionary *_previousNowPlayingInfo;
             if (uid){
                 if (!previousUID || (previousUID && ![uid isEqualToNumber:previousUID])){ //new song
                     
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        if (!self.acapella.scrollview.isAnimating){
-                            [self.acapella.scrollview finishWrapAroundAnimation];
-                        }
-                    }];
+                    [self.acapella.scrollview finishWrapAroundAnimation];
                     
                 } else {
                     
@@ -348,11 +348,7 @@ static NSDictionary *_previousNowPlayingInfo;
                     
                     if (elapsedTime && [elapsedTime doubleValue] <= 0.0){ //restarted the song
                         
-                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                            if (!self.acapella.scrollview.isAnimating){
-                                [self.acapella.scrollview finishWrapAroundAnimation];
-                            }
-                        }];
+                        [self.acapella.scrollview finishWrapAroundAnimation];
                         
                     }
                     
@@ -368,11 +364,7 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 if (!previousItemTitle || (previousItemTitle && ![itemTitle isEqualToString:previousItemTitle])){ //new song
                     
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        if (!self.acapella.scrollview.isAnimating){
-                            [self.acapella.scrollview finishWrapAroundAnimation];
-                        }
-                    }];
+                    [self.acapella.scrollview finishWrapAroundAnimation];
                     
                 } else {
                     
@@ -380,11 +372,7 @@ static NSDictionary *_previousNowPlayingInfo;
                     
                     if (elapsedTime && [elapsedTime doubleValue] <= 0.0){ //restarted the song
                         
-                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                            if (!self.acapella.scrollview.isAnimating){
-                                [self.acapella.scrollview finishWrapAroundAnimation];
-                            }
-                        }];
+                        [self.acapella.scrollview finishWrapAroundAnimation];
                         
                     }
                     
@@ -393,11 +381,7 @@ static NSDictionary *_previousNowPlayingInfo;
             }
         } else {
             
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if (!self.acapella.scrollview.isAnimating){
-                    [self.acapella.scrollview finishWrapAroundAnimation];
-                }
-            }];
+            [self.acapella.scrollview finishWrapAroundAnimation];
             
         }
         
@@ -412,6 +396,10 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)scrollViewDidScroll:(SWAcapellaScrollView *)scrollView
 {
     if ([self trackInformationView]){
+        
+        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) / CGRectGetMidY(scrollView.frame));
+        
+        [self trackInformationView].alpha = alpha;
         [self trackInformationView].center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
                                                          (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
     }
@@ -573,6 +561,7 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)action_NextSong
 {
     [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
+        
         if (!object){
             [self.acapella.scrollview finishWrapAroundAnimation];
         } else {
@@ -600,9 +589,7 @@ static NSDictionary *_previousNowPlayingInfo;
         
         if (successful && object){
             
-            
             NSDictionary *shareData = (NSDictionary *)object;
-            
             
             if (NSClassFromString(@"UIAlertController")){
                 

@@ -13,7 +13,7 @@ PACKAGE_VERSION=1.1~beta
 #USEWIFI = 1 ###COMMENT OUT TO USE USB
 
 ifdef USEWIFI
-	THEOS_DEVICE_IP = 192.168.1.149
+	THEOS_DEVICE_IP = 192.168.1.123
 	THEOS_DEVICE_PORT = 22
 else
 	THEOS_DEVICE_IP = 127.0.0.1
@@ -33,7 +33,7 @@ TARGET = iphone:clang:latest:7.0
 
 TWEAK_NAME = Acapella
 Acapella_CFLAGS = -fobjc-arc
-Acapella_FILES = SWAcapellaSpringboard.xm SWAcapellaMusicApp.xm AVSystemController.xm SWAcapellaActionsHelper.xm SWAcapellaPrefsBridge.xm SWAcapellaSharingFormatter.m
+Acapella_FILES = AVSystemController.xm SWAcapellaActionsHelper.xm SWAcapellaMediaTitles.xm SWAcapellaMusicApp.xm SWAcapellaPrefsBridge.xm SWAcapellaSharingFormatter.m SWAcapellaSpringboard.xm
 Acapella_FRAMEWORKS = Foundation UIKit CoreGraphics MediaPlayer Social
 Acapella_PRIVATE_FRAMEWORKS = MediaRemote
 Acapella_LIBRARIES = substrate sw packageinfo

@@ -12,9 +12,9 @@
 
 #import "MusicNowPlayingViewController.h"
 #import "MPPlaybackControlsView.h"
+#import "MusicNowPlayingPlaybackControlsView.h"
 #import "MPAVController.h"
 #import "MPAVItem.h"
-#import "MPUNowPlayingTitlesView.h"
 #import "MPDetailSlider.h"
 #import "MPVolumeSlider.h"
 
@@ -206,7 +206,7 @@ static NSDictionary *_previousNowPlayingInfo;
             
             //make sure views are all setup for constraints
             if (!([self progressControl] &&
-                  [self artworkView])){
+                  [self volumeSlider])){
                 return nil;
             }
             
@@ -215,6 +215,8 @@ static NSDictionary *_previousNowPlayingInfo;
             a.delegate = self;
             
             [mediaControlsView addSubview:a];
+            [[self progressControl].superview bringSubviewToFront:[self progressControl]];
+            [[self volumeSlider].superview bringSubviewToFront:[self volumeSlider]];
             
             //acapella constraints
             [mediaControlsView addConstraint:[NSLayoutConstraint constraintWithItem:a
@@ -299,10 +301,6 @@ static NSDictionary *_previousNowPlayingInfo;
                                                                                  constant:0.0]];
             [self.acapella.superview layoutIfNeeded];
             [self.acapella layoutIfNeeded];
-            
-            if ([self titlesView]){
-                [mediaControlsView sendSubviewToBack:[self titlesView]];
-            }
         }
     }
 }
@@ -469,14 +467,20 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     if ([self titlesView]){
         
-        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) / CGRectGetMidY(scrollView.frame));
+        //only update alpha if we are not at default position
+        //otherwide showing the ratings view glitches
+        if (!CGPointEqualToPoint(scrollView.contentOffset, scrollView.defaultContentOffset)){
+            
+            CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) / CGRectGetMidY(scrollView.frame));
+            [self titlesView].alpha = alpha;
+        }
+        
         
         CGPoint center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
                                      (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
         
         center = [self.view convertPoint:center fromView:self.acapella];
         
-        [self titlesView].alpha = alpha;
         [self titlesView].center = center;
     }
 }
@@ -750,6 +754,16 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 [self presentViewController:c animated:YES completion:nil];
                 
+            } else { //iOS < 8
+                
+                [self.acapella.scrollview finishWrapAroundAnimation];
+                
+                UIAlertView *c = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"This feature is only available on iOS 8.0 or greater."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil, nil];
+                [c show];
             }
             
         } else {
@@ -826,6 +840,16 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 [self presentViewController:c animated:YES completion:nil];
                 
+            } else { //iOS < 8
+                
+                [self.acapella.scrollview finishWrapAroundAnimation];
+                
+                UIAlertView *c = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"This feature is only available on iOS 8.0 or greater."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil, nil];
+                [c show];
             }
             
         } else {
@@ -877,11 +901,13 @@ static NSTimer *_hideRatingTimer;
     
     if (arg1){
         [self startRatingShouldHideTimer];
+        self.acapella.userInteractionEnabled = NO;
     } else {
         if (_hideRatingTimer){
             [_hideRatingTimer invalidate];
             _hideRatingTimer = nil;
         }
+        self.acapella.userInteractionEnabled = YES;
     }
 }
 
@@ -970,7 +996,7 @@ static void mpPlaybackControlsPostLayout(UIView *mpu)
     }
 }
 
-%hook MPPlaybackControlsView
+%hook MusicNowPlayingPlaybackControlsView
 
 - (void)layoutIfNeeded
 {
@@ -981,8 +1007,10 @@ static void mpPlaybackControlsPostLayout(UIView *mpu)
 
 - (void)layoutSubviews
 {
+    //wierd crash with iOS 7, have to call twice :O
     %orig();
-    
+    mpPlaybackControlsPostLayout(self);
+    %orig();
     mpPlaybackControlsPostLayout(self);
 }
 

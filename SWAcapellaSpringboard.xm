@@ -13,7 +13,6 @@
 #import "MPUSystemMediaControlsViewController.h"
 #import "_MPUSystemMediaControlsView.h" //iOS 7
 #import "MPUSystemMediaControlsView.h" //iOS 8
-#import "MPUMediaControlsTitlesView.h"
 #import "MPUMediaControlsVolumeView.h"
 #import "MPUItemOfferButton.h"
 
@@ -161,8 +160,6 @@ static NSDictionary *_previousNowPlayingInfo;
             
             //make sure views are all setup for constraints
             if (!([self timeInformationView] &&
-                  [self trackInformationView] &&
-                  [self transportControlsView] &&
                   [self volumeView])){
                 return nil;
             }
@@ -172,6 +169,8 @@ static NSDictionary *_previousNowPlayingInfo;
             a.delegate = self;
             
             [mediaControlsView addSubview:a];
+            [[self timeInformationView].superview bringSubviewToFront:[self timeInformationView]];
+            [[self volumeView].superview bringSubviewToFront:[self volumeView]];
             
             //acapella constraints
             [mediaControlsView addConstraint:[NSLayoutConstraint constraintWithItem:a
@@ -253,10 +252,6 @@ static NSDictionary *_previousNowPlayingInfo;
             
             [mediaControlsView.superview layoutIfNeeded];
             [self.acapella layoutIfNeeded];
-            
-            if ([self trackInformationView]){
-                [mediaControlsView sendSubviewToBack:[self trackInformationView]];
-            }
             
         }
     }
@@ -408,9 +403,6 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-    [[self timeInformationView].superview bringSubviewToFront:[self timeInformationView]];
-    [[self volumeView].superview bringSubviewToFront:[self volumeView]];
-    
     if (tap.state == UIGestureRecognizerStateEnded){
         
         swAcapellaAction action;
@@ -659,6 +651,16 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 [self presentViewController:c animated:YES completion:nil];
                 
+            } else { //iOS < 8
+                
+                UIAlertView *c = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"This feature is only available on iOS 8.0 or greater."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil, nil];
+                [c show];
+                
+                [self.acapella.scrollview finishWrapAroundAnimation];
             }
             
         } else {
@@ -735,9 +737,19 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 [self presentViewController:c animated:YES completion:nil];
                 
+            } else { //iOS < 8
+                
+                UIAlertView *c = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                            message:@"This feature is only available on iOS 8.0 or greater."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil, nil];
+                [c show];
+                
+                [self.acapella.scrollview finishWrapAroundAnimation];
             }
             
-        } else {
+        } else { //device is locked
             [self.acapella.scrollview finishWrapAroundAnimation];
         }
     }];
@@ -800,65 +812,26 @@ static void mpuPostLayoutSubviews(UIView *mpu)
     }
 }
 
-%hook _MPUSystemMediaControlsView
+%hook _MPUSystemMediaControlsView //iOS 7
+
+- (void)layoutSubviews
+{
+    //wierd crash with iOS 7, have to call twice :O
+    %orig();
+    mpuPostLayoutSubviews(self);
+    %orig();
+    mpuPostLayoutSubviews(self);
+}
+
+%end
+
+%hook MPUSystemMediaControlsView //iOS 8
 
 - (void)layoutSubviews
 {
     %orig();
     
     mpuPostLayoutSubviews(self);
-}
-
-%end
-
-%hook MPUSystemMediaControlsView
-
-- (void)layoutSubviews
-{
-    %orig();
-    
-    mpuPostLayoutSubviews(self);
-}
-
-%end
-
-
-
-
-
-#pragma mark - MPUMediaControlsTitlesView
-
-%hook MPUMediaControlsTitlesView
-
-//1 - 2 lines
-//2 - 1 line
-- (id)initWithStyle:(int)arg1
-{
-    if ([self isKindOfClass:%c(MusicNowPlayingTitlesView)] && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)){
-        return %orig(arg1);
-    }
-    
-    return %orig(1); //force to 2 lines because of our extra room
-}
-
-- (void)setTitleText:(NSString *)arg1
-{
-    %orig(arg1);
-    
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
-        
-        NSDictionary *resultDict = (__bridge NSDictionary *)result;
-        
-        if (!resultDict){
-            [self setArtistText:@"Tap To Play"];
-            [self setAlbumText:@"Acapella"];
-        }
-    });
-}
-
-- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled
-{
-    %orig(NO);
 }
 
 %end

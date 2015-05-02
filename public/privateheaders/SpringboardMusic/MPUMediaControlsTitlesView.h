@@ -5,9 +5,6 @@
 {
 }
 
-- (id)initWithMediaControlsStyle:(int)arg1;
-- (int)mediaControlsStyle;
-
 @end
 
 

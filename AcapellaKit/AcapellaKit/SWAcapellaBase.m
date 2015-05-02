@@ -217,24 +217,31 @@
         [self addSubview:_scrollview];
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
-                                                         attribute:NSLayoutAttributeWidth
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeWidth
-                                                        multiplier:1.0
-                                                          constant:0.0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
-                                                         attribute:NSLayoutAttributeHeight
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeHeight
-                                                        multiplier:1.0
-                                                          constant:0.0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
                                                          attribute:NSLayoutAttributeTop
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:self
                                                          attribute:NSLayoutAttributeTop
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
+                                                         attribute:NSLayoutAttributeBottom
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeBottom
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
+                                                         attribute:NSLayoutAttributeLeading
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeLeft
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_scrollview
+                                                         attribute:NSLayoutAttributeTrailing
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:self
+                                                         attribute:NSLayoutAttributeRight
                                                         multiplier:1.0
                                                           constant:0.0]];
         

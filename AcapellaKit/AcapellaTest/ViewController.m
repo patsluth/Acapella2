@@ -67,7 +67,7 @@
     if (longPress.state == UIGestureRecognizerStateBegan) {
         
     } else if (longPress.state == UIGestureRecognizerStateEnded) {
-        
+
     }
 }
 

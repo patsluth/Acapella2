@@ -40,7 +40,6 @@
         self.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.backgroundColor = [UIColor clearColor];
-        self.alpha = 0.3;
         
         if (self.scrollview){}
         

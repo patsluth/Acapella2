@@ -89,6 +89,13 @@
     }
 }
 
+- (void)addSubview:(UIView *)view
+{
+    [super addSubview:view];
+    
+    view.userInteractionEnabled = NO;
+}
+
 #pragma mark - SWAcapellaScrollViewProtocol
 
 - (CGPoint)defaultContentOffset

@@ -1,4 +1,7 @@
 
+#import <AcapellaKit/AcapellaKit.h>
+#import "SWAcapellaPrefsBridge.h"
+
 #import "MPUNowPlayingTitlesView.h"
 #import "MPUMediaControlsTitlesView.h"
 #import "MusicNowPlayingTitlesView.h"
@@ -11,15 +14,16 @@
 
 %hook MPUNowPlayingTitlesView //shared between springboard and music app
 
-//1 - 2 lines
-//2 - 1 line
-- (id)initWithStyle:(int)arg1
+- (void)setFrame:(CGRect)frame
 {
-    if ([self isKindOfClass:%c(MusicNowPlayingTitlesView)] && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)){
-        return %orig(arg1);
-    }
+    %orig(frame);
     
-    return %orig(1); //force to 2 lines because of our extra room
+    if (self.superview && [self.superview isKindOfClass:%c(SWAcapellaScrollView)]){
+        
+        SWAcapellaScrollView *acapellaScrollView = (SWAcapellaScrollView *)self.superview;
+        self.center = CGPointMake(acapellaScrollView.contentSize.width / 2.0, acapellaScrollView.contentSize.height / 2.0);
+        
+    }
 }
 
 %end
@@ -36,20 +40,23 @@
 {
     %orig(arg1);
     
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+    if ([self.superview isKindOfClass:%c(SWAcapellaScrollView)]){
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
             
-            if (!result){
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [self setArtistText:@"Tap to Play"];
-                [self setAlbumText:@"Acapella"];
-                
-                [self setNeedsDisplay];
-                
-            }
+                if (!result){
+                    
+                    [self setArtistText:@"Tap to Play"];
+                    [self setAlbumText:@"Acapella"];
+                    
+                    [self setNeedsDisplay];
+                    
+                }
+            });
         });
-    });
+    }
 }
 
 %end
@@ -66,6 +73,10 @@
 //2 - 1 line
 - (id)initWithStyle:(int)arg1
 {
+    if (![[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
+        return %orig(arg1);
+    }
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         return %orig(arg1);
     }

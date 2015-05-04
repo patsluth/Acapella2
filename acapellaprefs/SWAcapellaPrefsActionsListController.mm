@@ -1,5 +1,16 @@
+//
+//  SWAcapellaPrefsActionsListController.m
+//  libsw
+//
+//  Created by Pat Sluth on 2015-04-25.
+//
+//
 
 #import "SWAcapellaPrefsActionsListController.h"
+
+
+
+
 
 @implementation SWAcapellaPrefsActionsListController
 
@@ -8,7 +19,6 @@
 - (id)specifiers
 {
     if (_specifiers == nil) {
-        //self.parentController = SWGMCPrefsBundleController so value change will call setPreferenceValue:spec:
         _specifiers = [self loadSpecifiersFromPlistName:@"AcapellaPrefsActions" target:self];
     }
     return _specifiers;
@@ -42,16 +52,6 @@
 }
 
 #pragma mark Helper
-
-- (void)_returnKeyPressed:(id)pressed
-{
-    [super _returnKeyPressed:pressed];
-    
-    //this will dismiss the keyboard and save the preferences for the selected text field
-    if ([self isKindOfClass:[UIViewController class]]){
-        [((UIViewController *)self).view endEditing:YES];
-    }
-}
 
 - (id)readPreferenceValue:(PSSpecifier *)specifier
 {

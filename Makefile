@@ -59,7 +59,7 @@ AcapellaSupport_INSTALL_PATH = /Library/Application Support
 
 
 
-#SUBPROJECTS += acapellaprefs
+SUBPROJECTS += acapellaprefs
 
 
 

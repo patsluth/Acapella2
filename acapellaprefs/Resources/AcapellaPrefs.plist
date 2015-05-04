@@ -14,9 +14,85 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>cc_enabled</string>
+			<key>default</key>
+			<true/>
+			<key>label</key>
+			<string>Control Center</string>
+			<key>respringRequired</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>ls_enabled</string>
+			<key>default</key>
+			<true/>
+			<key>label</key>
+			<string>Lock Screen</string>
+			<key>respringRequired</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>ma_enabled</string>
+			<key>default</key>
+			<true/>
+			<key>label</key>
+			<string>Music App</string>
+			<key>respringRequired</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>progress_slider_enabled</string>
+			<key>default</key>
+			<true/>
+			<key>label</key>
+			<string>Progress Slider</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>volume_slider_enabled</string>
+			<key>default</key>
+			<true/>
+			<key>label</key>
+			<string>Volume Slider</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Sharing Hashtag</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -34,7 +110,7 @@
 			<key>key</key>
 			<string>sharingHashtag</string>
 			<key>label</key>
-			<string>#</string>
+			<string>Share #</string>
 			<key>default</key>
 			<string></string>
 			<key>placeholder</key>
@@ -52,7 +128,7 @@
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>icon</key>
-			<string>Acapella_Prefs_Tutorial_Icon.png</string>
+			<string>Prefs_Tutorial_Icon.png</string>
 			<key>action</key>
 			<string>viewTutorialVideo:</string>
 			<key>label</key>

@@ -1,11 +1,11 @@
 
 #import <Social/Social.h>
 
-#import <AcapellaKit/AcapellaKit.h>
 #import "libSluthware.h"
+#import "SWAcapella.h"
+#import <AcapellaKit/AcapellaKit.h>
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
-#import "SWAcapella.h"
 
 #import <Springboard/Springboard.h>
 #import <MediaRemote/MediaRemote.h>
@@ -150,6 +150,23 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (SWAcapellaBase *)acapella
 {
+    if (!self.view.window.rootViewController){
+        return nil;
+    } else {
+        
+        NSString *key;
+        
+        if ([self.view.window.rootViewController class] == %c(SBControlCenterController)){
+            key = @"cc_enabled";
+        } else { //SBMainScreenAlertWindowViewController -> Lock Screen
+            key = @"ls_enabled";
+        }
+        
+        if (![[SWAcapellaPrefsBridge valueForKey:key defaultValue:@YES] boolValue]){
+            return nil;
+        }
+    }
+    
     SWAcapellaBase *a = objc_getAssociatedObject(self, &_acapella);
     
     if (!a){
@@ -253,6 +270,9 @@ static NSDictionary *_previousNowPlayingInfo;
             [mediaControlsView.superview layoutIfNeeded];
             [self.acapella layoutIfNeeded];
             
+            [self.acapella.scrollview addSubview:[self trackInformationView]];
+            [self trackInformationView].frame = [self trackInformationView].frame;
+            
         }
     }
 }
@@ -262,14 +282,10 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig(arg1);
     
     if (self.acapella){
-        if (self.acapella.scrollview){
-            [self.acapella.scrollview resetContentOffset:NO];
-        }
+        
+        [self.acapella.superview layoutIfNeeded];
+        [self.acapella.scrollview resetContentOffset:NO];
     }
-    
-    
-    
-    
     
     MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_main_queue());
     
@@ -284,9 +300,7 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig(arg1);
     
     if (self.acapella){
-        if (self.acapella.scrollview){
-            [self.acapella.scrollview resetContentOffset:NO];
-        }
+        [self.acapella.scrollview resetContentOffset:NO];
     }
 }
 
@@ -315,7 +329,12 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (void)mediaRemoteNowPlayingInfoDidChangeNotification
 {
-    if (!self.view.window){
+    if (!self.view.window || !self.acapella){
+        return;
+    }
+    
+    if (![NSThread isMainThread]){
+        [self performSelectorOnMainThread:@selector(mediaRemoteNowPlayingInfoDidChangeNotification) withObject:nil waitUntilDone:NO];
         return;
     }
     
@@ -392,11 +411,9 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     if ([self trackInformationView]){
         
-        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) / CGRectGetMidY(scrollView.frame));
-        
+        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) /
+                               CGRectGetMidY(scrollView.frame));
         [self trackInformationView].alpha = alpha;
-        [self trackInformationView].center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
-                                                         (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
     }
 }
 
@@ -795,19 +812,36 @@ static NSDictionary *_previousNowPlayingInfo;
 
 static void mpuPostLayoutSubviews(UIView *mpu)
 {
-    UIView *transport = MSHookIvar<UIView *>(mpu, "_transportControlsView");
-    [transport removeFromSuperview];
+    SWAcapellaBase *acapella;
     
-    UIView *volume = MSHookIvar<UIView *>(mpu, "_volumeView");
-    //lock to bottom
-    volume.center = CGPointMake(CGRectGetMidX(volume.superview.bounds),
-                                CGRectGetMaxY(volume.superview.bounds) - CGRectGetMaxY(volume.bounds));
-    
-    //this will update the text center
     for (UIView *v in mpu.subviews){
         if ([v isKindOfClass:%c(SWAcapellaBase)]){
-            SWAcapellaBase *acapella = (SWAcapellaBase *)v;
-            [acapella scrollViewDidScroll:acapella.scrollview];
+            acapella = (SWAcapellaBase *)v;
+        }
+    }
+    
+    //if acapella is not nil, then we know it is enabled
+    if (acapella){
+        
+        UIView *time = MSHookIvar<UIView *>(mpu, "_timeInformationView");
+        UIView *transport = MSHookIvar<UIView *>(mpu, "_transportControlsView");
+        UIView *volume = MSHookIvar<UIView *>(mpu, "_volumeView");
+        
+        transport.center = CGPointMake(6900, transport.center.y);
+        
+        //time
+        if (![[SWAcapellaPrefsBridge valueForKey:@"progress_slider_enabled" defaultValue:@YES] boolValue]){
+            time.center = CGPointMake(6900, time.center.y);
+        } else {
+            time.center = CGPointMake(CGRectGetMidX(time.superview.bounds), time.center.y);
+        }
+        
+        //volume
+        if (![[SWAcapellaPrefsBridge valueForKey:@"volume_slider_enabled" defaultValue:@YES] boolValue]){
+            volume.center = CGPointMake(6900, volume.center.y);
+        } else { //lock to bottom
+            volume.center = CGPointMake(CGRectGetMidX(volume.superview.bounds),
+                                        CGRectGetMaxY(volume.superview.bounds) - CGRectGetMaxY(volume.bounds));
         }
     }
 }
@@ -816,11 +850,11 @@ static void mpuPostLayoutSubviews(UIView *mpu)
 
 - (void)layoutSubviews
 {
-    //wierd crash with iOS 7, have to call twice :O
     %orig();
     mpuPostLayoutSubviews(self);
-    %orig();
-    mpuPostLayoutSubviews(self);
+    
+    //iOS 7 auto layout bug. Need to call or crash
+    [self layoutIfNeeded];
 }
 
 %end
@@ -830,8 +864,10 @@ static void mpuPostLayoutSubviews(UIView *mpu)
 - (void)layoutSubviews
 {
     %orig();
-    
     mpuPostLayoutSubviews(self);
+    
+    //iOS 7 auto layout bug. Need to call or crash
+    [self layoutIfNeeded];
 }
 
 %end

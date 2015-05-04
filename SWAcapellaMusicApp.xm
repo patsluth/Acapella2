@@ -1,12 +1,12 @@
 
 #import <Social/Social.h>
 
-#import <AcapellaKit/AcapellaKit.h>
 #import "libSluthware.h"
 #import "NSTimer+SW.h"
+#import "SWAcapella.h"
+#import <AcapellaKit/AcapellaKit.h>
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
-#import "SWAcapella.h"
 
 #import <MediaRemote/MediaRemote.h>
 
@@ -64,15 +64,13 @@ static NSDictionary *_previousNowPlayingInfo;
 - (UIButton *)likeOrBanButton;
 
 @end
-//
-//
-//
-//
-//
+
+
+
+
+
 %hook MusicNowPlayingViewController
-//
-//#pragma mark - Helper
-//
+
 %new
 - (UIView *)playbackControlsView
 {
@@ -196,6 +194,10 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (SWAcapellaBase *)acapella
 {
+    if (![[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
+        return nil;
+    }
+    
     SWAcapellaBase *a = objc_getAssociatedObject(self, &_acapella);
     
     if (!a){
@@ -276,7 +278,6 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig();
     
     if (self.acapella){}
-    
 }
 
 - (void)viewDidLayoutSubviews
@@ -288,21 +289,29 @@ static NSDictionary *_previousNowPlayingInfo;
     if (self.acapella){
         
         UIView *mediaControlsView = [self playbackControlsView];
+        UIView *time = [self progressControl];
+        UIView *titles = [self titlesView];
         
-        if (mediaControlsView && [self progressControl]){
+        if (mediaControlsView && time && titles){
             
             //this view keeps on changing, so we have to keep adding the constraint
             [self.acapella.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.acapella
                                                                                 attribute:NSLayoutAttributeTop
                                                                                 relatedBy:NSLayoutRelationEqual
-                                                                                   toItem:[self progressControl]
+                                                                                   toItem:time
                                                                                 attribute:NSLayoutAttributeTop
                                                                                multiplier:1.0
                                                                                  constant:0.0]];
             [self.acapella.superview layoutIfNeeded];
             [self.acapella layoutIfNeeded];
+            
+            [self.acapella.scrollview addSubview:titles];
+            titles.frame = titles.frame; //re-center
+            
         }
     }
+    
+    %orig();
 }
 
 - (void)viewWillAppear:(BOOL)arg1
@@ -310,20 +319,17 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig(arg1);
     
     if (self.acapella){
-        if (self.acapella.scrollview){
-            [self.acapella.scrollview resetContentOffset:NO];
-        }
+        
+        [self.acapella.superview layoutIfNeeded];
+        [self.acapella.scrollview resetContentOffset:NO];
+        
     }
-    
-    
-    
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(appDidBecomeActive:)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
-
+    
     MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_main_queue());
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -337,9 +343,10 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig(arg1);
     
     if (self.acapella){
-        if (self.acapella.scrollview){
-            [self.acapella.scrollview resetContentOffset:NO];
-        }
+        
+        [self.acapella.superview layoutIfNeeded];
+        [self.acapella.scrollview resetContentOffset:NO];
+        
     }
 }
 
@@ -372,14 +379,14 @@ static NSDictionary *_previousNowPlayingInfo;
 // - (void)willAnimateRotationToInterfaceOrientation:(int)arg1 duration:(double)arg2
 // {
 // %orig(arg1, arg2);
-// 
+//
 // [self viewDidLayoutSubviews];
 // }
-// 
+//
 // - (void)didRotateFromInterfaceOrientation:(int)arg1
 // {
 // %orig(arg1);
-// 
+//
 // [self viewDidLayoutSubviews];
 // }
 // */
@@ -387,6 +394,10 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (void)appDidBecomeActive:(NSNotification *)notification
 {
+    if (!self.acapella){
+        return;
+    }
+    
     //sometimes third party app is still playing when we open the Music App, so using Acapella will control the third party
     //app instead of the Music App. This ensures the Music app gets set as the now playing application
     MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
@@ -412,7 +423,7 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (void)mediaRemoteNowPlayingInfoDidChangeNotification
 {
-    if (!self.view.window){
+    if (!self.view.window || !self.acapella){
         return;
     }
     
@@ -438,7 +449,7 @@ static NSDictionary *_previousNowPlayingInfo;
                 if (!previousUID || (previousUID && ![uid isEqualToNumber:previousUID])){
                     
                     [self.acapella.scrollview finishWrapAroundAnimation];
-                
+                    
                 } else {
                     
                     NSNumber *elapsedTime = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime];
@@ -451,7 +462,7 @@ static NSDictionary *_previousNowPlayingInfo;
             } else {
                 
                 [self.acapella.scrollview finishWrapAroundAnimation];
-            
+                
             }
         }
         
@@ -467,21 +478,9 @@ static NSDictionary *_previousNowPlayingInfo;
 {
     if ([self titlesView]){
         
-        //only update alpha if we are not at default position
-        //otherwide showing the ratings view glitches
-        if (!CGPointEqualToPoint(scrollView.contentOffset, scrollView.defaultContentOffset)){
-            
-            CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) / CGRectGetMidY(scrollView.frame));
-            [self titlesView].alpha = alpha;
-        }
-        
-        
-        CGPoint center = CGPointMake((scrollView.contentSize.width / 2) - scrollView.contentOffset.x,
-                                     (scrollView.contentSize.height / 2) - scrollView.contentOffset.y);
-        
-        center = [self.view convertPoint:center fromView:self.acapella];
-        
-        [self titlesView].center = center;
+        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) /
+                               CGRectGetMidY(scrollView.frame));
+        [self titlesView].alpha = alpha;
     }
 }
 
@@ -638,21 +637,21 @@ static NSDictionary *_previousNowPlayingInfo;
                 
                 MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul),
                                                ^(CFDictionaryRef result){
-                    
-                    NSDictionary *resultDict = (__bridge NSDictionary *)result;
-                    
-                    if (resultDict){
-                        
-                        double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
-                        
-                        if (mediaCurrentElapsedDuration >= 2.0 || mediaCurrentElapsedDuration <= 0.0){
-                            
-                            dispatch_async(dispatch_get_main_queue(), ^(void){
-                                [self.acapella.scrollview finishWrapAroundAnimation];
-                            });
-                        }
-                    }
-                });
+                                                   
+                                                   NSDictionary *resultDict = (__bridge NSDictionary *)result;
+                                                   
+                                                   if (resultDict){
+                                                       
+                                                       double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
+                                                       
+                                                       if (mediaCurrentElapsedDuration >= 2.0 || mediaCurrentElapsedDuration <= 0.0){
+                                                           
+                                                           dispatch_async(dispatch_get_main_queue(), ^(void){
+                                                               [self.acapella.scrollview finishWrapAroundAnimation];
+                                                           });
+                                                       }
+                                                   }
+                                               });
             }
         }];
     }];
@@ -899,15 +898,18 @@ static NSTimer *_hideRatingTimer;
 {
     %orig(arg1, arg2);
     
-    if (arg1){
-        [self startRatingShouldHideTimer];
-        self.acapella.userInteractionEnabled = NO;
-    } else {
-        if (_hideRatingTimer){
-            [_hideRatingTimer invalidate];
-            _hideRatingTimer = nil;
+    if (self.acapella){
+        
+        if (arg1){
+            [self startRatingShouldHideTimer];
+            //self.acapella.userInteractionEnabled = NO;
+        } else {
+            if (_hideRatingTimer){
+                [_hideRatingTimer invalidate];
+                _hideRatingTimer = nil;
+            }
+            //self.acapella.userInteractionEnabled = YES;
         }
-        self.acapella.userInteractionEnabled = YES;
     }
 }
 
@@ -984,14 +986,35 @@ static NSTimer *_hideRatingTimer;
 
 static void mpPlaybackControlsPostLayout(UIView *mpu)
 {
-    UIView *transport = MSHookIvar<UIView *>(mpu, "_transportControls");
-    [transport removeFromSuperview];
+    SWAcapellaBase *acapella;
     
-    //this will update the text center
     for (UIView *v in mpu.subviews){
         if ([v isKindOfClass:%c(SWAcapellaBase)]){
-            SWAcapellaBase *acapella = (SWAcapellaBase *)v;
-            [acapella scrollViewDidScroll:acapella.scrollview];
+            acapella = (SWAcapellaBase *)v;
+        }
+    }
+    
+    //if acapella is not nil, then we know it is enabled
+    if (acapella){
+        
+        UIView *time = MSHookIvar<UIView *>(mpu, "_progressControl");
+        UIView *transport = MSHookIvar<UIView *>(mpu, "_transportControls");
+        UIView *volume = MSHookIvar<UIView *>(mpu, "_volumeSlider");
+        
+        transport.center = CGPointMake(6900, transport.center.y);
+        
+        //time
+        if (![[SWAcapellaPrefsBridge valueForKey:@"progress_slider_enabled" defaultValue:@YES] boolValue]){
+            time.center = CGPointMake(6900, time.center.y);
+        } else {
+            time.center = CGPointMake(CGRectGetMidX(time.superview.bounds), time.center.y);
+        }
+        
+        //volume
+        if (![[SWAcapellaPrefsBridge valueForKey:@"volume_slider_enabled" defaultValue:@YES] boolValue]){
+            volume.center = CGPointMake(6900, volume.center.y);
+        } else {
+            volume.center = CGPointMake(CGRectGetMidX(volume.superview.bounds), volume.center.y);
         }
     }
 }
@@ -1001,17 +1024,16 @@ static void mpPlaybackControlsPostLayout(UIView *mpu)
 - (void)layoutIfNeeded
 {
     %orig();
-    
     mpPlaybackControlsPostLayout(self);
 }
 
 - (void)layoutSubviews
 {
-    //wierd crash with iOS 7, have to call twice :O
     %orig();
     mpPlaybackControlsPostLayout(self);
-    %orig();
-    mpPlaybackControlsPostLayout(self);
+    
+    //iOS 7 auto layout bug. Need to call or crash
+    [self layoutIfNeeded];
 }
 
 %end

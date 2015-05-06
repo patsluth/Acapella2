@@ -12,13 +12,6 @@
 		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
 		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */; };
 		2E242EF21A41D2E200864588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
-		2E334F551AE8524D002046A1 /* libSluthware.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F4D1AE8524D002046A1 /* libSluthware.h */; };
-		2E334F561AE8524D002046A1 /* NSTimer+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F4E1AE8524D002046A1 /* NSTimer+SW.h */; };
-		2E334F571AE8524D002046A1 /* SWMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F4F1AE8524D002046A1 /* SWMCircle.h */; };
-		2E334F581AE8524D002046A1 /* SWMLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F501AE8524D002046A1 /* SWMLine.h */; };
-		2E334F591AE8524D002046A1 /* SWMQuadratic.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F511AE8524D002046A1 /* SWMQuadratic.h */; };
-		2E334F5A1AE8524D002046A1 /* UIColor+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F521AE8524D002046A1 /* UIColor+SW.h */; };
-		2E334F5B1AE8524D002046A1 /* UIScrollView+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E334F531AE8524D002046A1 /* UIScrollView+SW.h */; };
 		2E334F5C1AE8524D002046A1 /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F541AE8524D002046A1 /* libSluthware.a */; };
 		2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
 		2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
@@ -32,6 +25,15 @@
 		2E75964119FDCCA600001BC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
 		2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964519FDCCA600001BC7 /* Images.xcassets */; };
 		2E75966719FDCD5D00001BC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75966519FDCD5D00001BC7 /* main.m */; };
+		2E8159821AF9A76100107833 /* libSluthware.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159791AF9A76100107833 /* libSluthware.h */; };
+		2E8159831AF9A76100107833 /* NSTimer+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597A1AF9A76100107833 /* NSTimer+SW.h */; };
+		2E8159841AF9A76100107833 /* SWMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597B1AF9A76100107833 /* SWMCircle.h */; };
+		2E8159851AF9A76100107833 /* SWMLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597C1AF9A76100107833 /* SWMLine.h */; };
+		2E8159861AF9A76100107833 /* SWMQuadratic.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597D1AF9A76100107833 /* SWMQuadratic.h */; };
+		2E8159871AF9A76100107833 /* TBAlertAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597E1AF9A76100107833 /* TBAlertAction.h */; };
+		2E8159881AF9A76100107833 /* TBAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597F1AF9A76100107833 /* TBAlertController.h */; };
+		2E8159891AF9A76100107833 /* UIColor+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159801AF9A76100107833 /* UIColor+SW.h */; };
+		2E81598A1AF9A76100107833 /* UIScrollView+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159811AF9A76100107833 /* UIScrollView+SW.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,13 +65,6 @@
 		2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaBase.m; sourceTree = "<group>"; };
 		2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollView.h; sourceTree = "<group>"; };
 		2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaScrollView.m; sourceTree = "<group>"; };
-		2E334F4D1AE8524D002046A1 /* libSluthware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
-		2E334F4E1AE8524D002046A1 /* NSTimer+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+SW.h"; sourceTree = "<group>"; };
-		2E334F4F1AE8524D002046A1 /* SWMCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMCircle.h; sourceTree = "<group>"; };
-		2E334F501AE8524D002046A1 /* SWMLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMLine.h; sourceTree = "<group>"; };
-		2E334F511AE8524D002046A1 /* SWMQuadratic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMQuadratic.h; sourceTree = "<group>"; };
-		2E334F521AE8524D002046A1 /* UIColor+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
-		2E334F531AE8524D002046A1 /* UIScrollView+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
 		2E334F541AE8524D002046A1 /* libSluthware.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSluthware.a; path = "../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware.a"; sourceTree = "<group>"; };
 		2E334F5F1AE85701002046A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -87,6 +82,15 @@
 		2E75964519FDCCA600001BC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2E75966419FDCD5D00001BC7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75966519FDCD5D00001BC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2E8159791AF9A76100107833 /* libSluthware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
+		2E81597A1AF9A76100107833 /* NSTimer+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+SW.h"; sourceTree = "<group>"; };
+		2E81597B1AF9A76100107833 /* SWMCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMCircle.h; sourceTree = "<group>"; };
+		2E81597C1AF9A76100107833 /* SWMLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMLine.h; sourceTree = "<group>"; };
+		2E81597D1AF9A76100107833 /* SWMQuadratic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMQuadratic.h; sourceTree = "<group>"; };
+		2E81597E1AF9A76100107833 /* TBAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAlertAction.h; sourceTree = "<group>"; };
+		2E81597F1AF9A76100107833 /* TBAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAlertController.h; sourceTree = "<group>"; };
+		2E8159801AF9A76100107833 /* UIColor+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
+		2E8159811AF9A76100107833 /* UIScrollView+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,21 +118,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2E334F4C1AE8524D002046A1 /* libSluthware */ = {
-			isa = PBXGroup;
-			children = (
-				2E334F4D1AE8524D002046A1 /* libSluthware.h */,
-				2E334F4E1AE8524D002046A1 /* NSTimer+SW.h */,
-				2E334F4F1AE8524D002046A1 /* SWMCircle.h */,
-				2E334F501AE8524D002046A1 /* SWMLine.h */,
-				2E334F511AE8524D002046A1 /* SWMQuadratic.h */,
-				2E334F521AE8524D002046A1 /* UIColor+SW.h */,
-				2E334F531AE8524D002046A1 /* UIScrollView+SW.h */,
-			);
-			name = libSluthware;
-			path = "../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware";
-			sourceTree = "<group>";
-		};
 		2E75956019FD49F500001BC7 = {
 			isa = PBXGroup;
 			children = (
@@ -173,7 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				2E51F4121AEC63DA00854158 /* Social.framework */,
-				2E334F4C1AE8524D002046A1 /* libSluthware */,
+				2E8159781AF9A76100107833 /* libSluthware */,
 				2E334F541AE8524D002046A1 /* libSluthware.a */,
 				2E334F621AE857FC002046A1 /* CoreGraphics.framework */,
 				2E334F5F1AE85701002046A1 /* Foundation.framework */,
@@ -205,6 +194,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		2E8159781AF9A76100107833 /* libSluthware */ = {
+			isa = PBXGroup;
+			children = (
+				2E8159791AF9A76100107833 /* libSluthware.h */,
+				2E81597A1AF9A76100107833 /* NSTimer+SW.h */,
+				2E81597B1AF9A76100107833 /* SWMCircle.h */,
+				2E81597C1AF9A76100107833 /* SWMLine.h */,
+				2E81597D1AF9A76100107833 /* SWMQuadratic.h */,
+				2E81597E1AF9A76100107833 /* TBAlertAction.h */,
+				2E81597F1AF9A76100107833 /* TBAlertController.h */,
+				2E8159801AF9A76100107833 /* UIColor+SW.h */,
+				2E8159811AF9A76100107833 /* UIScrollView+SW.h */,
+			);
+			name = libSluthware;
+			path = "../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -212,16 +218,18 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E334F581AE8524D002046A1 /* SWMLine.h in Headers */,
+				2E8159871AF9A76100107833 /* TBAlertAction.h in Headers */,
+				2E8159881AF9A76100107833 /* TBAlertController.h in Headers */,
+				2E8159851AF9A76100107833 /* SWMLine.h in Headers */,
+				2E8159891AF9A76100107833 /* UIColor+SW.h in Headers */,
+				2E8159861AF9A76100107833 /* SWMQuadratic.h in Headers */,
 				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
-				2E334F561AE8524D002046A1 /* NSTimer+SW.h in Headers */,
 				2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */,
-				2E334F5A1AE8524D002046A1 /* UIColor+SW.h in Headers */,
-				2E334F591AE8524D002046A1 /* SWMQuadratic.h in Headers */,
-				2E334F551AE8524D002046A1 /* libSluthware.h in Headers */,
+				2E8159841AF9A76100107833 /* SWMCircle.h in Headers */,
+				2E81598A1AF9A76100107833 /* UIScrollView+SW.h in Headers */,
+				2E8159821AF9A76100107833 /* libSluthware.h in Headers */,
+				2E8159831AF9A76100107833 /* NSTimer+SW.h in Headers */,
 				2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */,
-				2E334F5B1AE8524D002046A1 /* UIScrollView+SW.h in Headers */,
-				2E334F571AE8524D002046A1 /* SWMCircle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

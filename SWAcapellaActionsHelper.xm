@@ -168,9 +168,13 @@
             }
         }
         
-        if (completion){
-            completion(NO, nil);
-        }
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+            if (completion){
+                completion(NO, nil);
+            }
+            
+        }];
         
     });
 }

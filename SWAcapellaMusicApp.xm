@@ -8,6 +8,8 @@
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
 
+#import "TBAlertController.h"
+
 #import <MediaRemote/MediaRemote.h>
 
 #import "MusicNowPlayingViewController.h"
@@ -312,6 +314,11 @@ static NSDictionary *_previousNowPlayingInfo;
     }
     
     %orig();
+    
+    if (self.acapella){
+        [[self ratingControl] sizeToFit];
+        [self ratingControl].center = self.acapella.center;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)arg1
@@ -683,87 +690,84 @@ static NSDictionary *_previousNowPlayingInfo;
         
         if (successful && object){
             
+            TBAlertController *c = [[TBAlertController alloc] initWithTitle:@"Activity"
+                                                                    message:nil
+                                                                      style:TBAlertControllerStyleActionSheet];
+            
+            
+            [c setCancelButtonWithTitle:@"Cancel" buttonAction:^(NSArray *textFieldStrings){
+                [self.acapella.scrollview finishWrapAroundAnimation];
+            }];
+            
             NSDictionary *shareData = (NSDictionary *)object;
             
-            if (NSClassFromString(@"UIAlertController")){
+            //Twitter
+            [c addOtherButtonWithTitle:@"Twitter" buttonAction:^(NSArray *textFieldStrings){
                 
-                UIAlertController *c = [UIAlertController alertControllerWithTitle:@"Share"
-                                                                           message:nil
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
+                if (successful){ //device isnt locked and we have data
+                    
+                    SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+                    
+                    if ([shareData valueForKey:@"shareString"]){
+                        [compose setInitialText:[shareData valueForKey:@"shareString"]];
+                    }
+                    if ([shareData valueForKey:@"shareImage"]){
+                        [compose addImage:[shareData valueForKey:@"shareImage"]];
+                    }
+                    
+                    compose.completionHandler = ^(SLComposeViewControllerResult result) {
+                        [self.acapella.scrollview finishWrapAroundAnimation];
+                    };
+                    
+                    [self presentViewController:compose animated:YES completion:nil];
+                    
+                } else {
+                    
+                    TBAlertController *fail = [[TBAlertController alloc] initWithTitle:@"Error"
+                                                                               message:@"You cannot share from the Lock Screen for security reasons"
+                                                                                 style:TBAlertControllerStyleActionSheet];
+                    [fail setCancelButtonWithTitle:@"Ok" buttonAction:^(NSArray *textFieldStrings){
+                        [self.acapella.scrollview finishWrapAroundAnimation];
+                    }];
+                    [fail showFromViewController:self];
+                    
+                }
+            }];
+            
+            //Facebook
+            [c addOtherButtonWithTitle:@"Facebook" buttonAction:^(NSArray *textFieldStrings){
                 
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel"
-                                                                 style:UIAlertActionStyleCancel
-                                                               handler:^(UIAlertAction *action) {
-                                                                   [self.acapella.scrollview finishWrapAroundAnimation];
-                                                               }];
-                
-                [c addAction:cancel];
-                
-                
-                UIAlertActionStyle hasTwitter = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
-                
-                UIAlertAction *tweet = [UIAlertAction actionWithTitle:@"Twitter"
-                                                                style:hasTwitter
-                                                              handler:^(UIAlertAction *action) {
-                                                                  
-                                                                  SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-                                                                  
-                                                                  if ([shareData valueForKey:@"shareString"]){
-                                                                      [compose setInitialText:[shareData valueForKey:@"shareString"]];
-                                                                  }
-                                                                  if ([shareData valueForKey:@"shareImage"]){
-                                                                      [compose addImage:[shareData valueForKey:@"shareImage"]];
-                                                                  }
-                                                                  
-                                                                  compose.completionHandler = ^(SLComposeViewControllerResult result) {
-                                                                      [self.acapella.scrollview finishWrapAroundAnimation];
-                                                                  };
-                                                                  
-                                                                  [self presentViewController:compose animated:YES completion:nil];
-                                                              }];
-                
-                [c addAction:tweet];
-                
-                
-                
-                UIAlertActionStyle hasFacebook = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook] ? UIAlertActionStyleDefault : UIAlertActionStyleDestructive;
-                
-                UIAlertAction *facebook = [UIAlertAction actionWithTitle:@"Facebook"
-                                                                   style:hasFacebook
-                                                                 handler:^(UIAlertAction *action) {
-                                                                     SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-                                                                     
-                                                                     if ([shareData valueForKey:@"shareString"]){
-                                                                         [compose setInitialText:[shareData valueForKey:@"shareString"]];
-                                                                     }
-                                                                     if ([shareData valueForKey:@"shareImage"]){
-                                                                         [compose addImage:[shareData valueForKey:@"shareImage"]];
-                                                                     }
-                                                                     
-                                                                     compose.completionHandler = ^(SLComposeViewControllerResult result) {
-                                                                         [self.acapella.scrollview finishWrapAroundAnimation];
-                                                                     };
-                                                                     
-                                                                     [self presentViewController:compose animated:YES completion:nil];
-                                                                 }];
-                
-                [c addAction:facebook];
-                
-                
-                
-                [self presentViewController:c animated:YES completion:nil];
-                
-            } else { //iOS < 8
-                
-                [self.acapella.scrollview finishWrapAroundAnimation];
-                
-                UIAlertView *c = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:@"This feature is only available on iOS 8.0 or greater."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil, nil];
-                [c show];
-            }
+                if (successful){ //device isnt locked and we have data
+                    
+                    SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                    
+                    if ([shareData valueForKey:@"shareString"]){
+                        [compose setInitialText:[shareData valueForKey:@"shareString"]];
+                    }
+                    if ([shareData valueForKey:@"shareImage"]){
+                        [compose addImage:[shareData valueForKey:@"shareImage"]];
+                    }
+                    
+                    compose.completionHandler = ^(SLComposeViewControllerResult result) {
+                        [self.acapella.scrollview finishWrapAroundAnimation];
+                    };
+                    
+                    [self presentViewController:compose animated:YES completion:nil];
+                    
+                } else {
+                    
+                    TBAlertController *fail = [[TBAlertController alloc] initWithTitle:@"Error"
+                                                                               message:@"You cannot share from the Lock Screen for security reasons"
+                                                                                 style:TBAlertControllerStyleActionSheet];
+                    [fail setCancelButtonWithTitle:@"Ok" buttonAction:^(NSArray *textFieldStrings){
+                        [self.acapella.scrollview finishWrapAroundAnimation];
+                    }];
+                    [fail showFromViewController:self];
+                    
+                }
+            }];
+            
+            [c showFromViewController:self];
             
         } else {
             
@@ -902,13 +906,13 @@ static NSTimer *_hideRatingTimer;
         
         if (arg1){
             [self startRatingShouldHideTimer];
-            //self.acapella.userInteractionEnabled = NO;
+            self.acapella.userInteractionEnabled = NO;
         } else {
             if (_hideRatingTimer){
                 [_hideRatingTimer invalidate];
                 _hideRatingTimer = nil;
             }
-            //self.acapella.userInteractionEnabled = YES;
+            self.acapella.userInteractionEnabled = YES;
         }
     }
 }

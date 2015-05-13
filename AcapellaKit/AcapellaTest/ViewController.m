@@ -27,6 +27,8 @@
     
     if (self.acapella){}
     
+    
+    
     //[NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
 }
 
@@ -54,12 +56,17 @@
     }
 }
 
-- (void)swAcapella:(SWAcapellaScrollView *)swAcapella onSwipe:(ScrollDirection)direction
+- (void)swAcapella:(id<SWAcapellaScrollingViewProtocol>)swAcapella onSwipe:(SWScrollDirection)direction
 {
-    [swAcapella stopWrapAroundFallback];
-    [swAcapella finishWrapAroundAnimation];
-    [swAcapella finishWrapAroundAnimation];
-    [swAcapella finishWrapAroundAnimation];
+    if (swAcapella == self.acapella.scrollview){
+        [self.acapella.scrollview stopWrapAroundFallback];
+        [self.acapella.scrollview finishWrapAroundAnimation];
+        [self.acapella.scrollview finishWrapAroundAnimation];
+        [self.acapella.scrollview finishWrapAroundAnimation];
+    } else if (swAcapella == self.acapella.tableview){
+        [self.acapella.tableview resetContentOffset:YES];
+    }
+    
 }
 
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage

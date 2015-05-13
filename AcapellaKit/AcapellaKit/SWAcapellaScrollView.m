@@ -48,7 +48,6 @@
         self.pagingEnabled = YES;
         self.directionalLockEnabled = YES;
         self.scrollsToTop = NO;
-        self.alwaysBounceVertical = YES;
         
         self.backgroundColor = [UIColor clearColor];
         
@@ -72,20 +71,18 @@
 {
     [super layoutIfNeeded];
     
-    CGSize newSize = CGSizeMake(self.bounds.size.width * 3, self.bounds.size.height * 3);
+    CGSize newSize = CGSizeMake(self.bounds.size.width * 3, self.bounds.size.height);
     
     if (!CGSizeEqualToSize(self.contentSize, newSize)){ //only update on changed size
         
         self.contentSize = newSize;
         
-#ifdef DEBUG
-        if (self.testView) {
-            self.testView.center = CGPointMake(self.contentSize.width / 2, self.contentSize.height / 2);
-        }
-#endif
-        
         [self resetContentOffset:NO];
         
+    }
+    
+    for (UIView *v in self.subviews){
+        v.center = CGPointMake(self.contentSize.width / 2, self.contentSize.height / 2);
     }
 }
 
@@ -96,7 +93,7 @@
     view.userInteractionEnabled = NO;
 }
 
-#pragma mark - SWAcapellaScrollViewProtocol
+#pragma mark - Public
 
 - (CGPoint)defaultContentOffset
 {
@@ -113,6 +110,10 @@
     };
     
     void (^_postAnimation)() = ^() {
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){
+            [self.delegate scrollViewDidEndScrollingAnimation:self];
+        }
         
         self.isAnimating = NO;
         
@@ -183,18 +184,14 @@
     SWPage page = [self page];
     
     //make content offset the on the oposite side, to appear as if we wrapped around
-    if (page.x == 0 && page.y == 1) { //right
-        self.contentOffset = CGPointMake(self.bounds.size.width * 2.0, self.defaultContentOffset.y);
-    } else if (page.x == 2 && page.y == 1) { //left
-        self.contentOffset = CGPointMake(0, self.defaultContentOffset.y);
-    } else if (page.x == 1 && page.y == 0) { //bottom
-        self.contentOffset = CGPointMake(self.defaultContentOffset.x, self.bounds.size.height * 2.0);
-    } else if (page.x == 1 && page.y == 2) { //top
-        self.contentOffset = CGPointMake(self.defaultContentOffset.x, 0);
+    if (page.x == 0 && page.y == 0){ //left
+        self.contentOffset = CGPointMake(self.frame.size.width * 2, 0);
+    } else if (page.x == 2 && page.y == 0) { //right
+        self.contentOffset = CGPointMake(0, 0);
     } else {
+        [self resetContentOffset:NO];
         return;
     }
-    
     
     [self resetContentOffset:YES];
 }

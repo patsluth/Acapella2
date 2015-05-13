@@ -1,9 +1,9 @@
 //
-//  SWAcapellaScrollView.h
+//  SWAcapellaTableView.h
 //  AcapellaKit
 //
-//  Created by Pat Sluth on 2014-11-08.
-//  Copyright (c) 2014 Pat Sluth. All rights reserved.
+//  Created by Pat Sluth on 2015-05-06.
+//  Copyright (c) 2015 Pat Sluth. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -14,19 +14,15 @@
 
 
 
-@interface SWAcapellaScrollView : UIScrollView <SWAcapellaScrollingViewProtocol>
-
-@property (readwrite, nonatomic) BOOL isAnimating;
+@interface SWAcapellaTableView : UITableView <SWAcapellaScrollingViewProtocol>
 
 @property (readonly, nonatomic) CGPoint defaultContentOffset;
 @property (readwrite, nonatomic) CGPoint previousContentOffset;
+@property (readonly, nonatomic) NSIndexPath *defaultIndexPath;
 
 @property (readwrite, nonatomic) SWScrollDirection currentScrollDirection;
 
 - (void)resetContentOffset:(BOOL)animated;
-- (void)finishWrapAroundAnimation;
-- (void)startWrapAroundFallback;
-- (void)stopWrapAroundFallback;
 
 @end
 

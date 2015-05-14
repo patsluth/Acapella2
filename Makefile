@@ -74,9 +74,9 @@ include $(THEOS_MAKE_PATH)/aggregate.mk
 
 
 
-clean:: 
-	rm -r debs
-	rm -r .theos
+clean::
+	rm -rf debs
+	rm -rf .theos
 
 
 

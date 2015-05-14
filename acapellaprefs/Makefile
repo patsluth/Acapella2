@@ -34,7 +34,7 @@ include $(THEOS_MAKE_PATH)/bundle.mk
 
 
 clean::
-	rm -r .theos
+	rm -rf .theos
 
 
 

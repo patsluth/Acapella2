@@ -2,6 +2,8 @@
 #import <AcapellaKit/AcapellaKit.h>
 #import "SWAcapellaPrefsBridge.h"
 
+#import "UIColor+SW.h"
+
 #import "MPUNowPlayingTitlesView.h"
 #import "MPUMediaControlsTitlesView.h"
 #import "MusicNowPlayingTitlesView.h"

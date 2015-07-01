@@ -66,11 +66,17 @@
 
 + (void)action_PlayPause:(SWAcapellaActionsCompletionBlock)completion
 {
-    MRMediaRemoteSendCommand(kMRTogglePlayPause, nil);
-    
-    if (completion){
-        completion(YES, nil);
-    }
+    MRMediaRemoteGetNowPlayingApplicationIsPlaying(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(Boolean isPlaying){
+        
+        MRMediaRemoteSendCommand(isPlaying ? kMRPause : kMRPlay, nil);
+        
+        if (completion){
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                completion(YES, nil);
+            });
+        }
+        
+    });
 }
 
 + (void)action_PreviousSong:(SWAcapellaActionsCompletionBlock)completion
@@ -95,16 +101,15 @@
             itemTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
         }
         
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            MRMediaRemoteSendCommand((direction <= -1) ? kMRPreviousTrack : kMRNextTrack, nil);
-            
-            if (completion){
+        MRMediaRemoteSendCommand((direction <= -1) ? kMRPreviousTrack : kMRNextTrack, nil);
+        
+        if (completion){
+            dispatch_async(dispatch_get_main_queue(), ^(void){
                 //sometimes when nothing is playing, there is still a result dict with a few empty keys.
                 completion(resultDict ? YES : NO, itemTitle ? resultDict : nil);
-            }
-            
-        }];
+            });
+        }
+        
     });
 }
 

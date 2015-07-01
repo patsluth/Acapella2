@@ -12,7 +12,6 @@
 		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
 		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */; };
 		2E242EF21A41D2E200864588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
-		2E334F5C1AE8524D002046A1 /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F541AE8524D002046A1 /* libSluthware.a */; };
 		2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
 		2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
 		2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F621AE857FC002046A1 /* CoreGraphics.framework */; };
@@ -111,7 +110,6 @@
 				2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */,
 				2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */,
 				2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */,
-				2E334F5C1AE8524D002046A1 /* libSluthware.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,8 +45,6 @@ static NSDictionary *_previousNowPlayingInfo;
 
 @property (strong, nonatomic) NSDictionary *previousNowPlayingInfo;
 
-- (void)appDidBecomeActive:(NSNotification *)notification;
-
 - (void)startRatingShouldHideTimer;
 - (void)hideRatingControlWithTimer;
 
@@ -357,11 +355,6 @@ static NSDictionary *_previousNowPlayingInfo;
         [self.acapella.scrollview resetContentOffset:NO];
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(appDidBecomeActive:)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
-    
     MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_get_main_queue());
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -377,6 +370,25 @@ static NSDictionary *_previousNowPlayingInfo;
     if (self.acapella){
         [self.acapella.tableview resetContentOffset:NO];
         [self.acapella.scrollview resetContentOffset:NO];
+        
+        
+        //TODO: do better
+//        MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
+//            
+//            NSDictionary *resultDict = (__bridge NSDictionary *)result;
+//            
+//            if (resultDict){
+//                
+//                BOOL isMusicApp = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoIsMusicApp] boolValue];
+//                
+//                if (!isMusicApp){ //reset to music app, so thats what we control
+//                    if ([self player]){
+//                        [[self player] togglePlayback];
+//                        [[self player] togglePlayback];
+//                    }
+//                }
+//            }
+//        });
     }
 }
 
@@ -392,8 +404,6 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)viewDidDisappear:(BOOL)arg1
 {
     %orig(arg1);
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
@@ -421,33 +431,6 @@ static NSDictionary *_previousNowPlayingInfo;
 // }
 // */
 //
-
-%new
-- (void)appDidBecomeActive:(NSNotification *)notification
-{
-    if (!self.acapella){
-        return;
-    }
-    
-    //sometimes third party app is still playing when we open the Music App, so using Acapella will control the third party
-    //app instead of the Music App. This ensures the Music app gets set as the now playing application
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
-        
-        NSDictionary *resultDict = (__bridge NSDictionary *)result;
-        
-        if (resultDict){
-            
-            BOOL isMusicApp = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoIsMusicApp] boolValue];
-            
-            if (!isMusicApp){ //reset to music app, so thats what we control
-                if ([self player]){
-                    [[self player] togglePlayback];
-                    [[self player] togglePlayback];
-                }
-            }
-        }
-    });
-}
 
 #pragma mark - MediaRemote
 
@@ -692,16 +675,16 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)action_PlayPause
 {
     [SWAcapellaActionsHelper action_PlayPause:^(BOOL successful, id object){
-        if (successful && [self trackInformationView]){
+        if (successful && self.acapella){
             [UIView animateWithDuration:0.1
                              animations:^{
-                                 [self trackInformationView].transform = CGAffineTransformMakeScale(0.9, 0.9);
+                                 self.acapella.transform = CGAffineTransformMakeScale(0.9, 0.9);
                              } completion:^(BOOL finished){
                                  [UIView animateWithDuration:0.1
                                                   animations:^{
-                                                      [self trackInformationView].transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      self.acapella.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   } completion:^(BOOL finished){
-                                                      [self trackInformationView].transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      self.acapella.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }];
                              }];
         }

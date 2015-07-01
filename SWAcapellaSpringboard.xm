@@ -625,16 +625,16 @@ static NSDictionary *_previousNowPlayingInfo;
 - (void)action_PlayPause
 {
     [SWAcapellaActionsHelper action_PlayPause:^(BOOL successful, id object){
-        if (successful && [self trackInformationView]){
+        if (successful && self.acapella){
             [UIView animateWithDuration:0.1
                              animations:^{
-                                 [self trackInformationView].transform = CGAffineTransformMakeScale(0.9, 0.9);
+                                 self.acapella.transform = CGAffineTransformMakeScale(0.9, 0.9);
                              } completion:^(BOOL finished){
                                  [UIView animateWithDuration:0.1
                                                   animations:^{
-                                                      [self trackInformationView].transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      self.acapella.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   } completion:^(BOOL finished){
-                                                      [self trackInformationView].transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      self.acapella.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }];
                              }];
         }
@@ -975,8 +975,10 @@ static void mpuPostLayoutSubviews(UIView *mpu)
 {
     CGSize original = %orig(arg1);
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
-        return CGSizeMake(original.width, original.height * 0.75);
+    if ([[SWAcapellaPrefsBridge valueForKey:@"cc_enabled" defaultValue:@YES] boolValue]){
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+            return CGSizeMake(original.width, original.height * 0.75);
+        }
     }
     
     return original;

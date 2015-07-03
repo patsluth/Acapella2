@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION=1.1-4
+PACKAGE_VERSION = 1.0
 
 
 
@@ -31,12 +31,12 @@ TARGET = iphone:clang:latest:7.0
 
 
 
-TWEAK_NAME = Acapella
-Acapella_CFLAGS = -fobjc-arc
-Acapella_FILES = AVSystemController.xm SWAcapellaActionsHelper.xm SWAcapellaMediaTitles.xm SWAcapellaMusicApp.xm SWAcapellaPrefsBridge.xm SWAcapellaSharingFormatter.m SWAcapellaSpringboard.xm
-Acapella_FRAMEWORKS = Foundation UIKit CoreGraphics MediaPlayer Social
-Acapella_PRIVATE_FRAMEWORKS = MediaRemote
-Acapella_LIBRARIES = substrate sw packageinfo
+TWEAK_NAME = Acapella2
+Acapella2_CFLAGS = -fobjc-arc
+Acapella2_FILES = AVSystemController.xm SWAcapellaActionsHelper.xm SWAcapellaMediaTitles.xm SWAcapellaMusicApp.xm SWAcapellaPrefsBridge.xm SWAcapellaSpringboard.xm
+Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics MediaPlayer Social
+Acapella2_PRIVATE_FRAMEWORKS = MediaRemote
+Acapella2_LIBRARIES = substrate sw packageinfo
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -Ipublic/libsw
@@ -46,7 +46,7 @@ ADDITIONAL_CFLAGS += -Ipublic/privateheaders/MusicApp
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Shared
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Springboard
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/SpringboardMusic
-ADDITIONAL_CFLAGS += -IAcapellaKit
+ADDITIONAL_CFLAGS += -IAcapellaKit.framework/Headers
 
 
 

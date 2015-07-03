@@ -1,9 +1,6 @@
 
 #import "SWAcapellaActionsHelper.h"
-#import "SWAcapellaSharingFormatter.h"
 #import "SWAcapellaPrefsBridge.h"
-
-#import "SWAppLauncher.h"
 
 #import <Springboard/Springboard.h>
 #import <MediaRemote/MediaRemote.h>
@@ -36,25 +33,13 @@
             };
         } else if ([action isEqualToNumber:@6]){
             return ^(){
-                [acapellaDel action_OpenActivity];
+                [acapellaDel action_ShowRatings];
             };
         } else if ([action isEqualToNumber:@7]){
             return ^(){
-                [acapellaDel action_ShowPlaylistOptions];
-            };
-        } else if ([action isEqualToNumber:@8]){
-            return ^(){
-                [acapellaDel action_OpenApp];
-            };
-        } else if ([action isEqualToNumber:@9]){
-            return ^(){
-                [acapellaDel action_ShowRatingsOpenApp];
-            };
-        } else if ([action isEqualToNumber:@10]){
-            return ^(){
                 [acapellaDel action_DecreaseVolume];
             };
-        } else if ([action isEqualToNumber:@11]){
+        } else if ([action isEqualToNumber:@8]){
             return ^(){
                 [acapellaDel action_IncreaseVolume];
             };
@@ -95,35 +80,40 @@
         
         NSDictionary *resultDict = (__bridge NSDictionary *)result;
         
-        NSString *itemTitle;
+        //NSString *itemTitle;
         
         if (resultDict){
-            itemTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
+        //    itemTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
         }
         
         MRMediaRemoteSendCommand((direction <= -1) ? kMRPreviousTrack : kMRNextTrack, nil);
         
-        if (completion){
+        //if (completion){
             dispatch_async(dispatch_get_main_queue(), ^(void){
+                
+                if(completion){
+                    completion(YES, nil);
+                }
+                
                 //sometimes when nothing is playing, there is still a result dict with a few empty keys.
-                completion(resultDict ? YES : NO, itemTitle ? resultDict : nil);
+                //completion(resultDict ? YES : NO, itemTitle ? resultDict : nil);
             });
-        }
+        //}
         
     });
 }
 
-+ (void)action_SkipBackward:(SWAcapellaActionsCompletionBlock)completion
++ (void)action_SkipBackward
 {
-    [SWAcapellaActionsHelper changeSongTimeBySeconds:-20 completion:completion];
+    [SWAcapellaActionsHelper changeSongTimeBySeconds:-20];
 }
 
-+ (void)action_SkipForward:(SWAcapellaActionsCompletionBlock)completion
++ (void)action_SkipForward
 {
-    [SWAcapellaActionsHelper changeSongTimeBySeconds:20 completion:completion];
+    [SWAcapellaActionsHelper changeSongTimeBySeconds:20];
 }
 
-+ (void)changeSongTimeBySeconds:(double)seconds completion:(SWAcapellaActionsCompletionBlock)completion
++ (void)changeSongTimeBySeconds:(double)seconds
 {
     MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
         
@@ -133,76 +123,6 @@
             double mediaCurrentElapsedDuration = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoElapsedTime] doubleValue];
             MRMediaRemoteSetElapsedTime(mediaCurrentElapsedDuration + seconds);
         }
-        
-        if (completion){
-            completion(resultDict ? YES : NO, resultDict);
-        }
-    });
-}
-
-+ (void)action_OpenActivity:(SWAcapellaActionsCompletionBlock)completion
-{
-    SBDeviceLockController *deviceLC = [%c(SBDeviceLockController) sharedController];
-    
-    MRMediaRemoteGetNowPlayingInfo(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(CFDictionaryRef result){
-        
-        NSDictionary *resultDict = (__bridge NSDictionary *)result;
-        
-        if (resultDict){
-            
-            NSString *mediaTitle = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
-            NSString *mediaArtist = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
-            NSData *mediaArtworkData = [resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
-            NSString *sharingHashtag = [%c(SWAcapellaPrefsBridge) valueForKey:@"sharingHashtag" defaultValue:@"acapella"];
-            
-            NSDictionary *shareData = [%c(SWAcapellaSharingFormatter) formattedShareDictionaryWithMediaTitle:mediaTitle
-                                                                                            mediaArtist:mediaArtist
-                                                                                       mediaArtworkData:mediaArtworkData
-                                                                                         sharingHashtag:sharingHashtag];
-            
-            if (shareData){
-                
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    
-                    if (completion){
-                        completion(!(deviceLC && deviceLC.isPasscodeLocked), shareData);
-                    }
-                }];
-                
-                return;
-            }
-        }
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        
-            if (completion){
-                completion(NO, nil);
-            }
-            
-        }];
-        
-    });
-}
-
-+ (void)action_OpenApp:(SWAcapellaActionsCompletionBlock)completion
-{
-    MRMediaRemoteGetNowPlayingApplicationPID(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul), ^(int PID){
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            SBApplication *nowPlayingApp = [[%c(SBApplicationController) sharedInstance] applicationWithPid:PID];
-            
-            if (!nowPlayingApp){ //fallback
-                nowPlayingApp = [[%c(SBApplicationController) sharedInstance] applicationWithDisplayIdentifier:@"com.apple.Music"];
-            }
-            
-            [%c(SWAppLauncher) launchAppLockscreenFriendly:nowPlayingApp];
-            
-            if (completion){
-                completion(nowPlayingApp ? YES : NO, nil);
-            }
-            
-        }];
     });
 }
 
@@ -233,22 +153,14 @@
     });
 }
 
-+ (void)action_DecreaseVolume:(SWAcapellaActionsCompletionBlock)completion
++ (void)action_DecreaseVolume
 {
     [%c(AVSystemController) acapellaChangeVolume:-1];
-    
-    if (completion){
-        completion(YES, nil);
-    }
 }
 
-+ (void)action_IncreaseVolume:(SWAcapellaActionsCompletionBlock)completion
++ (void)action_IncreaseVolume
 {
     [%c(AVSystemController) acapellaChangeVolume:1];
-    
-    if (completion){
-        completion(YES, nil);
-    }
 }
 
 @end

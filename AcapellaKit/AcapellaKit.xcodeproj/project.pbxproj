@@ -16,8 +16,6 @@
 		2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
 		2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F621AE857FC002046A1 /* CoreGraphics.framework */; };
 		2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F641AE85822002046A1 /* UIKit.framework */; };
-		2E46AE1B1AFC627F008564F5 /* SWAcapellaPullToRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E46AE191AFC627F008564F5 /* SWAcapellaPullToRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E46AE1C1AFC627F008564F5 /* SWAcapellaPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E46AE1A1AFC627F008564F5 /* SWAcapellaPullToRefresh.m */; };
 		2E51F4131AEC63DA00854158 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E51F4121AEC63DA00854158 /* Social.framework */; };
 		2E73C39F1AE858A5008EA808 /* AcapellaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; };
 		2E73C3A01AE85C6F008EA808 /* AcapellaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -35,9 +33,7 @@
 		2E8159881AF9A76100107833 /* TBAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597F1AF9A76100107833 /* TBAlertController.h */; };
 		2E8159891AF9A76100107833 /* UIColor+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159801AF9A76100107833 /* UIColor+SW.h */; };
 		2E81598A1AF9A76100107833 /* UIScrollView+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159811AF9A76100107833 /* UIScrollView+SW.h */; };
-		2E97B9DA1AFAD46D0098F14D /* SWAcapellaTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E97B9D81AFAD46D0098F14D /* SWAcapellaTableView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E97B9DB1AFAD46D0098F14D /* SWAcapellaTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E97B9D91AFAD46D0098F14D /* SWAcapellaTableView.m */; };
-		2E97B9DD1AFAF8F80098F14D /* SWAcapellaScrollingViewProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E97B9DC1AFAF7CB0098F14D /* SWAcapellaScrollingViewProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2ED4861F1B45AF18007296AC /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F541AE8524D002046A1 /* libSluthware.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +69,6 @@
 		2E334F5F1AE85701002046A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2E334F641AE85822002046A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2E46AE191AFC627F008564F5 /* SWAcapellaPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPullToRefresh.h; sourceTree = "<group>"; };
-		2E46AE1A1AFC627F008564F5 /* SWAcapellaPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaPullToRefresh.m; sourceTree = "<group>"; };
 		2E51F4121AEC63DA00854158 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		2E75956A19FD49F500001BC7 /* AcapellaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AcapellaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75956E19FD49F500001BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,9 +91,6 @@
 		2E81597F1AF9A76100107833 /* TBAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAlertController.h; sourceTree = "<group>"; };
 		2E8159801AF9A76100107833 /* UIColor+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
 		2E8159811AF9A76100107833 /* UIScrollView+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
-		2E97B9D81AFAD46D0098F14D /* SWAcapellaTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTableView.h; sourceTree = "<group>"; };
-		2E97B9D91AFAD46D0098F14D /* SWAcapellaTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTableView.m; sourceTree = "<group>"; };
-		2E97B9DC1AFAF7CB0098F14D /* SWAcapellaScrollingViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollingViewProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +101,7 @@
 				2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */,
 				2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */,
 				2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */,
+				2ED4861F1B45AF18007296AC /* libSluthware.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,15 +141,10 @@
 			isa = PBXGroup;
 			children = (
 				2E75956F19FD49F500001BC7 /* AcapellaKit.h */,
-				2E97B9DC1AFAF7CB0098F14D /* SWAcapellaScrollingViewProtocol.h */,
 				2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */,
 				2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */,
-				2E97B9D81AFAD46D0098F14D /* SWAcapellaTableView.h */,
-				2E97B9D91AFAD46D0098F14D /* SWAcapellaTableView.m */,
 				2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */,
 				2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */,
-				2E46AE191AFC627F008564F5 /* SWAcapellaPullToRefresh.h */,
-				2E46AE1A1AFC627F008564F5 /* SWAcapellaPullToRefresh.m */,
 				2E75956D19FD49F500001BC7 /* Supporting Files */,
 			);
 			path = AcapellaKit;
@@ -232,15 +219,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
-				2E97B9DD1AFAF8F80098F14D /* SWAcapellaScrollingViewProtocol.h in Headers */,
 				2E8159871AF9A76100107833 /* TBAlertAction.h in Headers */,
 				2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */,
-				2E97B9DA1AFAD46D0098F14D /* SWAcapellaTableView.h in Headers */,
 				2E8159881AF9A76100107833 /* TBAlertController.h in Headers */,
 				2E8159851AF9A76100107833 /* SWMLine.h in Headers */,
 				2E8159891AF9A76100107833 /* UIColor+SW.h in Headers */,
 				2E8159861AF9A76100107833 /* SWMQuadratic.h in Headers */,
-				2E46AE1B1AFC627F008564F5 /* SWAcapellaPullToRefresh.h in Headers */,
 				2E8159841AF9A76100107833 /* SWMCircle.h in Headers */,
 				2E81598A1AF9A76100107833 /* UIScrollView+SW.h in Headers */,
 				2E8159821AF9A76100107833 /* libSluthware.h in Headers */,
@@ -351,8 +335,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E46AE1C1AFC627F008564F5 /* SWAcapellaPullToRefresh.m in Sources */,
-				2E97B9DB1AFAD46D0098F14D /* SWAcapellaTableView.m in Sources */,
 				2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */,
 				2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */,
 			);

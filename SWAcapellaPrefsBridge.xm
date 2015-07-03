@@ -3,7 +3,7 @@
 
 #pragma mark - Preferences
 
-#define SW_ACAPELLA_PREFERENCES_PATH @"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"
+#define SW_ACAPELLA_PREFERENCES_PATH @"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"
 
 static NSDictionary *_swAcapellaPreferences;
 
@@ -48,7 +48,7 @@ static void swAcapellaPreferencesChanged(CFNotificationCenterRef center,
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
                                     nil,
                                     swAcapellaPreferencesChanged,
-                                    CFSTR("com.patsluth.AcapellaPrefs.changed"),
+                                    CFSTR("com.patsluth.AcapellaPrefs2.changed"),
                                     nil,
                                     CFNotificationSuspensionBehaviorCoalesce);
     // Load preferences

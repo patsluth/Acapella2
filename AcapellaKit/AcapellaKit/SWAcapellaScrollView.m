@@ -10,6 +10,10 @@
 
 #import "UIScrollView+SW.h"
 
+#ifdef DEBUG
+    #import "UIColor+SW.h"
+#endif
+
 
 
 
@@ -38,7 +42,7 @@
 {
     self = [super init];
     
-    if (self) {
+    if (self){
         
         self.clipsToBounds = YES;
         self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -52,11 +56,14 @@
         self.backgroundColor = [UIColor clearColor];
         
 #ifdef DEBUG
+        
+        self.backgroundColor = [UIColor randomColour];
+        
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;
         
         self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-        self.testView.backgroundColor = [UIColor blackColor];
+        self.testView.backgroundColor = [UIColor randomColour];
         self.testView.alpha = 0.7;
         [self addSubview:self.testView];
 #endif
@@ -103,13 +110,13 @@
 
 - (void)resetContentOffset:(BOOL)animated
 {
-    void (^_animationContent)() = ^() {
+    void (^_animationContent)() = ^(){
         
         self.contentOffset = self.defaultContentOffset;
         
     };
     
-    void (^_postAnimation)() = ^() {
+    void (^_postAnimation)() = ^(){
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(scrollViewDidEndScrollingAnimation:)]){
             [self.delegate scrollViewDidEndScrollingAnimation:self];
@@ -122,7 +129,7 @@
     
     
     
-    if (self.isTracking) {
+    if (self.isTracking){
         return;
     }
     
@@ -130,14 +137,14 @@
     
     self.isAnimating = animated;
     
-    if (animated) {
+    if (animated){
         
         [UIView animateWithDuration:0.5
                               delay:0.0
                             options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionBeginFromCurrentState
                          animations:^{
                              _animationContent();
-                         }completion:^(BOOL finished) {
+                         }completion:^(BOOL finished){
                              _postAnimation();
                          }];
         
@@ -162,7 +169,7 @@
 
 - (void)stopWrapAroundFallback
 {
-    if (self.wrapAroundFallback) {
+    if (self.wrapAroundFallback){
         [self.wrapAroundFallback invalidate];
         self.wrapAroundFallback = nil;
     }
@@ -177,7 +184,7 @@
     
     [self stopWrapAroundFallback];
     
-    if (self.isAnimating || self.isTracking) {
+    if (self.isAnimating || self.isTracking){
         return;
     }
     
@@ -186,7 +193,7 @@
     //make content offset the on the oposite side, to appear as if we wrapped around
     if (page.x == 0 && page.y == 0){ //left
         self.contentOffset = CGPointMake(self.frame.size.width * 2, 0);
-    } else if (page.x == 2 && page.y == 0) { //right
+    } else if (page.x == 2 && page.y == 0){ //right
         self.contentOffset = CGPointMake(0, 0);
     } else {
         [self resetContentOffset:NO];

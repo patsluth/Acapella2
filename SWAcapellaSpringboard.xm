@@ -2,19 +2,15 @@
 #import <Social/Social.h>
 
 #import "libSluthware.h"
-#import "SWAcapella.h"
-#import <AcapellaKit/AcapellaKit.h>
+#import "AcapellaKit.h"
 #import "SWAcapellaPrefsBridge.h"
 #import "SWAcapellaActionsHelper.h"
-
-#import "TBAlertController.h"
 
 #import <Springboard/Springboard.h>
 #import <MediaRemote/MediaRemote.h>
 
 #import "MPUSystemMediaControlsViewController.h"
-#import "_MPUSystemMediaControlsView.h" //iOS 7
-#import "MPUSystemMediaControlsView.h" //iOS 8
+#import "MPUSystemMediaControlsView.h"
 #import "MPUMediaControlsVolumeView.h"
 #import "MPUItemOfferButton.h"
 
@@ -292,20 +288,6 @@ static NSDictionary *_previousNowPlayingInfo;
             [[self volumeView] removeFromSuperview];
         }
         
-        if (self.acapella.tableview){ //make sure progress and volume bars stay in cells
-            if ([self.acapella.tableview numberOfSections] > 0 && [self.acapella.tableview numberOfRowsInSection:0] > 2){
-                
-                [self.acapella.tableview beginUpdates];
-                
-                [self.acapella.tableview reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],
-                                                                  [NSIndexPath indexPathForRow:2 inSection:0]]
-                                               withRowAnimation:UITableViewRowAnimationNone];
-                
-                [self.acapella.tableview endUpdates];
-                
-            }
-        }
-        
     }
 }
 
@@ -314,7 +296,6 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig(arg1);
     
     if (self.acapella){
-        [self.acapella.tableview resetContentOffset:NO];
         [self.acapella.scrollview resetContentOffset:NO];
     }
     
@@ -331,7 +312,6 @@ static NSDictionary *_previousNowPlayingInfo;
     %orig(arg1);
     
     if (self.acapella){
-        [self.acapella.tableview resetContentOffset:NO];
         [self.acapella.scrollview resetContentOffset:NO];
     }
 }
@@ -439,28 +419,17 @@ static NSDictionary *_previousNowPlayingInfo;
 #pragma mark - SWAcapellaDelegate
 
 %new
-- (void)scrollViewDidScroll:(SWAcapellaScrollView *)scrollView
-{
-    if ([self trackInformationView]){
-        
-        CGFloat alpha = 1.0 - (fabs(scrollView.contentOffset.y - scrollView.defaultContentOffset.y) /
-                               CGRectGetMidY(scrollView.frame));
-        [self trackInformationView].alpha = alpha;
-    }
-}
-
-%new
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
     if (tap.state == UIGestureRecognizerStateEnded){
         
         swAcapellaAction action;
         
-        CGFloat percentBoundaries = SW_ACAPELLA_LEFTRIGHT_VIEW_BOUNDARY_PERCENTAGE;
+        CGFloat percentBoundaries = 0.2;
         
         if (percentage.x <= percentBoundaries){ //left
             action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                               valueForKey:@"leftTapAction" defaultValue:@10]
+                                                               valueForKey:@"leftTapAction" defaultValue:@7]
                                                  withDelegate:self];
         } else if (percentage.x > percentBoundaries && percentage.x <= (1.0 - percentBoundaries)){ //centre
             
@@ -470,7 +439,7 @@ static NSDictionary *_previousNowPlayingInfo;
             
         } else if (percentage.x > (1.0 - percentBoundaries)){ //right
             action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                               valueForKey:@"rightTapAction" defaultValue:@11]
+                                                               valueForKey:@"rightTapAction" defaultValue:@8]
                                                  withDelegate:self];
         }
         
@@ -482,32 +451,32 @@ static NSDictionary *_previousNowPlayingInfo;
 }
 
 %new
-- (void)swAcapella:(id<SWAcapellaScrollingViewProtocol>)swAcapella onSwipe:(SWScrollDirection)direction
+- (void)swAcapella:(SWAcapellaBase *)swAcapella onSwipe:(UISwipeGestureRecognizerDirection)direction
 {
     swAcapellaAction action;
     
-    if (swAcapella == self.acapella.scrollview){
-        [self.acapella.scrollview stopWrapAroundFallback];
-    }
+    [self.acapella.scrollview stopWrapAroundFallback];
     
-    if (direction == SWScrollDirectionLeft || direction == SWScrollDirectionRight){
+    if (direction == UISwipeGestureRecognizerDirectionLeft){
         
-        action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge valueForKey:(direction == SWScrollDirectionLeft) ?
-                                                           @"swipeLeftAction" : @"swipeRightAction"
-                                                                                defaultValue:(direction == SWScrollDirectionLeft) ?
-                                                           @3 : @2]
+        action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge valueForKey:@"swipeLeftAction" defaultValue:@3]
                                              withDelegate:self];
         
-    } else if (direction == SWScrollDirectionUp) {
+    } else if (direction == UISwipeGestureRecognizerDirectionRight){
         
-        action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                           valueForKey:@"swipeUpAction" defaultValue:@7]
+        action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge valueForKey:@"swipeRightAction" defaultValue:@2]
                                              withDelegate:self];
         
-    } else if (direction == SWScrollDirectionDown) {
+    } else if (direction == UISwipeGestureRecognizerDirectionUp) {
         
         action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                           valueForKey:@"swipeDownAction" defaultValue:@6]
+                                                           valueForKey:@"swipeUpAction" defaultValue:@0]
+                                             withDelegate:self];
+        
+    } else if (direction == UISwipeGestureRecognizerDirectionDown) {
+        
+        action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
+                                                           valueForKey:@"swipeDownAction" defaultValue:@0]
                                              withDelegate:self];
         
     }
@@ -515,18 +484,14 @@ static NSDictionary *_previousNowPlayingInfo;
     if (action){
         action();
     } else {
-        if (swAcapella == self.acapella.scrollview){
-            [self.acapella.scrollview finishWrapAroundAnimation];
-        } else if (swAcapella == self.acapella.tableview){
-            [self.acapella.tableview resetContentOffset:YES];
-        }
+        [self.acapella.scrollview finishWrapAroundAnimation];
     }
 }
 
 %new
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
-    CGFloat percentBoundaries = SW_ACAPELLA_LEFTRIGHT_VIEW_BOUNDARY_PERCENTAGE;
+    CGFloat percentBoundaries = 0.2;
     
     swAcapellaAction action;
     
@@ -545,7 +510,7 @@ static NSDictionary *_previousNowPlayingInfo;
         if (longPress.state == UIGestureRecognizerStateBegan){
             
             action = [SWAcapellaActionsHelper methodForAction:[SWAcapellaPrefsBridge
-                                                               valueForKey:@"centrePressAction" defaultValue:@9]
+                                                               valueForKey:@"centrePressAction" defaultValue:@6]
                                                  withDelegate:self];
             
         }
@@ -564,58 +529,6 @@ static NSDictionary *_previousNowPlayingInfo;
     
     if (action){
         action();
-    }
-}
-
-%new
-- (void)swAcapella:(SWAcapellaBase *)view willDisplayCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-    UIView *mediaControlsView = [self mediaControlsView];
-    
-    if (mediaControlsView){
-        
-        if (indexPath.section == 0){
-            switch (indexPath.row){
-                case 0:
-                    
-                    if ([self volumeView].superview){
-                        [[self volumeView] removeFromSuperview];
-                    }
-                    
-                    if ([self progressControl]){
-                        [cell addSubview:[self progressControl]];
-                    }
-                    
-                    break;
-                    
-                case 1:
-                    
-                    if ([self trackInformationView] && view.scrollview){
-                        [view.scrollview addSubview:[self trackInformationView]];
-                        [self trackInformationView].frame = [self trackInformationView].frame;
-                    }
-                    
-                    break;
-                    
-                case 2:
-                    
-                    if ([self progressControl].superview){
-                        [[self progressControl] removeFromSuperview];
-                    }
-                    
-                    if ([self volumeView]){
-                        [cell addSubview:[self volumeView]];
-                    }
-                    
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-        
-        [mediaControlsView layoutSubviews];
-        
     }
 }
 
@@ -659,235 +572,44 @@ static NSDictionary *_previousNowPlayingInfo;
 %new
 - (void)action_NextSong
 {
-    [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
-        
-        if (!object){
-            [self.acapella.scrollview finishWrapAroundAnimation];
-        } else {
-            [self.acapella.scrollview startWrapAroundFallback];
-        }
-    }];
+    MRMediaRemoteSendCommand(kMRNextTrack, nil);
+//    [SWAcapellaActionsHelper action_NextSong:^(BOOL successful, id object){
+//        
+//        if (!object){
+//            [self.acapella.scrollview finishWrapAroundAnimation];
+//        } else {
+//            [self.acapella.scrollview startWrapAroundFallback];
+//        }
+//    }];
 }
 
 %new
 - (void)action_SkipBackward
 {
-    [SWAcapellaActionsHelper action_SkipBackward:nil];
+    [SWAcapellaActionsHelper action_SkipBackward];
 }
 
 %new
 - (void)action_SkipForward
 {
-    [SWAcapellaActionsHelper action_SkipForward:nil];
+    [SWAcapellaActionsHelper action_SkipForward];
 }
 
 %new
-- (void)action_OpenActivity
+- (void)action_ShowRatings
 {
-    [SWAcapellaActionsHelper action_OpenActivity:^(BOOL successful, id object){
-        
-        
-        TBAlertController *c = [[TBAlertController alloc] initWithTitle:@"Activity"
-                                                                message:nil
-                                                                  style:TBAlertControllerStyleActionSheet];
-        
-        
-        [c setCancelButtonWithTitle:@"Cancel" buttonAction:^(NSArray *textFieldStrings){
-            [self.acapella.tableview resetContentOffset:YES];
-            [self.acapella.scrollview finishWrapAroundAnimation];
-        }];
-        
-        if (object){ //share data
-            
-            NSDictionary *shareData = (NSDictionary *)object;
-            
-            //Twitter
-            [c addOtherButtonWithTitle:@"Twitter" buttonAction:^(NSArray *textFieldStrings){
-                
-                if (successful){ //device isnt locked and we have data
-                    
-                    SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-                    
-                    if ([shareData valueForKey:@"shareString"]){
-                        [compose setInitialText:[shareData valueForKey:@"shareString"]];
-                    }
-                    if ([shareData valueForKey:@"shareImage"]){
-                        [compose addImage:[shareData valueForKey:@"shareImage"]];
-                    }
-                    
-                    compose.completionHandler = ^(SLComposeViewControllerResult result) {
-                        [self.acapella.tableview resetContentOffset:YES];
-                        [self.acapella.scrollview finishWrapAroundAnimation];
-                    };
-                    
-                    [self presentViewController:compose animated:YES completion:nil];
-                    
-                } else {
-                    
-                    TBAlertController *fail = [[TBAlertController alloc] initWithTitle:@"Error"
-                                                                               message:@"You cannot share from the Lock Screen for security reasons"
-                                                                                 style:TBAlertControllerStyleActionSheet];
-                    [fail setCancelButtonWithTitle:@"Ok" buttonAction:^(NSArray *textFieldStrings){
-                        [self.acapella.tableview resetContentOffset:YES];
-                        [self.acapella.scrollview finishWrapAroundAnimation];
-                    }];
-                    [fail showFromViewController:self];
-                    
-                }
-            }];
-            
-            //Facebook
-            [c addOtherButtonWithTitle:@"Facebook" buttonAction:^(NSArray *textFieldStrings){
-                
-                if (successful){ //device isnt locked and we have data
-                    
-                    SLComposeViewController *compose = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-                    
-                    if ([shareData valueForKey:@"shareString"]){
-                        [compose setInitialText:[shareData valueForKey:@"shareString"]];
-                    }
-                    if ([shareData valueForKey:@"shareImage"]){
-                        [compose addImage:[shareData valueForKey:@"shareImage"]];
-                    }
-                    
-                    compose.completionHandler = ^(SLComposeViewControllerResult result) {
-                        [self.acapella.tableview resetContentOffset:YES];
-                        [self.acapella.scrollview finishWrapAroundAnimation];
-                    };
-                    
-                    [self presentViewController:compose animated:YES completion:nil];
-                    
-                } else {
-                    
-                    TBAlertController *fail = [[TBAlertController alloc] initWithTitle:@"Error"
-                                                                               message:@"You cannot share from the Lock Screen for security reasons"
-                                                                                 style:TBAlertControllerStyleActionSheet];
-                    [fail setCancelButtonWithTitle:@"Ok" buttonAction:^(NSArray *textFieldStrings){
-                        [self.acapella.tableview resetContentOffset:YES];
-                        [self.acapella.scrollview finishWrapAroundAnimation];
-                    }];
-                    [fail showFromViewController:self];
-                    
-                }
-            }];
-            
-        }
-        
-        if ([self.view.superview isKindOfClass:NSClassFromString(@"SBEqualizerScrollView")]){
-            
-            [c addOtherButtonWithTitle:@"Equilizer Everywhere" buttonAction:^(NSArray *textFieldStrings){
-                
-                UIScrollView *eeScrollView = (UIScrollView *)self.view.superview;
-                [eeScrollView setContentOffset:CGPointMake(eeScrollView.frame.size.width, 0.0)];
-                [self.acapella.tableview resetContentOffset:YES];
-                [self.acapella.scrollview finishWrapAroundAnimation];
-                
-            }];
-            
-        }
-        
-        
-        if (c.numberOfButtons > 1){ //1 means only cancel button
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                [c showFromViewController:self];
-            });
-        } else {
-            c = nil;
-            
-            [self.acapella.tableview resetContentOffset:YES];
-            [self.acapella.scrollview finishWrapAroundAnimation];
-        }
-        
-    }];
-}
-
-%new
-- (void)action_ShowPlaylistOptions
-{
-    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-        
-        NSDictionary *resultDict = object;
-        
-        if (resultDict){
-            
-            //int mediaRepeatMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoRepeatMode] intValue];
-            //int mediaShuffleMode = [[resultDict valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoShuffleMode] intValue];
-            
-            TBAlertController *c = [[TBAlertController alloc] initWithTitle:@"Playlist Options"
-                                                                    message:nil
-                                                                      style:TBAlertControllerStyleActionSheet];
-            
-            
-            [c setCancelButtonWithTitle:@"Cancel" buttonAction:^(NSArray *textFieldStrings){
-                [self.acapella.tableview resetContentOffset:YES];
-                [self.acapella.scrollview finishWrapAroundAnimation];
-            }];
-            
-            
-            
-            for (NSUInteger x = 0; x < 3; x++){
-                
-                [c addOtherButtonWithTitle:NSStringForRepeatMode(x) buttonAction:^(NSArray *textFieldStrings){
-                    MRMediaRemoteSetRepeatMode(x);
-                    [self.acapella.tableview resetContentOffset:YES];
-                    [self.acapella.scrollview finishWrapAroundAnimation];
-                }];
-                
-            }
-            
-            
-            for (NSUInteger x = 0; x < 3; x++){
-                
-                if (x != 1){ //1 isnt a valid shuffle mode
-                    
-                    [c addOtherButtonWithTitle:NSStringForShuffleMode(x) buttonAction:^(NSArray *textFieldStrings){
-                        MRMediaRemoteSetShuffleMode(x);
-                        [self.acapella.tableview resetContentOffset:YES];
-                        [self.acapella.scrollview finishWrapAroundAnimation];
-                    }];
-                    
-                }
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                [c showFromViewController:self];
-            });
-            
-        } else {
-            [self.acapella.tableview resetContentOffset:YES];
-            [self.acapella.scrollview finishWrapAroundAnimation];
-        }
-    }];
-}
-
-%new
-- (void)action_OpenApp
-{
-    [SWAcapellaActionsHelper action_OpenApp:nil];
-}
-
-%new
-- (void)action_ShowRatingsOpenApp
-{
-    [SWAcapellaActionsHelper isCurrentItemRadioItem:^(BOOL successful, id object){
-        if (successful){
-            [self _likeBanButtonTapped:nil];
-        } else {
-            [SWAcapellaActionsHelper action_OpenApp:nil];
-        }
-    }];
 }
 
 %new
 - (void)action_DecreaseVolume
 {
-    [SWAcapellaActionsHelper action_DecreaseVolume:nil];
+    [SWAcapellaActionsHelper action_DecreaseVolume];
 }
 
 %new
 - (void)action_IncreaseVolume
 {
-    [SWAcapellaActionsHelper action_IncreaseVolume:nil];
+    [SWAcapellaActionsHelper action_IncreaseVolume];
 }
 
 %end
@@ -908,57 +630,31 @@ static void mpuPostLayoutSubviews(UIView *mpu)
         }
     }
     
-    //if acapella is not nil, then we know it is enabled
-    if (acapella){
+    if (acapella){ //if acapella is not nil, then we know it is enabled
         
-        UIView *time = MSHookIvar<UIView *>(mpu, "_timeInformationView");
+        //UIView *time = MSHookIvar<UIView *>(mpu, "_timeInformationView");
+        UIView *titles = MSHookIvar<UIView *>(mpu, "_trackInformationView");
         UIView *transport = MSHookIvar<UIView *>(mpu, "_transportControlsView");
-        UIView *volume = MSHookIvar<UIView *>(mpu, "_volumeView");
+        //UIView *volume = MSHookIvar<UIView *>(mpu, "_volumeView");
         
-        
-        transport.center = CGPointMake(6900, transport.center.y);
-        
-        
-        //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
-        if (time && ([time.superview isKindOfClass:[UITableViewCell class]] ||
-                     [time.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")])){
-            
-            time.center = CGPointMake(CGRectGetMidX(time.superview.bounds), CGRectGetMidY(time.superview.bounds));
-            
+        if (titles){
+            [acapella.scrollview addSubview:titles];
+            titles.frame = titles.frame; //center
         }
         
-        //iOS 7 superview is a UITableViewCellScrollView iOS 8 is UITableViewCell :$
-        if (volume && ([volume.superview isKindOfClass:[UITableViewCell class]] ||
-                       [volume.superview isKindOfClass:NSClassFromString(@"UITableViewCellScrollView")])){
-            
-            volume.center = CGPointMake(CGRectGetMidX(volume.superview.bounds), CGRectGetMidY(volume.superview.bounds));
-            
+        if (transport){
+            transport.center = CGPointMake(6900, transport.center.y);
         }
+        
     }
 }
 
-%hook _MPUSystemMediaControlsView //iOS 7
+%hook MPUSystemMediaControlsView
 
 - (void)layoutSubviews
 {
     %orig();
     mpuPostLayoutSubviews(self);
-    
-    //iOS 7 auto layout bug. Need to call or crash
-    [self layoutIfNeeded];
-}
-
-%end
-
-%hook MPUSystemMediaControlsView //iOS 8
-
-- (void)layoutSubviews
-{
-    %orig();
-    mpuPostLayoutSubviews(self);
-    
-    //iOS 7 auto layout bug. Need to call or crash
-    [self layoutIfNeeded];
 }
 
 %end
@@ -975,11 +671,9 @@ static void mpuPostLayoutSubviews(UIView *mpu)
 {
     CGSize original = %orig(arg1);
     
-    if ([[SWAcapellaPrefsBridge valueForKey:@"cc_enabled" defaultValue:@YES] boolValue]){
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
-            return CGSizeMake(original.width, original.height * 0.75);
-        }
-    }
+//    if ([[SWAcapellaPrefsBridge valueForKey:@"cc_enabled" defaultValue:@YES] boolValue]){
+//        return CGSizeMake(original.width, original.height * 0.75);
+//    }
     
     return original;
 }

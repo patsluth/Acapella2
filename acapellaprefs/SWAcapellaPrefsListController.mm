@@ -34,7 +34,7 @@
 - (id)specifiers
 {
     if(_specifiers == nil){
-        _specifiers = [self loadSpecifiersFromPlistName:@"AcapellaPrefs" target:self];
+        _specifiers = [self loadSpecifiersFromPlistName:@"AcapellaPrefs2" target:self];
     }
     
     return _specifiers;
@@ -44,52 +44,17 @@
 
 - (NSString *)bundlePath
 {
-    return @"/Library/PreferenceBundles/AcapellaPrefs.bundle";
+    return @"/Library/PreferenceBundles/AcapellaPrefs2.bundle";
 }
 
 - (NSString *)displayName
 {
-    return @"Acapella";
+    return @"Acapella II";
 }
 
 - (NSString *)plistPath
 {
-    return @"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist";
-}
-
-#pragma mark Tutorial Video
-
-- (void)viewTutorialVideo:(PSSpecifier *)specifier
-{
-    //random string so php doesnt cache
-    NSInteger randomStringLength = 200;
-    NSMutableString *randomString = [NSMutableString stringWithCapacity:randomStringLength];
-    for (int i = 0; i < randomStringLength; i++){
-        [randomString appendFormat:@"%C", (unichar)('a' + arc4random_uniform(25))];
-    }
-    
-    NSString *url = [NSString stringWithFormat:@"%@%@",
-                     @"http://sluthware.com/SluthwareApps/SWAcapellaTutorialVideoURL.php?",
-                     randomString];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
-                                    initWithURL:[NSURL URLWithString:url]];
-    
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[[NSOperationQueue alloc] init]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError){
-                                if (connectionError){
-                                    //NSLog(@"SW Error - %@", connectionError);
-                                    [[[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Could not retrive Video URL"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil, nil] show];
-                                } else {
-                                    NSString *result = [[NSString alloc] initWithData:data
-                                                                             encoding:NSUTF8StringEncoding];
-                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:result]];
-                                }
-                           }];
+    return @"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist";
 }
 
 #pragma mark Twitter

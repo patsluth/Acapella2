@@ -1,5 +1,5 @@
 
-#import <AcapellaKit/AcapellaKit.h>
+#import "AcapellaKit.h"
 #import "SWAcapellaPrefsBridge.h"
 
 #import "UIColor+SW.h"
@@ -76,10 +76,6 @@
 - (id)initWithStyle:(int)arg1
 {
     if (![[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
-        return %orig(arg1);
-    }
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         return %orig(arg1);
     }
     

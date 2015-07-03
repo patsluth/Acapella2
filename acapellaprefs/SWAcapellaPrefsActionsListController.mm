@@ -32,12 +32,9 @@
              @"Next Song", //3
              @"Back 20s", //4
              @"Forward 20s", //5
-             @"Open Activity", //6
-             @"Show Playlist Options", //7
-             @"Open App", //8
-             @"Show Ratings/Open App", //9
-             @"Decrease Volume", //10
-             @"Increase Volume"]; //11
+             @"Show Ratings", //6
+             @"Decrease Volume", //7
+             @"Increase Volume"]; //8
 }
 
 - (NSArray *)validActionValues
@@ -55,7 +52,7 @@
 
 - (id)readPreferenceValue:(PSSpecifier *)specifier
 {
-    NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"];
+    NSDictionary *acapellaPrefs = [NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"];
     
     if (!acapellaPrefs[specifier.properties[@"key"]]){
         if (acapellaPrefs[specifier.properties[@"placeholder"]]){
@@ -71,9 +68,9 @@
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier
 {
     NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-    [defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist"]];
+    [defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"]];
     [defaults setObject:value forKey:specifier.properties[@"key"]];
-    [defaults writeToFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs.plist" atomically:YES];
+    [defaults writeToFile:@"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist" atomically:YES];
     CFStringRef mikotoPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), mikotoPost, NULL, NULL, YES);
 }

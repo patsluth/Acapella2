@@ -48,32 +48,31 @@
     }repeats:NO];
 }
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+}
+
 #pragma mark - SWAcapellaDelegate
 
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
 {
-    if (tap.state == UIGestureRecognizerStateEnded) {
+    if (tap.state == UIGestureRecognizerStateEnded){
     }
 }
 
-- (void)swAcapella:(id<SWAcapellaScrollingViewProtocol>)swAcapella onSwipe:(SWScrollDirection)direction
+- (void)swAcapella:(SWAcapellaBase *)swAcapella onSwipe:(UISwipeGestureRecognizerDirection)direction
 {
-    if (swAcapella == self.acapella.scrollview){
-        [self.acapella.scrollview stopWrapAroundFallback];
-        [self.acapella.scrollview finishWrapAroundAnimation];
-        [self.acapella.scrollview finishWrapAroundAnimation];
-        [self.acapella.scrollview finishWrapAroundAnimation];
-    } else if (swAcapella == self.acapella.tableview){
-        [self.acapella.tableview resetContentOffset:YES];
-    }
-    
+    [self.acapella.scrollview stopWrapAroundFallback];
+    [self.acapella.scrollview finishWrapAroundAnimation];
+    [self.acapella.scrollview finishWrapAroundAnimation];
 }
 
 - (void)swAcapella:(SWAcapellaBase *)swAcapella onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
 {
-    if (longPress.state == UIGestureRecognizerStateBegan) {
+    if (longPress.state == UIGestureRecognizerStateBegan){
         
-    } else if (longPress.state == UIGestureRecognizerStateEnded) {
+    } else if (longPress.state == UIGestureRecognizerStateEnded){
 
     }
 }

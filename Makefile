@@ -24,7 +24,7 @@ endif
 
 
 
-ARCHS = armv7 armv7s arm64
+ARCHS = armv7 arm64
 TARGET = iphone:clang:latest:7.0
 
 
@@ -33,8 +33,8 @@ TARGET = iphone:clang:latest:7.0
 
 TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc
-Acapella2_FILES = AVSystemController.xm SWAcapellaActionsHelper.xm SWAcapellaMediaTitles.xm SWAcapellaMusicApp.xm SWAcapellaPrefsBridge.xm SWAcapellaSpringboard.xm
-Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics MediaPlayer Social
+Acapella2_FILES = SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm
+Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Acapella2_PRIVATE_FRAMEWORKS = MediaRemote
 Acapella2_LIBRARIES = substrate sw packageinfo
 
@@ -46,7 +46,6 @@ ADDITIONAL_CFLAGS += -Ipublic/privateheaders/MusicApp
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Shared
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/Springboard
 ADDITIONAL_CFLAGS += -Ipublic/privateheaders/SpringboardMusic
-ADDITIONAL_CFLAGS += -IAcapellaKit.framework/Headers
 
 
 
@@ -82,9 +81,9 @@ clean::
 
 
 
-stage::
-	mkdir -p "$(THEOS_STAGING_DIR)/Library/Frameworks"
-	cp -r AcapellaKit.framework "$(THEOS_STAGING_DIR)/Library/Frameworks"
+#stage::
+#mkdir -p "$(THEOS_STAGING_DIR)/Library/Frameworks"
+#cp -r AcapellaKit.framework "$(THEOS_STAGING_DIR)/Library/Frameworks"
 
 
 

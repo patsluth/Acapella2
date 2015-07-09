@@ -1,6 +1,0 @@
-framework module AcapellaKit {
-  umbrella header "AcapellaKit.h"
-
-  export *
-  module * { export * }
-}

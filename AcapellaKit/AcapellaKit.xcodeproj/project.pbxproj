@@ -7,44 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */; };
-		2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */; };
 		2E242EF21A41D2E200864588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
 		2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
-		2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
-		2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F621AE857FC002046A1 /* CoreGraphics.framework */; };
-		2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F641AE85822002046A1 /* UIKit.framework */; };
-		2E51F4131AEC63DA00854158 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E51F4121AEC63DA00854158 /* Social.framework */; };
-		2E73C39F1AE858A5008EA808 /* AcapellaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; };
-		2E73C3A01AE85C6F008EA808 /* AcapellaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E75956F19FD49F500001BC7 /* AcapellaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75963D19FDCCA600001BC7 /* AppDelegate.m */; };
 		2E75964119FDCCA600001BC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
 		2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964519FDCCA600001BC7 /* Images.xcassets */; };
 		2E75966719FDCD5D00001BC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75966519FDCD5D00001BC7 /* main.m */; };
-		2E8159821AF9A76100107833 /* libSluthware.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159791AF9A76100107833 /* libSluthware.h */; };
-		2E8159831AF9A76100107833 /* NSTimer+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597A1AF9A76100107833 /* NSTimer+SW.h */; };
-		2E8159841AF9A76100107833 /* SWMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597B1AF9A76100107833 /* SWMCircle.h */; };
-		2E8159851AF9A76100107833 /* SWMLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597C1AF9A76100107833 /* SWMLine.h */; };
-		2E8159861AF9A76100107833 /* SWMQuadratic.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597D1AF9A76100107833 /* SWMQuadratic.h */; };
-		2E8159871AF9A76100107833 /* TBAlertAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597E1AF9A76100107833 /* TBAlertAction.h */; };
-		2E8159881AF9A76100107833 /* TBAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E81597F1AF9A76100107833 /* TBAlertController.h */; };
-		2E8159891AF9A76100107833 /* UIColor+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159801AF9A76100107833 /* UIColor+SW.h */; };
-		2E81598A1AF9A76100107833 /* UIScrollView+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E8159811AF9A76100107833 /* UIScrollView+SW.h */; };
-		2ED4861F1B45AF18007296AC /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F541AE8524D002046A1 /* libSluthware.a */; };
+		2EA053291B4E036100A22197 /* SWAcapella.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6AEBA1B4DA0A800889115 /* SWAcapella.m */; };
+		2EF6AEBF1B4DB18A00889115 /* UISnapBehaviorHorizontal.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6AEBE1B4DB18A00889115 /* UISnapBehaviorHorizontal.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		2E75966C19FDCDD900001BC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E75956119FD49F500001BC7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2E75956919FD49F500001BC7;
-			remoteInfo = AcapellaKit;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		2E75966E19FDCDD900001BC7 /* Embed Frameworks */ = {
@@ -53,7 +24,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2E73C3A01AE85C6F008EA808 /* AcapellaKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,18 +31,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaBase.h; sourceTree = "<group>"; };
-		2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaBase.m; sourceTree = "<group>"; };
-		2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaScrollView.h; sourceTree = "<group>"; };
-		2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaScrollView.m; sourceTree = "<group>"; };
 		2E334F541AE8524D002046A1 /* libSluthware.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSluthware.a; path = "../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware.a"; sourceTree = "<group>"; };
 		2E334F5F1AE85701002046A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2E334F641AE85822002046A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2E51F4121AEC63DA00854158 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		2E75956A19FD49F500001BC7 /* AcapellaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AcapellaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2E75956E19FD49F500001BC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E75956F19FD49F500001BC7 /* AcapellaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AcapellaKit.h; sourceTree = "<group>"; };
 		2E75963619FDCCA600001BC7 /* AcapellaTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcapellaTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75963C19FDCCA600001BC7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E75963D19FDCCA600001BC7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -91,27 +53,18 @@
 		2E81597F1AF9A76100107833 /* TBAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBAlertController.h; sourceTree = "<group>"; };
 		2E8159801AF9A76100107833 /* UIColor+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
 		2E8159811AF9A76100107833 /* UIScrollView+SW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
+		2EF6AEB91B4DA0A800889115 /* SWAcapella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapella.h; path = ../AcapellaKit/SWAcapella.h; sourceTree = "<group>"; };
+		2EF6AEBA1B4DA0A800889115 /* SWAcapella.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWAcapella.m; path = ../AcapellaKit/SWAcapella.m; sourceTree = "<group>"; };
+		2EF6AEBD1B4DB18A00889115 /* UISnapBehaviorHorizontal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UISnapBehaviorHorizontal.h; sourceTree = "<group>"; };
+		2EF6AEBE1B4DB18A00889115 /* UISnapBehaviorHorizontal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UISnapBehaviorHorizontal.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2E75956619FD49F500001BC7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2E334F631AE857FC002046A1 /* CoreGraphics.framework in Frameworks */,
-				2E334F611AE857F9002046A1 /* Foundation.framework in Frameworks */,
-				2E334F651AE85823002046A1 /* UIKit.framework in Frameworks */,
-				2ED4861F1B45AF18007296AC /* libSluthware.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2E75963319FDCCA600001BC7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E51F4131AEC63DA00854158 /* Social.framework in Frameworks */,
 				2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */,
-				2E73C39F1AE858A5008EA808 /* AcapellaKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +74,6 @@
 		2E75956019FD49F500001BC7 = {
 			isa = PBXGroup;
 			children = (
-				2E75956C19FD49F500001BC7 /* AcapellaKit */,
 				2E75963719FDCCA600001BC7 /* AcapellaTest */,
 				2E75959419FD958600001BC7 /* Frameworks */,
 				2E75956B19FD49F500001BC7 /* Products */,
@@ -131,37 +83,14 @@
 		2E75956B19FD49F500001BC7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2E75956A19FD49F500001BC7 /* AcapellaKit.framework */,
 				2E75963619FDCCA600001BC7 /* AcapellaTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2E75956C19FD49F500001BC7 /* AcapellaKit */ = {
-			isa = PBXGroup;
-			children = (
-				2E75956F19FD49F500001BC7 /* AcapellaKit.h */,
-				2E1DFE631A0DC628000DCF1E /* SWAcapellaBase.h */,
-				2E1DFE641A0DC628000DCF1E /* SWAcapellaBase.m */,
-				2E1DFE701A0EA3BC000DCF1E /* SWAcapellaScrollView.h */,
-				2E1DFE711A0EA3BC000DCF1E /* SWAcapellaScrollView.m */,
-				2E75956D19FD49F500001BC7 /* Supporting Files */,
-			);
-			path = AcapellaKit;
-			sourceTree = "<group>";
-		};
-		2E75956D19FD49F500001BC7 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				2E75956E19FD49F500001BC7 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		2E75959419FD958600001BC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2E51F4121AEC63DA00854158 /* Social.framework */,
 				2E8159781AF9A76100107833 /* libSluthware */,
 				2E334F541AE8524D002046A1 /* libSluthware.a */,
 				2E334F621AE857FC002046A1 /* CoreGraphics.framework */,
@@ -174,6 +103,10 @@
 		2E75963719FDCCA600001BC7 /* AcapellaTest */ = {
 			isa = PBXGroup;
 			children = (
+				2EF6AEBD1B4DB18A00889115 /* UISnapBehaviorHorizontal.h */,
+				2EF6AEBE1B4DB18A00889115 /* UISnapBehaviorHorizontal.m */,
+				2EF6AEB91B4DA0A800889115 /* SWAcapella.h */,
+				2EF6AEBA1B4DA0A800889115 /* SWAcapella.m */,
 				2E75963C19FDCCA600001BC7 /* AppDelegate.h */,
 				2E75963D19FDCCA600001BC7 /* AppDelegate.m */,
 				2E75963F19FDCCA600001BC7 /* ViewController.h */,
@@ -213,47 +146,7 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		2E75956719FD49F500001BC7 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2E75957019FD49F500001BC7 /* AcapellaKit.h in Headers */,
-				2E8159871AF9A76100107833 /* TBAlertAction.h in Headers */,
-				2E1DFE651A0DC628000DCF1E /* SWAcapellaBase.h in Headers */,
-				2E8159881AF9A76100107833 /* TBAlertController.h in Headers */,
-				2E8159851AF9A76100107833 /* SWMLine.h in Headers */,
-				2E8159891AF9A76100107833 /* UIColor+SW.h in Headers */,
-				2E8159861AF9A76100107833 /* SWMQuadratic.h in Headers */,
-				2E8159841AF9A76100107833 /* SWMCircle.h in Headers */,
-				2E81598A1AF9A76100107833 /* UIScrollView+SW.h in Headers */,
-				2E8159821AF9A76100107833 /* libSluthware.h in Headers */,
-				2E8159831AF9A76100107833 /* NSTimer+SW.h in Headers */,
-				2E1DFE721A0EA3BC000DCF1E /* SWAcapellaScrollView.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		2E75956919FD49F500001BC7 /* AcapellaKit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2E75958019FD49F500001BC7 /* Build configuration list for PBXNativeTarget "AcapellaKit" */;
-			buildPhases = (
-				2E75956519FD49F500001BC7 /* Sources */,
-				2E75956619FD49F500001BC7 /* Frameworks */,
-				2E75956719FD49F500001BC7 /* Headers */,
-				2E75956819FD49F500001BC7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = AcapellaKit;
-			productName = AcapellaKit;
-			productReference = 2E75956A19FD49F500001BC7 /* AcapellaKit.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		2E75963519FDCCA600001BC7 /* AcapellaTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2E75965619FDCCA600001BC7 /* Build configuration list for PBXNativeTarget "AcapellaTest" */;
@@ -266,7 +159,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2E75966D19FDCDD900001BC7 /* PBXTargetDependency */,
 			);
 			name = AcapellaTest;
 			productName = AcapellaTest;
@@ -279,13 +171,9 @@
 		2E75956119FD49F500001BC7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Pat Sluth";
 				TargetAttributes = {
-					2E75956919FD49F500001BC7 = {
-						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = KZ3284WPA2;
-					};
 					2E75963519FDCCA600001BC7 = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = KZ3284WPA2;
@@ -305,20 +193,12 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2E75956919FD49F500001BC7 /* AcapellaKit */,
 				2E75963519FDCCA600001BC7 /* AcapellaTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2E75956819FD49F500001BC7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2E75963419FDCCA600001BC7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -331,15 +211,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2E75956519FD49F500001BC7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2E1DFE751A0EA5C0000DCF1E /* SWAcapellaBase.m in Sources */,
-				2E1DFE731A0EA3BC000DCF1E /* SWAcapellaScrollView.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2E75963219FDCCA600001BC7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -347,18 +218,12 @@
 				2E75964119FDCCA600001BC7 /* ViewController.m in Sources */,
 				2E75966719FDCD5D00001BC7 /* main.m in Sources */,
 				2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */,
+				2EA053291B4E036100A22197 /* SWAcapella.m in Sources */,
+				2EF6AEBF1B4DB18A00889115 /* UISnapBehaviorHorizontal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		2E75966D19FDCDD900001BC7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2E75956919FD49F500001BC7 /* AcapellaKit */;
-			targetProxy = 2E75966C19FDCDD900001BC7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2E75964219FDCCA600001BC7 /* Main.storyboard */ = {
@@ -412,7 +277,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = /opt/theos/lib;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
@@ -422,6 +287,7 @@
 				STRIP_STYLE = all;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
+				VALID_ARCHS = "arm64 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -472,80 +338,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		2E75958119FD49F500001BC7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-				);
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
-				GCC_WARN_UNDECLARED_SELECTOR = NO;
-				INFOPLIST_FILE = AcapellaKit/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/theos/lib,
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
-				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
-			};
-			name = Debug;
-		};
-		2E75958219FD49F500001BC7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-				);
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
-				GCC_WARN_UNDECLARED_SELECTOR = NO;
-				INFOPLIST_FILE = AcapellaKit/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/theos/lib,
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(CONTENTS_FOLDER_PATH)/Headers";
-				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = /opt/theos/include/;
 			};
 			name = Release;
 		};
@@ -623,15 +418,6 @@
 			buildConfigurations = (
 				2E75957E19FD49F500001BC7 /* Debug */,
 				2E75957F19FD49F500001BC7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2E75958019FD49F500001BC7 /* Build configuration list for PBXNativeTarget "AcapellaKit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2E75958119FD49F500001BC7 /* Debug */,
-				2E75958219FD49F500001BC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

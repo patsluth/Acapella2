@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-#import "AcapellaKit.h"
+#import "SWAcapella.h"
 
 
 
 
 
-@interface ViewController : UIViewController <SWAcapellaDelegate>
+@interface ViewController : UIViewController
+
+@property (strong, nonatomic) IBOutlet UIView *top;
+@property (strong, nonatomic) IBOutlet UIView *dragView;
+@property (strong, nonatomic) IBOutlet UIView *bottom;
 
 @end
 

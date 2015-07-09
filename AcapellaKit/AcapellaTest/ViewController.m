@@ -14,115 +14,61 @@
 
 @interface ViewController ()
 
-@property (strong, nonatomic) IBOutlet UIView *acapellaContainer;
-@property (strong, nonatomic) SWAcapellaBase *acapella;
+@property (strong, nonatomic) IBOutlet UIButton *button;
 
 @end
 
+
+
+
+
 @implementation ViewController
+
+- (SWAcapella *)acapella
+{
+    return [SWAcapella acapellaForOwner:self];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    if (self.acapella){}
-    
-    
-    
-    //[NSTimer scheduledTimerWithTimeInterval:0.25 target:self selector:@selector(resizeB) userInfo:nil repeats:NO];
-}
-
-- (void)resizeA
-{
-    self.acapellaContainer.frame = CGRectMake(40, 100, self.view.frame.size.width - 80, 200);
-    [self.acapellaContainer layoutIfNeeded];
-}
-
-- (void)resizeB
-{
-    self.acapellaContainer.frame = CGRectMake(0, 100, self.view.frame.size.width, 100);
-    [self.acapellaContainer layoutIfNeeded];
-    [NSTimer scheduledTimerWithTimeInterval:2.0
-                                      block:^{
-                                          [self resizeA];
-    }repeats:NO];
-}
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-}
-
-#pragma mark - SWAcapellaDelegate
-
-- (void)swAcapella:(SWAcapellaBase *)swAcapella onTap:(UITapGestureRecognizer *)tap percentage:(CGPoint)percentage
-{
-    if (tap.state == UIGestureRecognizerStateEnded){
+    if (!self.acapella){
+        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
+            a.owner = self;
+            a.titles = self.dragView;
+            a.topSlider = self.top;
+            a.bottomSlider = self.bottom;
+        }] ForOwner:self];
     }
 }
 
-- (void)swAcapella:(SWAcapellaBase *)swAcapella onSwipe:(UISwipeGestureRecognizerDirection)direction
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    [self.acapella.scrollview stopWrapAroundFallback];
-    [self.acapella.scrollview finishWrapAroundAnimation];
-    [self.acapella.scrollview finishWrapAroundAnimation];
-}
-
-- (void)swAcapella:(SWAcapellaBase *)swAcapella onLongPress:(UILongPressGestureRecognizer *)longPress percentage:(CGPoint)percentage
-{
-    if (longPress.state == UIGestureRecognizerStateBegan){
+    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
         
-    } else if (longPress.state == UIGestureRecognizerStateEnded){
-
-    }
-}
-
-#pragma mark - Internal
-
-- (SWAcapellaBase *)acapella
-{
-    if (!_acapella){
+        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         
-        _acapella = [[SWAcapellaBase alloc] init];
-        _acapella.delegate = self;
-        
-        [self.acapellaContainer addSubview:_acapella];
-        
-        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
-                                                         attribute:NSLayoutAttributeTop
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self.acapellaContainer
-                                                         attribute:NSLayoutAttributeTop
-                                                        multiplier:1.0
-                                                          constant:0.0]];
-        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
-                                                         attribute:NSLayoutAttributeLeading
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self.acapellaContainer
-                                                         attribute:NSLayoutAttributeLeft
-                                                        multiplier:1.0
-                                                          constant:0.0]];
-        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
-                                                         attribute:NSLayoutAttributeBottom
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self.acapellaContainer
-                                                         attribute:NSLayoutAttributeBottom
-                                                        multiplier:1.0
-                                                          constant:0.0]];
-        [self.acapellaContainer addConstraint:[NSLayoutConstraint constraintWithItem:_acapella
-                                                         attribute:NSLayoutAttributeTrailing
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self.acapellaContainer
-                                                         attribute:NSLayoutAttributeRight
-                                                        multiplier:1.0
-                                                          constant:0.0]];
-        
-        [self.acapellaContainer layoutIfNeeded];
-        [self.acapella layoutIfNeeded];
+        if (pan == self.acapella.pan){
+            CGPoint panVelocity = [pan velocityInView:pan.view];
+            NSLog(@"%@", NSStringFromCGPoint(panVelocity));
+            
+            if (fabs(panVelocity.y) > fabs(panVelocity.x)){
+                return NO;
+            }
+        }
         
     }
     
-    return _acapella;
+    return YES;
+}
+
+- (IBAction)buttonClick:(id)sender
+{
+//    CATransform3D newTransform = self.button.layer.transform;
+//    newTransform = CATransform3DScale(newTransform, 0.9, 0.9, 1.0);
+    
+    
 }
 
 @end

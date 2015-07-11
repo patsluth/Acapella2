@@ -1,0 +1,92 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		2E1DF1E41B4F7150006836E6 /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Acapella2.plist; path = acapella2/Acapella2.plist; sourceTree = "<group>"; };
+		2E1DF1E51B4F7150006836E6 /* MPUSystemMediaControlsViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = MPUSystemMediaControlsViewController.xm; path = acapella2/MPUSystemMediaControlsViewController.xm; sourceTree = "<group>"; };
+		2E1DF1E61B4F7150006836E6 /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = MusicMiniPlayerViewController.xm; path = acapella2/MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
+		2E1DF1E71B4F7150006836E6 /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = MusicNowPlayingViewController.xm; path = acapella2/MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
+		2E1DF1E81B4F7150006836E6 /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = MPUMediaControlsTitlesView.xm; path = acapella2/MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
+		2E1DF1E91B4F7150006836E6 /* SWAcapellaPrefsBridge.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = SWAcapellaPrefsBridge.xm; path = acapella2/SWAcapellaPrefsBridge.xm; sourceTree = "<group>"; };
+		2E1DF1EA1B4F7150006836E6 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = acapella2/Makefile; sourceTree = "<group>"; };
+		2E1DF2231B4F718B006836E6 /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; name = layout; path = acapella2/layout; sourceTree = "<group>"; };
+		2E1DF2241B4F718B006836E6 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = acapella2/public; sourceTree = "<group>"; };
+		2E1DF2631B4F8641006836E6 /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = MusicNowPlayingTitlesView.xm; path = acapella2/MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
+		2E5142011B5035B900F8721B /* SBLockScreenView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = SBLockScreenView.xm; path = acapella2/SBLockScreenView.xm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2E9C908E1A36BC0F006622A8 = {
+			isa = PBXGroup;
+			children = (
+				2E1DF2231B4F718B006836E6 /* layout */,
+				2E1DF2241B4F718B006836E6 /* public */,
+				2E1DF1E41B4F7150006836E6 /* Acapella2.plist */,
+				2E1DF1EA1B4F7150006836E6 /* Makefile */,
+				2E1DF1E51B4F7150006836E6 /* MPUSystemMediaControlsViewController.xm */,
+				2E1DF1E61B4F7150006836E6 /* MusicMiniPlayerViewController.xm */,
+				2E1DF1E71B4F7150006836E6 /* MusicNowPlayingViewController.xm */,
+				2E1DF2631B4F8641006836E6 /* MusicNowPlayingTitlesView.xm */,
+				2E1DF1E81B4F7150006836E6 /* MPUMediaControlsTitlesView.xm */,
+				2E5142011B5035B900F8721B /* SBLockScreenView.xm */,
+				2E1DF1E91B4F7150006836E6 /* SWAcapellaPrefsBridge.xm */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		2E9C908F1A36BC0F006622A8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+			};
+			buildConfigurationList = 2E9C90921A36BC0F006622A8 /* Build configuration list for PBXProject "acapella2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2E9C908E1A36BC0F006622A8;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		2E9C90931A36BC0F006622A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		2E9C90941A36BC0F006622A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2E9C90921A36BC0F006622A8 /* Build configuration list for PBXProject "acapella2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E9C90931A36BC0F006622A8 /* Debug */,
+				2E9C90941A36BC0F006622A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2E9C908F1A36BC0F006622A8 /* Project object */;
+}

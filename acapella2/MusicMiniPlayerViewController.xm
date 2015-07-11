@@ -40,13 +40,19 @@
 {
     %orig();
     
-    [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
-        a.owner = self;
-        a.titles = self.titlesView;
-    }] ForOwner:self];
+    //if ([[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
+        
+        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
+            a.owner = self;
+            a.titles = self.titlesView;
+        }] ForOwner:self];
+        
+    //}
     
-    if ([self acapella]){
+    if (self.acapella){
+        
         [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
+        
     }
 }
 
@@ -54,7 +60,7 @@
 {
     %orig();
     
-    if ([self acapella]){
+    if (self.acapella){ //stretch title frame across the entire view
         
         CGRect targetFrame = CGRectMake(0,
                                         self.titlesView.frame.origin.y,
@@ -71,7 +77,7 @@
 %new
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+    if (self.acapella && [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
         
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         
@@ -88,7 +94,7 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
-    if ([self acapella]){
+    if (self.acapella){
         return nil;
     }
     
@@ -97,7 +103,7 @@
 
 - (void)_tapRecognized:(id)arg1
 {
-    if ([self acapella]){
+    if (self.acapella){
         
         MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
         
@@ -105,7 +111,7 @@
         
         [UIView animateWithDuration:0.1
                          animations:^{
-                             self.view.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                             self.view.transform = CGAffineTransformMakeScale(1.15, 1.0);
                          } completion:^(BOOL finished){
                              [UIView animateWithDuration:0.1
                                               animations:^{
@@ -117,6 +123,21 @@
         
     } else {
         %orig(arg1);
+    }
+}
+
+%new
+- (void)onAcapellaWrapAround:(NSNumber *)direction
+{
+    MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
+    
+    //Disable frame changes. See MusicNowPlayingTitlesView.xm
+    self.acapella.titles.tag = 696969;
+    
+    if ([direction integerValue] == 0){
+        [t handlePushingMediaRemoteCommand:4];
+    } else if ([direction integerValue] == 1){
+        [t handlePushingMediaRemoteCommand:5];
     }
 }
 

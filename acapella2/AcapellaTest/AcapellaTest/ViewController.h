@@ -14,7 +14,7 @@
 
 
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *top;
 @property (strong, nonatomic) IBOutlet UIView *dragView;

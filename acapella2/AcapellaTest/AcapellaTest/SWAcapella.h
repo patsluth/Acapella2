@@ -19,6 +19,7 @@
 
 + (SWAcapella *)acapellaForOwner:(id)owner;
 + (void)setAcapella:(SWAcapella *)acapella ForOwner:(id)owner;
++ (void)removeAcapella:(SWAcapella *)acapella;
 
 @property (weak, nonatomic) id owner;
 

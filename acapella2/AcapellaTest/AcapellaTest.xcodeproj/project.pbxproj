@@ -10,17 +10,6 @@
 		2E1DF2281B4F7257006836E6 /* SWAcapella.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DF2271B4F7257006836E6 /* SWAcapella.m */; };
 		2E1DF24A1B4F7396006836E6 /* libSluthware in Resources */ = {isa = PBXBuildFile; fileRef = 2E1DF2481B4F7396006836E6 /* libSluthware */; };
 		2E1DF24B1B4F7396006836E6 /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E1DF2491B4F7396006836E6 /* libSluthware.a */; };
-		2E1DF2581B4F73BA006836E6 /* libSluthware.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF24D1B4F73BA006836E6 /* libSluthware.h */; };
-		2E1DF2591B4F73BA006836E6 /* NSTimer+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF24E1B4F73BA006836E6 /* NSTimer+SW.h */; };
-		2E1DF25A1B4F73BA006836E6 /* SWMCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF24F1B4F73BA006836E6 /* SWMCircle.h */; };
-		2E1DF25B1B4F73BA006836E6 /* SWMLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2501B4F73BA006836E6 /* SWMLine.h */; };
-		2E1DF25C1B4F73BA006836E6 /* SWMQuadratic.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2511B4F73BA006836E6 /* SWMQuadratic.h */; };
-		2E1DF25D1B4F73BA006836E6 /* TBAlertAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2521B4F73BA006836E6 /* TBAlertAction.h */; };
-		2E1DF25E1B4F73BA006836E6 /* TBAlertController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2531B4F73BA006836E6 /* TBAlertController.h */; };
-		2E1DF25F1B4F73BA006836E6 /* UIColor+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2541B4F73BA006836E6 /* UIColor+SW.h */; };
-		2E1DF2601B4F73BA006836E6 /* UIScrollView+SW.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2551B4F73BA006836E6 /* UIScrollView+SW.h */; };
-		2E1DF2611B4F73BA006836E6 /* UISnapBehaviorHorizontal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2561B4F73BA006836E6 /* UISnapBehaviorHorizontal.h */; };
-		2E1DF2621B4F73BA006836E6 /* UISnapBehaviourHorizontal.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E1DF2571B4F73BA006836E6 /* UISnapBehaviourHorizontal.h */; };
 		2E242EF21A41D2E200864588 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964219FDCCA600001BC7 /* Main.storyboard */; };
 		2E334F601AE85701002046A1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E334F5F1AE85701002046A1 /* Foundation.framework */; };
 		2E75963E19FDCCA600001BC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75963D19FDCCA600001BC7 /* AppDelegate.m */; };
@@ -47,17 +36,6 @@
 		2E1DF2271B4F7257006836E6 /* SWAcapella.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = "<group>"; };
 		2E1DF2481B4F7396006836E6 /* libSluthware */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libSluthware; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware"; sourceTree = "<group>"; };
 		2E1DF2491B4F7396006836E6 /* libSluthware.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSluthware.a; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware.a"; sourceTree = "<group>"; };
-		2E1DF24D1B4F73BA006836E6 /* libSluthware.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libSluthware.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/libSluthware.h"; sourceTree = "<group>"; };
-		2E1DF24E1B4F73BA006836E6 /* NSTimer+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSTimer+SW.h"; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/NSTimer+SW.h"; sourceTree = "<group>"; };
-		2E1DF24F1B4F73BA006836E6 /* SWMCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SWMCircle.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/SWMCircle.h"; sourceTree = "<group>"; };
-		2E1DF2501B4F73BA006836E6 /* SWMLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SWMLine.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/SWMLine.h"; sourceTree = "<group>"; };
-		2E1DF2511B4F73BA006836E6 /* SWMQuadratic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SWMQuadratic.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/SWMQuadratic.h"; sourceTree = "<group>"; };
-		2E1DF2521B4F73BA006836E6 /* TBAlertAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TBAlertAction.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/TBAlertAction.h"; sourceTree = "<group>"; };
-		2E1DF2531B4F73BA006836E6 /* TBAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TBAlertController.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/TBAlertController.h"; sourceTree = "<group>"; };
-		2E1DF2541B4F73BA006836E6 /* UIColor+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIColor+SW.h"; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/UIColor+SW.h"; sourceTree = "<group>"; };
-		2E1DF2551B4F73BA006836E6 /* UIScrollView+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SW.h"; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/UIScrollView+SW.h"; sourceTree = "<group>"; };
-		2E1DF2561B4F73BA006836E6 /* UISnapBehaviorHorizontal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UISnapBehaviorHorizontal.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/UISnapBehaviorHorizontal.h"; sourceTree = "<group>"; };
-		2E1DF2571B4F73BA006836E6 /* UISnapBehaviourHorizontal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UISnapBehaviourHorizontal.h; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware/UISnapBehaviourHorizontal.h"; sourceTree = "<group>"; };
 		2E334F5F1AE85701002046A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2E334F641AE85822002046A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -88,17 +66,6 @@
 		2E75956019FD49F500001BC7 = {
 			isa = PBXGroup;
 			children = (
-				2E1DF24D1B4F73BA006836E6 /* libSluthware.h */,
-				2E1DF24E1B4F73BA006836E6 /* NSTimer+SW.h */,
-				2E1DF24F1B4F73BA006836E6 /* SWMCircle.h */,
-				2E1DF2501B4F73BA006836E6 /* SWMLine.h */,
-				2E1DF2511B4F73BA006836E6 /* SWMQuadratic.h */,
-				2E1DF2521B4F73BA006836E6 /* TBAlertAction.h */,
-				2E1DF2531B4F73BA006836E6 /* TBAlertController.h */,
-				2E1DF2541B4F73BA006836E6 /* UIColor+SW.h */,
-				2E1DF2551B4F73BA006836E6 /* UIScrollView+SW.h */,
-				2E1DF2561B4F73BA006836E6 /* UISnapBehaviorHorizontal.h */,
-				2E1DF2571B4F73BA006836E6 /* UISnapBehaviourHorizontal.h */,
 				2E75963719FDCCA600001BC7 /* AcapellaTest */,
 				2E75959419FD958600001BC7 /* Frameworks */,
 				2E75956B19FD49F500001BC7 /* Products */,
@@ -157,17 +124,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E1DF2581B4F73BA006836E6 /* libSluthware.h in Headers */,
-				2E1DF2591B4F73BA006836E6 /* NSTimer+SW.h in Headers */,
-				2E1DF25A1B4F73BA006836E6 /* SWMCircle.h in Headers */,
-				2E1DF25B1B4F73BA006836E6 /* SWMLine.h in Headers */,
-				2E1DF25C1B4F73BA006836E6 /* SWMQuadratic.h in Headers */,
-				2E1DF25D1B4F73BA006836E6 /* TBAlertAction.h in Headers */,
-				2E1DF25E1B4F73BA006836E6 /* TBAlertController.h in Headers */,
-				2E1DF25F1B4F73BA006836E6 /* UIColor+SW.h in Headers */,
-				2E1DF2601B4F73BA006836E6 /* UIScrollView+SW.h in Headers */,
-				2E1DF2611B4F73BA006836E6 /* UISnapBehaviorHorizontal.h in Headers */,
-				2E1DF2621B4F73BA006836E6 /* UISnapBehaviourHorizontal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

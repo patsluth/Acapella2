@@ -8,7 +8,7 @@
 
 #import "SWAcapella.h"
 
-#import "UISnapBehaviorHorizontal.h"
+#import "libsw/libSluthware/UISnapBehaviorHorizontal.h"
 
 #import <objc/runtime.h>
 
@@ -44,6 +44,11 @@ static SWAcapella *_acapella;
 + (void)setAcapella:(SWAcapella *)acapella ForOwner:(id)owner
 {
     objc_setAssociatedObject(owner, &_acapella, acapella, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
++ (void)removeAcapella:(SWAcapella *)acapella
+{
+    objc_removeAssociatedObjects(acapella);
 }
 
 #pragma mark Init
@@ -98,24 +103,24 @@ static SWAcapella *_acapella;
     }
     
     
-    if (self.topSlider || self.bottomSlider){ //we dont need these gestures if the slider views are both nil
-        
-        UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipe:)];
-        UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipe:)];
-        
-        swipeUp.delegate = self.owner;
-        swipeDown.delegate = self.owner;
-        
-        swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
-        swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
-        
-        [self.referenceView addGestureRecognizer:swipeUp];
-        [self.referenceView addGestureRecognizer:swipeDown];
-        
-        [self.pan requireGestureRecognizerToFail:swipeUp];
-        [self.pan requireGestureRecognizerToFail:swipeDown];
-        
-    }
+//    if (self.topSlider || self.bottomSlider){ //we dont need these gestures if the slider views are both nil
+//        
+//        UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipe:)];
+//        UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipe:)];
+//        
+//        swipeUp.delegate = self.owner;
+//        swipeDown.delegate = self.owner;
+//        
+//        swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
+//        swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
+//        
+//        [self.referenceView addGestureRecognizer:swipeUp];
+//        [self.referenceView addGestureRecognizer:swipeDown];
+//        
+//        [self.pan requireGestureRecognizerToFail:swipeUp];
+//        [self.pan requireGestureRecognizerToFail:swipeDown];
+//        
+//    }
     
 }
 
@@ -163,14 +168,21 @@ static SWAcapella *_acapella;
                 [self.animator_titles addBehavior:snapBehaviour];
             };
             
-            void(^wrapAround)() = ^{
+            void(^wrapAround)(NSNumber *direction) = ^(NSNumber *direction){ //0 left    1 right
+                
+                
+                SEL wrapAroundSelector = @selector(onAcapellaWrapAround:);
+                if ([self.owner respondsToSelector:wrapAroundSelector]){
+                    [self.owner performSelectorOnMainThread:wrapAroundSelector withObject:direction waitUntilDone:NO];
+                }
+                
                 
                 [self.animator_titles removeAllBehaviors];
                 
                 //stop rotation
                 UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titles]];
                 d.allowsRotation = NO;
-                d.resistance = 3;
+                d.resistance = 4;
                 [self.animator_titles addBehavior:d];
                 [d addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titles];
                 
@@ -203,10 +215,10 @@ static SWAcapella *_acapella;
             
             if (upperLeft.x < -CGRectGetMaxX(self.titles.bounds)){ //just off left side of screen
                 self.titles.center = CGPointMake(CGRectGetMaxX(self.referenceView.bounds) + CGRectGetMidX(self.titles.bounds), self.defaultTitlesCenter.y);
-                wrapAround();
+                wrapAround(@0);
             } else if (upperRight.x > CGRectGetMaxX(self.referenceView.bounds) + CGRectGetMaxX(self.titles.bounds)){ //just off right side of screen
                 self.titles.center = CGPointMake(-CGRectGetMidX(self.titles.bounds), self.defaultTitlesCenter.y);
-                wrapAround();
+                wrapAround(@1);
             } else {
                 //snap to center if we are moving to slow
                 if (fabs([dynamicBehaviour linearVelocityForItem:self.titles].x) < CGRectGetMidX(self.referenceView.bounds)){
@@ -222,78 +234,82 @@ static SWAcapella *_acapella;
     }
 }
 
+- (void)showTopSlider:(BOOL)show
+{
+    if (!CGRectIsEmpty(self.topSlider.bounds)){
+        
+        CGFloat topSliderAbsDistanceFromEdge = fabs(self.topSlider.center.y);
+        
+        [self.animator_topSlider removeAllBehaviors];
+        
+        CGPoint snapPoint = CGPointMake(self.topSlider.center.x, (topSliderAbsDistanceFromEdge * ((show) ? 1 : -1)));
+        
+        UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.topSlider]];
+        dynamicBehaviour.allowsRotation = NO;
+        UISnapBehavior *snapBehaviour = [[UISnapBehavior alloc] initWithItem:self.topSlider snapToPoint:snapPoint];
+        [self.animator_topSlider addBehavior:dynamicBehaviour];
+        [self.animator_topSlider addBehavior:snapBehaviour];
+        
+        //self.topSlider.tag = 696969;
+        
+    }
+}
+
+- (void)showBottomSlider:(BOOL)show
+{
+    if (!CGRectIsEmpty(self.bottomSlider.bounds)){
+        
+        self.bottomSlider.tag = 0;
+        
+        CGFloat bottomSliderAbsDistanceFromEdge = fabs(CGRectGetMaxY(self.referenceView.bounds) - self.bottomSlider.center.y);
+        
+        [self.animator_bottomSlider removeAllBehaviors];
+        
+        CGPoint snapPoint = CGPointMake(self.bottomSlider.center.x, CGRectGetMaxY(self.referenceView.bounds));
+        snapPoint.y += (show) ? -bottomSliderAbsDistanceFromEdge : bottomSliderAbsDistanceFromEdge;
+        
+        UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.bottomSlider]];
+        dynamicBehaviour.allowsRotation = NO;
+        UISnapBehavior *snapBehaviour = [[UISnapBehavior alloc] initWithItem:self.bottomSlider snapToPoint:snapPoint];
+        [self.animator_bottomSlider addBehavior:dynamicBehaviour];
+        [self.animator_bottomSlider addBehavior:snapBehaviour];
+        
+        //self.bottomSlider.tag = 696969;
+        
+    }
+}
+
 - (void)onSwipe:(UISwipeGestureRecognizer *)swipe
 {
     if (swipe.state == UIGestureRecognizerStateEnded){
         
-        CGFloat topSliderAbsDistanceFromEdge = fabs(self.topSlider.center.y);
-        CGFloat bottomSliderAbsDistanceFromEdge = fabs(CGRectGetMaxY(self.referenceView.bounds) - self.bottomSlider.center.y);
         
         //find our swipe start point so we can decide which view we are moving
         CGPoint swipeStartPoint = [[swipe valueForKey:@"_startLocation"] CGPointValue];
         swipeStartPoint = [swipe.view convertPoint:swipeStartPoint fromCoordinateSpace:swipe.view.window.screen.coordinateSpace];
-        CGFloat swipeStartPointPercentage = swipeStartPoint.y / CGRectGetMaxY(swipe.view.bounds);
-        
+        CGFloat swipeStartPointYPercentage = swipeStartPoint.y / CGRectGetMaxY(swipe.view.bounds);
         
         BOOL topIsVisible = (self.topSlider.center.y >= 0.0);
         BOOL bottomIsVisible = (self.bottomSlider.center.y <= CGRectGetMaxY(self.referenceView.bounds));
         
-            
-        void(^showTopSlider)(BOOL show) = ^(BOOL show){
-            
-            if (!CGRectIsEmpty(self.topSlider.bounds)){
-                
-                [self.animator_topSlider removeAllBehaviors];
-                
-                CGPoint snapPoint = CGPointMake(self.topSlider.center.x, (topSliderAbsDistanceFromEdge * ((show) ? 1 : -1)));
-                
-                UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.topSlider]];
-                dynamicBehaviour.allowsRotation = NO;
-                UISnapBehavior *snapBehaviour = [[UISnapBehavior alloc] initWithItem:self.topSlider snapToPoint:snapPoint];
-                [self.animator_topSlider addBehavior:dynamicBehaviour];
-                [self.animator_topSlider addBehavior:snapBehaviour];
-                
-            }
-            
-        };
-        
-        void(^showBottomSlider)(BOOL show) = ^(BOOL show){
-            
-            if (!CGRectIsEmpty(self.bottomSlider.bounds)){
-                
-                [self.animator_bottomSlider removeAllBehaviors];
-                
-                CGPoint snapPoint = CGPointMake(self.bottomSlider.center.x, CGRectGetMaxY(self.referenceView.bounds));
-                snapPoint.y += (show) ? -bottomSliderAbsDistanceFromEdge : bottomSliderAbsDistanceFromEdge;
-                
-                UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.bottomSlider]];
-                dynamicBehaviour.allowsRotation = NO;
-                UISnapBehavior *snapBehaviour = [[UISnapBehavior alloc] initWithItem:self.bottomSlider snapToPoint:snapPoint];
-                [self.animator_bottomSlider addBehavior:dynamicBehaviour];
-                [self.animator_bottomSlider addBehavior:snapBehaviour];
-                
-            }
-            
-        };
-        
-        if (swipeStartPointPercentage < 0.5){
+        if (swipeStartPointYPercentage < 0.5){
             if (swipe.direction == UISwipeGestureRecognizerDirectionUp){
                 if (topIsVisible){
-                    showTopSlider(NO);
+                    [self showTopSlider:NO];
                 }
             } else if (swipe.direction == UISwipeGestureRecognizerDirectionDown){
                 if (!topIsVisible){
-                    showTopSlider(YES);
+                    [self showTopSlider:YES];
                 }
             }
         } else {
             if (swipe.direction == UISwipeGestureRecognizerDirectionUp){
                 if (!bottomIsVisible){
-                    showBottomSlider(YES);
+                    [self showBottomSlider:YES];
                 }
             } else if (swipe.direction == UISwipeGestureRecognizerDirectionDown){
                 if (bottomIsVisible){
-                    showBottomSlider(NO);
+                    [self showBottomSlider:NO];
                 }
             }
         }
@@ -309,6 +325,10 @@ static SWAcapella *_acapella;
     if (self.pan.state == UIGestureRecognizerStateChanged){
         return;
     }
+    
+    //reset our tag, which we change in order to block frame changes while moving
+    self.titles.tag = 0;
+    self.titles.superview.tag = 0;
     
     [animator removeAllBehaviors];
 }

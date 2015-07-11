@@ -1,11 +1,17 @@
 
 #import "SWAcapellaPrefsBridge.h"
 
-#pragma mark - Preferences
-
 #define SW_ACAPELLA_PREFERENCES_PATH @"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"
 
+
+
+
+
 static NSDictionary *_swAcapellaPreferences;
+
+
+
+
 
 @implementation SWAcapellaPrefsBridge
 
@@ -32,7 +38,9 @@ static NSDictionary *_swAcapellaPreferences;
 
 @end
 
-#pragma mark - logos
+
+
+
 
 static void swAcapellaPreferencesChanged(CFNotificationCenterRef center,
                                         void *observer,

@@ -10,89 +10,33 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>cc_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>label</key>
-			<string>Control Center</string>
-			<key>respringRequired</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>ls_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>label</key>
-			<string>Lock Screen</string>
-			<key>respringRequired</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>ma_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>label</key>
-			<string>Music App</string>
-			<key>respringRequired</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>otm_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>label</key>
-			<string>OnTapMusic</string>
-			<key>respringRequired</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkListCell</string>
-			<key>detail</key>
-			<string>SWAcapellaPrefsActionsListController</string>
-			<key>label</key>
 			<string>Actions</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
 			<key>isStaticText</key>
 			<true/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
 			<key>label</key>
-			<string></string>
-			<key>footerText</key>
-			<string></string>
+			<string>Tap to toggle playback state</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>label</key>
+			<string>Swipe to change song</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>label</key>
+			<string>Press to show ratings (Music App)</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Created By</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>

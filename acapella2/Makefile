@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.0
+PACKAGE_VERSION = 1.0-1
 
 
 
@@ -13,7 +13,7 @@ PACKAGE_VERSION = 1.0
 #USEWIFI = 1 ###COMMENT OUT TO USE USB
 
 ifdef USEWIFI
-	THEOS_DEVICE_IP = 192.168.1.149
+	THEOS_DEVICE_IP = 192.168.1.120
 	THEOS_DEVICE_PORT = 22
 else
 	THEOS_DEVICE_IP = 127.0.0.1
@@ -33,10 +33,9 @@ TARGET = iphone:clang:latest:7.0
 
 TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc
-Acapella2_FILES = SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm
 Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
-Acapella2_PRIVATE_FRAMEWORKS = MediaRemote
 Acapella2_LIBRARIES = substrate sw packageinfo
+Acapella2_FILES = SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -Ipublic/libsw

@@ -64,18 +64,6 @@
     [SWPSTwitterCell performActionWithSpecifier:specifier];
 }
 
-#pragma mark Helper
-
-- (void)_returnKeyPressed:(id)pressed
-{
-    [super _returnKeyPressed:pressed];
-    
-    //this will dismiss the keyboard and save the preferences for the selected text field
-    if ([self isKindOfClass:[UIViewController class]]){
-        [((UIViewController *)self).view endEditing:YES];
-    }
-}
-
 @end
 
 

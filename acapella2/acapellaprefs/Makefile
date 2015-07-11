@@ -12,7 +12,7 @@ TARGET = iphone:clang:latest:7.0
 
 BUNDLE_NAME = AcapellaPrefs2
 AcapellaPrefs2_CFLAGS = -fobjc-arc
-AcapellaPrefs2_FILES = SWAcapellaPrefsActionsListController.mm SWAcapellaPrefsListController.mm
+AcapellaPrefs2_FILES = SWAcapellaPrefsListController.mm
 AcapellaPrefs2_INSTALL_PATH = /Library/PreferenceBundles
 AcapellaPrefs2_FRAMEWORKS = UIKit
 AcapellaPrefs2_PRIVATE_FRAMEWORKS = Preferences

@@ -56,31 +56,50 @@
 {
     %orig();
     
-    [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
+    [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.mediaControlsView preInitializeAction:^(SWAcapella *a){
         a.owner = self;
         a.titles = self.mediaControlsView.trackInformationView;
         a.topSlider = self.mediaControlsView.timeInformationView;
         a.bottomSlider = self.mediaControlsView.volumeView;
     }] ForOwner:self];
     
-    if ([self acapella]){
+    if (self.acapella){
+        
+        for (UIView *v in self.acapella.titles.subviews){
+            if ([v isKindOfClass:[UIButton class]]){
+                [v removeFromSuperview];
+            }
+        }
+        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
         tap.cancelsTouchesInView = YES;
-        [self.view addGestureRecognizer:tap];
+        [self.mediaControlsView addGestureRecognizer:tap];
+        
     }
     
 }
 
+%new
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.acapella && [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+        
+        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
+        
+        if (pan == self.acapella.pan){ //make sure the default music app GR can still pull down vertically
+            CGPoint panVelocity = [pan velocityInView:pan.view];
+            return (fabs(panVelocity.x) > fabs(panVelocity.y));
+        }
+        
+    }
+    
+    return YES;
+}
+
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
-    //0 Play
-    //1 Pause
-    //2 Stop
-    //3 TogglePlayPause
-    //4 Skip Forward
-    //5 Skip Backwards
-    
-    if ([self acapella]){
+    //see MPUTransportControlMediaRemoteController.h
+    if (self.acapella){
         if (arg2 >= 0 && arg2 <= 5){
             return nil;
         }
@@ -92,7 +111,7 @@
 %new
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-    if ([self acapella]){
+    if (self.acapella){
             
         MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
         
@@ -116,7 +135,27 @@
     }
 }
 
+%new
+- (void)onAcapellaWrapAround:(NSNumber *)direction
+{
+    MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
+    
+    //Disable frame changes. See MusicNowPlayingTitlesView.xm
+    self.mediaControlsView.tag = 696969;
+    self.acapella.titles.tag = 696969;
+    
+    if ([direction integerValue] == 0){
+        [t handlePushingMediaRemoteCommand:4];
+    } else if ([direction integerValue] == 1){
+        [t handlePushingMediaRemoteCommand:5];
+    }
+}
+
 %end
+
+
+
+
 
 %hook MPUSystemMediaControlsView
 
@@ -127,6 +166,54 @@
     }
     
     %orig();
+}
+
+%end
+
+
+
+
+
+@interface MPUChronologicalProgressView : UIView
+{
+}
+
+@end
+
+
+%hook MPUChronologicalProgressView
+
+- (void)setFrame:(CGRect)frame
+{
+    if (self.tag == 696969){
+        return;
+    }
+    
+    %orig(frame);
+}
+
+%end
+
+
+
+
+
+@interface MPUMediaControlsVolumeView : UIView
+{
+}
+
+@end
+
+
+%hook MPUMediaControlsVolumeView
+
+- (void)setFrame:(CGRect)frame
+{
+    if (self.tag == 696969){
+        return;
+    }
+    
+    %orig(frame);
 }
 
 %end

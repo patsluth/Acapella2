@@ -48,7 +48,8 @@ static SWAcapella *_acapella;
 
 + (void)removeAcapella:(SWAcapella *)acapella
 {
-    objc_removeAssociatedObjects(acapella);
+    [SWAcapella setAcapella:nil ForOwner:acapella.owner];
+    //objc_removeAssociatedObjects(acapella);
 }
 
 #pragma mark Init
@@ -164,7 +165,7 @@ static SWAcapella *_acapella;
                 
                 UISnapBehaviorHorizontal *snapBehaviour = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titles
                                                                                              snapToPoint:self.defaultTitlesCenter];
-                snapBehaviour.damping = 0.17;
+                snapBehaviour.damping = 0.15;
                 [self.animator_titles addBehavior:snapBehaviour];
             };
             
@@ -182,9 +183,13 @@ static SWAcapella *_acapella;
                 //stop rotation
                 UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titles]];
                 d.allowsRotation = NO;
-                d.resistance = 4;
+                d.resistance = 1;
                 [self.animator_titles addBehavior:d];
-                [d addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titles];
+                
+//                CGFloat clampedVelocity = fabs(velocity.x);
+//                clampedVelocity = fmin(clampedVelocity, CGRectGetMaxX(self.referenceView.bounds) * 4);
+//                [d addLinearVelocity:CGPointMake(copysign(clampedVelocity, velocity.x), 0.0) forItem:self.titles];
+                [d addLinearVelocity:CGPointMake(velocity.x * 0.9, 0.0) forItem:self.titles];
                 
                 __weak UIDynamicItemBehavior *wd = d;
                 
@@ -192,11 +197,11 @@ static SWAcapella *_acapella;
                     
                     CGFloat distanceFromCenter = fabs(self.titles.center.x - self.defaultTitlesCenter.x);
                     
-                    if (distanceFromCenter < CGRectGetMidX(self.referenceView.bounds)){
+                    if (distanceFromCenter < 50){
                         
                         CGPoint curVelocity = [wd linearVelocityForItem:self.titles];
                         curVelocity.x *= -1; //reverse velocity
-                        [wd addLinearVelocity:curVelocity forItem:self.titles];
+                        [wd addLinearVelocity:curVelocity forItem:self.titles]; //apply reversed velocity, to stop
                         
                         snapToCenter();
                         

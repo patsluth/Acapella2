@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.0-1
+PACKAGE_VERSION = 1.0-2
 
 
 
@@ -25,7 +25,7 @@ endif
 
 
 ARCHS = armv7 armv7s arm64
-TARGET = iphone:clang:latest:7.0
+TARGET = iphone:clang:latest
 
 
 

@@ -55,7 +55,6 @@
         
         if (pan == self.acapella.pan){
             CGPoint panVelocity = [pan velocityInView:pan.view];
-            NSLog(@"%@", NSStringFromCGPoint(panVelocity));
             
             if (fabs(panVelocity.y) > fabs(panVelocity.x)){
                 return NO;

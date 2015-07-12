@@ -140,8 +140,8 @@
 {
     MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
     
-    //Disable frame changes. See MusicNowPlayingTitlesView.xm
-    self.mediaControlsView.tag = 696969;
+    //Lock our x value. See MPUMediaControlsTitlesView.xm
+    //self.mediaControlsView.tag = 696969;
     self.acapella.titles.tag = 696969;
     
     if ([direction integerValue] == 0){
@@ -157,66 +157,69 @@
 
 
 
-%hook MPUSystemMediaControlsView
-
-- (void)layoutSubviews
-{
-    if (self.tag == 696969){
-        return;
-    }
-    
-    %orig();
-}
-
-%end
-
-
-
-
-
-@interface MPUChronologicalProgressView : UIView
-{
-}
-
-@end
-
-
-%hook MPUChronologicalProgressView
-
-- (void)setFrame:(CGRect)frame
-{
-    if (self.tag == 696969){
-        return;
-    }
-    
-    %orig(frame);
-}
-
-%end
+//%hook MPUSystemMediaControlsView
+//
+//- (void)layoutSubviews
+//{
+////    if (self.tag == 696969){
+////        CGRect originalTitlesFrame = self.trackInformationView.frame;
+////        %orig();
+////        self.trackInformationView.frame = CGRectMake(originalTitlesFrame.origin.x, self.trackInformationView.frame.origin.y, self.trackInformationView.frame.size.width, self.trackInformationView.frame.size.height);
+////    } else {
+//    
+//        %orig();
+//    }
+//}
+//
+//%end
 
 
 
 
 
-@interface MPUMediaControlsVolumeView : UIView
-{
-}
+//@interface MPUChronologicalProgressView : UIView
+//{
+//}
+//
+//@end
 
-@end
+
+//%hook MPUChronologicalProgressView
+//
+//- (void)setFrame:(CGRect)frame
+//{
+//    if (self.tag == 696969){
+//        return;
+//    }
+//    
+//    %orig(frame);
+//}
+//
+//%end
 
 
-%hook MPUMediaControlsVolumeView
 
-- (void)setFrame:(CGRect)frame
-{
-    if (self.tag == 696969){
-        return;
-    }
-    
-    %orig(frame);
-}
 
-%end
+
+//@interface MPUMediaControlsVolumeView : UIView
+//{
+//}
+//
+//@end
+//
+//
+//%hook MPUMediaControlsVolumeView
+//
+//- (void)setFrame:(CGRect)frame
+//{
+//    if (self.tag == 696969){
+//        return;
+//    }
+//    
+//    %orig(frame);
+//}
+//
+//%end
 
 
 

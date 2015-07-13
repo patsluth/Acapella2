@@ -35,9 +35,10 @@ TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc
 Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Acapella2_LIBRARIES = substrate sw packageinfo
-Acapella2_FILES = SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm
+Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm
 
 ADDITIONAL_CFLAGS = -Ipublic
+ADDITIONAL_CFLAGS += -IAcapellaTest/AcapellaTest/
 ADDITIONAL_CFLAGS += -Ipublic/libsw
 ADDITIONAL_CFLAGS += -Ipublic/libsw/libSluthware
 

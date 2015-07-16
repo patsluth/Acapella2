@@ -71,6 +71,29 @@
             }
         }
         
+        
+        
+        
+        
+        if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
+            self.mediaControlsView.timeInformationView.layer.opacity = 0.0;
+            //self.timeInformationView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
+        }
+        if (![[SWAcapellaPrefsBridge valueForKey:@"transportControls_enabled" defaultValue:@YES] boolValue]){
+            self.mediaControlsView.transportControlsView.layer.opacity = 0.0;
+            //self.volumeView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
+        }
+        if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
+            self.mediaControlsView.volumeView.layer.opacity = 0.0;
+            //self.volumeView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
+        }
+        
+        
+        
+        
+        
+        
+        
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
         tap.cancelsTouchesInView = YES;
         [self.mediaControlsView addGestureRecognizer:tap];
@@ -111,6 +134,14 @@
 %new
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
+    /* hide transport animated
+     if (x%2 == 0){
+        self.mediaControlsView.transportControlsView.layer.transform = CATransform3DMakeScale(1.5, 1.0, 0.0);
+    } else {
+        self.mediaControlsView.transportControlsView.layer.transform = CATransform3DMakeScale(1.0, 1.0, 0.0);
+    }*/
+    
+    
     if (self.acapella){
             
         MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
@@ -157,21 +188,50 @@
 
 
 
-//%hook MPUSystemMediaControlsView
-//
-//- (void)layoutSubviews
+%hook MPUSystemMediaControlsView
+
+- (void)layoutSubviews
+{
 //{
 ////    if (self.tag == 696969){
 ////        CGRect originalTitlesFrame = self.trackInformationView.frame;
 ////        %orig();
 ////        self.trackInformationView.frame = CGRectMake(originalTitlesFrame.origin.x, self.trackInformationView.frame.origin.y, self.trackInformationView.frame.size.width, self.trackInformationView.frame.size.height);
 ////    } else {
-//    
-//        %orig();
-//    }
-//}
 //
-//%end
+    %orig();
+    
+    //self.trackInformationView.transform = CGAffineTransformMakeTranslation(0.0, 100);
+    
+//    if (self.trackInformationView.tag != 696969){
+//        NSInteger yOffset = (self.transportControlsView.layer.opacity == 0.0) ? 0 : -10;
+//        self.trackInformationView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) + yOffset);
+//    }
+    
+    //self.trackInformationView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+//    
+//    
+//    if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
+//        self.transportControlsView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
+//    }
+//    if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
+//        self.volumeView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
+//    }
+    
+    
+    
+    
+    //if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
+        //self.transportControlsView.transform = CGAffineTransformMakeScale(0.0, 0.0);
+   // }
+    //if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
+        //self.volumeView.transform = CGAffineTransformMakeScale(0.0, 0.0);
+    //}
+
+//    }
+}
+
+%end
 
 
 
@@ -182,13 +242,13 @@
 //}
 //
 //@end
-
-
+//
+//
 //%hook MPUChronologicalProgressView
 //
 //- (void)setFrame:(CGRect)frame
 //{
-//    if (self.tag == 696969){
+//    if (self.tag == 69){
 //        return;
 //    }
 //    
@@ -196,11 +256,11 @@
 //}
 //
 //%end
-
-
-
-
-
+//
+//
+//
+//
+//
 //@interface MPUMediaControlsVolumeView : UIView
 //{
 //}
@@ -212,7 +272,7 @@
 //
 //- (void)setFrame:(CGRect)frame
 //{
-//    if (self.tag == 696969){
+//    if (self.tag == 69){
 //        return;
 //    }
 //    

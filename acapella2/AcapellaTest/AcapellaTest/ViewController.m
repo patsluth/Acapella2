@@ -19,6 +19,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) IBOutlet UIButton *button;
+@property (strong, nonatomic) UIView *testView;
 
 @end
 
@@ -45,6 +46,10 @@
             a.bottomSlider = self.bottom;
         }] ForOwner:self];
     }
+    
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(50, 50, 100, 50)];
+    self.testView.backgroundColor = [UIColor purpleColor];
+    [self.view addSubview:self.testView];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
@@ -68,10 +73,26 @@
 
 - (IBAction)buttonClick:(id)sender
 {
-//    CATransform3D newTransform = self.button.layer.transform;
-//    newTransform = CATransform3DScale(newTransform, 0.9, 0.9, 1.0);
+    UIView *titlesCopy = [self.testView resizableSnapshotViewFromRect:self.testView.bounds afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
+    titlesCopy.center = CGPointZero;
+    
+    [self.view addSubview:titlesCopy];
     
     
+    
+   // [self.view drawViewHierarchyInRect:CGRectMake(0, 0, 100, 100) afterScreenUpdates:YES];
+    
+    
+    
+    
+    
+    //self.dragView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
+    //self.dragView.layer.opacity = 0.0;
+    
+    //UIView *temp = [self.button snapshotViewAfterScreenUpdates:YES];
+    //self.button.hidden = YES;
+    //[self.view addSubview:temp];
+    //temp.frame = CGRectMake(0, 0, temp.frame.size.width, temp.frame.size.height);
 }
 
 @end

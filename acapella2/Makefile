@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.0-2
+PACKAGE_VERSION = 1.0-4
 
 
 
@@ -35,7 +35,7 @@ TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc
 Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Acapella2_LIBRARIES = substrate sw packageinfo
-Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm
+Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m MPUSystemMediaControlsViewController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SWAcapellaPrefsBridge.xm
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -IAcapellaTest/AcapellaTest/

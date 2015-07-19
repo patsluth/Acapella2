@@ -28,8 +28,8 @@
 @property (readwrite, strong, nonatomic) UIView *titleCloneContainer;
 @property (readwrite, nonatomic) CGPoint titleCloneContainer_LastVelocity;
 
-@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
+@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
 
 @end
 
@@ -57,14 +57,7 @@
         [acapella.animator_titles removeAllBehaviors];
         acapella.animator_titles = nil;
         
-        if (acapella.titleCloneContainer){
-            for (UIView *v in acapella.titleCloneContainer.subviews){
-                [v removeFromSuperview];
-            }
-            [acapella.titleCloneContainer removeFromSuperview];
-        }
-        
-        acapella.titleCloneContainer = nil;
+        [acapella resetTitleCloneContainer];
         acapella.titles.layer.opacity = 1.0;
         
         [acapella.pan removeTarget:nil action:nil];
@@ -123,8 +116,8 @@
     [self.referenceView addGestureRecognizer:self.pan];
     
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self.owner action:@selector(onTap:)];
+    self.tap.delegate = self.owner;
     self.tap.cancelsTouchesInView = YES;
-    [self.referenceView addGestureRecognizer:self.tap];
     
 }
 
@@ -133,16 +126,34 @@
     return CGPointMake(CGRectGetWidth(self.referenceView.bounds) / 2, CGRectGetHeight(self.referenceView.bounds) / 2);
 }
 
+- (void)resetTitleCloneContainer
+{
+    if (self.titleCloneContainer){
+        for (UIView *v in self.titleCloneContainer.subviews){
+            [v removeFromSuperview];
+        }
+        [self.titleCloneContainer removeFromSuperview];
+    }
+    
+    self.titleCloneContainer = nil;
+}
+
 - (void)refreshTitleClones
 {
     if (!self.titleCloneContainer){return;}
     
-    //wait for the next iteration, so we know the original text has been updated
-    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
     for (UIView *v in self.titleCloneContainer.subviews){ //update our label
         if ([v isKindOfClass:[SWAcapellaTitlesClone class]]){
             SWAcapellaTitlesClone *clone = (SWAcapellaTitlesClone *)v;
+            
+            //wait for the next iteration, so we know the original text has been updated
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+            
             clone.frame = clone.titles.frame;
+            clone.center = CGPointMake(self.referenceViewMidpoint.x, clone.center.y);
+            
+            //wait for the next iteration, so we know the original text has been updated
+            //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
             [clone setNeedsDisplay];
         }
     }
@@ -207,26 +218,27 @@
         
         [self.animator_titles removeAllBehaviors];
         
+        self.titles.layer.opacity = 0.0;
+        
         
         self.titleCloneContainer.tag = 0;
         self.titleCloneContainer_LastVelocity = CGPointZero;
         
         
-        CGRect x = self.referenceView.bounds;
-        x.origin = CGPointZero;
+        
+        CGRect targetFrame = self.referenceView.bounds;
+        targetFrame.origin = CGPointZero;
         
         if (!self.titleCloneContainer){
-            self.titleCloneContainer = [[UIView alloc] initWithFrame:x];
+            self.titleCloneContainer = [[UIView alloc] initWithFrame:targetFrame];
             self.titleCloneContainer.backgroundColor = [UIColor clearColor];
             self.titleCloneContainer.userInteractionEnabled = NO;
             [self.referenceView addSubview:self.titleCloneContainer];
+        } else { //in this scenario, we might be starting our pan while the title is in motion
+            CGFloat originalCenterX = self.titleCloneContainer.center.x;
+            self.titleCloneContainer.frame = targetFrame;
+            self.titleCloneContainer.center = CGPointMake(originalCenterX, location.y);
         }
-        
-        
-        CGFloat originalCenterX = self.titleCloneContainer.center.x;
-        self.titleCloneContainer.frame = x;
-        self.titleCloneContainer.center = CGPointMake(originalCenterX, location.y);
-        
         
         //clear current clones
         for (UIView *v in self.titleCloneContainer.subviews){
@@ -237,10 +249,9 @@
         SWAcapellaTitlesClone *titleClone = [[SWAcapellaTitlesClone alloc] initWithFrame:self.titles.frame];
         titleClone.backgroundColor = [UIColor clearColor];
         titleClone.titles = self.titles;
-        [self.titleCloneContainer addSubview:titleClone];
-        self.titles.layer.opacity = 0.0;
-        
         [self refreshTitleClones];
+        [self.titleCloneContainer addSubview:titleClone];
+        //[titleClone startDisplayLink];
         
     
         
@@ -291,8 +302,9 @@
             
             
             CGPoint center = self.titleCloneContainer.center;
-            CGFloat offScreenLeftX = -CGRectGetMidX(self.titleCloneContainer.bounds);
-            CGFloat offScreenRightX = CGRectGetMaxX(self.titleCloneContainer.bounds) + CGRectGetMidX(self.titleCloneContainer.bounds);
+            CGFloat halfWidth = CGRectGetWidth(self.titleCloneContainer.bounds) / 2.0;
+            CGFloat offScreenLeftX = -halfWidth;
+            CGFloat offScreenRightX = CGRectGetWidth(self.titleCloneContainer.bounds) + halfWidth;
             
             if (center.x < offScreenLeftX){
                 

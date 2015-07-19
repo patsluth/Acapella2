@@ -44,16 +44,6 @@
     
     
     
-    
-    
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
-//    [self.view addGestureRecognizer:tap];
-    
-    
-    
-    
-    
-    
     if (!self.acapella){
         
         [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
@@ -63,25 +53,11 @@
                                                       }]
                       ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN];
         
+        
+        
+        [self.view addGestureRecognizer:self.acapella.tap];
+        
     }
-    
-    [NSTimer scheduledTimerWithTimeInterval:10 block:^{
-        
-        
-        for (UIView *v in self.dragView.subviews){
-            if ([v isKindOfClass:[UILabel class]]){
-                UILabel *l = (UILabel *)v;
-                l.text = [NSString stringWithFormat:@"%d", rand()];
-                [l sizeToFit];
-            }
-        }
-        
-        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
-            [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
-        }
-        
-        
-    }repeats:YES];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
@@ -103,28 +79,40 @@
     return YES;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if (self.acapella.tap == gestureRecognizer){
+        return ![touch.view isKindOfClass:[UISlider class]];
+    }
+    
+    return YES;
+}
+
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-    CGPoint location = [tap locationInView:tap.view];
+    for (UILabel *l in self.dragView.subviews){
+        l.text = [NSString stringWithFormat:@"%d", rand()];
+    }
     
-    [self.animator removeAllBehaviors];
-    
-    UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
-    b.resistance = 1;
-    b.elasticity = 0;
-    b.density = 10000;
-    b.friction = 1000;
-    
-    [self.animator addBehavior:b];
-    
-    UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
-    s.damping = 1.0;
-    [self.animator addBehavior:s];
-    
+    //if (tap.state == UIGestureRecognizerStateEnded){
+        
+        CGPoint location = [tap locationInView:tap.view];
+        
+        [self.animator removeAllBehaviors];
+        
+        UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
+        
+        [self.animator addBehavior:b];
+        
+        UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
+        [self.animator addBehavior:s];
+        
+    //}
 }
 
 - (IBAction)buttonClick:(id)sender
 {
+    
 }
 
 @end

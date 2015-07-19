@@ -20,6 +20,19 @@
 
 %hook MusicNowPlayingTitlesView
 
+- (void)layoutSubviews
+{
+    %orig();
+    
+    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
+    
+    if (acapella){
+        if ([acapella respondsToSelector:@selector(refreshTitleClones)]){
+            [acapella performSelector:@selector(refreshTitleClones) withObject:nil afterDelay:0.0];
+        }
+    }
+}
+
 - (void)setAttributedTexts:(id)arg1
 {
     %orig(arg1);

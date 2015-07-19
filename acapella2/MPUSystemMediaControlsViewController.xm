@@ -69,6 +69,8 @@
     
     if (self.acapella){
         
+        [self.view addGestureRecognizer:self.acapella.tap];
+        
         for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
             if ([v isKindOfClass:[UIButton class]]){
                 UIButton *b = (UIButton *)v;
@@ -119,20 +121,34 @@
 }
 
 %new
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    if (self.acapella && [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+    if (self.acapella){
         
-        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-        
-        if (pan == self.acapella.pan){ //only accept horizontal pans
-            CGPoint panVelocity = [pan velocityInView:pan.view];
-            return (fabs(panVelocity.x) > fabs(panVelocity.y));
+        if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
+            return ![touch.view isKindOfClass:[UISlider class]];
         }
         
     }
     
-    return NO;
+    return YES;
+}
+
+%new
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.acapella){
+        
+        if (self.acapella.pan == gestureRecognizer){
+            
+            CGPoint panVelocity = [self.acapella.pan velocityInView:self.acapella.pan.view];
+            return (fabs(panVelocity.x) > fabs(panVelocity.y)); //only accept horizontal pans
+            
+        }
+        
+    }
+    
+    return YES;
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -202,7 +218,7 @@
     
     SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
     
-    if (acapella){ //center
+    if (acapella && (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)){ //center
         NSInteger trackInfoYOffset = (self.transportControlsView.layer.opacity <= 0.0) ? 0 : -15;
         self.trackInformationView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2, (CGRectGetHeight(self.bounds) / 2) + trackInfoYOffset);
     }

@@ -41,6 +41,17 @@
     return [SWAcapella acapellaForObject:self];
 }
 
+- (void)_setRatingsVisible:(BOOL)arg1
+{
+    if (self.acapella){
+        if (self.acapella.titleCloneContainer){
+            self.acapella.titleCloneContainer.hidden = arg1;
+        }
+    }
+    
+    %orig(arg1);
+}
+
 //- (void)viewDidLoad
 //{
 //    %orig();
@@ -88,15 +99,11 @@
     
     if (self.acapella){
         
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                              action:@selector(onTap:)];
-        //tap.delegate = self;
-        tap.cancelsTouchesInView = YES;
-        [self.acapella.titles.superview addGestureRecognizer:tap];
+        [self.acapella.titles.superview addGestureRecognizer:self.acapella.tap];
         
         UILongPressGestureRecognizer *press = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                             action:@selector(onPress:)];
-        //press.delegate = self;
+        press.delegate = self;
         press.minimumPressDuration = 0.7;
         [self.acapella.titles.superview addGestureRecognizer:press];
         
@@ -110,16 +117,29 @@
     %orig(animated);
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if (self.acapella){
+        
+        if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
+            return ![touch.view isKindOfClass:[UISlider class]];
+        }
+        
+    }
+    
+    return %orig(gestureRecognizer, touch);
+}
+
 %new
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if (self.acapella && [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+    if (self.acapella){
         
-        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-        
-        if (pan == self.acapella.pan){ //only accept horizontal pans
-            CGPoint panVelocity = [pan velocityInView:pan.view];
-            return (fabs(panVelocity.x) > fabs(panVelocity.y));
+        if (self.acapella.pan == gestureRecognizer){
+            
+            CGPoint panVelocity = [self.acapella.pan velocityInView:self.acapella.pan.view];
+            return (fabs(panVelocity.x) > fabs(panVelocity.y)); //only accept horizontal pans
+            
         }
         
     }
@@ -181,11 +201,11 @@
     }
 }
 
-- (void)_handleTapGestureRecognizerAction:(id)arg1
+- (void)_handleTapGestureRecognizerAction:(id)arg1 //click on artwork
 {
-    if (!self.acapella){
+    //if (!self.acapella){
         %orig(arg1);
-    }
+    //}
 }
 
 %new

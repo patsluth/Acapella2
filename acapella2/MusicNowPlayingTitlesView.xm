@@ -1,4 +1,6 @@
 
+#import "SWAcapella.h"
+
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
@@ -18,16 +20,17 @@
 
 %hook MusicNowPlayingTitlesView
 
-- (void)setFrame:(CGRect)frame
+- (void)setAttributedTexts:(id)arg1
 {
-    //this tag means we dont want this view to layout
-    //when the titles change, layout subviews is called
-    //which re-centers the titles view, making the animation look bad
-    if (self.tag == 696969){
-        return;
-    }
+    %orig(arg1);
     
-    %orig(frame);
+    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
+    
+    if (acapella){
+        if ([acapella respondsToSelector:@selector(finishWrapAround)]){
+            [acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
+        }
+    }
 }
 
 %end

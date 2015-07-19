@@ -1,4 +1,6 @@
 
+#import "SWAcapella.h"
+
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
@@ -16,22 +18,7 @@
 
 
 
-%hook MPUMediaControlsTitlesView //springboard specific
-
-- (void)setFrame:(CGRect)frame
-{
-    //this tag means we dont want this view to layout
-    //when the titles change, layout subviews is called
-    //which re-centers the titles view, making the animation look bad
-    if (self.tag == 696969){
-        return;
-    } else if (self.tag == 69){ //only lock the x position
-        %orig(CGRectMake(self.frame.origin.x, frame.origin.y, frame.size.width, frame.size.height));
-        return;
-    }
-    
-    %orig(frame);
-}
+%hook MPUMediaControlsTitlesView
 
 - (void)updateTrackInformationWithNowPlayingInfo:(NSDictionary *)info
 {
@@ -41,6 +28,15 @@
     }
     
     %orig(info);
+    
+    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
+    
+    if (acapella){
+        if ([acapella respondsToSelector:@selector(finishWrapAround)]){
+            [acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
+        }
+    }
+    
 }
 
 %end

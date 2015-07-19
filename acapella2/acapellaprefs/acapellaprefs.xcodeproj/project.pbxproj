@@ -7,22 +7,22 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2EE53F041A36BCE900BEED8F /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
-		2EE53F051A36BCEE00BEED8F /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
-		2EE53F061A36BD0300BEED8F /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		2EE53F071A36BD0900BEED8F /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entry.plist; sourceTree = "<group>"; };
-		2EE53F081A36BD1400BEED8F /* SWAcapellaPrefsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController.mm; sourceTree = "<group>"; };
+		2E75D7AA1B5B878700920EEF /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = acapellaprefs/public; sourceTree = "<group>"; };
+		2E75D7AB1B5B878700920EEF /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = acapellaprefs/Resources; sourceTree = "<group>"; };
+		2E75D7AC1B5B878700920EEF /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = entry.plist; path = acapellaprefs/entry.plist; sourceTree = "<group>"; };
+		2E75D7AD1B5B878700920EEF /* SWAcapellaPrefsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = SWAcapellaPrefsListController.mm; path = acapellaprefs/SWAcapellaPrefsListController.mm; sourceTree = "<group>"; };
+		2E75D7AE1B5B878700920EEF /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = acapellaprefs/Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		2EE53EFD1A36BCBB00BEED8F = {
 			isa = PBXGroup;
 			children = (
-				2EE53F041A36BCE900BEED8F /* public */,
-				2EE53F051A36BCEE00BEED8F /* Resources */,
-				2EE53F061A36BD0300BEED8F /* Makefile */,
-				2EE53F071A36BD0900BEED8F /* entry.plist */,
-				2EE53F081A36BD1400BEED8F /* SWAcapellaPrefsListController.mm */,
+				2E75D7AA1B5B878700920EEF /* public */,
+				2E75D7AB1B5B878700920EEF /* Resources */,
+				2E75D7AE1B5B878700920EEF /* Makefile */,
+				2E75D7AC1B5B878700920EEF /* entry.plist */,
+				2E75D7AD1B5B878700920EEF /* SWAcapellaPrefsListController.mm */,
 			);
 			sourceTree = "<group>";
 		};

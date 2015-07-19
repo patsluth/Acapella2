@@ -12,7 +12,7 @@
 
 
 
-@interface MusicNowPlayingViewController : UIViewController
+@interface MusicNowPlayingViewController : UIViewController <UIGestureRecognizerDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
@@ -38,21 +38,53 @@
 %new
 - (SWAcapella *)acapella
 {
-    return [SWAcapella acapellaForOwner:self];
+    return [SWAcapella acapellaForObject:self];
 }
 
-- (void)viewDidLoad
+//- (void)viewDidLoad
+//{
+//    %orig();
+//    
+//    //if ([[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
+//        
+//        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
+//            a.owner = self;
+//            a.titles = self.titlesView;
+//        }] ForOwner:self];
+//        
+//    //}
+//    
+//    if (self.acapella){
+//        
+//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+//                                                                              action:@selector(onTap:)];
+//        //tap.delegate = self;
+//        tap.cancelsTouchesInView = YES;
+//        [self.acapella.titles.superview addGestureRecognizer:tap];
+//        
+//        UILongPressGestureRecognizer *press = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+//                                                                                            action:@selector(onPress:)];
+//        //press.delegate = self;
+//        press.minimumPressDuration = 0.7;
+//        [self.acapella.titles.superview addGestureRecognizer:press];
+//        
+//    }
+//}
+
+- (void)viewDidAppear:(BOOL)animated
 {
-    %orig();
+    %orig(animated);
     
-    //if ([[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
+    if (!self.acapella){
         
-        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
-            a.owner = self;
-            a.titles = self.titlesView;
-        }] ForOwner:self];
+        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
+                                                      preInitializeAction:^(SWAcapella *a){
+                                                          a.owner = self;
+                                                          a.titles = self.titlesView;
+                                                      }]
+                      ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
         
-    //}
+    }
     
     if (self.acapella){
         
@@ -69,22 +101,25 @@
         [self.acapella.titles.superview addGestureRecognizer:press];
         
     }
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+    %orig(animated);
 }
 
 %new
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if (self.acapella){
+    if (self.acapella && [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
         
-        if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
-            
-            UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-            
-            if (pan == self.acapella.pan){ //make sure the default music app GR can still pull down vertically
-                CGPoint panVelocity = [pan velocityInView:pan.view];
-                return (fabs(panVelocity.x) > fabs(panVelocity.y));
-            }
-            
+        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
+        
+        if (pan == self.acapella.pan){ //only accept horizontal pans
+            CGPoint panVelocity = [pan velocityInView:pan.view];
+            return (fabs(panVelocity.x) > fabs(panVelocity.y));
         }
         
     }
@@ -100,11 +135,11 @@
     //3 TogglePlayPause
     //4 Skip Forward
     //5 Skip Backwards
-    if (self.acapella){
+   // if (self.acapella){
         if (arg2 >= 0 && arg2 <= 5){
             return nil;
         }
-    }
+   // }
     
     return %orig(arg1, arg2);
 }
@@ -118,19 +153,19 @@
             [self _setRatingsVisible:NO];
         } else {
             
-            MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-            
+            MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self,
+                                                                                                                 "_transportControlMediaRemoteController");
             [t handlePushingMediaRemoteCommand:(t.playing) ? 1 : 0];
             
             [UIView animateWithDuration:0.1
                              animations:^{
-                                 self.view.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                                 self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.05, 1.05);
                              } completion:^(BOOL finished){
                                  [UIView animateWithDuration:0.1
                                                   animations:^{
-                                                      self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   } completion:^(BOOL finished){
-                                                      self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                      self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                                   }];
                              }];
             
@@ -148,9 +183,9 @@
 
 - (void)_handleTapGestureRecognizerAction:(id)arg1
 {
-    //if (!self.acapella){
+    if (!self.acapella){
         %orig(arg1);
-    //}
+    }
 }
 
 %new

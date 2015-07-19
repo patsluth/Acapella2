@@ -12,7 +12,7 @@
 
 
 
-@interface MusicMiniPlayerViewController : UIViewController
+@interface MusicMiniPlayerViewController : UIViewController <UIGestureRecognizerDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
@@ -33,27 +33,36 @@
 %new
 - (SWAcapella *)acapella
 {
-    return [SWAcapella acapellaForOwner:self];
+    return [SWAcapella acapellaForObject:self];
 }
 
-- (void)viewDidLoad
+- (void)viewDidAppear:(BOOL)animated
 {
-    %orig();
+    %orig(animated);
     
-    //if ([[SWAcapellaPrefsBridge valueForKey:@"ma_enabled" defaultValue:@YES] boolValue]){
+    if (!self.acapella){
         
-        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
-            a.owner = self;
-            a.titles = self.titlesView;
-        }] ForOwner:self];
+        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
+                                                      preInitializeAction:^(SWAcapella *a){
+                                                          a.owner = self;
+                                                          a.titles = self.titlesView;
+                                                      }]
+                      ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
         
-    //}
+    }
     
     if (self.acapella){
         
         [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
         
     }
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+    %orig(animated);
 }
 
 - (void)viewDidLayoutSubviews
@@ -81,9 +90,8 @@
         
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         
-        CGPoint panVelocity = [pan velocityInView:pan.view];
-        
-        if (pan == self.acapella.pan){ //make sure we can still pull up to the MusicNowPlayingViewController
+        if (pan == self.acapella.pan){ //only accept horizontal pans
+            CGPoint panVelocity = [pan velocityInView:pan.view];
             return (fabs(panVelocity.x) > fabs(panVelocity.y));
         }
         
@@ -94,34 +102,39 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
-    if (self.acapella){
+    //if (self.acapella){
         return nil;
-    }
+    //}
     
-    return %orig(arg1, arg2);
+   // return %orig(arg1, arg2);
 }
 
-- (void)_tapRecognized:(id)arg1
+%new
+- (void)onTap:(UITapGestureRecognizer *)tap
 {
     if (self.acapella){
         
         MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-        
         [t handlePushingMediaRemoteCommand:(t.playing) ? 1 : 0];
         
         [UIView animateWithDuration:0.1
                          animations:^{
-                             self.view.transform = CGAffineTransformMakeScale(1.15, 1.0);
+                             self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.1, 1.0);
                          } completion:^(BOOL finished){
                              [UIView animateWithDuration:0.1
                                               animations:^{
-                                                  self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               } completion:^(BOOL finished){
-                                                  self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               }];
                          }];
         
-    } else {
+    }
+}
+
+- (void)_tapRecognized:(id)arg1
+{
+    if (!self.acapella){
         %orig(arg1);
     }
 }

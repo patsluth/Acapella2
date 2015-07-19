@@ -43,7 +43,7 @@
 %new
 - (SWAcapella *)acapella
 {
-    return [SWAcapella acapellaForOwner:self];
+    return [SWAcapella acapellaForObject:self];
 }
 
 %new
@@ -52,54 +52,70 @@
     return MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
 }
 
-- (void)viewDidLoad
+- (void)viewDidAppear:(BOOL)animated
 {
-    %orig();
+    %orig(animated);
     
-    [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.mediaControlsView preInitializeAction:^(SWAcapella *a){
-        a.owner = self;
-        a.titles = self.mediaControlsView.trackInformationView;
-        a.topSlider = self.mediaControlsView.timeInformationView;
-        a.bottomSlider = self.mediaControlsView.volumeView;
-    }] ForOwner:self];
-    
-    if (self.acapella){
+    if (!self.acapella){
         
-        for (UIView *v in self.acapella.titles.subviews){
-            if ([v isKindOfClass:[UIButton class]]){
-                [v removeFromSuperview];
-            }
-        }
-        
-        
-        
-        
-        
-        if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
-            self.mediaControlsView.timeInformationView.layer.opacity = 0.0;
-            //self.timeInformationView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
-        }
-        if (![[SWAcapellaPrefsBridge valueForKey:@"transportControls_enabled" defaultValue:@YES] boolValue]){
-            self.mediaControlsView.transportControlsView.layer.opacity = 0.0;
-            //self.volumeView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
-        }
-        if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
-            self.mediaControlsView.volumeView.layer.opacity = 0.0;
-            //self.volumeView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
-        }
-        
-        
-        
-        
-        
-        
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
-        tap.cancelsTouchesInView = YES;
-        [self.mediaControlsView addGestureRecognizer:tap];
+        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
+                                                      preInitializeAction:^(SWAcapella *a){
+                                                          a.owner = self;
+                                                          a.titles = self.mediaControlsView.trackInformationView;
+                                                      }]
+                      ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
         
     }
     
+    if (self.acapella){
+        
+        for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
+            if ([v isKindOfClass:[UIButton class]]){
+                UIButton *b = (UIButton *)v;
+                b.enabled = NO;
+            }
+        }
+        
+        if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
+            self.mediaControlsView.timeInformationView.layer.opacity = 0.0;
+        } else {
+            self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
+        }
+        if (![[SWAcapellaPrefsBridge valueForKey:@"transportControls_enabled" defaultValue:@YES] boolValue]){
+            self.mediaControlsView.transportControlsView.layer.opacity = 0.0;
+        } else {
+            self.mediaControlsView.transportControlsView.layer.opacity = 1.0;
+        }
+        if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
+            self.mediaControlsView.volumeView.layer.opacity = 0.0;
+        } else {
+            self.mediaControlsView.volumeView.layer.opacity = 1.0;
+        }
+        
+        
+    } else { //restore original state
+        
+        for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
+            if ([v isKindOfClass:[UIButton class]]){
+                UIButton *b = (UIButton *)v;
+                b.enabled = YES;
+            }
+        }
+        
+        self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
+        self.mediaControlsView.transportControlsView.layer.opacity = 1.0;
+        self.mediaControlsView.volumeView.layer.opacity = 1.0;
+        
+    }
+    
+    [self.mediaControlsView layoutSubviews];
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+    %orig(animated);
 }
 
 %new
@@ -109,24 +125,24 @@
         
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         
-        if (pan == self.acapella.pan){ //make sure the default music app GR can still pull down vertically
+        if (pan == self.acapella.pan){ //only accept horizontal pans
             CGPoint panVelocity = [pan velocityInView:pan.view];
             return (fabs(panVelocity.x) > fabs(panVelocity.y));
         }
         
     }
     
-    return YES;
+    return NO;
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
     //see MPUTransportControlMediaRemoteController.h
-    if (self.acapella){
+    //if (self.acapella){
         if (arg2 >= 0 && arg2 <= 5){
             return nil;
         }
-    }
+    //}
     
     return %orig(arg1, arg2);
 }
@@ -134,35 +150,23 @@
 %new
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-    /* hide transport animated
-     if (x%2 == 0){
-        self.mediaControlsView.transportControlsView.layer.transform = CATransform3DMakeScale(1.5, 1.0, 0.0);
-    } else {
-        self.mediaControlsView.transportControlsView.layer.transform = CATransform3DMakeScale(1.0, 1.0, 0.0);
-    }*/
-    
-    
     if (self.acapella){
-            
+        
         MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-        
         [t handlePushingMediaRemoteCommand:(t.playing) ? 1 : 0];
-        
-        self.mediaControlsView.tag = 696969;
         
         [UIView animateWithDuration:0.1
                          animations:^{
-                             self.view.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                             self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.05, 1.05);
                          } completion:^(BOOL finished){
                              [UIView animateWithDuration:0.1
                                               animations:^{
-                                                  self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               } completion:^(BOOL finished){
-                                                  self.mediaControlsView.tag = 0;
-                                                  self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               }];
                          }];
-        
+
     }
 }
 
@@ -171,14 +175,16 @@
 {
     MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
     
-    //Lock our x value. See MPUMediaControlsTitlesView.xm
-    //self.mediaControlsView.tag = 696969;
-    self.acapella.titles.tag = 696969;
-    
     if ([direction integerValue] == 0){
         [t handlePushingMediaRemoteCommand:4];
     } else if ([direction integerValue] == 1){
         [t handlePushingMediaRemoteCommand:5];
+    }
+    
+    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
+        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
+            [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
+        }
     }
 }
 
@@ -192,94 +198,17 @@
 
 - (void)layoutSubviews
 {
-//{
-////    if (self.tag == 696969){
-////        CGRect originalTitlesFrame = self.trackInformationView.frame;
-////        %orig();
-////        self.trackInformationView.frame = CGRectMake(originalTitlesFrame.origin.x, self.trackInformationView.frame.origin.y, self.trackInformationView.frame.size.width, self.trackInformationView.frame.size.height);
-////    } else {
-//
     %orig();
     
-    //self.trackInformationView.transform = CGAffineTransformMakeTranslation(0.0, 100);
+    SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
     
-//    if (self.trackInformationView.tag != 696969){
-//        NSInteger yOffset = (self.transportControlsView.layer.opacity == 0.0) ? 0 : -10;
-//        self.trackInformationView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) + yOffset);
-//    }
-    
-    //self.trackInformationView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-//    
-//    
-//    if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
-//        self.transportControlsView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
-//    }
-//    if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
-//        self.volumeView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
-//    }
-    
-    
-    
-    
-    //if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
-        //self.transportControlsView.transform = CGAffineTransformMakeScale(0.0, 0.0);
-   // }
-    //if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
-        //self.volumeView.transform = CGAffineTransformMakeScale(0.0, 0.0);
-    //}
-
-//    }
+    if (acapella){ //center
+        NSInteger trackInfoYOffset = (self.transportControlsView.layer.opacity <= 0.0) ? 0 : -15;
+        self.trackInformationView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2, (CGRectGetHeight(self.bounds) / 2) + trackInfoYOffset);
+    }
 }
 
 %end
-
-
-
-
-
-//@interface MPUChronologicalProgressView : UIView
-//{
-//}
-//
-//@end
-//
-//
-//%hook MPUChronologicalProgressView
-//
-//- (void)setFrame:(CGRect)frame
-//{
-//    if (self.tag == 69){
-//        return;
-//    }
-//    
-//    %orig(frame);
-//}
-//
-//%end
-//
-//
-//
-//
-//
-//@interface MPUMediaControlsVolumeView : UIView
-//{
-//}
-//
-//@end
-//
-//
-//%hook MPUMediaControlsVolumeView
-//
-//- (void)setFrame:(CGRect)frame
-//{
-//    if (self.tag == 69){
-//        return;
-//    }
-//    
-//    %orig(frame);
-//}
-//
-//%end
 
 
 

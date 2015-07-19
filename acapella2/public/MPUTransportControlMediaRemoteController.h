@@ -7,6 +7,7 @@
 {
 }
 
+@property (nonatomic, copy) NSDictionary *nowPlayingInfo;
 @property (nonatomic, assign, getter=isPlaying) BOOL playing;
 
 //hook this to view media remote command codes
@@ -17,6 +18,8 @@
 //3 TogglePlayPause
 //4 Skip Forward
 //5 Skip Backwards
+
+- (void)_updateForSupportedCommandsChange;
 
 @end
 

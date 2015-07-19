@@ -11,84 +11,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string></string>
-			<key>isStaticText</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>ls_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>respringRequired</key>
-			<true/>
-			<key>label</key>
-			<string>Lock Screen</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>cc_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>respringRequired</key>
-			<true/>
-			<key>label</key>
-			<string>Control Center</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>ma_miniplayer_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>respringRequired</key>
-			<true/>
-			<key>label</key>
-			<string>Music App Mini Player</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>ma_nowplaying_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>respringRequired</key>
-			<true/>
-			<key>label</key>
-			<string>Music App Now Playing</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>otm_enabled</string>
-			<key>default</key>
-			<true/>
-			<key>respringRequired</key>
-			<true/>
-			<key>label</key>
-			<string>OnTapMusic</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
 			<key>footerText</key>
-			<string>Only apply to springboard instances</string>
+			<string>Only applies to springboard instances</string>
 			<key>isStaticText</key>
 			<true/>
 		</dict>
@@ -99,12 +23,12 @@
 			<string>progressSlider_enabled</string>
 			<key>default</key>
 			<true/>
-			<key>respringRequired</key>
-			<true/>
 			<key>label</key>
 			<string>Progress Slider</string>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -113,12 +37,12 @@
 			<string>transportControls_enabled</string>
 			<key>default</key>
 			<false/>
-			<key>respringRequired</key>
-			<true/>
 			<key>label</key>
 			<string>Transport Controls</string>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -127,12 +51,12 @@
 			<string>volumeSlider_enabled</string>
 			<key>default</key>
 			<true/>
-			<key>respringRequired</key>
-			<true/>
 			<key>label</key>
 			<string>Volume Slider</string>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -156,7 +80,7 @@
 			<key>cell</key>
 			<string>PSStaticTextCell</string>
 			<key>label</key>
-			<string>Hold to show transport</string>
+			<string>Hold to show rating</string>
 		</dict>
 		<dict>
 			<key>cell</key>

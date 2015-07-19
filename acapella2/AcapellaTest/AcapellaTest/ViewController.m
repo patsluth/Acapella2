@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "libsw/libSluthware/NSTimer+SW.h"
 
+@import CoreGraphics;
 @import Social;
 @import Foundation;
 
@@ -19,7 +20,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) IBOutlet UIButton *button;
-@property (strong, nonatomic) UIView *testView;
+@property (strong, nonatomic) UIDynamicAnimator *animator;
 
 @end
 
@@ -31,25 +32,56 @@
 
 - (SWAcapella *)acapella
 {
-    return [SWAcapella acapellaForOwner:self];
+    return [SWAcapella acapellaForObject:self];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    
+    
+    
+    
+    
+    
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+//    [self.view addGestureRecognizer:tap];
+    
+    
+    
+    
+    
+    
     if (!self.acapella){
-        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view preInitializeAction:^(SWAcapella *a){
-            a.owner = self;
-            a.titles = self.dragView;
-            a.topSlider = self.top;
-            a.bottomSlider = self.bottom;
-        }] ForOwner:self];
+        
+        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
+                                                      preInitializeAction:^(SWAcapella *a){
+                                                          a.owner = self;
+                                                          a.titles = self.dragView;
+                                                      }]
+                      ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN];
+        
     }
     
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(50, 50, 100, 50)];
-    self.testView.backgroundColor = [UIColor purpleColor];
-    [self.view addSubview:self.testView];
+    [NSTimer scheduledTimerWithTimeInterval:10 block:^{
+        
+        
+        for (UIView *v in self.dragView.subviews){
+            if ([v isKindOfClass:[UILabel class]]){
+                UILabel *l = (UILabel *)v;
+                l.text = [NSString stringWithFormat:@"%d", rand()];
+                [l sizeToFit];
+            }
+        }
+        
+        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
+            [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
+        }
+        
+        
+    }repeats:YES];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
@@ -71,28 +103,28 @@
     return YES;
 }
 
+- (void)onTap:(UITapGestureRecognizer *)tap
+{
+    CGPoint location = [tap locationInView:tap.view];
+    
+    [self.animator removeAllBehaviors];
+    
+    UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
+    b.resistance = 1;
+    b.elasticity = 0;
+    b.density = 10000;
+    b.friction = 1000;
+    
+    [self.animator addBehavior:b];
+    
+    UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
+    s.damping = 1.0;
+    [self.animator addBehavior:s];
+    
+}
+
 - (IBAction)buttonClick:(id)sender
 {
-    UIView *titlesCopy = [self.testView resizableSnapshotViewFromRect:self.testView.bounds afterScreenUpdates:YES withCapInsets:UIEdgeInsetsZero];
-    titlesCopy.center = CGPointZero;
-    
-    [self.view addSubview:titlesCopy];
-    
-    
-    
-   // [self.view drawViewHierarchyInRect:CGRectMake(0, 0, 100, 100) afterScreenUpdates:YES];
-    
-    
-    
-    
-    
-    //self.dragView.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0);
-    //self.dragView.layer.opacity = 0.0;
-    
-    //UIView *temp = [self.button snapshotViewAfterScreenUpdates:YES];
-    //self.button.hidden = YES;
-    //[self.view addSubview:temp];
-    //temp.frame = CGRectMake(0, 0, temp.frame.size.width, temp.frame.size.height);
 }
 
 @end

@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>AcapellaPrefs2</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.patsluth.AcapellaPrefs2</string>
+	<string>com.patsluth.acapellaprefs2</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

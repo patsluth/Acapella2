@@ -33,7 +33,6 @@
 		2E28F7E21B5D77160061AE27 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		2E28F7E31B5D77160061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		2E28F7E41B5D77160061AE27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E28F7E51B5D77160061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2E28F7E61B5D77160061AE27 /* Prefs_Banner_Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Prefs_Banner_Background.png; sourceTree = "<group>"; };
 		2E28F7E71B5D77160061AE27 /* Prefs_Banner_Background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Background@2x.png"; sourceTree = "<group>"; };
 		2E28F7E81B5D77160061AE27 /* Prefs_Banner_Background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Background@3x.png"; sourceTree = "<group>"; };
@@ -106,7 +105,6 @@
 				2E28F7E21B5D77160061AE27 /* Icon@2x.png */,
 				2E28F7E31B5D77160061AE27 /* Icon@3x.png */,
 				2E28F7E41B5D77160061AE27 /* Info.plist */,
-				2E28F7E51B5D77160061AE27 /* Makefile */,
 				2E28F7E61B5D77160061AE27 /* Prefs_Banner_Background.png */,
 				2E28F7E71B5D77160061AE27 /* Prefs_Banner_Background@2x.png */,
 				2E28F7E81B5D77160061AE27 /* Prefs_Banner_Background@3x.png */,

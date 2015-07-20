@@ -1,0 +1,178 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		2E28F7C71B5D77160061AE27 /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entry.plist; sourceTree = "<group>"; };
+		2E28F7C81B5D77160061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2E28F7CC1B5D77160061AE27 /* libSluthware.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
+		2E28F7CD1B5D77160061AE27 /* NSTimer+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+SW.h"; sourceTree = "<group>"; };
+		2E28F7CE1B5D77160061AE27 /* SWMCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMCircle.h; sourceTree = "<group>"; };
+		2E28F7CF1B5D77160061AE27 /* SWMLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMLine.h; sourceTree = "<group>"; };
+		2E28F7D01B5D77160061AE27 /* SWMQuadratic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMQuadratic.h; sourceTree = "<group>"; };
+		2E28F7D11B5D77160061AE27 /* TBAlertAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBAlertAction.h; sourceTree = "<group>"; };
+		2E28F7D21B5D77160061AE27 /* TBAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBAlertController.h; sourceTree = "<group>"; };
+		2E28F7D31B5D77160061AE27 /* UIColor+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
+		2E28F7D41B5D77160061AE27 /* UIScrollView+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
+		2E28F7D51B5D77160061AE27 /* UISnapBehaviorHorizontal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UISnapBehaviorHorizontal.h; sourceTree = "<group>"; };
+		2E28F7D61B5D77160061AE27 /* libsw.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libsw.h; sourceTree = "<group>"; };
+		2E28F7D71B5D77160061AE27 /* SWAppLauncher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAppLauncher.h; sourceTree = "<group>"; };
+		2E28F7D81B5D77160061AE27 /* SWPSListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListController.h; sourceTree = "<group>"; };
+		2E28F7D91B5D77160061AE27 /* SWPSListControllerHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListControllerHeaderView.h; sourceTree = "<group>"; };
+		2E28F7DA1B5D77160061AE27 /* SWPSTwitterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSTwitterCell.h; sourceTree = "<group>"; };
+		2E28F7DB1B5D77160061AE27 /* SWSuperiorWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWSuperiorWindow.h; sourceTree = "<group>"; };
+		2E28F7DC1B5D77160061AE27 /* SWAcapellaPrefsListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPrefsListController.h; sourceTree = "<group>"; };
+		2E28F7DE1B5D77160061AE27 /* AcapellaPrefs2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AcapellaPrefs2.plist; sourceTree = "<group>"; };
+		2E28F7DF1B5D77160061AE27 /* Designer_Twitter_Profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Designer_Twitter_Profile.png; sourceTree = "<group>"; };
+		2E28F7E01B5D77160061AE27 /* Developer_Twitter_Profile.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Developer_Twitter_Profile.jpeg; sourceTree = "<group>"; };
+		2E28F7E11B5D77160061AE27 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		2E28F7E21B5D77160061AE27 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		2E28F7E31B5D77160061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
+		2E28F7E41B5D77160061AE27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2E28F7E51B5D77160061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2E28F7E61B5D77160061AE27 /* Prefs_Banner_Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Prefs_Banner_Background.png; sourceTree = "<group>"; };
+		2E28F7E71B5D77160061AE27 /* Prefs_Banner_Background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Background@2x.png"; sourceTree = "<group>"; };
+		2E28F7E81B5D77160061AE27 /* Prefs_Banner_Background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Background@3x.png"; sourceTree = "<group>"; };
+		2E28F7E91B5D77160061AE27 /* Prefs_Banner_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Prefs_Banner_Icon.png; sourceTree = "<group>"; };
+		2E28F7EA1B5D77160061AE27 /* Prefs_Banner_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Icon@2x.png"; sourceTree = "<group>"; };
+		2E28F7EB1B5D77160061AE27 /* Prefs_Banner_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Icon@3x.png"; sourceTree = "<group>"; };
+		2E28F7EC1B5D77160061AE27 /* SWAcapellaPrefsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController.mm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2E28F7C61B5D77160061AE27 /* acapellaprefs */ = {
+			isa = PBXGroup;
+			children = (
+				2E28F7C91B5D77160061AE27 /* public */,
+				2E28F7C81B5D77160061AE27 /* Makefile */,
+				2E28F7C71B5D77160061AE27 /* entry.plist */,
+				2E28F7EC1B5D77160061AE27 /* SWAcapellaPrefsListController.mm */,
+				2E28F7DD1B5D77160061AE27 /* Resources */,
+			);
+			path = acapellaprefs;
+			sourceTree = "<group>";
+		};
+		2E28F7C91B5D77160061AE27 /* public */ = {
+			isa = PBXGroup;
+			children = (
+				2E28F7CA1B5D77160061AE27 /* libsw */,
+				2E28F7DC1B5D77160061AE27 /* SWAcapellaPrefsListController.h */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
+		2E28F7CA1B5D77160061AE27 /* libsw */ = {
+			isa = PBXGroup;
+			children = (
+				2E28F7CB1B5D77160061AE27 /* libSluthware */,
+				2E28F7D61B5D77160061AE27 /* libsw.h */,
+				2E28F7D71B5D77160061AE27 /* SWAppLauncher.h */,
+				2E28F7D81B5D77160061AE27 /* SWPSListController.h */,
+				2E28F7D91B5D77160061AE27 /* SWPSListControllerHeaderView.h */,
+				2E28F7DA1B5D77160061AE27 /* SWPSTwitterCell.h */,
+				2E28F7DB1B5D77160061AE27 /* SWSuperiorWindow.h */,
+			);
+			path = libsw;
+			sourceTree = "<group>";
+		};
+		2E28F7CB1B5D77160061AE27 /* libSluthware */ = {
+			isa = PBXGroup;
+			children = (
+				2E28F7CC1B5D77160061AE27 /* libSluthware.h */,
+				2E28F7CD1B5D77160061AE27 /* NSTimer+SW.h */,
+				2E28F7CE1B5D77160061AE27 /* SWMCircle.h */,
+				2E28F7CF1B5D77160061AE27 /* SWMLine.h */,
+				2E28F7D01B5D77160061AE27 /* SWMQuadratic.h */,
+				2E28F7D11B5D77160061AE27 /* TBAlertAction.h */,
+				2E28F7D21B5D77160061AE27 /* TBAlertController.h */,
+				2E28F7D31B5D77160061AE27 /* UIColor+SW.h */,
+				2E28F7D41B5D77160061AE27 /* UIScrollView+SW.h */,
+				2E28F7D51B5D77160061AE27 /* UISnapBehaviorHorizontal.h */,
+			);
+			path = libSluthware;
+			sourceTree = "<group>";
+		};
+		2E28F7DD1B5D77160061AE27 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2E28F7DE1B5D77160061AE27 /* AcapellaPrefs2.plist */,
+				2E28F7DF1B5D77160061AE27 /* Designer_Twitter_Profile.png */,
+				2E28F7E01B5D77160061AE27 /* Developer_Twitter_Profile.jpeg */,
+				2E28F7E11B5D77160061AE27 /* Icon.png */,
+				2E28F7E21B5D77160061AE27 /* Icon@2x.png */,
+				2E28F7E31B5D77160061AE27 /* Icon@3x.png */,
+				2E28F7E41B5D77160061AE27 /* Info.plist */,
+				2E28F7E51B5D77160061AE27 /* Makefile */,
+				2E28F7E61B5D77160061AE27 /* Prefs_Banner_Background.png */,
+				2E28F7E71B5D77160061AE27 /* Prefs_Banner_Background@2x.png */,
+				2E28F7E81B5D77160061AE27 /* Prefs_Banner_Background@3x.png */,
+				2E28F7E91B5D77160061AE27 /* Prefs_Banner_Icon.png */,
+				2E28F7EA1B5D77160061AE27 /* Prefs_Banner_Icon@2x.png */,
+				2E28F7EB1B5D77160061AE27 /* Prefs_Banner_Icon@3x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2EE53EFD1A36BCBB00BEED8F = {
+			isa = PBXGroup;
+			children = (
+				2E28F7C61B5D77160061AE27 /* acapellaprefs */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		2EE53EFE1A36BCBB00BEED8F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+			};
+			buildConfigurationList = 2EE53F011A36BCBB00BEED8F /* Build configuration list for PBXProject "acapellaprefs" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2EE53EFD1A36BCBB00BEED8F;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		2EE53F021A36BCBB00BEED8F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		2EE53F031A36BCBB00BEED8F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2EE53F011A36BCBB00BEED8F /* Build configuration list for PBXProject "acapellaprefs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EE53F021A36BCBB00BEED8F /* Debug */,
+				2EE53F031A36BCBB00BEED8F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2EE53EFE1A36BCBB00BEED8F /* Project object */;
+}

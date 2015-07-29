@@ -7,6 +7,7 @@
 //
 
 #import "SWAcapella.h"
+#import "SWAcapellaTitlesCloneContainer.h"
 #import "SWAcapellaTitlesClone.h"
 
 #import "libsw/libSluthware/NSTimer+SW.h"
@@ -22,14 +23,22 @@
 {
 }
 
-@property (strong, nonatomic) UIDynamicAnimator *animator_titles;
-@property (strong, nonatomic) UIAttachmentBehavior *behaviour_attachment_titles;
-
-@property (readwrite, strong, nonatomic) UIView *titleCloneContainer;
-@property (readwrite, nonatomic) CGPoint titleCloneContainer_LastVelocity;
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
 @property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
 @property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
+@property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press;
+
+@property (strong, nonatomic) NSTimer *wrapAroundFallback;
+
+
+
+
+
+
+@property (strong, nonatomic) void (^wrapAroundAction)(void);
+@property (strong, nonatomic) void (^finishWrapAroundAction)(void);
 
 @end
 
@@ -39,7 +48,7 @@
 
 @implementation SWAcapella
 
-#pragma mark Associated Object
+#pragma mark - Associated Object
 
 + (SWAcapella *)acapellaForObject:(id)object
 {
@@ -54,19 +63,23 @@
 + (void)removeAcapella:(SWAcapella *)acapella
 {
     if (acapella){
-        [acapella.animator_titles removeAllBehaviors];
-        acapella.animator_titles = nil;
+        [acapella.animator removeAllBehaviors];
+        acapella.animator = nil;
         
-        [acapella resetTitleCloneContainer];
+        acapella.titlesCloneContainer = nil;
         acapella.titles.layer.opacity = 1.0;
         
-        [acapella.pan removeTarget:nil action:nil];
         [acapella.referenceView removeGestureRecognizer:acapella.pan];
+        [acapella.pan removeTarget:nil action:nil];
         acapella.pan = nil;
         
-        [acapella.tap removeTarget:nil action:nil];
         [acapella.tap.view removeGestureRecognizer:acapella.tap];
+        [acapella.tap removeTarget:nil action:nil];
         acapella.tap = nil;
+        
+        [acapella.press.view removeGestureRecognizer:acapella.press];
+        [acapella.press removeTarget:nil action:nil];
+        acapella.press = nil;
         
         [acapella.referenceView layoutSubviews];
     }
@@ -75,7 +88,7 @@
     [SWAcapella setAcapella:nil ForObject:acapella.owner withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
 }
 
-#pragma mark Init
+#pragma mark - Init
 
 - (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
 {
@@ -108,235 +121,229 @@
     
     [SWAcapella setAcapella:self ForObject:self.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
     
-    self.animator_titles = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
-    self.animator_titles.delegate = self;
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
+    self.animator.delegate = self;
     
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan.delegate = self.owner;
     [self.referenceView addGestureRecognizer:self.pan];
     
-    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self.owner action:@selector(onTap:)];
+    self.tap = [[UITapGestureRecognizer alloc] init];
     self.tap.delegate = self.owner;
     self.tap.cancelsTouchesInView = YES;
+    [self.referenceView addGestureRecognizer:self.tap];
     
+    self.press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
+    self.press.delegate = self.owner;
+    self.press.minimumPressDuration = 0.7;
+    [self.referenceView addGestureRecognizer:self.press];
 }
 
-- (CGPoint)referenceViewMidpoint
+- (void)setupTitleCloneContainer
 {
-    return CGPointMake(CGRectGetWidth(self.referenceView.bounds) / 2, CGRectGetHeight(self.referenceView.bounds) / 2);
+    if (!self.titlesCloneContainer){
+        
+        self.titlesCloneContainer = [[SWAcapellaTitlesCloneContainer alloc] initWithFrame:self.referenceView.bounds];
+        [self.referenceView addSubview:self.titlesCloneContainer];
+        
+        self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesCloneContainer attachedToAnchor:CGPointZero];
+        
+    } else {
+        
+        CGPoint originalCenter = self.titlesCloneContainer.center;
+        self.titlesCloneContainer.frame = self.referenceView.bounds;
+        self.titlesCloneContainer.center = CGPointMake(originalCenter.x, CGRectGetMidY(self.referenceView.bounds));
+        
+    }
 }
 
-- (void)resetTitleCloneContainer
+- (void)refreshTitleClone
 {
-    if (self.titleCloneContainer){
-        for (UIView *v in self.titleCloneContainer.subviews){
-            [v removeFromSuperview];
-        }
-        [self.titleCloneContainer removeFromSuperview];
+    BOOL didExist = (self.titlesCloneContainer != nil);
+    
+    [self setupTitleCloneContainer];
+    
+    if (didExist){
+        self.titlesCloneContainer.clone.titles = self.titles; //refresh
     }
     
-    self.titleCloneContainer = nil;
 }
 
-- (void)refreshTitleClones
+#pragma mark - Gesture Recognizers
+
+- (void)onPan:(UIPanGestureRecognizer *)pan
 {
-    if (!self.titleCloneContainer){return;}
+    CGPoint panLocation = [pan locationInView:pan.view];
+    panLocation.y = CGRectGetMidY(self.referenceView.bounds);
     
-    for (UIView *v in self.titleCloneContainer.subviews){ //update our label
-        if ([v isKindOfClass:[SWAcapellaTitlesClone class]]){
-            SWAcapellaTitlesClone *clone = (SWAcapellaTitlesClone *)v;
+    if (pan.state == UIGestureRecognizerStateBegan){
+        
+        [self.animator removeAllBehaviors];
+        
+        self.wrapAroundFallback = nil;
+        self.titles.layer.opacity = 0.0;
+        
+        [self setupTitleCloneContainer];
+        
+        self.titlesCloneContainer.tag = 0;
+        self.titlesCloneContainer.velocity = CGPointZero;
+        
+        self.attachment.anchorPoint = panLocation;
+        [self.animator addBehavior:self.attachment];
+        
+    } else if (pan.state == UIGestureRecognizerStateChanged){
+        
+        self.attachment.anchorPoint = panLocation;
+        
+    } else if (pan.state == UIGestureRecognizerStateEnded){
+        
+        [self.animator removeBehavior:self.attachment];
+        
+        //velocity after dragging
+        CGPoint velocity = [pan velocityInView:pan.view];
+        
+        UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
+        d.allowsRotation = NO;
+        d.resistance = 1.8;
+        
+        [self.animator addBehavior:d];
+        [d addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titlesCloneContainer];
+        
+        __block SWAcapella *bself = self;
+        __block UIDynamicItemBehavior *bd = d;
+        
+        d.action = ^{
             
-            //wait for the next iteration, so we know the original text has been updated
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+            bself.titlesCloneContainer.velocity = [bd linearVelocityForItem:bself.titlesCloneContainer];
             
-            clone.frame = clone.titles.frame;
-            clone.center = CGPointMake(self.referenceViewMidpoint.x, clone.center.y);
+            CGPoint center = bself.titlesCloneContainer.center;
+            CGFloat halfWidth = CGRectGetWidth(bself.titlesCloneContainer.bounds) / 2.0;
+            CGFloat offScreenLeftX = -halfWidth;
+            CGFloat offScreenRightX = CGRectGetWidth(bself.titlesCloneContainer.bounds) + halfWidth;
             
-            //wait for the next iteration, so we know the original text has been updated
-            //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
-            [clone setNeedsDisplay];
-        }
+            if (center.x < offScreenLeftX){
+                
+                [bself.animator removeAllBehaviors];
+                bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, CGRectGetMidY(bself.referenceView.bounds));
+                 [self didWrapAround:@(-1)];
+                
+            } else if (center.x > offScreenRightX){
+                
+                [bself.animator removeAllBehaviors];
+                bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, CGRectGetMidY(bself.referenceView.bounds));
+                [self didWrapAround:@(1)];
+                
+            } else {
+                
+                CGFloat absoluteVelocity = fabs([bd linearVelocityForItem:bself.titlesCloneContainer].x);
+                
+                //snap to center if we are moving to slow
+                if (absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)){
+                    [bself snapToCenter];
+                }
+                
+            }
+            
+        };
     }
+}
+
+- (void)onPress:(UILongPressGestureRecognizer *)press
+{
+//    if (press.state == UIGestureRecognizerStateBegan){
+//        NSLog(@"BEGIN");
+//    } else if (press.state == UIGestureRecognizerStateEnded){
+//        NSLog(@"END");
+//    }
+}
+
+#pragma mark - UIDynamics
+
+// direction < 0 - decrease
+// direction = 0 - no change
+// direction > 0 - increase
+- (void)didWrapAround:(NSNumber *)direction
+{
+    self.titlesCloneContainer.tag = 6969;
+    
+    SEL wrapAroundSelector = @selector(onAcapellaWrapAround:);
+    if ([self.owner respondsToSelector:wrapAroundSelector]){
+        [self.owner performSelectorOnMainThread:wrapAroundSelector withObject:direction waitUntilDone:NO];
+    }
+    
+    self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:1
+                                                                block:^{
+                                                                    [self finishWrapAround];
+                                                                } repeats:NO];
 }
 
 - (void)finishWrapAround
 {
-    [self refreshTitleClones];
-    
-    if (self.titleCloneContainer.tag == 6969){ //waiting for wrap around tag
-        
-        self.titleCloneContainer.tag = 0;
+    if (!self.titlesCloneContainer){
+        return;
+    }
 
-        [self.animator_titles removeAllBehaviors];
+    [self refreshTitleClone];
+
+    self.wrapAroundFallback = nil;
+
+    if (self.titlesCloneContainer.tag == 6969){ //waiting for wrap around tag
         
-        //stop rotation
-        UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titleCloneContainer]];
-        __weak UIDynamicItemBehavior *weakDynamicBehaviour = dynamicBehaviour;
-        dynamicBehaviour.allowsRotation = NO;
-        dynamicBehaviour.resistance = 1;
-        [self.animator_titles addBehavior:dynamicBehaviour];
+        [self.animator removeAllBehaviors];
+
+        self.titlesCloneContainer.tag = 0;
+        
+        //clamp velocity. The velocity is points per second, make sure we cant travel 6 view lengths in one second
+        double velocityClampAbs = fmin(fabs(self.titlesCloneContainer.velocity.x), CGRectGetWidth(self.referenceView.bounds) * 6);
+        double finalVelocity = copysign(velocityClampAbs, self.titlesCloneContainer.velocity.x);
         
         //add original velocity
-        [dynamicBehaviour addLinearVelocity:CGPointMake(self.titleCloneContainer_LastVelocity.x, 0.0) forItem:self.titleCloneContainer];
+        UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
+        [self.animator addBehavior:d];
+        [d addLinearVelocity:CGPointMake(finalVelocity, 0.0) forItem:self.titlesCloneContainer];
         
+        __block SWAcapella *bself = self;
+        __block UIDynamicItemBehavior *bd = d;
         
-        dynamicBehaviour.action = ^{
+        d.action = ^{
             
-            CGFloat distanceFromCenter = fabs(self.titleCloneContainer.center.x - self.referenceViewMidpoint.x);
-            CGFloat absoluteVelocity = fabs([weakDynamicBehaviour linearVelocityForItem:self.titleCloneContainer].x);
+            CGFloat distanceFromCenter = fabs(bself.titlesCloneContainer.center.x -
+                                              CGRectGetMidX(bself.referenceView.bounds));
+            CGFloat absoluteVelocity = fabs([bd linearVelocityForItem:bself.titlesCloneContainer].x);
             
-            if (distanceFromCenter < 50 || absoluteVelocity < CGRectGetMidX(self.referenceView.bounds)){
-                [self snapToCenter];
+            if (distanceFromCenter < 50 || absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)){
+                [bself snapToCenter];
             }
             
+            //unnessecary, because we clamp the velocity now
+            //else if (distanceFromCenter > CGRectGetWidth(bself.referenceView.bounds) * 1.5){ //swiped to fast
+            
+            //}
+            
         };
+        
+        self.titlesCloneContainer.velocity = CGPointZero;
         
     }
 }
 
 - (void)snapToCenter
 {
-    [self.animator_titles removeAllBehaviors];
+    [self.animator removeAllBehaviors];
     
-    UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titleCloneContainer]];
-    dynamicBehaviour.allowsRotation = NO;
-    dynamicBehaviour.resistance = 2;
-    [self.animator_titles addBehavior:dynamicBehaviour];
+    UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
+    d.allowsRotation = NO;
+    d.resistance = 20;
+    [self.animator addBehavior:d];
     
-    UISnapBehaviorHorizontal *snapBehaviour = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titleCloneContainer
-                                                                                 snapToPoint:self.referenceViewMidpoint];
-    snapBehaviour.damping = 0.15;
-    [self.animator_titles addBehavior:snapBehaviour];
-}
-
-- (void)onPan:(UIPanGestureRecognizer *)pan
-{
-    CGPoint location = [pan locationInView:pan.view];
-    location.y = self.referenceViewMidpoint.y;
+    CGPoint snapPoint = CGPointMake(CGRectGetMidX(self.referenceView.bounds), CGRectGetMidY(self.referenceView.bounds));
     
-    if (pan.state == UIGestureRecognizerStateBegan){
-        
-        [self.animator_titles removeAllBehaviors];
-        
-        self.titles.layer.opacity = 0.0;
-        
-        
-        self.titleCloneContainer.tag = 0;
-        self.titleCloneContainer_LastVelocity = CGPointZero;
-        
-        
-        
-        CGRect targetFrame = self.referenceView.bounds;
-        targetFrame.origin = CGPointZero;
-        
-        if (!self.titleCloneContainer){
-            self.titleCloneContainer = [[UIView alloc] initWithFrame:targetFrame];
-            self.titleCloneContainer.backgroundColor = [UIColor clearColor];
-            self.titleCloneContainer.userInteractionEnabled = NO;
-            [self.referenceView addSubview:self.titleCloneContainer];
-        } else { //in this scenario, we might be starting our pan while the title is in motion
-            CGFloat originalCenterX = self.titleCloneContainer.center.x;
-            self.titleCloneContainer.frame = targetFrame;
-            self.titleCloneContainer.center = CGPointMake(originalCenterX, location.y);
-        }
-        
-        //clear current clones
-        for (UIView *v in self.titleCloneContainer.subviews){
-            [v removeFromSuperview];
-        }
-        
-        //create our CLONE
-        SWAcapellaTitlesClone *titleClone = [[SWAcapellaTitlesClone alloc] initWithFrame:self.titles.frame];
-        titleClone.backgroundColor = [UIColor clearColor];
-        titleClone.titles = self.titles;
-        [self refreshTitleClones];
-        [self.titleCloneContainer addSubview:titleClone];
-        //[titleClone startDisplayLink];
-        
+    UISnapBehaviorHorizontal *s = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titlesCloneContainer
+                                                                        snapToPoint:snapPoint];
+    s.damping = 0.15;
+    [self.animator addBehavior:s];
     
-        
-        //add our attachment behaviour so we can drag our view
-        self.behaviour_attachment_titles = [[UIAttachmentBehavior alloc] initWithItem:self.titleCloneContainer
-                                                                     attachedToAnchor:location];
-        [self.animator_titles addBehavior:self.behaviour_attachment_titles];
-        
-        
-    } else if (pan.state == UIGestureRecognizerStateChanged){
-        
-        self.behaviour_attachment_titles.anchorPoint = location;
-        
-    } else if (pan.state == UIGestureRecognizerStateEnded){
-        
-        [self.animator_titles removeBehavior:self.behaviour_attachment_titles];
-        
-        //velocity after dragging
-        CGPoint velocity = [pan velocityInView:pan.view];
-        
-        UIDynamicItemBehavior *dynamicBehaviour = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titleCloneContainer]];
-        __weak UIDynamicItemBehavior *weakDynamicBehaviour = dynamicBehaviour;
-        dynamicBehaviour.allowsRotation = NO;
-        dynamicBehaviour.resistance = 2;
-        
-        dynamicBehaviour.action = ^{
-            
-            void(^wrapAround)(NSNumber *direction) = ^(NSNumber *direction){ //0 left    1 right
-                
-                SEL wrapAroundSelector = @selector(onAcapellaWrapAround:);
-                if ([self.owner respondsToSelector:wrapAroundSelector]){
-                    [self.owner performSelectorOnMainThread:wrapAroundSelector withObject:direction waitUntilDone:NO];
-                }
-                
-                //falback
-                __block NSTimer *fallback = [NSTimer scheduledTimerWithTimeInterval:1
-                                                                      block:^{
-                                                                          [self finishWrapAround];
-                                                                          fallback = nil;
-                                                                      }repeats:NO];
-                
-            };
-            
-
-            
-            self.titleCloneContainer_LastVelocity = [weakDynamicBehaviour linearVelocityForItem:self.titleCloneContainer];
-            
-            
-            
-            CGPoint center = self.titleCloneContainer.center;
-            CGFloat halfWidth = CGRectGetWidth(self.titleCloneContainer.bounds) / 2.0;
-            CGFloat offScreenLeftX = -halfWidth;
-            CGFloat offScreenRightX = CGRectGetWidth(self.titleCloneContainer.bounds) + halfWidth;
-            
-            if (center.x < offScreenLeftX){
-                
-                [self.animator_titles removeAllBehaviors];
-                self.titleCloneContainer.tag = 6969;
-                
-                self.titleCloneContainer.center = CGPointMake(offScreenRightX, self.referenceViewMidpoint.y);
-                wrapAround(@0);
-                
-            } else if (center.x > offScreenRightX){
-                
-                [self.animator_titles removeAllBehaviors];
-                self.titleCloneContainer.tag = 6969;
-                
-                self.titleCloneContainer.center = CGPointMake(offScreenLeftX, self.referenceViewMidpoint.y);
-                wrapAround(@1);
-                
-            } else {
-                
-                CGFloat absoluteVelocity = fabs([weakDynamicBehaviour linearVelocityForItem:self.titleCloneContainer].x);
-                //snap to center if we are moving to slow
-                if (absoluteVelocity < CGRectGetMidX(self.referenceView.bounds)){
-                    [self snapToCenter];
-                }
-                
-            }
-            
-        };
-        
-        [self.animator_titles addBehavior:dynamicBehaviour];
-        [dynamicBehaviour addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titleCloneContainer];
-    }
+    self.titlesCloneContainer.tag = 98765;
 }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
@@ -347,7 +354,74 @@
         return;
     }
     
+    if (self.titlesCloneContainer && self.titlesCloneContainer.tag == 98765){
+        self.titlesCloneContainer = nil;
+    }
+    
     [animator removeAllBehaviors];
+}
+
+#pragma mark - Public
+
+- (void)pulseAnimateView:(UIView *)view
+{
+    if (!self.titlesCloneContainer){
+        [self refreshTitleClone];
+    }
+    
+    if (!view){
+        view = self.titlesCloneContainer;
+    }
+    
+    [view.layer removeAllAnimations];
+    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+    
+    [UIView animateWithDuration:0.1
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         view.transform = CGAffineTransformMakeScale(1.07, 1.07);
+                     }completion:^(BOOL finished){
+                         
+                         if (finished){
+                             
+                             [UIView animateWithDuration:0.1
+                                              animations:^{
+                                                  view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                              } completion:^(BOOL finished){
+                                                  view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                              }];
+                             
+                         }
+                         
+                     }];
+
+}
+
+#pragma mark - Internal
+
+- (void)setTitlesCloneContainer:(SWAcapellaTitlesCloneContainer *)titlesCloneContainer
+{
+    if (!titlesCloneContainer && _titlesCloneContainer){
+        [_titlesCloneContainer removeFromSuperview];
+        self.titles.layer.opacity = 1.0;
+    }
+    
+    _titlesCloneContainer = titlesCloneContainer;
+    
+    if (_titlesCloneContainer){
+        self.titles.layer.opacity = 0.0;
+        _titlesCloneContainer.clone.titles = self.titles;
+    }
+}
+
+- (void)setWrapAroundFallback:(NSTimer *)wrapAroundFallback
+{
+    if (_wrapAroundFallback && !wrapAroundFallback){
+        [_wrapAroundFallback invalidate];
+    }
+    
+    _wrapAroundFallback = wrapAroundFallback;
 }
 
 @end

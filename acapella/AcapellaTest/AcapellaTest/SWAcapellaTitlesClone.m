@@ -14,8 +14,6 @@
 
 @interface SWAcapellaTitlesClone()
 
-@property (strong, nonatomic) CADisplayLink *displayLink;
-
 @end
 
 
@@ -24,48 +22,120 @@
 
 @implementation SWAcapellaTitlesClone
 
-//- (void)setTitles:(UIView *)titles
-//{
-//    _titles = titles;
-//    
-//    [NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
-//    [self setNeedsDisplay];
-//}
+#pragma mark - Init
 
-- (void)startDisplayLink
+- (id)init
 {
-//    if (!self.displayLink){
-//        self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkUpdate)];
-//        [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-//    }
+    self = [super init];
+    
+    if (self){
+        [self initialize];
+    }
+    
+    return self;
 }
 
-- (void)stopDisplayLink
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-//    if (self.displayLink){
-//        [self.displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-//    }
-//    
-//    self.displayLink = nil;
+    self = [super initWithCoder:aDecoder];
+    
+    if (self){
+        [self initialize];
+    }
+    
+    return self;
 }
 
-- (void)displayLinkUpdate
+- (id)initWithFrame:(CGRect)frame
 {
-    //wait for the next iteration
-    //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+    self = [super initWithFrame:frame];
+    
+    if (self){
+        [self initialize];
+    }
+    
+    return self;
+}
+
+- (void)initialize
+{
+    self.backgroundColor = [UIColor clearColor];
+    self.userInteractionEnabled = NO;
+}
+
+- (void)setTitles:(UIView *)titles
+{
+    _titles = titles;
+    
+    if (_titles){
+        self.frame = _titles.frame;
+    } else {
+        self.frame = CGRectZero;
+    }
+    
+    [self setNeedsDisplay];
+    //wait for the next iteration, so we know the original text has been updated
+    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
     [self setNeedsDisplay];
 }
+
+//- (void)setNeedsDisplay
+//{
+//    [super setNeedsDisplay];
+//    
+//    CGFloat xxxxx = CACurrentMediaTime();
+//    
+//    
+//    
+//    
+//    for (UIView *v in self.subviews){
+//        [v removeFromSuperview];
+//    }
+//    
+//    
+//    
+//    //CALayer *layer = [self.titles.layer presentationLayer];
+//    //layer.opacity = 1.0;
+//    //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeInterval:1 sinceDate:[NSDate date]]];
+//    
+//    
+//    
+//    NSData *tempArchiveView = [NSKeyedArchiver archivedDataWithRootObject:self.titles];
+//    UIView *viewOfSelf = [NSKeyedUnarchiver unarchiveObjectWithData:tempArchiveView];
+//    
+//    
+//    //UIView *x = [self.titles snapshotViewAfterScreenUpdates:NO];
+//    //x.layer.opacity = 1.0;
+//   // NSLog(@"PAT %@", NSStringFromCGRect(x.frame));
+//    [self addSubview:viewOfSelf];
+//    viewOfSelf.frame = viewOfSelf.bounds;
+//    viewOfSelf.layer.opacity = 1.0;
+//    
+//    //layer.opacity = 0.0;
+//    
+//    NSLog(@"UPDATING SNAPSHOT %f", CACurrentMediaTime() - xxxxx);
+//    
+//}
+
+#pragma mark Rendering
 
 - (void)drawRect:(CGRect)rect
 {
     if (self.titles){
         
-        CGFloat originalOpacity = self.titles.layer.opacity;
-        self.titles.layer.opacity = 1.0;
+        CALayer *layer = [self.titles.layer presentationLayer];
         
-        [self.titles.layer renderInContext:UIGraphicsGetCurrentContext()];
+        if (!layer){
+            layer = self.titles.layer;
+        }
         
-        self.titles.layer.opacity = originalOpacity;
+        CGFloat originalOpacity = layer.opacity;
+        layer.opacity = 1.0;
+        
+        CGContextSetInterpolationQuality(UIGraphicsGetCurrentContext(), kCGInterpolationNone);
+        [layer renderInContext:UIGraphicsGetCurrentContext()];
+        
+        layer.opacity = originalOpacity;
     }
 }
 

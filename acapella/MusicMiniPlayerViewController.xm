@@ -20,7 +20,11 @@
 - (SWAcapella *)acapella;
 
 - (UIView *)titlesView;
+- (UIView *)transportControlsView;
+
 - (UIPanGestureRecognizer *)nowPlayingPresentationPanRecognizer;
+
+- (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
 
 @end
 
@@ -42,18 +46,24 @@
     
     if (!self.acapella){
         
-        [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
-                                                      preInitializeAction:^(SWAcapella *a){
-                                                          a.owner = self;
-                                                          a.titles = self.titlesView;
-                                                      }]
-                      ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+        if ([[SWAcapellaPrefsBridge valueForKey:@"ma_mini_enabled" defaultValue:@YES] boolValue]){
+            
+            [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
+                                                          preInitializeAction:^(SWAcapella *a){
+                                                              a.owner = self;
+                                                              a.titles = self.titlesView;
+                                                          }]
+                          ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+            
+        }
         
     }
     
     if (self.acapella){
         
-        [self.view addGestureRecognizer:self.acapella.tap];
+        [self.acapella.tap addTarget:self action:@selector(onTap:)];
+        [self.acapella.press addTarget:self action:@selector(onPress:)];
+        
         [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
         
     }
@@ -117,34 +127,28 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
-    //if (self.acapella){
-        return nil;
-    //}
     
-   // return %orig(arg1, arg2);
-}
-
-%new
-- (void)onTap:(UITapGestureRecognizer *)tap
-{
-    if (self.acapella){
-        
-        MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-        [t handlePushingMediaRemoteCommand:(t.playing) ? 1 : 0];
-        
-        [UIView animateWithDuration:0.1
-                         animations:^{
-                             self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.1, 1.0);
-                         } completion:^(BOOL finished){
-                             [UIView animateWithDuration:0.1
-                                              animations:^{
-                                                  self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                              } completion:^(BOOL finished){
-                                                  self.acapella.referenceView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                              }];
-                         }];
-        
+    if ([[SWAcapellaPrefsBridge valueForKey:@"ma_mini_enabled" defaultValue:@YES] boolValue]){
+        return nil;
     }
+    
+    return %orig(arg1, arg2);
+    
+    
+    //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
+    
+    //3 play/pause
+    //11 contextual
+    
+//    if (arg2 == 3 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_play/pause_enabled" defaultValue:@NO] boolValue]){
+//        return nil;
+//    }
+//    
+//    if (arg2 == 11 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_contextual_enabled" defaultValue:@YES] boolValue]){
+//        return nil;
+//    }
+//    
+//    return %orig(arg1, arg2);
 }
 
 - (void)_tapRecognized:(id)arg1
@@ -155,17 +159,40 @@
 }
 
 %new
+- (void)onTap:(UITapGestureRecognizer *)tap
+{
+    if (self.acapella){
+        
+        [self transportControlsView:self.transportControlsView tapOnControlType:3];
+        [self.acapella pulseAnimateView:nil];
+        
+    }
+}
+
+%new
+- (void)onPress:(UILongPressGestureRecognizer *)press
+{
+    if (self.acapella){
+        
+        //CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
+        //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+        
+        if (press.state == UIGestureRecognizerStateBegan){
+            
+             [self transportControlsView:self.transportControlsView tapOnControlType:11];
+            
+        }
+        
+    }
+}
+
+%new
 - (void)onAcapellaWrapAround:(NSNumber *)direction
 {
-    MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-    
-    //Disable frame changes. See MusicNowPlayingTitlesView.xm
-    self.acapella.titles.tag = 696969;
-    
-    if ([direction integerValue] == 0){
-        [t handlePushingMediaRemoteCommand:4];
-    } else if ([direction integerValue] == 1){
-        [t handlePushingMediaRemoteCommand:5];
+    if ([direction integerValue] < 0){
+        [self transportControlsView:self.transportControlsView tapOnControlType:4];
+    } else if ([direction integerValue] > 0){
+        [self transportControlsView:self.transportControlsView tapOnControlType:1];
     }
 }
 

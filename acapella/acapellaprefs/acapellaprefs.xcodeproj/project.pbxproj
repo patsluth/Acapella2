@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		2E0A49E31B68CE05005FE2BF /* SWAcapellaPrefsListController_Actions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController_Actions.mm; sourceTree = "<group>"; };
+		2E0A49E41B68CE26005FE2BF /* AcapellaPrefs2_Actions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AcapellaPrefs2_Actions.plist; sourceTree = "<group>"; };
+		2E0A49E51B68CE71005FE2BF /* AcapellaPrefs2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AcapellaPrefs2.plist; sourceTree = "<group>"; };
 		2E28F7C71B5D77160061AE27 /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entry.plist; sourceTree = "<group>"; };
 		2E28F7C81B5D77160061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2E28F7CC1B5D77160061AE27 /* libSluthware.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
@@ -26,7 +29,6 @@
 		2E28F7DA1B5D77160061AE27 /* SWPSTwitterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSTwitterCell.h; sourceTree = "<group>"; };
 		2E28F7DB1B5D77160061AE27 /* SWSuperiorWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWSuperiorWindow.h; sourceTree = "<group>"; };
 		2E28F7DC1B5D77160061AE27 /* SWAcapellaPrefsListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPrefsListController.h; sourceTree = "<group>"; };
-		2E28F7DE1B5D77160061AE27 /* AcapellaPrefs2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AcapellaPrefs2.plist; sourceTree = "<group>"; };
 		2E28F7DF1B5D77160061AE27 /* Designer_Twitter_Profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Designer_Twitter_Profile.png; sourceTree = "<group>"; };
 		2E28F7E01B5D77160061AE27 /* Developer_Twitter_Profile.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Developer_Twitter_Profile.jpeg; sourceTree = "<group>"; };
 		2E28F7E11B5D77160061AE27 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -40,6 +42,8 @@
 		2E28F7EA1B5D77160061AE27 /* Prefs_Banner_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Icon@2x.png"; sourceTree = "<group>"; };
 		2E28F7EB1B5D77160061AE27 /* Prefs_Banner_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Icon@3x.png"; sourceTree = "<group>"; };
 		2E28F7EC1B5D77160061AE27 /* SWAcapellaPrefsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController.mm; sourceTree = "<group>"; };
+		2E6CF89C1B684A6F0046293E /* AcapellaPrefs2_Transport.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = AcapellaPrefs2_Transport.plist; sourceTree = "<group>"; };
+		2E6CF89D1B684B200046293E /* SWAcapellaPrefsListController_Transport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController_Transport.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -50,6 +54,8 @@
 				2E28F7C81B5D77160061AE27 /* Makefile */,
 				2E28F7C71B5D77160061AE27 /* entry.plist */,
 				2E28F7EC1B5D77160061AE27 /* SWAcapellaPrefsListController.mm */,
+				2E6CF89D1B684B200046293E /* SWAcapellaPrefsListController_Transport.mm */,
+				2E0A49E31B68CE05005FE2BF /* SWAcapellaPrefsListController_Actions.mm */,
 				2E28F7DD1B5D77160061AE27 /* Resources */,
 			);
 			path = acapellaprefs;
@@ -98,7 +104,9 @@
 		2E28F7DD1B5D77160061AE27 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2E28F7DE1B5D77160061AE27 /* AcapellaPrefs2.plist */,
+				2E0A49E51B68CE71005FE2BF /* AcapellaPrefs2.plist */,
+				2E6CF89C1B684A6F0046293E /* AcapellaPrefs2_Transport.plist */,
+				2E0A49E41B68CE26005FE2BF /* AcapellaPrefs2_Actions.plist */,
 				2E28F7DF1B5D77160061AE27 /* Designer_Twitter_Profile.png */,
 				2E28F7E01B5D77160061AE27 /* Developer_Twitter_Profile.jpeg */,
 				2E28F7E11B5D77160061AE27 /* Icon.png */,

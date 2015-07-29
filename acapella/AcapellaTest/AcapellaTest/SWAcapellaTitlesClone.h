@@ -16,9 +16,6 @@
 
 @property (weak, nonatomic) UIView *titles;
 
-- (void)startDisplayLink;
-- (void)stopDisplayLink;
-
 @end
 
 

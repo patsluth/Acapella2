@@ -3,8 +3,8 @@
 		bundle = AcapellaPrefs2;
 		cell = PSLinkCell;
 		detail = "SWAcapellaPrefsListController";
-		icon = "Icon.png";
 		isController = 1;
+		icon = "Icon.png";
 		label = "Acapella II";
 	};
 }

@@ -7,7 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "SWAcapellaTitlesCloneContainer.h"
 #import "libsw/libSluthware/NSTimer+SW.h"
+
 
 @import CoreGraphics;
 @import Social;
@@ -90,29 +92,28 @@
 
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-    for (UILabel *l in self.dragView.subviews){
-        l.text = [NSString stringWithFormat:@"%d", rand()];
-    }
+    CGPoint location = [tap locationInView:tap.view];
     
-    //if (tap.state == UIGestureRecognizerStateEnded){
-        
-        CGPoint location = [tap locationInView:tap.view];
-        
-        [self.animator removeAllBehaviors];
-        
-        UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
-        
-        [self.animator addBehavior:b];
-        
-        UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
-        [self.animator addBehavior:s];
-        
-    //}
+    [self.animator removeAllBehaviors];
+    
+    UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
+    
+    [self.animator addBehavior:b];
+    
+    UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
+    [self.animator addBehavior:s];
+    
+    
 }
 
 - (IBAction)buttonClick:(id)sender
 {
-    
+    [NSTimer scheduledTimerWithTimeInterval:2 block:^{
+        for (UILabel *l in self.dragView.subviews){
+            l.text = [NSString stringWithFormat:@"%d", rand()];
+        }
+        [self.acapella.titlesCloneContainer setNeedsDisplay];
+    }repeats:YES];
 }
 
 @end

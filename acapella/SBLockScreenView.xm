@@ -6,47 +6,30 @@
 
 
 
-@interface SBLockScreenView : UIView
+%hook SBLockScreenHintManager
+
+- (BOOL)presentingController:(id)arg1 gestureRecognizer:(UIGestureRecognizer *)arg2 shouldReceiveTouch:(UITouch *)arg3
 {
-}
-
-@end
-
-
-
-
-%hook SBLockScreenView
-
-- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-{
-    NSString *classString = NSStringFromClass([gestureRecognizer class]);
+    NSString *x = NSStringFromClass([arg3.view class]);
+    NSString *y = NSStringFromClass(%c(MPUSystemMediaControlsView));
     
-    if ([classString isEqualToString:@"SBLockScreenHintTapGestureRecognizer"] ||
-        [classString isEqualToString:@"SBLockScreenHintLongPressGestureRecognizer"]){
-        return;
+    if ([x isEqualToString:y]){
+        return NO;
     }
     
-    %orig(gestureRecognizer);
+    return %orig(arg1, arg2, arg3);
 }
 
-- (BOOL)_disallowScrollingInTouchedView:(UIView *)view
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)arg1 shouldReceiveTouch:(UITouch *)arg2
 {
-    NSLog(@"PAT DISSALLOW SCROLLING %@", view);
-    return YES;
+    NSString *x = NSStringFromClass([arg2.view class]);
+    NSString *y = NSStringFromClass(%c(MPUSystemMediaControlsView));
+    
+    if ([x isEqualToString:y]){
+        return NO;
+    }
+    
+    return %orig(arg1, arg2);
 }
 
 %end
-
-%hook SBLockScreenScrollView
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    NSLog(@"PAT TOUCH ME %@", gestureRecognizer);
-    return NO;
-}
-
-%end
-
-
-
-

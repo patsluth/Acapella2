@@ -11,6 +11,9 @@
 
 #import <objc/runtime.h>
 
+@class SWAcapellaTitlesCloneContainer;
+@class SWAcapellaTitlesClone;
+
 
 
 
@@ -32,10 +35,14 @@
 @property (weak, nonatomic) UIView *topSlider;
 @property (weak, nonatomic) UIView *bottomSlider;
 
-@property (readonly, strong, nonatomic) UIView *titleCloneContainer;
+@property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
 
 @property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan;
 @property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
+@property (readonly, strong, nonatomic) UILongPressGestureRecognizer *press;
+
+- (void)finishWrapAround;
+- (void)pulseAnimateView:(UIView *)view;
 
 @end
 

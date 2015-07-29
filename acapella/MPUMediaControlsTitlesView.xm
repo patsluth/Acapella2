@@ -20,23 +20,20 @@
 
 %hook MPUMediaControlsTitlesView
 
-- (void)updateTrackInformationWithNowPlayingInfo:(NSDictionary *)info
+- (void)updateTrackInformationWithNowPlayingInfo:(NSDictionary *)arg1
 {
-    if (info.count == 0){
-        info = @{@"kMRMediaRemoteNowPlayingInfoTitle" : @"Acapella",
+    if (arg1.count == 0){
+        arg1 = @{@"kMRMediaRemoteNowPlayingInfoTitle" : @"Acapella",
                  @"kMRMediaRemoteNowPlayingInfoArtist" : @"Tap To Play"};
     }
     
-    %orig(info);
+    %orig(arg1);
     
     SWAcapella *acapella = [SWAcapella acapellaForObject:self];
     
     if (acapella){
-        if ([acapella respondsToSelector:@selector(finishWrapAround)]){
-            [acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
-        }
+        [acapella finishWrapAround];
     }
-    
 }
 
 %end

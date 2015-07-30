@@ -6,18 +6,15 @@
 //
 //
 
-#import "SWAcapellaPrefsListController.h"
-
 #import <Preferences/Preferences.h>
 
-#import "libSluthware.h"
-#import "SWPSTwitterCell.h"
+#import "SWPSListController.h"
 
 
 
 
 
-@interface SWAcapellaPrefsListController()
+@interface SWAcapellaPrefsListController_Instance : SWPSListController
 {
 }
 
@@ -27,9 +24,9 @@
 
 
 
-@implementation SWAcapellaPrefsListController
+@implementation SWAcapellaPrefsListController_Instance
 
-#pragma mark - Override
+#pragma mark Init
 
 - (NSString *)bundlePath
 {
@@ -44,13 +41,6 @@
 - (NSString *)plistPath
 {
     return @"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist";
-}
-
-#pragma mark Twitter
-
-- (void)viewTwitterProfile:(PSSpecifier *)specifier
-{
-    [SWPSTwitterCell performActionWithSpecifier:specifier];
 }
 
 @end

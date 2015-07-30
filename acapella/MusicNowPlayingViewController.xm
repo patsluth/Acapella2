@@ -18,6 +18,7 @@
 }
 
 - (SWAcapella *)acapella;
+- (NSString *)acapellaPrefKeyPrefix;
 
 - (UIView *)playbackProgressSliderView;
 - (UIView *)titlesView;
@@ -45,20 +46,34 @@
     return [SWAcapella acapellaForObject:self];
 }
 
+%new
+- (NSString *)acapellaPrefKeyPrefix
+{
+    return @"ma_nowplaying_";
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     %orig(animated);
     
     if (!self.acapella){
         
-        if ([[SWAcapellaPrefsBridge valueForKey:@"ma_nowplaying_enabled" defaultValue:@YES] boolValue]){
+        NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
+        
+        if (prefKeyPrefix != nil){
             
-            [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.titlesView.superview
-                                                          preInitializeAction:^(SWAcapella *a){
-                                                              a.owner = self;
-                                                              a.titles = self.titlesView;
-                                                          }]
-                          ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+            NSString *enabledKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"enabled"];
+            
+            if ([[SWAcapellaPrefsBridge valueForKey:enabledKey defaultValue:@YES] boolValue]){
+                
+                [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.titlesView.superview
+                                                              preInitializeAction:^(SWAcapella *a){
+                                                                  a.owner = self;
+                                                                  a.titles = self.titlesView;
+                                                              }]
+                              ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+                
+            }
             
         }
         
@@ -84,7 +99,12 @@
     if (self.acapella){
         
         if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
-            return ![touch.view isKindOfClass:[UISlider class]];
+            
+            BOOL isSlider = [touch.view isKindOfClass:[UISlider class]];
+            BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
+            
+            return !isSlider && !isControl;
+            
         }
         
     }
@@ -113,55 +133,70 @@
 {
     //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
     
-    //Top Row
+    //TOP ROW
     //6 like/ban
     //1 rewind
     //3 play/pause
     //4 forward
     //7 present up next
     
-    //Bottom Row
+    //BOTTOM ROW
     //8 share
     //10 shuffle
     //9 repeat
     //11 contextual
     
-    //Top Row
-    if (arg2 == 6 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_heart_enabled" defaultValue:@YES] boolValue]){
-        return nil;
-    }
+    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
     
-    if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_skipprevious_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 3 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_play/pause_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_skipnext_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 7 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_presentupnext_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    //Bottom Row
-    if (arg2 == 8 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_share_enabled" defaultValue:@YES] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 10 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_shuffle_enabled" defaultValue:@YES] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 9 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_repeat_enabled" defaultValue:@YES] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 11 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_contextual_enabled" defaultValue:@YES] boolValue]){
-        return nil;
+    if (prefKeyPrefix != nil){
+     
+        //TOP ROW
+        NSString *key_Heart = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_heart_enabled"];
+        if (arg2 == 6 && ![[SWAcapellaPrefsBridge valueForKey:key_Heart defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_SkipPrev = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipprevious_enabled"];
+        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipPrev defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_PlayPause = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_play/pause_enabled"];
+        if (arg2 == 3 && ![[SWAcapellaPrefsBridge valueForKey:key_PlayPause defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_SkipNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipnext_enabled"];
+        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipNext defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_UpNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_presentupnext_enabled"];
+        if (arg2 == 7 && ![[SWAcapellaPrefsBridge valueForKey:key_UpNext defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
+        //BOTTOM ROW
+        NSString *key_Share = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_share_enabled"];
+        if (arg2 == 8 && ![[SWAcapellaPrefsBridge valueForKey:key_Share defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_Shuffle = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_shuffle_enabled"];
+        if (arg2 == 10 && ![[SWAcapellaPrefsBridge valueForKey:key_Shuffle defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_Repeat = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_repeat_enabled"];
+        if (arg2 == 9 && ![[SWAcapellaPrefsBridge valueForKey:key_Repeat defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_Contextual = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_contextual_enabled"];
+        if (arg2 == 11 && ![[SWAcapellaPrefsBridge valueForKey:key_Contextual defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
     }
     
     return %orig(arg1, arg2);
@@ -239,12 +274,12 @@
     }
 }
 
-- (void)_handleTapGestureRecognizerAction:(id)arg1 //tap on artwork
-{
-    //if (!self.acapella){
-        %orig(arg1);
-    //}
-}
+//- (void)_handleTapGestureRecognizerAction:(id)arg1 //tap on artwork
+//{
+//    //if (!self.acapella){
+//        %orig(arg1);
+//    //}
+//}
 
 %new
 - (void)onAcapellaWrapAround:(NSNumber *)direction
@@ -254,6 +289,24 @@
     } else if ([direction integerValue] > 0){
         [self transportControlsView:self.transportControls tapOnControlType:1];
     }
+}
+
+- (void)_showUpNext
+{
+    if (self.acapella){
+        self.acapella.titlesCloneContainer = nil;
+    }
+    
+    %orig();
+}
+
+- (void)_showUpNext:(id)arg1
+{
+    if (self.acapella){
+        self.acapella.titlesCloneContainer = nil;
+    }
+    
+    %orig(arg1);
 }
 
 %end

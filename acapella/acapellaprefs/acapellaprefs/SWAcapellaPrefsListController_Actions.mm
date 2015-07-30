@@ -28,15 +28,6 @@
 
 #pragma mark Init
 
-- (id)specifiers
-{
-    if(_specifiers == nil){
-        _specifiers = [self loadSpecifiersFromPlistName:@"AcapellaPrefs2_Actions" target:self];
-    }
-    
-    return _specifiers;
-}
-
 - (NSString *)bundlePath
 {
     return @"/Library/PreferenceBundles/AcapellaPrefs2.bundle";

@@ -30,6 +30,8 @@
 }
 
 - (SWAcapella *)acapella;
+- (NSString *)acapellaPrefKeyPrefix;
+
 - (MPUSystemMediaControlsView *)mediaControlsView;
 
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
@@ -51,6 +53,36 @@
 }
 
 %new
+- (NSString *)acapellaPrefKeyPrefix
+{
+    //Control Center
+    NSString *cc1 = NSStringFromClass(%c(SBControlCenterSectionView));
+    NSString *cc2 = NSStringFromClass(%c(SBControlCenterContentView));
+    if ([NSStringFromClass([self.view.superview class]) isEqualToString:cc1] &&
+        [NSStringFromClass([self.view.superview.superview class]) isEqualToString:cc2]){
+        return @"cc_";
+    }
+    
+    //Lock Screen
+    NSString *ls1 = NSStringFromClass(%c(SBMainScreenAlertWindowViewController));
+    NSString *ls2 = NSStringFromClass(%c(SBInteractionPassThroughView));
+    
+    if ([NSStringFromClass([self.view.window.rootViewController class]) isEqualToString:ls1] &&
+        [NSStringFromClass([self.view.superview.superview class]) isEqualToString:ls2]){
+        return @"ls_";
+    }
+    
+    //OnTapMusic
+    NSString *otm1 = NSStringFromClass(%c(OTMView));
+    
+    if ([NSStringFromClass([self.view.superview class]) isEqualToString:otm1]){
+        return @"otm_";
+    }
+    
+    return nil;
+}
+
+%new
 - (MPUSystemMediaControlsView *)mediaControlsView
 {
     return MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
@@ -60,35 +92,24 @@
 {
     %orig(animated);
     
+    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
+    
     if (!self.acapella){
         
-        BOOL createAcapella = NO;
-        
-        if (!self.view.window.rootViewController){
+        if (prefKeyPrefix != nil){
             
-            if ([self.view.superview isKindOfClass:%c(OTMView)]){ //OnTapMusic
-                createAcapella = [[SWAcapellaPrefsBridge valueForKey:@"otm_enabled" defaultValue:@YES] boolValue];
+            NSString *enabledKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"enabled"];
+            
+            if ([[SWAcapellaPrefsBridge valueForKey:enabledKey defaultValue:@YES] boolValue]){
+                
+                [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
+                                                              preInitializeAction:^(SWAcapella *a){
+                                                                  a.owner = self;
+                                                                  a.titles = self.mediaControlsView.trackInformationView;
+                                                              }]
+                              ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+                
             }
-            
-        } else {
-            
-            if ([self.view.window.rootViewController class] == %c(SBControlCenterController)){
-                createAcapella = [[SWAcapellaPrefsBridge valueForKey:@"cc_enabled" defaultValue:@YES] boolValue];
-            } else { //SBMainScreenAlertWindowViewController -> Lock Screen
-                createAcapella = [[SWAcapellaPrefsBridge valueForKey:@"ls_enabled" defaultValue:@YES] boolValue];
-            }
-            
-        }
-        
-        
-        if (createAcapella){
-            
-            [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
-                                                          preInitializeAction:^(SWAcapella *a){
-                                                              a.owner = self;
-                                                              a.titles = self.mediaControlsView.trackInformationView;
-                                                          }]
-                          ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
         }
         
@@ -126,6 +147,26 @@
             }
         }
         
+    }
+    
+    if (prefKeyPrefix != nil){
+        
+        NSString *progressKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"progressSlider_enabled"];
+        NSString *volumeKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"volumeSlider_enabled"];
+        
+        if (![[SWAcapellaPrefsBridge valueForKey:progressKey defaultValue:@YES] boolValue]){
+            self.mediaControlsView.timeInformationView.layer.opacity = 0.0;
+        } else {
+            self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
+        }
+        if (![[SWAcapellaPrefsBridge valueForKey:volumeKey defaultValue:@YES] boolValue]){
+            self.mediaControlsView.volumeView.layer.opacity = 0.0;
+        } else {
+            self.mediaControlsView.volumeView.layer.opacity = 1.0;
+        }
+        
+    } else {
+        
         self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
         self.mediaControlsView.volumeView.layer.opacity = 1.0;
         
@@ -161,7 +202,12 @@
     if (self.acapella){
         
         if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
-            return ![touch.view isKindOfClass:[UISlider class]];
+            
+            BOOL isSlider = [touch.view isKindOfClass:[UISlider class]];
+            BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
+            
+            return !isSlider && !isControl;
+            
         }
         
     }
@@ -195,25 +241,38 @@
     //4 forward
     //8 share
     
-    if (arg2 == 6 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_heart_enabled" defaultValue:@YES] boolValue]){
-        return nil;
+    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
+    
+    
+    if (prefKeyPrefix != nil){
+    
+        NSString *key_Heart = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_heart_enabled"];
+        if (arg2 == 6 && ![[SWAcapellaPrefsBridge valueForKey:key_Heart defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_SkipPrev = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipprevious_enabled"];
+        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipPrev defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_PlayPause = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_play/pause_enabled"];
+        if (arg2 == 3 && ![[SWAcapellaPrefsBridge valueForKey:key_PlayPause defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_SkipNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipnext_enabled"];
+        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipNext defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_Share = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_share_enabled"];
+        if (arg2 == 8 && ![[SWAcapellaPrefsBridge valueForKey:key_Share defaultValue:@YES] boolValue]){
+            return nil;
+        }
+        
     }
     
-    if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_skipprevious_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 3 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_play/pause_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_skipnext_enabled" defaultValue:@NO] boolValue]){
-        return nil;
-    }
-    
-    if (arg2 == 8 && ![[SWAcapellaPrefsBridge valueForKey:@"transport_share_enabled" defaultValue:@YES] boolValue]){
-        return nil;
-    }
     
     return %orig(arg1, arg2);
 }

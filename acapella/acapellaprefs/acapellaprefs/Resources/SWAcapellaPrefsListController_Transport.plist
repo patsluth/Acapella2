@@ -10,7 +10,11 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_heart_enabled</string>
+			<string>heart_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ma_mini_</string>
+			</array>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -19,14 +23,12 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_skipprevious_enabled</string>
+			<string>skipprevious_enabled</string>
 			<key>default</key>
 			<false/>
 			<key>label</key>
@@ -35,14 +37,12 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_play/pause_enabled</string>
+			<string>play/pause_enabled</string>
 			<key>default</key>
 			<false/>
 			<key>label</key>
@@ -51,14 +51,12 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_skipnext_enabled</string>
+			<string>skipnext_enabled</string>
 			<key>default</key>
 			<false/>
 			<key>label</key>
@@ -67,14 +65,22 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_presentupnext_enabled</string>
+			<string>presentupnext_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ls_</string>
+				<string>cc_</string>
+				<string>otm_</string>
+			</array>
+			<key>invert_default_for_keys</key>
+			<array>
+				<string>ma_mini_</string>
+			</array>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -83,14 +89,16 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_share_enabled</string>
+			<string>share_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ma_mini_</string>
+			</array>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -99,14 +107,19 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_shuffle_enabled</string>
+			<string>shuffle_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ls_</string>
+				<string>cc_</string>
+				<string>otm_</string>
+				<string>ma_mini_</string>
+			</array>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -115,14 +128,19 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_repeat_enabled</string>
+			<string>repeat_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ls_</string>
+				<string>cc_</string>
+				<string>otm_</string>
+				<string>ma_mini_</string>
+			</array>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -131,14 +149,22 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>transport_contextual_enabled</string>
+			<string>contextual_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ls_</string>
+				<string>cc_</string>
+				<string>otm_</string>
+			</array>
+			<key>invert_default_for_keys</key>
+			<array>
+				<string>ma_mini_</string>
+			</array>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -147,8 +173,6 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 	</array>
 </dict>

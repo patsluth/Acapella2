@@ -143,7 +143,7 @@
 {
     if (!self.titlesCloneContainer){
         
-        self.titlesCloneContainer = [[SWAcapellaTitlesCloneContainer alloc] initWithFrame:self.referenceView.bounds];
+        self.titlesCloneContainer = [[SWAcapellaTitlesCloneContainer alloc] initWithFrame:self.titles.superview.frame];
         [self.referenceView addSubview:self.titlesCloneContainer];
         
         self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesCloneContainer attachedToAnchor:CGPointZero];
@@ -151,8 +151,8 @@
     } else {
         
         CGPoint originalCenter = self.titlesCloneContainer.center;
-        self.titlesCloneContainer.frame = self.referenceView.bounds;
-        self.titlesCloneContainer.center = CGPointMake(originalCenter.x, CGRectGetMidY(self.referenceView.bounds));
+        self.titlesCloneContainer.frame = self.titles.superview.frame;
+        self.titlesCloneContainer.center = CGPointMake(originalCenter.x, self.titles.superview.center.y);
         
     }
 }
@@ -166,7 +166,6 @@
     if (didExist){
         self.titlesCloneContainer.clone.titles = self.titles; //refresh
     }
-    
 }
 
 #pragma mark - Gesture Recognizers
@@ -174,7 +173,7 @@
 - (void)onPan:(UIPanGestureRecognizer *)pan
 {
     CGPoint panLocation = [pan locationInView:pan.view];
-    panLocation.y = CGRectGetMidY(self.referenceView.bounds);
+    panLocation.y = self.titles.superview.center.y;
     
     if (pan.state == UIGestureRecognizerStateBegan){
         
@@ -219,18 +218,18 @@
             CGPoint center = bself.titlesCloneContainer.center;
             CGFloat halfWidth = CGRectGetWidth(bself.titlesCloneContainer.bounds) / 2.0;
             CGFloat offScreenLeftX = -halfWidth;
-            CGFloat offScreenRightX = CGRectGetWidth(bself.titlesCloneContainer.bounds) + halfWidth;
+            CGFloat offScreenRightX = CGRectGetWidth(bself.referenceView.bounds) + halfWidth;
             
             if (center.x < offScreenLeftX){
                 
                 [bself.animator removeAllBehaviors];
-                bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, CGRectGetMidY(bself.referenceView.bounds));
+                bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, self.titles.superview.center.y);
                  [self didWrapAround:@(-1)];
                 
             } else if (center.x > offScreenRightX){
                 
                 [bself.animator removeAllBehaviors];
-                bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, CGRectGetMidY(bself.referenceView.bounds));
+                bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, self.titles.superview.center.y);
                 [self didWrapAround:@(1)];
                 
             } else {
@@ -254,7 +253,8 @@
 //        NSLog(@"BEGIN");
 //    } else if (press.state == UIGestureRecognizerStateEnded){
 //        NSLog(@"END");
-//    }
+//    }8
+    
 }
 
 #pragma mark - UIDynamics
@@ -307,8 +307,7 @@
         
         d.action = ^{
             
-            CGFloat distanceFromCenter = fabs(bself.titlesCloneContainer.center.x -
-                                              CGRectGetMidX(bself.referenceView.bounds));
+            CGFloat distanceFromCenter = fabs(bself.titlesCloneContainer.center.x - self.titles.superview.center.x);
             CGFloat absoluteVelocity = fabs([bd linearVelocityForItem:bself.titlesCloneContainer].x);
             
             if (distanceFromCenter < 50 || absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)){
@@ -336,7 +335,7 @@
     d.resistance = 20;
     [self.animator addBehavior:d];
     
-    CGPoint snapPoint = CGPointMake(CGRectGetMidX(self.referenceView.bounds), CGRectGetMidY(self.referenceView.bounds));
+    CGPoint snapPoint = self.titles.superview.center;
     
     UISnapBehaviorHorizontal *s = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titlesCloneContainer
                                                                         snapToPoint:snapPoint];

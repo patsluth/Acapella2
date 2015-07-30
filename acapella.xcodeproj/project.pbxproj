@@ -70,6 +70,7 @@
 		2E28F6291B5D76A40061AE27 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		2E28F62A1B5D76A40061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		2E28F62C1B5D76A40061AE27 /* SWAcapellaPrefsBridge.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaPrefsBridge.xm; sourceTree = "<group>"; };
+		2E6218361B69D4B900995D02 /* MPUTransportControlsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUTransportControlsView.h; sourceTree = "<group>"; };
 		2ECCE01F1B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
 		2ECCE0201B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -188,6 +189,7 @@
 			children = (
 				2E28F6141B5D76A40061AE27 /* libsw */,
 				2E28F6261B5D76A40061AE27 /* MPUTransportControlMediaRemoteController.h */,
+				2E6218361B69D4B900995D02 /* MPUTransportControlsView.h */,
 				2E28F6271B5D76A40061AE27 /* SWAcapellaPrefsBridge.h */,
 			);
 			path = public;

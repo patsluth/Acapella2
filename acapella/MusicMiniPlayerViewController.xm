@@ -5,6 +5,7 @@
 #import "libSluthware.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
+#import "MPUTransportControlsView.h"
 
 #import "substrate.h"
 
@@ -21,7 +22,8 @@
 - (NSString *)acapellaPrefKeyPrefix;
 
 - (UIView *)titlesView;
-- (UIView *)transportControlsView;
+- (MPUTransportControlsView *)transportControlsView;
+- (MPUTransportControlsView *)secondaryTransportControlsView;
 
 - (UIPanGestureRecognizer *)nowPlayingPresentationPanRecognizer;
 
@@ -45,6 +47,23 @@
 - (NSString *)acapellaPrefKeyPrefix
 {
     return @"ma_mini_";
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    %orig(animated);
+    
+    //Reload our transport buttons
+    //See [self transportControlsView:arg1 buttonForControlType:arg2];
+    
+    //LEFT SECTION
+    [self.transportControlsView reloadTransportButtonWithControlType:1];
+    [self.transportControlsView reloadTransportButtonWithControlType:3];
+    [self.transportControlsView reloadTransportButtonWithControlType:4];
+    
+    //RIGHT SECTION
+    [self.secondaryTransportControlsView reloadTransportButtonWithControlType:7];
+    [self.secondaryTransportControlsView reloadTransportButtonWithControlType:11];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -148,10 +167,14 @@
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
     //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
-    //1 rewind
+    
+    //LEFT SECTION
+    //1 rewind (IPAD)
     //3 play/pause
-    //4 forward
-    //7 present up next
+    //4 forward (IPAD)
+    
+    //RIGHT SECTION
+    //7 present up next (IPAD)
     //11 contextual
     
     NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
@@ -159,8 +182,9 @@
     
     if (prefKeyPrefix != nil){
         
-        NSString *key_SkipPrev = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipprevious_enabled"];
-        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipPrev defaultValue:@NO] boolValue]){
+        //LEFT SECTION
+        NSString *key_PrevTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_previoustrack_enabled"];
+        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_PrevTrack defaultValue:@NO] boolValue]){
             return nil;
         }
         
@@ -169,11 +193,12 @@
             return nil;
         }
         
-        NSString *key_SkipNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipnext_enabled"];
-        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipNext defaultValue:@NO] boolValue]){
+        NSString *key_NextTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_nextTrack_enabled"];
+        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_NextTrack defaultValue:@NO] boolValue]){
             return nil;
         }
         
+        //RIGHT SECTION
         NSString *key_UpNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_presentupnext_enabled"];
         if (arg2 == 7 && ![[SWAcapellaPrefsBridge valueForKey:key_UpNext defaultValue:@NO] boolValue]){
             return nil;
@@ -213,12 +238,36 @@
 {
     if (self.acapella){
         
-        //CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
+        CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
         //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
         
         if (press.state == UIGestureRecognizerStateBegan){
             
-             [self transportControlsView:self.transportControlsView tapOnControlType:11];
+            if (xPercentage <= 0.25){
+                
+                //SEEK
+                //[self transportControlsView:self.transportControls longPressBeginOnControlType:1];
+                //INTERVAL
+                [self transportControlsView:self.transportControlsView tapOnControlType:2];
+                
+            } else if (xPercentage > 0.75){
+                
+                //SEEK
+                //[self transportControlsView:self.transportControls longPressBeginOnControlType:4];
+                //INTERVAL
+                [self transportControlsView:self.transportControlsView tapOnControlType:5];
+                
+            } else {
+                
+                [self transportControlsView:self.transportControlsView tapOnControlType:11];
+                
+            }
+            
+        } else if (press.state == UIGestureRecognizerStateEnded){
+            
+            //SEEK
+            //[self transportControlsView:self.transportControls longPressEndOnControlType:1];
+            //[self transportControlsView:self.transportControls longPressEndOnControlType:4];
             
         }
         

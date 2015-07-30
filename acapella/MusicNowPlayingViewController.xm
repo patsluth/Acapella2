@@ -5,6 +5,7 @@
 #import "libSluthware.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
+#import "MPUTransportControlsView.h"
 
 #import "substrate.h"
 
@@ -22,15 +23,14 @@
 
 - (UIView *)playbackProgressSliderView;
 - (UIView *)titlesView;
-- (UIView *)transportControls;
+- (MPUTransportControlsView *)transportControls;
+- (MPUTransportControlsView *)secondaryTransportControls;
 - (UIView *)volumeSlider;
 
 - (UIView *)ratingControl;
 - (void)_setRatingsVisible:(BOOL)arg1;
 
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2;
 
 @end
 
@@ -50,6 +50,29 @@
 - (NSString *)acapellaPrefKeyPrefix
 {
     return @"ma_nowplaying_";
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    %orig(animated);
+    
+    //Reload our transport buttons
+    //See [self transportControlsView:arg1 buttonForControlType:arg2];
+    
+    //TOP ROW
+    [self.transportControls reloadTransportButtonWithControlType:6];
+    [self.transportControls reloadTransportButtonWithControlType:1];
+    [self.transportControls reloadTransportButtonWithControlType:2];
+    [self.transportControls reloadTransportButtonWithControlType:3];
+    [self.transportControls reloadTransportButtonWithControlType:4];
+    [self.transportControls reloadTransportButtonWithControlType:5];
+    [self.transportControls reloadTransportButtonWithControlType:7];
+    
+    //BOTTOM ROW
+    [self.secondaryTransportControls reloadTransportButtonWithControlType:8];
+    [self.secondaryTransportControls reloadTransportButtonWithControlType:10];
+    [self.secondaryTransportControls reloadTransportButtonWithControlType:9];
+    [self.secondaryTransportControls reloadTransportButtonWithControlType:11];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -136,8 +159,10 @@
     //TOP ROW
     //6 like/ban
     //1 rewind
+    //2 interval rewind
     //3 play/pause
     //4 forward
+    //5 interval forward
     //7 present up next
     
     //BOTTOM ROW
@@ -156,8 +181,13 @@
             return nil;
         }
         
-        NSString *key_SkipPrev = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipprevious_enabled"];
-        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipPrev defaultValue:@NO] boolValue]){
+        NSString *key_PrevTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_previoustrack_enabled"];
+        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_PrevTrack defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_IntervalRewind = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_intervalrewind_enabled"];
+        if (arg2 == 2 && ![[SWAcapellaPrefsBridge valueForKey:key_IntervalRewind defaultValue:@NO] boolValue]){
             return nil;
         }
         
@@ -166,8 +196,13 @@
             return nil;
         }
         
-        NSString *key_SkipNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipnext_enabled"];
-        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipNext defaultValue:@NO] boolValue]){
+        NSString *key_NextTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_nextTrack_enabled"];
+        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_NextTrack defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_IntervalForward = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_intervalforward_enabled"];
+        if (arg2 == 5 && ![[SWAcapellaPrefsBridge valueForKey:key_IntervalForward defaultValue:@NO] boolValue]){
             return nil;
         }
         
@@ -250,12 +285,17 @@
             
             if (xPercentage <= 0.25){
                 
-                [self transportControlsView:self.transportControls longPressBeginOnControlType:1];
-                
+                //SEEK
+                //[self transportControlsView:self.transportControls longPressBeginOnControlType:1];
+                //INTERVAL
+                [self transportControlsView:self.transportControls tapOnControlType:2];
                 
             } else if (xPercentage > 0.75){
                 
-                [self transportControlsView:self.transportControls longPressBeginOnControlType:4];
+                //SEEK
+                //[self transportControlsView:self.transportControls longPressBeginOnControlType:4];
+                //INTERVAL
+                [self transportControlsView:self.transportControls tapOnControlType:5];
                 
             } else {
                 
@@ -266,8 +306,9 @@
             
         } else if (press.state == UIGestureRecognizerStateEnded){
             
-            [self transportControlsView:self.transportControls longPressEndOnControlType:1];
-            [self transportControlsView:self.transportControls longPressEndOnControlType:4];
+            //SEEK
+            //[self transportControlsView:self.transportControls longPressEndOnControlType:1];
+            //[self transportControlsView:self.transportControls longPressEndOnControlType:4];
             
         }
         

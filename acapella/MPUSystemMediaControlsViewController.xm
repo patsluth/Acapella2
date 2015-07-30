@@ -6,6 +6,7 @@
 #import "libsw/SWAppLauncher.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
+#import "MPUTransportControlsView.h"
 
 #import "substrate.h"
 
@@ -18,7 +19,7 @@
 
 - (UIView *)timeInformationView;
 - (UIView *)trackInformationView;
-- (UIView *)transportControlsView;
+- (MPUTransportControlsView *)transportControlsView;
 - (UIView *)volumeView;
 
 @end
@@ -35,8 +36,6 @@
 - (MPUSystemMediaControlsView *)mediaControlsView;
 
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2;
 
 @end
 
@@ -66,7 +65,6 @@
     //Lock Screen
     NSString *ls1 = NSStringFromClass(%c(SBMainScreenAlertWindowViewController));
     NSString *ls2 = NSStringFromClass(%c(SBInteractionPassThroughView));
-    
     if ([NSStringFromClass([self.view.window.rootViewController class]) isEqualToString:ls1] &&
         [NSStringFromClass([self.view.superview.superview class]) isEqualToString:ls2]){
         return @"ls_";
@@ -74,7 +72,6 @@
     
     //OnTapMusic
     NSString *otm1 = NSStringFromClass(%c(OTMView));
-    
     if ([NSStringFromClass([self.view.superview class]) isEqualToString:otm1]){
         return @"otm_";
     }
@@ -86,6 +83,21 @@
 - (MPUSystemMediaControlsView *)mediaControlsView
 {
     return MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    %orig(animated);
+    
+    //Reload our transport buttons
+    //See [self transportControlsView:arg1 buttonForControlType:arg2];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:6];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:1];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:2];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:3];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:4];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:5];
+    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:8];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -115,6 +127,7 @@
         
     }
     
+    
     if (self.acapella){
         
         [self.acapella.tap addTarget:self action:@selector(onTap:)];
@@ -127,17 +140,6 @@
             }
         }
         
-        if (![[SWAcapellaPrefsBridge valueForKey:@"progressSlider_enabled" defaultValue:@YES] boolValue]){
-            self.mediaControlsView.timeInformationView.layer.opacity = 0.0;
-        } else {
-            self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
-        }
-        if (![[SWAcapellaPrefsBridge valueForKey:@"volumeSlider_enabled" defaultValue:@YES] boolValue]){
-            self.mediaControlsView.volumeView.layer.opacity = 0.0;
-        } else {
-            self.mediaControlsView.volumeView.layer.opacity = 1.0;
-        }
-        
     } else { //restore original state
         
         for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
@@ -148,6 +150,7 @@
         }
         
     }
+    
     
     if (prefKeyPrefix != nil){
         
@@ -176,22 +179,9 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    %orig(animated);
-    
-//    [self.mediaControlsView.transportControlsView performSelector:@selector(_reloadSortedVisibleControlsWithBlanks)
-//                                                       withObject:nil
-//                                                       afterDelay:0.0];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
-    
-//    [self.mediaControlsView.transportControlsView performSelector:@selector(setAvailableTransportControls:)
-//                                                       withObject:nil
-//                                                       afterDelay:0.0];
     
     %orig(animated);
 }
@@ -237,8 +227,10 @@
     //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
     //6 like/ban
     //1 rewind
+    //2 interval rewind
     //3 play/pause
     //4 forward
+    //5 interval forward
     //8 share
     
     NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
@@ -251,8 +243,13 @@
             return nil;
         }
         
-        NSString *key_SkipPrev = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipprevious_enabled"];
-        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipPrev defaultValue:@NO] boolValue]){
+        NSString *key_PrevTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_previoustrack_enabled"];
+        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_PrevTrack defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_IntervalRewind = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_intervalrewind_enabled"];
+        if (arg2 == 2 && ![[SWAcapellaPrefsBridge valueForKey:key_IntervalRewind defaultValue:@NO] boolValue]){
             return nil;
         }
         
@@ -261,8 +258,13 @@
             return nil;
         }
         
-        NSString *key_SkipNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_skipnext_enabled"];
-        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_SkipNext defaultValue:@NO] boolValue]){
+        NSString *key_NextTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_nextTrack_enabled"];
+        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_NextTrack defaultValue:@NO] boolValue]){
+            return nil;
+        }
+        
+        NSString *key_IntervalForward = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_intervalforward_enabled"];
+        if (arg2 == 5 && ![[SWAcapellaPrefsBridge valueForKey:key_IntervalForward defaultValue:@NO] boolValue]){
             return nil;
         }
         
@@ -319,12 +321,17 @@
             
             if (xPercentage <= 0.25){
                 
-                [self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:1];
-
+                //SEEK
+                //[self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:1];
+                //INTERVAL
+                [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:2];
                 
             } else if (xPercentage > 0.75){
                 
-                [self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:4];
+                //SEEK
+                //[self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:4];
+                //INTERVAL
+                [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:5];
                 
             } else {
                 
@@ -336,8 +343,9 @@
             
         } else if (press.state == UIGestureRecognizerStateEnded){
             
-            [self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:1];
-            [self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:4];
+            //SEEK
+            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:1];
+            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:4];
             
         }
         

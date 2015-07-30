@@ -9,102 +9,50 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>isStaticText</key>
-			<true/>
 			<key>label</key>
-			<string>NOT ASSIGNABLE IN THIS VERSION</string>
-			<key>footerText</key>
-			<string></string>
+			<string>Left Tap = Decrease Volume</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>isStaticText</key>
-			<true/>
 			<key>label</key>
-			<string>Tap</string>
-			<key>footerText</key>
-			<string>Note - Music Mini Player cannot change volume</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>label</key>
-			<string>Left = -Volume</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>label</key>
-			<string>Centre = Play/Pause</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>label</key>
-			<string>Right = +Volume</string>
+			<string>Centre Tap = Play/Pause</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>isStaticText</key>
-			<true/>
 			<key>label</key>
-			<string>Swipe</string>
-			<key>footerText</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>label</key>
-			<string>Left = Next Song</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>label</key>
-			<string>Right = Previous Song</string>
+			<string>Right Tap = Increase Volume</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>isStaticText</key>
-			<true/>
 			<key>label</key>
-			<string>Press</string>
-			<key>footerText</key>
-			<string>Note - Music Mini Player cannot seek</string>
+			<string>Left Swipe = Next Track</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSStaticTextCell</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Left = Seek Backwards</string>
+			<string>Right Swipe = Previous Track</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSStaticTextCell</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Centre (Springboard) = Open App</string>
+			<string>Left Press = Interval Rewind</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSStaticTextCell</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Centre (Now Playing) = Show Ratings</string>
+			<string>Centre Press = App/Ratings/Contextual</string>
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSStaticTextCell</string>
+			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Centre (Mini) = Contextual</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>label</key>
-			<string>Right = Seek Forwards</string>
+			<string>Right Press = Interval Forward</string>
 		</dict>
 	</array>
 </dict>

@@ -8,6 +8,12 @@
 	<array>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>heart_enabled</string>
@@ -19,24 +25,42 @@
 			<true/>
 			<key>label</key>
 			<string>Heart</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>skipprevious_enabled</string>
+			<string>previoustrack_enabled</string>
 			<key>default</key>
 			<false/>
 			<key>label</key>
-			<string>Skip Previous</string>
-			<key>respringRequired</key>
-			<true/>
+			<string>Previous Track</string>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>intervalrewind_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ma_mini_</string>
+			</array>
+			<key>default</key>
+			<false/>
+			<key>label</key>
+			<string>Interval Rewind</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -47,24 +71,42 @@
 			<false/>
 			<key>label</key>
 			<string>Play/Pause</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>skipnext_enabled</string>
+			<string>nextTrack_enabled</string>
 			<key>default</key>
 			<false/>
 			<key>label</key>
-			<string>Skip Next</string>
-			<key>respringRequired</key>
-			<true/>
+			<string>Next Track</string>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>intervalforward_enabled</string>
+			<key>disable_for_keys</key>
+			<array>
+				<string>ma_mini_</string>
+			</array>
+			<key>default</key>
+			<false/>
+			<key>label</key>
+			<string>Interval Forward</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -85,10 +127,16 @@
 			<true/>
 			<key>label</key>
 			<string>Present Up Next</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -103,10 +151,10 @@
 			<true/>
 			<key>label</key>
 			<string>Share</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -124,10 +172,10 @@
 			<true/>
 			<key>label</key>
 			<string>Shuffle</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -145,10 +193,10 @@
 			<true/>
 			<key>label</key>
 			<string>Repeat</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -169,10 +217,10 @@
 			<true/>
 			<key>label</key>
 			<string>Contextual</string>
-			<key>respringRequired</key>
-			<true/>
 			<key>defaults</key>
 			<string>com.patsluth.AcapellaPrefs2</string>
+			<key>PostNotification</key>
+			<string>com.patsluth.AcapellaPrefs2.changed</string>
 		</dict>
 	</array>
 </dict>

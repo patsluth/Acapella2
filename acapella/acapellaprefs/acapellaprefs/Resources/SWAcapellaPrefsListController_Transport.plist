@@ -115,9 +115,10 @@
 			<string>presentupnext_enabled</string>
 			<key>disable_for_keys</key>
 			<array>
-				<string>ls_</string>
 				<string>cc_</string>
+				<string>ls_</string>
 				<string>otm_</string>
+				<string>auxo_</string>
 			</array>
 			<key>invert_default_for_keys</key>
 			<array>
@@ -163,10 +164,11 @@
 			<string>shuffle_enabled</string>
 			<key>disable_for_keys</key>
 			<array>
-				<string>ls_</string>
 				<string>cc_</string>
-				<string>otm_</string>
+				<string>ls_</string>
 				<string>ma_mini_</string>
+				<string>otm_</string>
+				<string>auxo_</string>
 			</array>
 			<key>default</key>
 			<true/>
@@ -184,10 +186,11 @@
 			<string>repeat_enabled</string>
 			<key>disable_for_keys</key>
 			<array>
-				<string>ls_</string>
 				<string>cc_</string>
-				<string>otm_</string>
+				<string>ls_</string>
 				<string>ma_mini_</string>
+				<string>otm_</string>
+				<string>auxo_</string>
 			</array>
 			<key>default</key>
 			<true/>
@@ -205,9 +208,10 @@
 			<string>contextual_enabled</string>
 			<key>disable_for_keys</key>
 			<array>
-				<string>ls_</string>
 				<string>cc_</string>
+				<string>ls_</string>
 				<string>otm_</string>
+				<string>auxo_</string>
 			</array>
 			<key>invert_default_for_keys</key>
 			<array>

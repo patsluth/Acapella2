@@ -10,9 +10,9 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string></string>
+			<string>Stock</string>
 			<key>footerText</key>
-			<string>Acapella will only be loaded into these instances. Feel free to request support for additional music controls.</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -64,6 +64,14 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Third Party</string>
+			<key>footerText</key>
+			<string>Send a request to make Acapella compatible with other third party tweaks/apps!</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
 			<string>SWAcapellaPrefsListController_Instance</string>
@@ -73,6 +81,18 @@
 			<string>otm_</string>
 			<key>label</key>
 			<string>OnTapMusic</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>SWAcapellaPrefsListController_Instance</string>
+			<key>isController</key>
+			<string>1</string>
+			<key>key</key>
+			<string>auxo_</string>
+			<key>label</key>
+			<string>Auxo</string>
 		</dict>
 		<dict>
 			<key>cell</key>

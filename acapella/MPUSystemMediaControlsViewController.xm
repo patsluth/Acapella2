@@ -54,26 +54,55 @@
 %new
 - (NSString *)acapellaPrefKeyPrefix
 {
+//    id a = NSStringFromClass([self.view.superview class]);
+//    id b = NSStringFromClass([self.view.superview.superview class]);
+//    id c = NSStringFromClass([self.view.window.rootViewController class]);
+//    NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
+    
+    
     //Control Center
-    NSString *cc1 = NSStringFromClass(%c(SBControlCenterSectionView));
-    NSString *cc2 = NSStringFromClass(%c(SBControlCenterContentView));
+    NSString *cc1 = @"SBControlCenterSectionView";
+    NSString *cc2 = @"SBControlCenterContentView";
     if ([NSStringFromClass([self.view.superview class]) isEqualToString:cc1] &&
         [NSStringFromClass([self.view.superview.superview class]) isEqualToString:cc2]){
         return @"cc_";
     }
     
+    
     //Lock Screen
-    NSString *ls1 = NSStringFromClass(%c(SBMainScreenAlertWindowViewController));
-    NSString *ls2 = NSStringFromClass(%c(SBInteractionPassThroughView));
+    NSString *ls1 = @"SBMainScreenAlertWindowViewController";
+    NSString *ls2 = @"SBInteractionPassThroughView";
     if ([NSStringFromClass([self.view.window.rootViewController class]) isEqualToString:ls1] &&
         [NSStringFromClass([self.view.superview.superview class]) isEqualToString:ls2]){
         return @"ls_";
     }
     
+    
     //OnTapMusic
-    NSString *otm1 = NSStringFromClass(%c(OTMView));
-    if ([NSStringFromClass([self.view.superview class]) isEqualToString:otm1]){
-        return @"otm_";
+    if (%c(OTMView)){ //if null tweak is not installed
+        
+        NSString *otm1 = @"OTMView";
+        if ([NSStringFromClass([self.view.superview class]) isEqualToString:otm1]){
+            return @"otm_";
+        }
+        
+    }
+    
+    
+    //Auxo
+    if (%c(AuxoCollectionView)){
+        
+        //Auxo
+        NSString *auxo1 = @"AuxoCollectionView";
+        UIView *curView = self.view.superview;
+        
+        while (curView){ //drill up
+            if ([NSStringFromClass([curView class]) isEqualToString:auxo1]){
+                return @"auxo_";
+            }
+            curView = curView.superview;
+        }
+        
     }
     
     return nil;
@@ -175,6 +204,7 @@
         
     }
     
+    
     [self.mediaControlsView layoutSubviews];
     
 }
@@ -234,7 +264,6 @@
     //8 share
     
     NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
-    
     
     if (prefKeyPrefix != nil){
     

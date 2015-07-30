@@ -37,11 +37,6 @@
 		2E28F6011B5D76A30061AE27 /* IMG_0053.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0053.PNG; sourceTree = "<group>"; };
 		2E28F6021B5D76A30061AE27 /* IMG_0054.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0054.PNG; sourceTree = "<group>"; };
 		2E28F6031B5D76A30061AE27 /* IMG_0055.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0055.PNG; sourceTree = "<group>"; };
-		2E28F6051B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-1_iphoneos-arm.deb */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "com.patsluth.swacapella2_1.0-1_iphoneos-arm.deb"; sourceTree = "<group>"; };
-		2E28F6061B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-2_iphoneos-arm.deb */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "com.patsluth.swacapella2_1.0-2_iphoneos-arm.deb"; sourceTree = "<group>"; };
-		2E28F6071B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-4_iphoneos-arm.deb */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "com.patsluth.swacapella2_1.0-4_iphoneos-arm.deb"; sourceTree = "<group>"; };
-		2E28F6081B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-5_iphoneos-arm.deb */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "com.patsluth.swacapella2_1.0-5_iphoneos-arm.deb"; sourceTree = "<group>"; };
-		2E28F6091B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-6_iphoneos-arm.deb */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "com.patsluth.swacapella2_1.0-6_iphoneos-arm.deb"; sourceTree = "<group>"; };
 		2E28F60C1B5D76A30061AE27 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		2E28F60D1B5D76A30061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2E28F60E1B5D76A30061AE27 /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
@@ -71,6 +66,7 @@
 		2E28F62A1B5D76A40061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		2E28F62C1B5D76A40061AE27 /* SWAcapellaPrefsBridge.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaPrefsBridge.xm; sourceTree = "<group>"; };
 		2E6218361B69D4B900995D02 /* MPUTransportControlsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUTransportControlsView.h; sourceTree = "<group>"; };
+		2EAFA92C1B6A86F500036B7F /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = final_release_debs; sourceTree = "<group>"; };
 		2ECCE01F1B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
 		2ECCE0201B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,7 +77,7 @@
 			children = (
 				2E28F60A1B5D76A30061AE27 /* layout */,
 				2E28F6131B5D76A40061AE27 /* public */,
-				2E28F6041B5D76A30061AE27 /* final_release_debs */,
+				2EAFA92C1B6A86F500036B7F /* final_release_debs */,
 				2E28F60D1B5D76A30061AE27 /* Makefile */,
 				2E28F42A1B5D76A30061AE27 /* Acapella2.plist */,
 				2E28F60E1B5D76A30061AE27 /* MPUMediaControlsTitlesView.xm */,
@@ -154,18 +150,6 @@
 				2E28F6031B5D76A30061AE27 /* IMG_0055.PNG */,
 			);
 			path = Screenshots;
-			sourceTree = "<group>";
-		};
-		2E28F6041B5D76A30061AE27 /* final_release_debs */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F6051B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-1_iphoneos-arm.deb */,
-				2E28F6061B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-2_iphoneos-arm.deb */,
-				2E28F6071B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-4_iphoneos-arm.deb */,
-				2E28F6081B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-5_iphoneos-arm.deb */,
-				2E28F6091B5D76A30061AE27 /* com.patsluth.swacapella2_1.0-6_iphoneos-arm.deb */,
-			);
-			path = final_release_debs;
 			sourceTree = "<group>";
 		};
 		2E28F60A1B5D76A30061AE27 /* layout */ = {

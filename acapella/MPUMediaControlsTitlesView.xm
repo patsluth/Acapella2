@@ -22,14 +22,16 @@
 
 - (void)updateTrackInformationWithNowPlayingInfo:(NSDictionary *)arg1
 {
-    if (arg1.count == 0){
+    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
+    
+    //dont override if we dont have an acapella (disabled in this section)
+    //TODO: Localization
+    if (acapella && arg1.count == 0){
         arg1 = @{@"kMRMediaRemoteNowPlayingInfoTitle" : @"Acapella",
                  @"kMRMediaRemoteNowPlayingInfoArtist" : @"Tap To Play"};
     }
     
     %orig(arg1);
-    
-    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
     
     if (acapella){
         [acapella finishWrapAround];

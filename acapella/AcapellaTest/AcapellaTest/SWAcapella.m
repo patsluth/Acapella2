@@ -254,7 +254,6 @@
 //    } else if (press.state == UIGestureRecognizerStateEnded){
 //        NSLog(@"END");
 //    }8
-    
 }
 
 #pragma mark - UIDynamics

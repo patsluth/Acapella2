@@ -1,5 +1,6 @@
 
 #import "SWAcapella.h"
+#import "SWAcapellaPrefsBridge.h"
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -26,9 +27,28 @@
     
     //dont override if we dont have an acapella (disabled in this section)
     //TODO: Localization
-    if (acapella && arg1.count == 0){
-        arg1 = @{@"kMRMediaRemoteNowPlayingInfoTitle" : @"Acapella",
-                 @"kMRMediaRemoteNowPlayingInfoArtist" : @"Tap To Play"};
+    if (arg1.count == 0){
+        
+        BOOL shouldOverride = (acapella != nil);
+        
+        if (!shouldOverride){ //sometimes acapella will be nil, so we will drill up
+            
+            NSString *prefKeyPrefix = [SWAcapella prefKeyByDrillingUpFromView:self];
+            
+            if (prefKeyPrefix){
+                
+                NSString *enabledKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"enabled"];
+                shouldOverride = [[SWAcapellaPrefsBridge valueForKey:enabledKey defaultValue:@YES] boolValue];
+                
+            }
+            
+        }
+        
+        if (shouldOverride){
+            arg1 = @{@"kMRMediaRemoteNowPlayingInfoTitle" : @"Acapella",
+                     @"kMRMediaRemoteNowPlayingInfoArtist" : @"Tap To Play"};
+        }
+        
     }
     
     %orig(arg1);

@@ -1,12 +1,12 @@
 //
-//  SWAcapellaPrefsListController.m
-//  libsw
+//  SWAcapellaPSListController.m
+//  acapellaprefs
 //
 //  Created by Pat Sluth on 2015-04-25.
 //
 //
 
-#import "SWAcapellaPrefsListController.h"
+#import "SWAcapellaPSListController.h"
 
 #import <Preferences/Preferences.h>
 
@@ -17,7 +17,7 @@
 
 
 
-@interface SWAcapellaPrefsListController()
+@interface SWAcapellaPSListController()
 {
 }
 
@@ -27,7 +27,7 @@
 
 
 
-@implementation SWAcapellaPrefsListController
+@implementation SWAcapellaPSListController
 
 #pragma mark - Override
 

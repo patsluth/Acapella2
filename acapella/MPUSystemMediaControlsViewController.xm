@@ -54,58 +54,7 @@
 %new
 - (NSString *)acapellaPrefKeyPrefix
 {
-//    id a = NSStringFromClass([self.view.superview class]);
-//    id b = NSStringFromClass([self.view.superview.superview class]);
-//    id c = NSStringFromClass([self.view.window.rootViewController class]);
-//    NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
-    
-    
-    //Control Center
-    NSString *cc1 = @"SBControlCenterSectionView";
-    NSString *cc2 = @"SBControlCenterContentView";
-    if ([NSStringFromClass([self.view.superview class]) isEqualToString:cc1] &&
-        [NSStringFromClass([self.view.superview.superview class]) isEqualToString:cc2]){
-        return @"cc_";
-    }
-    
-    
-    //Lock Screen
-    NSString *ls1 = @"SBMainScreenAlertWindowViewController";
-    NSString *ls2 = @"SBInteractionPassThroughView";
-    if ([NSStringFromClass([self.view.window.rootViewController class]) isEqualToString:ls1] &&
-        [NSStringFromClass([self.view.superview.superview class]) isEqualToString:ls2]){
-        return @"ls_";
-    }
-    
-    
-    //OnTapMusic
-    if (%c(OTMView)){ //if null tweak is not installed
-        
-        NSString *otm1 = @"OTMView";
-        if ([NSStringFromClass([self.view.superview class]) isEqualToString:otm1]){
-            return @"otm_";
-        }
-        
-    }
-    
-    
-    //Auxo
-    if (%c(AuxoCollectionView)){
-        
-        //Auxo
-        NSString *auxo1 = @"AuxoCollectionView";
-        UIView *curView = self.view.superview;
-        
-        while (curView){ //drill up
-            if ([NSStringFromClass([curView class]) isEqualToString:auxo1]){
-                return @"auxo_";
-            }
-            curView = curView.superview;
-        }
-        
-    }
-    
-    return nil;
+    return [SWAcapella prefKeyByDrillingUpFromView:self.view];
 }
 
 %new
@@ -133,7 +82,9 @@
 {
     %orig(animated);
     
-    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
+    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];;
+    
+    //NSLog(@"Acapella Preference Key Prefix %@", prefKeyPrefix);
     
     if (!self.acapella){
         
@@ -158,6 +109,8 @@
     
     
     if (self.acapella){
+        
+        self.acapella.prefKeyPrefix = prefKeyPrefix;
         
         [self.acapella.tap addTarget:self action:@selector(onTap:)];
         [self.acapella.press addTarget:self action:@selector(onPress:)];
@@ -263,7 +216,7 @@
     //5 interval forward
     //8 share
     
-    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
+    NSString *prefKeyPrefix = [SWAcapella prefKeyByDrillingUpFromView:self.view];
     
     if (prefKeyPrefix != nil){
     
@@ -315,24 +268,31 @@
         
         CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
         //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
+        SEL sel = nil;
         
         if (xPercentage <= 0.25){
             
-            id vc = [self.mediaControlsView.volumeView valueForKey:@"volumeController"];
-            [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
+            NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapleft"];
+            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_decreasevolume"];
+            sel = NSSelectorFromString(selString);
             
         } else if (xPercentage > 0.75){
             
-            id vc = [self.mediaControlsView.volumeView valueForKey:@"volumeController"];
-            [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(1) afterDelay:0.0];
+            NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapright"];
+            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_increasevolume"];
+            sel = NSSelectorFromString(selString);
             
         } else {
             
-            MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-            [t handlePushingMediaRemoteCommand:(t.playing) ? 1 : 0];
+            NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapcentre"];
+            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            sel = NSSelectorFromString(selString);
             
-            [self.acapella pulseAnimateView:self.acapella.referenceView];
-            
+        }
+        
+
+        if (sel && [self respondsToSelector:sel]){
+            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
         }
         
     }
@@ -345,37 +305,45 @@
         
         CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
         //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+        SEL sel = nil;
         
         if (press.state == UIGestureRecognizerStateBegan){
             
             if (xPercentage <= 0.25){
                 
-                //SEEK
-                //[self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:1];
-                //INTERVAL
-                [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:2];
+                NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_pressleft"];
+                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_intervalrewind"];
+                sel = NSSelectorFromString(selString);
                 
             } else if (xPercentage > 0.75){
                 
-                //SEEK
-                //[self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:4];
-                //INTERVAL
-                [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:5];
+                NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_pressright"];
+                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_intervalforward"];
+                sel = NSSelectorFromString(selString);
                 
             } else {
                 
-                id x = [self valueForKey:@"_nowPlayingController"]; //MPUNowPlayingController
-                id y = [x valueForKey:@"_currentNowPlayingAppDisplayID"]; //NSString
-                [%c(SWAppLauncher) launchAppWithBundleIDLockscreenFriendly:y];
+                NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_presscentre"];
+                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_openapp"];
+                sel = NSSelectorFromString(selString);
                 
             }
             
-        } else if (press.state == UIGestureRecognizerStateEnded){
-            
-            //SEEK
-            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:1];
-            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:4];
-            
+        }
+        
+//        else if (press.state == UIGestureRecognizerStateEnded){
+//            
+//            //SEEK BEGIN
+//            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:1];
+//            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:4];
+//            //SEEK END
+//            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:1];
+//            //[self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:4];
+//            
+//        }
+        
+        if (sel && [self respondsToSelector:sel]){
+            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
         }
         
     }
@@ -384,11 +352,48 @@
 %new
 - (void)onAcapellaWrapAround:(NSNumber *)direction
 {
+    SEL sel = nil;
+    
     if ([direction integerValue] < 0){
-        [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:4];
+        
+        NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_swipeleft"];
+        NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_nexttrack"];
+        sel = NSSelectorFromString(selString);
+        
     } else if ([direction integerValue] > 0){
-        [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:1];
+        
+        NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_swiperight"];
+        NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_previoustrack"];
+        sel = NSSelectorFromString(selString);
+        
     }
+    
+    
+    if (sel && [self respondsToSelector:sel]){
+        [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+    }
+    
+}
+
+
+
+#pragma mark - Actions
+
+%new
+- (void)action_none
+{
+}
+
+%new
+- (void)action_heart
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:6];
+}
+
+%new
+- (void)action_previoustrack
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:1];
     
     MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
     
@@ -397,6 +402,92 @@
             [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
         }
     }
+}
+
+%new
+- (void)action_intervalrewind
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:2];
+}
+
+%new
+- (void)action_playpause
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:3];
+    [self.acapella pulseAnimateView:self.acapella.referenceView];
+}
+
+%new
+- (void)action_nexttrack
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:4];
+    
+    MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
+    
+    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
+        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
+            [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
+        }
+    }
+}
+
+%new
+- (void)action_intervalforward
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:5];
+}
+
+%new
+- (void)action_upnext
+{
+}
+
+%new
+- (void)action_share
+{
+    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:8];
+}
+
+%new
+- (void)action_toggleshuffle
+{
+}
+
+%new
+- (void)action_togglerepeat
+{
+}
+
+%new
+- (void)action_contextual
+{
+}
+
+%new
+- (void)action_openapp
+{
+    id x = [self valueForKey:@"_nowPlayingController"]; //MPUNowPlayingController
+    id y = [x valueForKey:@"_currentNowPlayingAppDisplayID"]; //NSString
+    [%c(SWAppLauncher) launchAppWithBundleIDLockscreenFriendly:y];
+}
+
+%new
+- (void)action_showratings
+{
+}
+
+%new
+- (void)action_increasevolume
+{
+    id vc = [self.mediaControlsView.volumeView valueForKey:@"volumeController"];
+    [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(1) afterDelay:0.0];
+}
+
+%new
+- (void)action_decreasevolume
+{
+    id vc = [self.mediaControlsView.volumeView valueForKey:@"volumeController"];
+    [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
 }
 
 %end

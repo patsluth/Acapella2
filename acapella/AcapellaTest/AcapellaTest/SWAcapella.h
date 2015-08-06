@@ -35,6 +35,8 @@
 @property (weak, nonatomic) UIView *topSlider;
 @property (weak, nonatomic) UIView *bottomSlider;
 
+@property (strong, nonatomic) NSString *prefKeyPrefix;
+
 @property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
 
 @property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan;
@@ -43,6 +45,8 @@
 
 - (void)finishWrapAround;
 - (void)pulseAnimateView:(UIView *)view;
+
++ (NSString *)prefKeyByDrillingUpFromView:(UIView *)view;
 
 @end
 

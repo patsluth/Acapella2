@@ -1,6 +1,6 @@
 //
-//  SWAcapellaPrefsListController.m
-//  libsw
+//  SWAcapellaPSListController_Instance.m
+//  acapellaprefs
 //
 //  Created by Pat Sluth on 2015-04-25.
 //
@@ -14,7 +14,7 @@
 
 
 
-@interface SWAcapellaPrefsListController_Transport : SWPSListController
+@interface SWAcapellaPSListController_Instance : SWPSListController
 {
 }
 
@@ -24,7 +24,7 @@
 
 
 
-@implementation SWAcapellaPrefsListController_Transport
+@implementation SWAcapellaPSListController_Instance
 
 #pragma mark Init
 

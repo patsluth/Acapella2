@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2E0A49E31B68CE05005FE2BF /* SWAcapellaPrefsListController_Actions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController_Actions.mm; sourceTree = "<group>"; };
-		2E14EC2B1B6963A7000DF542 /* SWAcapellaPrefsListController.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SWAcapellaPrefsListController.plist; sourceTree = "<group>"; };
-		2E14EC2D1B6963BB000DF542 /* SWAcapellaPrefsListController_Actions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SWAcapellaPrefsListController_Actions.plist; sourceTree = "<group>"; };
-		2E14EC2E1B6963C0000DF542 /* SWAcapellaPrefsListController_Transport.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SWAcapellaPrefsListController_Transport.plist; sourceTree = "<group>"; };
-		2E14EC2F1B696486000DF542 /* SWAcapellaPrefsListController_Instance.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SWAcapellaPrefsListController_Instance.plist; sourceTree = "<group>"; };
-		2E14EC301B6965DC000DF542 /* SWAcapellaPrefsListController_Instance.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController_Instance.mm; sourceTree = "<group>"; };
+		2E14EC301B6965DC000DF542 /* SWAcapellaPSListController_Instance.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController_Instance.mm; sourceTree = "<group>"; };
+		2E28F3331B726B7900172ADB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = acapellaprefs/Resources; sourceTree = "<group>"; };
+		2E28F3341B7270CF00172ADB /* SWAcapellaPSListController_Gestures.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController_Gestures.mm; sourceTree = "<group>"; };
 		2E28F7C71B5D77160061AE27 /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entry.plist; sourceTree = "<group>"; };
 		2E28F7C81B5D77160061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2E28F7CC1B5D77160061AE27 /* libSluthware.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
@@ -31,21 +28,10 @@
 		2E28F7D91B5D77160061AE27 /* SWPSListControllerHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListControllerHeaderView.h; sourceTree = "<group>"; };
 		2E28F7DA1B5D77160061AE27 /* SWPSTwitterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSTwitterCell.h; sourceTree = "<group>"; };
 		2E28F7DB1B5D77160061AE27 /* SWSuperiorWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWSuperiorWindow.h; sourceTree = "<group>"; };
-		2E28F7DC1B5D77160061AE27 /* SWAcapellaPrefsListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPrefsListController.h; sourceTree = "<group>"; };
-		2E28F7DF1B5D77160061AE27 /* Designer_Twitter_Profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Designer_Twitter_Profile.png; sourceTree = "<group>"; };
-		2E28F7E01B5D77160061AE27 /* Developer_Twitter_Profile.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Developer_Twitter_Profile.jpeg; sourceTree = "<group>"; };
-		2E28F7E11B5D77160061AE27 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		2E28F7E21B5D77160061AE27 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		2E28F7E31B5D77160061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
-		2E28F7E41B5D77160061AE27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E28F7E61B5D77160061AE27 /* Prefs_Banner_Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Prefs_Banner_Background.png; sourceTree = "<group>"; };
-		2E28F7E71B5D77160061AE27 /* Prefs_Banner_Background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Background@2x.png"; sourceTree = "<group>"; };
-		2E28F7E81B5D77160061AE27 /* Prefs_Banner_Background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Background@3x.png"; sourceTree = "<group>"; };
-		2E28F7E91B5D77160061AE27 /* Prefs_Banner_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Prefs_Banner_Icon.png; sourceTree = "<group>"; };
-		2E28F7EA1B5D77160061AE27 /* Prefs_Banner_Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Icon@2x.png"; sourceTree = "<group>"; };
-		2E28F7EB1B5D77160061AE27 /* Prefs_Banner_Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Prefs_Banner_Icon@3x.png"; sourceTree = "<group>"; };
-		2E28F7EC1B5D77160061AE27 /* SWAcapellaPrefsListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController.mm; sourceTree = "<group>"; };
-		2E6CF89D1B684B200046293E /* SWAcapellaPrefsListController_Transport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefsListController_Transport.mm; sourceTree = "<group>"; };
+		2E28F7DC1B5D77160061AE27 /* SWAcapellaPSListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPSListController.h; sourceTree = "<group>"; };
+		2E28F7EC1B5D77160061AE27 /* SWAcapellaPSListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController.mm; sourceTree = "<group>"; };
+		2E6CF89D1B684B200046293E /* SWAcapellaPSListController_Transport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController_Transport.mm; sourceTree = "<group>"; };
+		2EAB2F4E1B73A6DA00A99E80 /* SWAcapellaPSListItemsController_Actions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListItemsController_Actions.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -55,11 +41,11 @@
 				2E28F7C91B5D77160061AE27 /* public */,
 				2E28F7C81B5D77160061AE27 /* Makefile */,
 				2E28F7C71B5D77160061AE27 /* entry.plist */,
-				2E28F7EC1B5D77160061AE27 /* SWAcapellaPrefsListController.mm */,
-				2E14EC301B6965DC000DF542 /* SWAcapellaPrefsListController_Instance.mm */,
-				2E0A49E31B68CE05005FE2BF /* SWAcapellaPrefsListController_Actions.mm */,
-				2E6CF89D1B684B200046293E /* SWAcapellaPrefsListController_Transport.mm */,
-				2E28F7DD1B5D77160061AE27 /* Resources */,
+				2E28F7EC1B5D77160061AE27 /* SWAcapellaPSListController.mm */,
+				2E14EC301B6965DC000DF542 /* SWAcapellaPSListController_Instance.mm */,
+				2E28F3341B7270CF00172ADB /* SWAcapellaPSListController_Gestures.mm */,
+				2EAB2F4E1B73A6DA00A99E80 /* SWAcapellaPSListItemsController_Actions.mm */,
+				2E6CF89D1B684B200046293E /* SWAcapellaPSListController_Transport.mm */,
 			);
 			path = acapellaprefs;
 			sourceTree = "<group>";
@@ -68,7 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				2E28F7CA1B5D77160061AE27 /* libsw */,
-				2E28F7DC1B5D77160061AE27 /* SWAcapellaPrefsListController.h */,
+				2E28F7DC1B5D77160061AE27 /* SWAcapellaPSListController.h */,
 			);
 			path = public;
 			sourceTree = "<group>";
@@ -104,33 +90,11 @@
 			path = libSluthware;
 			sourceTree = "<group>";
 		};
-		2E28F7DD1B5D77160061AE27 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				2E14EC2B1B6963A7000DF542 /* SWAcapellaPrefsListController.plist */,
-				2E14EC2F1B696486000DF542 /* SWAcapellaPrefsListController_Instance.plist */,
-				2E14EC2D1B6963BB000DF542 /* SWAcapellaPrefsListController_Actions.plist */,
-				2E14EC2E1B6963C0000DF542 /* SWAcapellaPrefsListController_Transport.plist */,
-				2E28F7DF1B5D77160061AE27 /* Designer_Twitter_Profile.png */,
-				2E28F7E01B5D77160061AE27 /* Developer_Twitter_Profile.jpeg */,
-				2E28F7E11B5D77160061AE27 /* Icon.png */,
-				2E28F7E21B5D77160061AE27 /* Icon@2x.png */,
-				2E28F7E31B5D77160061AE27 /* Icon@3x.png */,
-				2E28F7E41B5D77160061AE27 /* Info.plist */,
-				2E28F7E61B5D77160061AE27 /* Prefs_Banner_Background.png */,
-				2E28F7E71B5D77160061AE27 /* Prefs_Banner_Background@2x.png */,
-				2E28F7E81B5D77160061AE27 /* Prefs_Banner_Background@3x.png */,
-				2E28F7E91B5D77160061AE27 /* Prefs_Banner_Icon.png */,
-				2E28F7EA1B5D77160061AE27 /* Prefs_Banner_Icon@2x.png */,
-				2E28F7EB1B5D77160061AE27 /* Prefs_Banner_Icon@3x.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		2EE53EFD1A36BCBB00BEED8F = {
 			isa = PBXGroup;
 			children = (
 				2E28F7C61B5D77160061AE27 /* acapellaprefs */,
+				2E28F3331B726B7900172ADB /* Resources */,
 			);
 			sourceTree = "<group>";
 		};

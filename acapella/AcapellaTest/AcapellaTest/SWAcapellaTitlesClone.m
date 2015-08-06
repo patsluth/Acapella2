@@ -68,14 +68,19 @@
     _titles = titles;
     
     if (_titles){
+        
+        //wait for the next iteration, so we know the original text has been updated
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+        
         self.frame = _titles.frame;
+        
     } else {
         self.frame = CGRectZero;
     }
     
-    [self setNeedsDisplay];
+    //[self setNeedsDisplay];
     //wait for the next iteration, so we know the original text has been updated
-    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+    //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
     [self setNeedsDisplay];
 }
 

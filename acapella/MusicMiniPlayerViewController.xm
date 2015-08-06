@@ -70,9 +70,9 @@
 {
     %orig(animated);
     
+    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
+    
     if (!self.acapella){
-        
-        NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];
         
         if (prefKeyPrefix != nil){
             
@@ -94,6 +94,8 @@
     }
     
     if (self.acapella){
+        
+        self.acapella.prefKeyPrefix = prefKeyPrefix;
         
         [self.acapella.tap addTarget:self action:@selector(onTap:)];
         [self.acapella.press addTarget:self action:@selector(onPress:)];
@@ -227,8 +229,34 @@
 {
     if (self.acapella){
         
-        [self transportControlsView:self.transportControlsView tapOnControlType:3];
-        [self.acapella pulseAnimateView:nil];
+        CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
+        //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
+        SEL sel = nil;
+        
+        if (xPercentage <= 0.25){
+            
+            NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapleft"];
+            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            sel = NSSelectorFromString(selString);
+            
+        } else if (xPercentage > 0.75){
+            
+            NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapright"];
+            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            sel = NSSelectorFromString(selString);
+            
+        } else {
+            
+            NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapcentre"];
+            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            sel = NSSelectorFromString(selString);
+            
+        }
+        
+        
+        if (sel && [self respondsToSelector:sel]){
+            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        }
         
     }
 }
@@ -240,35 +268,35 @@
         
         CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
         //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+        SEL sel = nil;
         
         if (press.state == UIGestureRecognizerStateBegan){
             
             if (xPercentage <= 0.25){
                 
-                //SEEK
-                //[self transportControlsView:self.transportControls longPressBeginOnControlType:1];
-                //INTERVAL
-                [self transportControlsView:self.transportControlsView tapOnControlType:2];
+                NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_pressleft"];
+                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_intervalrewind"];
+                sel = NSSelectorFromString(selString);
                 
             } else if (xPercentage > 0.75){
                 
-                //SEEK
-                //[self transportControlsView:self.transportControls longPressBeginOnControlType:4];
-                //INTERVAL
-                [self transportControlsView:self.transportControlsView tapOnControlType:5];
+                NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_pressright"];
+                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_intervalforward"];
+                sel = NSSelectorFromString(selString);
                 
             } else {
                 
-                [self transportControlsView:self.transportControlsView tapOnControlType:11];
+                NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_presscentre"];
+                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_contextual"];
+                sel = NSSelectorFromString(selString);
                 
             }
             
-        } else if (press.state == UIGestureRecognizerStateEnded){
-            
-            //SEEK
-            //[self transportControlsView:self.transportControls longPressEndOnControlType:1];
-            //[self transportControlsView:self.transportControls longPressEndOnControlType:4];
-            
+        }
+        
+        
+        if (sel && [self respondsToSelector:sel]){
+            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
         }
         
     }
@@ -277,11 +305,119 @@
 %new
 - (void)onAcapellaWrapAround:(NSNumber *)direction
 {
+    SEL sel = nil;
+    
     if ([direction integerValue] < 0){
-        [self transportControlsView:self.transportControlsView tapOnControlType:4];
+        
+        NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_swipeleft"];
+        NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_nexttrack"];
+        sel = NSSelectorFromString(selString);
+        
     } else if ([direction integerValue] > 0){
-        [self transportControlsView:self.transportControlsView tapOnControlType:1];
+        
+        NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_swiperight"];
+        NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_previoustrack"];
+        sel = NSSelectorFromString(selString);
+        
     }
+    
+    
+    if (sel && [self respondsToSelector:sel]){
+        [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+    }
+    
+}
+
+
+
+#pragma mark - Actions
+
+%new
+- (void)action_none
+{
+}
+
+%new
+- (void)action_heart
+{
+}
+
+%new
+- (void)action_previoustrack
+{
+    [self transportControlsView:self.transportControlsView tapOnControlType:1];
+}
+
+%new
+- (void)action_intervalrewind
+{
+     [self transportControlsView:self.transportControlsView tapOnControlType:2];
+}
+
+%new
+- (void)action_playpause
+{
+    [self transportControlsView:self.transportControlsView tapOnControlType:3];
+    [self.acapella pulseAnimateView:nil];
+}
+
+%new
+- (void)action_nexttrack
+{
+    [self transportControlsView:self.transportControlsView tapOnControlType:4];
+}
+
+%new
+- (void)action_intervalforward
+{
+     [self transportControlsView:self.transportControlsView tapOnControlType:5];
+}
+
+%new
+- (void)action_upnext
+{
+    [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:7];
+}
+
+%new
+- (void)action_share
+{
+}
+
+%new
+- (void)action_toggleshuffle
+{
+}
+
+%new
+- (void)action_togglerepeat
+{
+}
+
+%new
+- (void)action_contextual
+{
+     [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:11];
+}
+
+%new
+- (void)action_openapp
+{
+}
+
+%new
+- (void)action_showratings
+{
+}
+
+%new
+- (void)action_increasevolume
+{
+}
+
+%new
+- (void)action_decreasevolume
+{
 }
 
 %end

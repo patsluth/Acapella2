@@ -64,8 +64,9 @@
 {
     [super setNeedsDisplay];
     
-    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
     [self.clone setNeedsDisplay];
+//    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
+//    [self.clone setNeedsDisplay];
 }
 
 @end

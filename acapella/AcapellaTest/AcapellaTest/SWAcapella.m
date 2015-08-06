@@ -180,9 +180,9 @@
         [self.animator removeAllBehaviors];
         
         self.wrapAroundFallback = nil;
-        self.titles.layer.opacity = 0.0;
         
         [self setupTitleCloneContainer];
+        self.titles.layer.opacity = 0.0;
         
         self.titlesCloneContainer.tag = 0;
         self.titlesCloneContainer.velocity = CGPointZero;
@@ -371,6 +371,8 @@
         view = self.titlesCloneContainer;
     }
     
+    self.titles.layer.opacity = 0.0;
+    
     [view.layer removeAllAnimations];
     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
     
@@ -388,12 +390,58 @@
                                                   view.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               } completion:^(BOOL finished){
                                                   view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  self.titlesCloneContainer = nil;
                                               }];
                              
+                         } else {
+                             self.titlesCloneContainer = nil;
                          }
                          
                      }];
 
+}
+
++ (NSString *)prefKeyByDrillingUpFromView:(UIView *)view
+{
+    //    id a = NSStringFromClass([self.view.superview class]);
+    //    id b = NSStringFromClass([self.view.superview.superview class]);
+    //    id c = NSStringFromClass([self.view.window.rootViewController class]);
+    //    NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
+    
+    UIView *curView = view.superview;
+    
+    while (curView){
+        
+        //Control Centre
+        if ([NSStringFromClass([curView class]) isEqualToString:@"SBControlCenterRootView"]){
+            return @"cc_";
+        }
+        
+        //Lock Screen
+        if ([NSStringFromClass([curView class]) isEqualToString:@"SBLockScreenView"]){
+            return @"ls_";
+        }
+        
+        //OnTapMusic - class will be null if tweak is not installed
+        if (objc_getClass("OTMView") && [NSStringFromClass([curView class]) isEqualToString:@"OTMView"]){
+            return @"otm_";
+        }
+        
+        //Auxo LE - class will be null if tweak is not installed
+        if (objc_getClass("AuxoCollectionView") && [NSStringFromClass([curView class]) isEqualToString:@"AuxoCollectionView"]){
+            return @"auxo_";
+        }
+        
+        //Vertex - Vertex has no classes ?
+        if ([NSStringFromClass([curView class]) isEqualToString:@"SBAppSwitcherContainer"]){
+            return @"vertex_";
+        }
+        
+        curView = curView.superview;
+        
+    }
+    
+    return @"undefined_";
 }
 
 #pragma mark - Internal
@@ -408,7 +456,6 @@
     _titlesCloneContainer = titlesCloneContainer;
     
     if (_titlesCloneContainer){
-        self.titles.layer.opacity = 0.0;
         _titlesCloneContainer.clone.titles = self.titles;
     }
 }

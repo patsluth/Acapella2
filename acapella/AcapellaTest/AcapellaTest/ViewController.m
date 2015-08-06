@@ -91,6 +91,7 @@
 
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
+    
     CGPoint location = [tap locationInView:tap.view];
     
     [self.animator removeAllBehaviors];
@@ -101,7 +102,6 @@
     
     UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
     [self.animator addBehavior:s];
-    
     
 }
 

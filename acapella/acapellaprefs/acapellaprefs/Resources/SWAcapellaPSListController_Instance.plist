@@ -8,14 +8,6 @@
 	<array>
 		<dict>
 			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-			<key>footerText</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>enabled</string>
@@ -27,6 +19,18 @@
 			<string>com.patsluth.AcapellaPrefs2</string>
 			<key>PostNotification</key>
 			<string>com.patsluth.AcapellaPrefs2.changed</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>SWAcapellaPSListController_Gestures</string>
+			<key>isController</key>
+			<string>1</string>
+			<key>key</key>
+			<string>gestures_</string>
+			<key>label</key>
+			<string>Gestures</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -61,7 +65,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPrefsListController_Transport</string>
+			<string>SWAcapellaPSListController_Transport</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
@@ -87,24 +91,6 @@
 			<string>com.patsluth.AcapellaPrefs2</string>
 			<key>PostNotification</key>
 			<string>com.patsluth.AcapellaPrefs2.changed</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>isStaticText</key>
-			<true/>
-			<key>label</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>SWAcapellaPrefsListController_Actions</string>
-			<key>isController</key>
-			<string>1</string>
-			<key>label</key>
-			<string>Actions</string>
 		</dict>
 	</array>
 </dict>

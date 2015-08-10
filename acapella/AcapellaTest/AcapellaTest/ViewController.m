@@ -64,18 +64,18 @@
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+   // if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
         
-        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-        
-        if (pan == self.acapella.pan){
-            CGPoint panVelocity = [pan velocityInView:pan.view];
-            
-            if (fabs(panVelocity.y) > fabs(panVelocity.x)){
-                return NO;
-            }
-        }
-    }
+//        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
+//        
+//        if (pan == self.acapella.pan){
+//            CGPoint panVelocity = [pan velocityInView:pan.view];
+//            
+////            if (fabs(panVelocity.y) > fabs(panVelocity.x)){
+////                return NO;
+////            }
+//        }
+//    }
     
     return YES;
 }

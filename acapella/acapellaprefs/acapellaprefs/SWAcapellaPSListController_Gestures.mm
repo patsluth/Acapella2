@@ -160,7 +160,8 @@
                                @"Open App",
                                @"Rating",
                                @"Increase Volume",
-                               @"Decrease Volume"] mutableCopy];
+                               @"Decrease Volume",
+                               @"EqualizerEverywhere"] mutableCopy];
     }
     
     return _allActionTitles;
@@ -186,7 +187,8 @@
                                @"action_openapp",
                                @"action_showratings",
                                @"action_increasevolume",
-                               @"action_decreasevolume"] mutableCopy];
+                               @"action_decreasevolume",
+                               @"action_equalizereverywhere"] mutableCopy];
     }
     
     return _allActionValues;

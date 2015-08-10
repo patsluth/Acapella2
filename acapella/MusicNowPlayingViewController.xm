@@ -30,6 +30,7 @@
 - (UIView *)ratingControl;
 - (void)_setRatingsVisible:(BOOL)arg1;
 
+- (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2;
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
 
 @end
@@ -125,10 +126,13 @@
         
         if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
             
-            BOOL isSlider = [touch.view isKindOfClass:[UISlider class]];
             BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
             
-            return !isSlider && !isControl;
+            if (isControl){
+                return !((UIControl *)touch.view).enabled; //we can accept this touch if the control is enabled
+            }
+            
+            return !isControl; //not a control, recieve the touch
             
         }
         
@@ -156,6 +160,7 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
+    //TRANSPORT CONTROL TYPES
     //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
     
     //TOP ROW
@@ -473,6 +478,11 @@
 {
     id vc = [self.volumeSlider valueForKey:@"volumeController"];
     [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
+}
+
+%new
+- (void)action_equalizereverywhere
+{
 }
 
 %end

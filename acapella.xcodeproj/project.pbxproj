@@ -44,31 +44,13 @@
 		2E28F6101B5D76A40061AE27 /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
 		2E28F6111B5D76A40061AE27 /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
 		2E28F6121B5D76A40061AE27 /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
-		2E28F6161B5D76A40061AE27 /* libSluthware.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
-		2E28F6171B5D76A40061AE27 /* NSTimer+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+SW.h"; sourceTree = "<group>"; };
-		2E28F6181B5D76A40061AE27 /* SWMCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMCircle.h; sourceTree = "<group>"; };
-		2E28F6191B5D76A40061AE27 /* SWMLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMLine.h; sourceTree = "<group>"; };
-		2E28F61A1B5D76A40061AE27 /* SWMQuadratic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMQuadratic.h; sourceTree = "<group>"; };
-		2E28F61B1B5D76A40061AE27 /* TBAlertAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBAlertAction.h; sourceTree = "<group>"; };
-		2E28F61C1B5D76A40061AE27 /* TBAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBAlertController.h; sourceTree = "<group>"; };
-		2E28F61D1B5D76A40061AE27 /* UIColor+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
-		2E28F61E1B5D76A40061AE27 /* UIScrollView+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
-		2E28F61F1B5D76A40061AE27 /* UISnapBehaviorHorizontal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UISnapBehaviorHorizontal.h; sourceTree = "<group>"; };
-		2E28F6201B5D76A40061AE27 /* libsw.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libsw.h; sourceTree = "<group>"; };
-		2E28F6211B5D76A40061AE27 /* SWAppLauncher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAppLauncher.h; sourceTree = "<group>"; };
-		2E28F6221B5D76A40061AE27 /* SWPSListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListController.h; sourceTree = "<group>"; };
-		2E28F6231B5D76A40061AE27 /* SWPSListControllerHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListControllerHeaderView.h; sourceTree = "<group>"; };
-		2E28F6241B5D76A40061AE27 /* SWPSTwitterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSTwitterCell.h; sourceTree = "<group>"; };
-		2E28F6251B5D76A40061AE27 /* SWSuperiorWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWSuperiorWindow.h; sourceTree = "<group>"; };
-		2E28F6261B5D76A40061AE27 /* MPUTransportControlMediaRemoteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUTransportControlMediaRemoteController.h; sourceTree = "<group>"; };
-		2E28F6271B5D76A40061AE27 /* SWAcapellaPrefsBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPrefsBridge.h; sourceTree = "<group>"; };
 		2E28F6291B5D76A40061AE27 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		2E28F62A1B5D76A40061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		2E28F62C1B5D76A40061AE27 /* SWAcapellaPrefsBridge.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaPrefsBridge.xm; sourceTree = "<group>"; };
-		2E6218361B69D4B900995D02 /* MPUTransportControlsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUTransportControlsView.h; sourceTree = "<group>"; };
 		2EAFA92C1B6A86F500036B7F /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = final_release_debs; sourceTree = "<group>"; };
 		2ECCE01F1B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
 		2ECCE0201B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
+		2EF59F481B759E5C00E7A0D4 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -76,7 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				2E28F60A1B5D76A30061AE27 /* layout */,
-				2E28F6131B5D76A40061AE27 /* public */,
+				2EF59F481B759E5C00E7A0D4 /* public */,
 				2EAFA92C1B6A86F500036B7F /* final_release_debs */,
 				2E28F60D1B5D76A30061AE27 /* Makefile */,
 				2E28F42A1B5D76A30061AE27 /* Acapella2.plist */,
@@ -166,48 +148,6 @@
 				2E28F60C1B5D76A30061AE27 /* control */,
 			);
 			path = DEBIAN;
-			sourceTree = "<group>";
-		};
-		2E28F6131B5D76A40061AE27 /* public */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F6141B5D76A40061AE27 /* libsw */,
-				2E28F6261B5D76A40061AE27 /* MPUTransportControlMediaRemoteController.h */,
-				2E6218361B69D4B900995D02 /* MPUTransportControlsView.h */,
-				2E28F6271B5D76A40061AE27 /* SWAcapellaPrefsBridge.h */,
-			);
-			path = public;
-			sourceTree = "<group>";
-		};
-		2E28F6141B5D76A40061AE27 /* libsw */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F6151B5D76A40061AE27 /* libSluthware */,
-				2E28F6201B5D76A40061AE27 /* libsw.h */,
-				2E28F6211B5D76A40061AE27 /* SWAppLauncher.h */,
-				2E28F6221B5D76A40061AE27 /* SWPSListController.h */,
-				2E28F6231B5D76A40061AE27 /* SWPSListControllerHeaderView.h */,
-				2E28F6241B5D76A40061AE27 /* SWPSTwitterCell.h */,
-				2E28F6251B5D76A40061AE27 /* SWSuperiorWindow.h */,
-			);
-			path = libsw;
-			sourceTree = "<group>";
-		};
-		2E28F6151B5D76A40061AE27 /* libSluthware */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F6161B5D76A40061AE27 /* libSluthware.h */,
-				2E28F6171B5D76A40061AE27 /* NSTimer+SW.h */,
-				2E28F6181B5D76A40061AE27 /* SWMCircle.h */,
-				2E28F6191B5D76A40061AE27 /* SWMLine.h */,
-				2E28F61A1B5D76A40061AE27 /* SWMQuadratic.h */,
-				2E28F61B1B5D76A40061AE27 /* TBAlertAction.h */,
-				2E28F61C1B5D76A40061AE27 /* TBAlertController.h */,
-				2E28F61D1B5D76A40061AE27 /* UIColor+SW.h */,
-				2E28F61E1B5D76A40061AE27 /* UIScrollView+SW.h */,
-				2E28F61F1B5D76A40061AE27 /* UISnapBehaviorHorizontal.h */,
-			);
-			path = libSluthware;
 			sourceTree = "<group>";
 		};
 		2E28F6281B5D76A40061AE27 /* Resources */ = {

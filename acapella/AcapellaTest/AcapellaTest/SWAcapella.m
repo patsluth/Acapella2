@@ -292,31 +292,36 @@
 
         self.titlesCloneContainer.tag = 0;
         
-        //clamp velocity. The velocity is points per second, make sure we cant travel 6 view lengths in one second
-        double velocityClampAbs = fmin(fabs(self.titlesCloneContainer.velocity.x), CGRectGetWidth(self.referenceView.bounds) * 6);
-        double finalVelocity = copysign(velocityClampAbs, self.titlesCloneContainer.velocity.x);
-        
         //add original velocity
         UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
         [self.animator addBehavior:d];
-        [d addLinearVelocity:CGPointMake(finalVelocity, 0.0) forItem:self.titlesCloneContainer];
+        [d addLinearVelocity:CGPointMake(self.titlesCloneContainer.velocity.x, 0.0) forItem:self.titlesCloneContainer];
         
         __block SWAcapella *bself = self;
         __block UIDynamicItemBehavior *bd = d;
         
         d.action = ^{
             
-            CGFloat distanceFromCenter = fabs(bself.titlesCloneContainer.center.x - self.titles.superview.center.x);
-            CGFloat absoluteVelocity = fabs([bd linearVelocityForItem:bself.titlesCloneContainer].x);
+            CGFloat velocity = [bd linearVelocityForItem:bself.titlesCloneContainer].x;
             
-            if (distanceFromCenter < 50 || absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)){
+            BOOL toSlow = fabs(velocity) < CGRectGetMidX(bself.referenceView.bounds);
+            
+            if (toSlow){
                 [bself snapToCenter];
+            } else {
+                
+                CGFloat distanceFromCenter = bself.titlesCloneContainer.center.x - bself.titles.superview.center.x;
+                
+                //if we have a -ve velocity, after we wrap around we will have a positive value for distanceFromCenter
+                //once we travel past the center, this value will be -ve as well. This also happens in the other direction
+                //except with positive values. So we know we have travelled past the center if our velocity and our distance from
+                //the center have the same sign (-ve && -ve || +ve && +ve)
+                if (((distanceFromCenter < 0) == (velocity < 0))){
+                    //this will cause the toSlow condition to be met much quicker, snapping it to the centre
+                    bd.resistance = 60;
+                }
+                
             }
-            
-            //unnessecary, because we clamp the velocity now
-            //else if (distanceFromCenter > CGRectGetWidth(bself.referenceView.bounds) * 1.5){ //swiped to fast
-            
-            //}
             
         };
         

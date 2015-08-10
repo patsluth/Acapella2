@@ -32,7 +32,7 @@ TARGET = iphone:clang:latest
 
 
 TWEAK_NAME = Acapella2
-Acapella2_CFLAGS = -fobjc-arc
+Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
 Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Acapella2_LIBRARIES = substrate sw packageinfo
 Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTest/SWAcapellaTitlesCloneContainer.m AcapellaTest/AcapellaTest/SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm SWAcapellaPrefsBridge.xm

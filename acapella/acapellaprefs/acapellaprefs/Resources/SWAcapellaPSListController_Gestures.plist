@@ -32,10 +32,12 @@
 					<string>action_togglerepeat</string>
 					<string>action_contextual</string>
 					<string>action_showratings</string>
+					<string>action_equalizereverywhere</string>
 				</array>
 				<key>ma_nowplaying_gestures_</key>
 				<array>
 					<string>action_openapp</string>
+					<string>action_equalizereverywhere</string>
 				</array>
 				<key>ma_mini_gestures_</key>
 				<array>
@@ -44,10 +46,10 @@
 					<string>action_toggleshuffle</string>
 					<string>action_togglerepeat</string>
 					<string>action_openapp</string>
-					<string>action_contextual</string>
 					<string>action_showratings</string>
 					<string>action_increasevolume</string>
 					<string>action_decreasevolume</string>
+					<string>action_equalizereverywhere</string>
 				</array>
 				<key>otm_gestures_</key>
 				<array>
@@ -56,6 +58,7 @@
 					<string>action_togglerepeat</string>
 					<string>action_contextual</string>
 					<string>action_showratings</string>
+					<string>action_equalizereverywhere</string>
 				</array>
 				<key>auxo_gestures_</key>
 				<array>
@@ -64,6 +67,7 @@
 					<string>action_togglerepeat</string>
 					<string>action_contextual</string>
 					<string>action_showratings</string>
+					<string>action_equalizereverywhere</string>
 				</array>
 				<key>vertex_gestures_</key>
 				<array>
@@ -72,6 +76,7 @@
 					<string>action_togglerepeat</string>
 					<string>action_contextual</string>
 					<string>action_showratings</string>
+					<string>action_equalizereverywhere</string>
 				</array>
 			</dict>
 			<key>validTitles</key>

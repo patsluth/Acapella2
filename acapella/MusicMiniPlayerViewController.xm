@@ -6,6 +6,7 @@
 
 #import "MPUTransportControlMediaRemoteController.h"
 #import "MPUTransportControlsView.h"
+#import "MusicTabBarController.h"
 
 #import "substrate.h"
 
@@ -27,6 +28,7 @@
 
 - (UIPanGestureRecognizer *)nowPlayingPresentationPanRecognizer;
 
+- (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2;
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
 
 @end
@@ -116,16 +118,12 @@
 {
     %orig();
     
-    if (self.acapella){ //stretch title frame across the entire view
+    if (self.acapella){
         
-        CGRect targetFrame = CGRectMake(0,
-                                        self.titlesView.frame.origin.y,
-                                        CGRectGetMaxX(self.view.bounds),
-                                        self.titlesView.frame.size.width);
-        
-        if (!CGRectEqualToRect(targetFrame, self.titlesView.frame)){
-            self.titlesView.frame = targetFrame;
-        }
+        self.titlesView.frame = CGRectMake(0, //stretch title frame across the entire view
+                                           self.titlesView.frame.origin.y,
+                                           CGRectGetMaxX(self.view.bounds),
+                                           CGRectGetHeight(self.titlesView.bounds));
         
     }
 }
@@ -137,10 +135,13 @@
         
         if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
             
-            BOOL isSlider = [touch.view isKindOfClass:[UISlider class]];
             BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
             
-            return !isSlider && !isControl;
+            if (isControl){
+                return !((UIControl *)touch.view).enabled; //we can accept this touch if the control is enabled
+            }
+            
+            return !isControl; //not a control, recieve the touch
             
         }
         
@@ -254,6 +255,12 @@
         }
         
         
+        //perform the original tap action if our action is nil
+        if (!sel || (sel && [NSStringFromSelector(sel) isEqualToString:@"action_nil"])){
+            [(MusicTabBarController *)self.parentViewController presentNowPlayingViewController];
+        }
+        
+        
         if (sel && [self respondsToSelector:sel]){
             [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
         }
@@ -298,6 +305,7 @@
         if (sel && [self respondsToSelector:sel]){
             [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
         }
+        
         
     }
 }
@@ -376,7 +384,26 @@
 %new
 - (void)action_upnext
 {
-    [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:7];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+        
+        [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:7];
+        
+    } else {
+        
+        id nowPlaying = [(MusicTabBarController *)self.parentViewController nowPlayingViewController];
+        
+        [(MusicTabBarController *)self.parentViewController presentViewController:nowPlaying
+                                                                         animated:YES
+                                                                       completion:^(BOOL finished){
+                                                                           
+                                                                           SEL upNext = NSSelectorFromString(@"action_upnext");
+                                                                           if ([nowPlaying respondsToSelector:upNext]){
+                                                                               [nowPlaying performSelector:upNext];
+                                                                           }
+                                                                           
+                                                                       }];
+        
+    }
 }
 
 %new
@@ -397,7 +424,7 @@
 %new
 - (void)action_contextual
 {
-     [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:11];
+    [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:11];
 }
 
 %new
@@ -417,6 +444,11 @@
 
 %new
 - (void)action_decreasevolume
+{
+}
+
+%new
+- (void)action_equalizereverywhere
 {
 }
 

@@ -33,10 +33,6 @@
 		2E28F5F91B5D76A30061AE27 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		2E28F5FA1B5D76A30061AE27 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2E28F5FB1B5D76A30061AE27 /* AcapellaTest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AcapellaTest.xcodeproj; sourceTree = "<group>"; };
-		2E28F6001B5D76A30061AE27 /* IMG_0052.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0052.PNG; sourceTree = "<group>"; };
-		2E28F6011B5D76A30061AE27 /* IMG_0053.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0053.PNG; sourceTree = "<group>"; };
-		2E28F6021B5D76A30061AE27 /* IMG_0054.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0054.PNG; sourceTree = "<group>"; };
-		2E28F6031B5D76A30061AE27 /* IMG_0055.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0055.PNG; sourceTree = "<group>"; };
 		2E28F60C1B5D76A30061AE27 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		2E28F60D1B5D76A30061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2E28F60E1B5D76A30061AE27 /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
@@ -44,8 +40,6 @@
 		2E28F6101B5D76A40061AE27 /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
 		2E28F6111B5D76A40061AE27 /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
 		2E28F6121B5D76A40061AE27 /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
-		2E28F6291B5D76A40061AE27 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		2E28F62A1B5D76A40061AE27 /* Icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@3x.png"; sourceTree = "<group>"; };
 		2E28F62C1B5D76A40061AE27 /* SWAcapellaPrefsBridge.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaPrefsBridge.xm; sourceTree = "<group>"; };
 		2EAFA92C1B6A86F500036B7F /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = final_release_debs; sourceTree = "<group>"; };
 		2ECCE01F1B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
@@ -71,8 +65,6 @@
 				2E0A49E11B68B20A005FE2BF /* SBLockScreenView.xm */,
 				2E28F62C1B5D76A40061AE27 /* SWAcapellaPrefsBridge.xm */,
 				2E28F5EC1B5D76A30061AE27 /* AcapellaTest */,
-				2E28F6281B5D76A40061AE27 /* Resources */,
-				2E28F5FE1B5D76A30061AE27 /* Assets */,
 			);
 			path = acapella;
 			sourceTree = "<group>";
@@ -115,25 +107,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2E28F5FE1B5D76A30061AE27 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F5FF1B5D76A30061AE27 /* Screenshots */,
-			);
-			path = Assets;
-			sourceTree = "<group>";
-		};
-		2E28F5FF1B5D76A30061AE27 /* Screenshots */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F6001B5D76A30061AE27 /* IMG_0052.PNG */,
-				2E28F6011B5D76A30061AE27 /* IMG_0053.PNG */,
-				2E28F6021B5D76A30061AE27 /* IMG_0054.PNG */,
-				2E28F6031B5D76A30061AE27 /* IMG_0055.PNG */,
-			);
-			path = Screenshots;
-			sourceTree = "<group>";
-		};
 		2E28F60A1B5D76A30061AE27 /* layout */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,15 +121,6 @@
 				2E28F60C1B5D76A30061AE27 /* control */,
 			);
 			path = DEBIAN;
-			sourceTree = "<group>";
-		};
-		2E28F6281B5D76A40061AE27 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F6291B5D76A40061AE27 /* Icon@2x.png */,
-				2E28F62A1B5D76A40061AE27 /* Icon@3x.png */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		2E9C908E1A36BC0F006622A8 = {

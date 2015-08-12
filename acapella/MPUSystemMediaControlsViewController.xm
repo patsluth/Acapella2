@@ -68,6 +68,13 @@
 {
     %orig(animated);
     
+    //these will cache sometimes, so make sure we clear them out before we reload them
+    //so we can correctly see if there are any visible controls in viewDidLayoutSubviews
+    //where we modify the titles centre
+    for (UIView *subview in self.mediaControlsView.transportControlsView.subviews){
+        [subview removeFromSuperview];
+    }
+    
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
     [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:6];
@@ -523,15 +530,15 @@
 {
     %orig();
     
-    SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
-    
-    if (acapella && (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)){ //center
+    //intelligently calcualate centre based on visible controls
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad){
         
         CGFloat topGuideline = 0;
         
         if (self.timeInformationView.layer.opacity > 0.0){ //visible
             topGuideline += CGRectGetMaxY(self.timeInformationView.frame);
         }
+        
         
         CGFloat bottomGuideline = CGRectGetMaxY(self.bounds);
         
@@ -543,10 +550,10 @@
             }
         }
         
+        
         //the midpoint between the currently visible views. This is where we will place our titles
         NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
-        
-        self.trackInformationView.center = CGPointMake(CGRectGetMidX(self.bounds), midPoint);
+        self.trackInformationView.center = CGPointMake(self.trackInformationView.center.x, midPoint);
         
     }
 }

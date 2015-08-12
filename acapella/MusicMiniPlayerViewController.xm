@@ -23,6 +23,7 @@
 - (NSString *)acapellaPrefKeyPrefix;
 
 - (UIView *)titlesView;
+- (UIView *)playbackProgressView;
 - (MPUTransportControlsView *)transportControlsView;
 - (MPUTransportControlsView *)secondaryTransportControlsView;
 
@@ -54,6 +55,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     %orig(animated);
+    
+    //these will cache sometimes, so make sure we clear them out before we reload them
+    //so we can correctly see if there are any visible controls in viewDidLayoutSubviews
+    for (UIView *subview in self.transportControlsView.subviews){
+        [subview removeFromSuperview];
+    }
+    for (UIView *subview in self.secondaryTransportControlsView.subviews){
+        [subview removeFromSuperview];
+    }
     
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
@@ -118,14 +128,27 @@
 {
     %orig();
     
-    if (self.acapella){
-        
-        self.titlesView.frame = CGRectMake(0, //stretch title frame across the entire view
-                                           self.titlesView.frame.origin.y,
-                                           CGRectGetMaxX(self.view.bounds),
-                                           CGRectGetHeight(self.titlesView.bounds));
-        
+    CGRect titlesFrame = self.titlesView.frame;
+    
+    //intelligently calcualate titles frame based on visible transport controls
+    BOOL primaryTransportVisible = (self.transportControlsView.subviews.count > 0);
+    if (!primaryTransportVisible){
+        titlesFrame.origin.x = 0.0;
+        titlesFrame.size.width = self.secondaryTransportControlsView.frame.origin.x;
     }
+    BOOL secondaryTransportVisible = (self.secondaryTransportControlsView.subviews.count > 0);
+    if (!secondaryTransportVisible){
+        titlesFrame.size.width = CGRectGetWidth(self.titlesView.superview.bounds) - titlesFrame.origin.x;
+    }
+    
+    self.titlesView.frame = titlesFrame;
+    
+    
+    //show/hide progress slider
+    NSString *progressKey = [NSString stringWithFormat:@"%@%@", [self acapellaPrefKeyPrefix], @"progressSlider_enabled"];
+    BOOL progressVisible = [[SWAcapellaPrefsBridge valueForKey:progressKey defaultValue:@YES] boolValue];
+    self.playbackProgressView.layer.opacity = progressVisible ? 1.0 : 0.0;
+    
 }
 
 %new

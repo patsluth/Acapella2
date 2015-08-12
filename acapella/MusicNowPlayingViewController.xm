@@ -27,6 +27,8 @@
 - (MPUTransportControlsView *)secondaryTransportControls;
 - (UIView *)volumeSlider;
 
+- (UIView *)vibrantEffectView; //MPUVibrantContentEffectView.h
+
 - (UIView *)ratingControl;
 - (void)_setRatingsVisible:(BOOL)arg1;
 
@@ -57,6 +59,16 @@
 {
     %orig(animated);
     
+    //these will cache sometimes, so make sure we clear them out before we reload them
+    //so we can correctly see if there are any visible controls in viewDidLayoutSubviews
+    //where we modify the titles centre
+    for (UIView *subview in self.transportControls.subviews){
+        [subview removeFromSuperview];
+    }
+    for (UIView *subview in self.secondaryTransportControls.subviews){
+        [subview removeFromSuperview];
+    }
+    
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
     
@@ -74,7 +86,16 @@
     [self.secondaryTransportControls reloadTransportButtonWithControlType:10];
     [self.secondaryTransportControls reloadTransportButtonWithControlType:9];
     [self.secondaryTransportControls reloadTransportButtonWithControlType:11];
+    
+    [self viewDidLayoutSubviews];
 }
+
+//- (void)setVolumeSlider:(UIView *)arg1
+//{
+//    %orig(arg1);
+//    arg1.layer.opacity = 0.0;
+//    arg1.hidden = YES;
+//}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -118,6 +139,77 @@
 {
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     %orig(animated);
+}
+
+- (void)viewDidLayoutSubviews
+{
+    %orig();
+    
+    
+    NSString *prefKeyPrefix = [self acapellaPrefKeyPrefix];;
+    
+    
+    NSString *progressKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"progressSlider_enabled"];
+    NSString *volumeKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"volumeSlider_enabled"];
+    
+    BOOL progressVisible = [[SWAcapellaPrefsBridge valueForKey:progressKey defaultValue:@YES] boolValue];
+    BOOL volumeVisible = [[SWAcapellaPrefsBridge valueForKey:volumeKey defaultValue:@YES] boolValue];
+    
+    //show/hide sliders
+    self.playbackProgressSliderView.layer.opacity = progressVisible ? 1.0 : 0.0;
+    self.volumeSlider.layer.opacity = volumeVisible ? 1.0 : 0.0;
+    
+    //Pinnning views responsible for drawing knobs
+    for (UIView *subview in self.vibrantEffectView.subviews){
+        if (%c(MPUPinningView) && [subview isKindOfClass:%c(MPUPinningView)]){
+            
+            id pinningSourceLayer = [subview valueForKey:@"pinningSourceLayer"];
+            id progressLayer = [[self.playbackProgressSliderView valueForKey:@"_playbackProgressSlider"] valueForKey:@"layer"];
+            
+            if (pinningSourceLayer == progressLayer){
+                subview.hidden = !progressVisible;
+            } else if (pinningSourceLayer == self.volumeSlider.layer){
+                subview.hidden = !volumeVisible;
+            }
+            
+        }
+    }
+    
+    
+    
+    //intelligently calcualate centre based on visible controls, which we dont want to do on iPAD
+    if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)){ return; }
+    
+    
+    CGFloat topGuideline = CGRectGetMinY(self.playbackProgressSliderView.frame);
+    
+    if (self.playbackProgressSliderView.layer.opacity > 0.0){ //visible
+        topGuideline += CGRectGetHeight(self.playbackProgressSliderView.bounds);
+    }
+    
+    
+    CGFloat bottomGuideline = CGRectGetMinY(self.transportControls.frame); //top of primary transport controls
+    
+    if (self.transportControls.subviews.count <= 0){ //hidden
+        
+        bottomGuideline = CGRectGetMinY(self.volumeSlider.frame); //top of volume slider
+        
+        if (self.volumeSlider.layer.opacity <= 0.0){ //hidden
+            
+            bottomGuideline = CGRectGetMinY(self.secondaryTransportControls.frame); //top of transport secondary controls
+            
+            if (self.secondaryTransportControls.subviews.count <= 0){ //hidden
+                bottomGuideline = CGRectGetMaxY(self.titlesView.superview.bounds); //bottom of screen
+            }
+            
+        }
+        
+    }
+    
+    //the midpoint between the currently visible views. This is where we will place our titles
+    NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
+    self.titlesView.center = CGPointMake(self.titlesView.center.x, midPoint);
+    
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

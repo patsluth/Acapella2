@@ -10,6 +10,8 @@
 #import "SWAcapellaTitlesCloneContainer.h"
 #import "libsw/libSluthware/NSTimer+SW.h"
 
+#import <CoreFoundation/CoreFoundation.h>
+
 
 @import CoreGraphics;
 @import Social;
@@ -114,6 +116,7 @@
         }
         [self.acapella.titlesCloneContainer setNeedsDisplay];
     }repeats:YES];
+
 }
 
 @end

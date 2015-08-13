@@ -1,8 +1,8 @@
 
 #import "SWAcapella.h"
-#import "SWAcapellaPrefsBridge.h"
 
 #import "libSluthware.h"
+#import "libsw/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
 #import "MPUTransportControlsView.h"
@@ -56,15 +56,6 @@
 {
     %orig(animated);
     
-    //these will cache sometimes, so make sure we clear them out before we reload them
-    //so we can correctly see if there are any visible controls in viewDidLayoutSubviews
-    for (UIView *subview in self.transportControlsView.subviews){
-        [subview removeFromSuperview];
-    }
-    for (UIView *subview in self.secondaryTransportControlsView.subviews){
-        [subview removeFromSuperview];
-    }
-    
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
     
@@ -76,6 +67,8 @@
     //RIGHT SECTION
     [self.secondaryTransportControlsView reloadTransportButtonWithControlType:7];
     [self.secondaryTransportControlsView reloadTransportButtonWithControlType:11];
+    
+    [self viewDidLayoutSubviews];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -90,7 +83,7 @@
             
             NSString *enabledKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"enabled"];
             
-            if ([[SWAcapellaPrefsBridge valueForKey:enabledKey defaultValue:@YES] boolValue]){
+            if ([[SWPrefs valueForKey:enabledKey fallbackValue:@YES application:@"com.apple.Music"] boolValue]){
                 
                 [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
                                                               preInitializeAction:^(SWAcapella *a){
@@ -116,6 +109,8 @@
         
     }
     
+    [self viewDidLayoutSubviews];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -131,22 +126,22 @@
     CGRect titlesFrame = self.titlesView.frame;
     
     //intelligently calcualate titles frame based on visible transport controls
-    BOOL primaryTransportVisible = (self.transportControlsView.subviews.count > 0);
-    if (!primaryTransportVisible){
+    if ([self.transportControlsView hidden_acapella]){
         titlesFrame.origin.x = 0.0;
         titlesFrame.size.width = self.secondaryTransportControlsView.frame.origin.x;
     }
-    BOOL secondaryTransportVisible = (self.secondaryTransportControlsView.subviews.count > 0);
-    if (!secondaryTransportVisible){
+    
+    if ([self.secondaryTransportControlsView hidden_acapella]){
         titlesFrame.size.width = CGRectGetWidth(self.titlesView.superview.bounds) - titlesFrame.origin.x;
     }
+    
     
     self.titlesView.frame = titlesFrame;
     
     
     //show/hide progress slider
     NSString *progressKey = [NSString stringWithFormat:@"%@%@", [self acapellaPrefKeyPrefix], @"progressSlider_enabled"];
-    BOOL progressVisible = [[SWAcapellaPrefsBridge valueForKey:progressKey defaultValue:@YES] boolValue];
+    BOOL progressVisible = [[SWPrefs valueForKey:progressKey fallbackValue:@YES application:@"com.apple.Music"] boolValue];
     self.playbackProgressView.layer.opacity = progressVisible ? 1.0 : 0.0;
     
 }
@@ -210,28 +205,28 @@
         
         //LEFT SECTION
         NSString *key_PrevTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_previoustrack_enabled"];
-        if (arg2 == 1 && ![[SWAcapellaPrefsBridge valueForKey:key_PrevTrack defaultValue:@NO] boolValue]){
+        if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack fallbackValue:@NO application:@"com.apple.Music"] boolValue]){
             return nil;
         }
         
         NSString *key_PlayPause = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_play/pause_enabled"];
-        if (arg2 == 3 && ![[SWAcapellaPrefsBridge valueForKey:key_PlayPause defaultValue:@NO] boolValue]){
+        if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause fallbackValue:@NO application:@"com.apple.Music"] boolValue]){
             return nil;
         }
         
         NSString *key_NextTrack = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_nextTrack_enabled"];
-        if (arg2 == 4 && ![[SWAcapellaPrefsBridge valueForKey:key_NextTrack defaultValue:@NO] boolValue]){
+        if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack fallbackValue:@NO application:@"com.apple.Music"] boolValue]){
             return nil;
         }
         
         //RIGHT SECTION
         NSString *key_UpNext = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_presentupnext_enabled"];
-        if (arg2 == 7 && ![[SWAcapellaPrefsBridge valueForKey:key_UpNext defaultValue:@NO] boolValue]){
+        if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext fallbackValue:@NO application:@"com.apple.Music"] boolValue]){
             return nil;
         }
         
         NSString *key_Contextual = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"transport_contextual_enabled"];
-        if (arg2 == 11 && ![[SWAcapellaPrefsBridge valueForKey:key_Contextual defaultValue:@NO] boolValue]){
+        if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual fallbackValue:@NO application:@"com.apple.Music"] boolValue]){
             return nil;
         }
         
@@ -260,19 +255,19 @@
         if (xPercentage <= 0.25){
             
             NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapleft"];
-            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_playpause" application:@"com.apple.Music"];
             sel = NSSelectorFromString(selString);
             
         } else if (xPercentage > 0.75){
             
             NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapright"];
-            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_playpause" application:@"com.apple.Music"];
             sel = NSSelectorFromString(selString);
             
         } else {
             
             NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_tapcentre"];
-            NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_playpause"];
+            NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_playpause" application:@"com.apple.Music"];
             sel = NSSelectorFromString(selString);
             
         }
@@ -305,19 +300,19 @@
             if (xPercentage <= 0.25){
                 
                 NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_pressleft"];
-                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_intervalrewind"];
+                NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_intervalrewind" application:@"com.apple.Music"];
                 sel = NSSelectorFromString(selString);
                 
             } else if (xPercentage > 0.75){
                 
                 NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_pressright"];
-                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_intervalforward"];
+                NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_intervalforward" application:@"com.apple.Music"];
                 sel = NSSelectorFromString(selString);
                 
             } else {
                 
                 NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_presscentre"];
-                NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_contextual"];
+                NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_contextual" application:@"com.apple.Music"];
                 sel = NSSelectorFromString(selString);
                 
             }
@@ -341,13 +336,13 @@
     if ([direction integerValue] < 0){
         
         NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_swipeleft"];
-        NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_nexttrack"];
+        NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_nexttrack" application:@"com.apple.Music"];
         sel = NSSelectorFromString(selString);
         
     } else if ([direction integerValue] > 0){
         
         NSString *key = [NSString stringWithFormat:@"%@%@", self.acapella.prefKeyPrefix, @"gestures_swiperight"];
-        NSString *selString = [SWAcapellaPrefsBridge valueForKey:key defaultValue:@"action_previoustrack"];
+        NSString *selString = [SWPrefs valueForKey:key fallbackValue:@"action_previoustrack" application:@"com.apple.Music"];
         sel = NSSelectorFromString(selString);
         
     }

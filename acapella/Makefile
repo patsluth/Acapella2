@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.0-12
+PACKAGE_VERSION = 1.0-13
 
 
 
@@ -35,7 +35,7 @@ TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
 Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Acapella2_LIBRARIES = substrate sw packageinfo
-Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTest/SWAcapellaTitlesCloneContainer.m AcapellaTest/AcapellaTest/SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm SWAcapellaPrefsBridge.xm
+Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTest/SWAcapellaTitlesCloneContainer.m AcapellaTest/AcapellaTest/SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -IAcapellaTest/AcapellaTest/

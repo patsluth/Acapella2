@@ -90,10 +90,11 @@
 			<string>action_decreasevolume</string>
 			<key>label</key>
 			<string>Tap Left</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -110,10 +111,11 @@
 			<string>action_playpause</string>
 			<key>label</key>
 			<string>Tap Centre</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -135,10 +137,11 @@
 			<string>action_increasevolume</string>
 			<key>label</key>
 			<string>Tap Right</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -159,10 +162,11 @@
 			<string>action_nexttrack</string>
 			<key>label</key>
 			<string>Swipe Left</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -179,10 +183,11 @@
 			<string>action_previoustrack</string>
 			<key>label</key>
 			<string>Swipe Right</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -205,10 +210,11 @@
 			<string>action_intervalrewind</string>
 			<key>label</key>
 			<string>Press Left</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -242,10 +248,11 @@
 			</dict>
 			<key>label</key>
 			<string>Press Centre</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -264,10 +271,11 @@
 			<string>action_intervalforward</string>
 			<key>label</key>
 			<string>Press Right</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 	</array>
 </dict>

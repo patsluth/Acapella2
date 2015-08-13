@@ -1,6 +1,7 @@
 
 #import "SWAcapella.h"
-#import "SWAcapellaPrefsBridge.h"
+
+#import "libsw/SWPrefs.h"
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -38,7 +39,8 @@
             if (prefKeyPrefix){
                 
                 NSString *enabledKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"enabled"];
-                shouldOverride = [[SWAcapellaPrefsBridge valueForKey:enabledKey defaultValue:@YES] boolValue];
+                id enabled = [SWPrefs valueForKey:enabledKey fallbackValue:@YES application:@"com.patsluth.AcapellaPrefs2"];
+                shouldOverride = [enabled boolValue];
                 
             }
             

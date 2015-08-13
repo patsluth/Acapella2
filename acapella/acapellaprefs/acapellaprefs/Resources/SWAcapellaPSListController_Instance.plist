@@ -15,10 +15,11 @@
 			<true/>
 			<key>label</key>
 			<string>Enabled</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -51,10 +52,11 @@
 			<true/>
 			<key>label</key>
 			<string>Progress Slider</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -81,10 +83,11 @@
 			<true/>
 			<key>label</key>
 			<string>Volume Slider</string>
-			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
-			<key>PostNotification</key>
-			<string>com.patsluth.AcapellaPrefs2.changed</string>
+			<key>defaultsArray</key>
+			<array>
+				<string>com.patsluth.AcapellaPrefs2</string>
+				<string>com.apple.Music</string>
+			</array>
 		</dict>
 	</array>
 </dict>

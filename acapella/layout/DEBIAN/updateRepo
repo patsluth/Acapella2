@@ -1,8 +1,0 @@
-PLIST="/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"
-plutil $PLIST
-
-CUR=$(plutil -key ma_mini_gestures_tapcentre ${PLIST})
-echo $CUR
-
-NEW=$(echo -e $CUR\ntestetsetset)
-plutil -key ma_mini_gestures_tapcentre -value $NEW $PLIST

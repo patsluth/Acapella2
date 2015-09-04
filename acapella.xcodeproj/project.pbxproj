@@ -20,18 +20,6 @@
 		2E0A49DA1B688B6E005FE2BF /* MPVolumeController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPVolumeController.xm; sourceTree = "<group>"; };
 		2E0A49E11B68B20A005FE2BF /* SBLockScreenView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SBLockScreenView.xm; sourceTree = "<group>"; };
 		2E28F42A1B5D76A30061AE27 /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Acapella2.plist; sourceTree = "<group>"; };
-		2E28F5EE1B5D76A30061AE27 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		2E28F5EF1B5D76A30061AE27 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		2E28F5F11B5D76A30061AE27 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		2E28F5F21B5D76A30061AE27 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2E28F5F31B5D76A30061AE27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E28F5F41B5D76A30061AE27 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2E28F5F51B5D76A30061AE27 /* SWAcapella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapella.h; sourceTree = "<group>"; };
-		2E28F5F61B5D76A30061AE27 /* SWAcapella.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = "<group>"; };
-		2E28F5F71B5D76A30061AE27 /* SWAcapellaTitlesClone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesClone.h; sourceTree = "<group>"; };
-		2E28F5F81B5D76A30061AE27 /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
-		2E28F5F91B5D76A30061AE27 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		2E28F5FA1B5D76A30061AE27 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		2E28F5FB1B5D76A30061AE27 /* AcapellaTest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AcapellaTest.xcodeproj; sourceTree = "<group>"; };
 		2E28F60C1B5D76A30061AE27 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		2E28F60D1B5D76A30061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -42,8 +30,6 @@
 		2E28F6121B5D76A40061AE27 /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
 		2EA5D4BB1B7BC26800F9A6E4 /* MPUTransportControlsView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUTransportControlsView.xm; sourceTree = "<group>"; };
 		2EAFA92C1B6A86F500036B7F /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = final_release_debs; sourceTree = "<group>"; };
-		2ECCE01F1B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
-		2ECCE0201B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
 		2EF59F481B759E5C00E7A0D4 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,29 +58,7 @@
 		2E28F5EC1B5D76A30061AE27 /* AcapellaTest */ = {
 			isa = PBXGroup;
 			children = (
-				2E28F5ED1B5D76A30061AE27 /* AcapellaTest */,
 				2E28F5FB1B5D76A30061AE27 /* AcapellaTest.xcodeproj */,
-			);
-			path = AcapellaTest;
-			sourceTree = "<group>";
-		};
-		2E28F5ED1B5D76A30061AE27 /* AcapellaTest */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F5EE1B5D76A30061AE27 /* AppDelegate.h */,
-				2E28F5EF1B5D76A30061AE27 /* AppDelegate.m */,
-				2E28F5F01B5D76A30061AE27 /* Main.storyboard */,
-				2E28F5F21B5D76A30061AE27 /* Images.xcassets */,
-				2E28F5F31B5D76A30061AE27 /* Info.plist */,
-				2E28F5F41B5D76A30061AE27 /* main.m */,
-				2E28F5F51B5D76A30061AE27 /* SWAcapella.h */,
-				2E28F5F61B5D76A30061AE27 /* SWAcapella.m */,
-				2ECCE01F1B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.h */,
-				2ECCE0201B670FBE00F8B253 /* SWAcapellaTitlesCloneContainer.m */,
-				2E28F5F71B5D76A30061AE27 /* SWAcapellaTitlesClone.h */,
-				2E28F5F81B5D76A30061AE27 /* SWAcapellaTitlesClone.m */,
-				2E28F5F91B5D76A30061AE27 /* ViewController.h */,
-				2E28F5FA1B5D76A30061AE27 /* ViewController.m */,
 			);
 			path = AcapellaTest;
 			sourceTree = "<group>";
@@ -169,17 +133,6 @@
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
-
-/* Begin PBXVariantGroup section */
-		2E28F5F01B5D76A30061AE27 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2E28F5F11B5D76A30061AE27 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2E9C90931A36BC0F006622A8 /* Debug */ = {

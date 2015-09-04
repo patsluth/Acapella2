@@ -334,6 +334,10 @@
 {
     [self.animator removeAllBehaviors];
     
+    if (!self.titlesCloneContainer){
+        return;
+    }
+    
     UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
     d.allowsRotation = NO;
     d.resistance = 20;
@@ -395,11 +399,15 @@
                                                   view.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               } completion:^(BOOL finished){
                                                   view.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                                  self.titlesCloneContainer = nil;
+                                                  if (!self.animator.isRunning){
+                                                      self.titlesCloneContainer = nil;
+                                                  }
                                               }];
                              
                          } else {
-                             self.titlesCloneContainer = nil;
+                             if (!self.animator.isRunning){
+                                 self.titlesCloneContainer = nil;
+                             }
                          }
                          
                      }];

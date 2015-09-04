@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2E00EAB81B5B1EA900B1BC4D /* SWAcapellaTitlesClone.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E00EAB61B5B1EA900B1BC4D /* SWAcapellaTitlesClone.h */; };
 		2E00EAB91B5B1EA900B1BC4D /* SWAcapellaTitlesClone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E00EAB71B5B1EA900B1BC4D /* SWAcapellaTitlesClone.m */; };
+		2E0AB0171B8F715C0081B7D6 /* SWAcapellaTitlesCloneContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E0AB0161B8F715C0081B7D6 /* SWAcapellaTitlesCloneContainer.h */; };
 		2E1DF2281B4F7257006836E6 /* SWAcapella.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DF2271B4F7257006836E6 /* SWAcapella.m */; };
 		2E1DF24A1B4F7396006836E6 /* libSluthware in Resources */ = {isa = PBXBuildFile; fileRef = 2E1DF2481B4F7396006836E6 /* libSluthware */; };
 		2E1DF24B1B4F7396006836E6 /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E1DF2491B4F7396006836E6 /* libSluthware.a */; };
@@ -39,7 +40,7 @@
 /* Begin PBXFileReference section */
 		2E00EAB61B5B1EA900B1BC4D /* SWAcapellaTitlesClone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesClone.h; sourceTree = "<group>"; };
 		2E00EAB71B5B1EA900B1BC4D /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
-		2E0A49DE1B688EB0005FE2BF /* VolumeControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VolumeControl.h; path = ../public/VolumeControl.h; sourceTree = "<group>"; };
+		2E0AB0161B8F715C0081B7D6 /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
 		2E1DF2261B4F7257006836E6 /* SWAcapella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAcapella.h; sourceTree = "<group>"; };
 		2E1DF2271B4F7257006836E6 /* SWAcapella.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = "<group>"; };
 		2E1DF2481B4F7396006836E6 /* libSluthware */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libSluthware; path = "../../../../../Library/Developer/Xcode/DerivedData/libSluthware-gkkaqduyganxrafgxfkattygrxdd/Build/Products/Debug-iphoneos/libSluthware"; sourceTree = "<group>"; };
@@ -47,7 +48,6 @@
 		2E334F5F1AE85701002046A1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2E334F641AE85822002046A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2E6CF8991B680CC70046293E /* SWAcapellaDynamicAnimator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SWAcapellaDynamicAnimator.m; path = AcapellaTest/SWAcapellaDynamicAnimator.m; sourceTree = "<group>"; };
 		2E75963619FDCCA600001BC7 /* AcapellaTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcapellaTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75963C19FDCCA600001BC7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E75963D19FDCCA600001BC7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		2E75964519FDCCA600001BC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2E75966419FDCD5D00001BC7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75966519FDCD5D00001BC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2ECCE0221B67112900F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SWAcapellaTitlesCloneContainer.m; path = AcapellaTest/SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
+		2ECCE0221B67112900F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,9 +78,6 @@
 		2E75956019FD49F500001BC7 = {
 			isa = PBXGroup;
 			children = (
-				2E0A49DE1B688EB0005FE2BF /* VolumeControl.h */,
-				2E6CF8991B680CC70046293E /* SWAcapellaDynamicAnimator.m */,
-				2ECCE0221B67112900F8B253 /* SWAcapellaTitlesCloneContainer.m */,
 				2E75963719FDCCA600001BC7 /* AcapellaTest */,
 				2E75959419FD958600001BC7 /* Frameworks */,
 				2E75956B19FD49F500001BC7 /* Products */,
@@ -114,6 +111,8 @@
 				2E1DF2271B4F7257006836E6 /* SWAcapella.m */,
 				2E00EAB61B5B1EA900B1BC4D /* SWAcapellaTitlesClone.h */,
 				2E00EAB71B5B1EA900B1BC4D /* SWAcapellaTitlesClone.m */,
+				2E0AB0161B8F715C0081B7D6 /* SWAcapellaTitlesCloneContainer.h */,
+				2ECCE0221B67112900F8B253 /* SWAcapellaTitlesCloneContainer.m */,
 				2E75963C19FDCCA600001BC7 /* AppDelegate.h */,
 				2E75963D19FDCCA600001BC7 /* AppDelegate.m */,
 				2E75963F19FDCCA600001BC7 /* ViewController.h */,
@@ -141,6 +140,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E0AB0171B8F715C0081B7D6 /* SWAcapellaTitlesCloneContainer.h in Headers */,
 				2E00EAB81B5B1EA900B1BC4D /* SWAcapellaTitlesClone.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

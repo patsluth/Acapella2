@@ -89,34 +89,17 @@
 //    [super setNeedsDisplay];
 //    
 //    CGFloat xxxxx = CACurrentMediaTime();
-//    
-//    
-//    
-//    
+//
 //    for (UIView *v in self.subviews){
 //        [v removeFromSuperview];
 //    }
-//    
-//    
-//    
-//    //CALayer *layer = [self.titles.layer presentationLayer];
-//    //layer.opacity = 1.0;
-//    //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeInterval:1 sinceDate:[NSDate date]]];
-//    
-//    
-//    
+//
 //    NSData *tempArchiveView = [NSKeyedArchiver archivedDataWithRootObject:self.titles];
 //    UIView *viewOfSelf = [NSKeyedUnarchiver unarchiveObjectWithData:tempArchiveView];
-//    
-//    
-//    //UIView *x = [self.titles snapshotViewAfterScreenUpdates:NO];
-//    //x.layer.opacity = 1.0;
-//   // NSLog(@"PAT %@", NSStringFromCGRect(x.frame));
-//    [self addSubview:viewOfSelf];
+//
 //    viewOfSelf.frame = viewOfSelf.bounds;
 //    viewOfSelf.layer.opacity = 1.0;
-//    
-//    //layer.opacity = 0.0;
+//    [self addSubview:viewOfSelf];
 //    
 //    NSLog(@"UPDATING SNAPSHOT %f", CACurrentMediaTime() - xxxxx);
 //    

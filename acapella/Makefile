@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.0-13
+PACKAGE_VERSION = 1.0-14
 
 
 
@@ -71,14 +71,6 @@ include $(THEOS_MAKE_PATH)/aggregate.mk
 clean::
 	rm -rf debs
 	rm -rf .theos
-
-
-
-
-
-#stage::
-#mkdir -p "$(THEOS_STAGING_DIR)/Library/Frameworks"
-#cp -r AcapellaKit.framework "$(THEOS_STAGING_DIR)/Library/Frameworks"
 
 
 

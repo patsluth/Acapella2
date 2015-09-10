@@ -10,8 +10,8 @@
 
 #import <Preferences/Preferences.h>
 
-#import "libSluthware.h"
-#import "SWPSTwitterCell.h"
+#import "libsw/libSluthware/libSluthware.h"
+#import "libsw/SWPSTwitterCell.h"
 
 
 

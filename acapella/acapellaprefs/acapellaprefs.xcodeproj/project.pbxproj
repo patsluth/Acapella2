@@ -7,28 +7,12 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		2E033E641BA1253700422168 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		2E14EC301B6965DC000DF542 /* SWAcapellaPSListController_Instance.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController_Instance.mm; sourceTree = "<group>"; };
-		2E28F3331B726B7900172ADB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = acapellaprefs/Resources; sourceTree = "<group>"; };
+		2E28F3331B726B7900172ADB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		2E28F3341B7270CF00172ADB /* SWAcapellaPSListController_Gestures.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController_Gestures.mm; sourceTree = "<group>"; };
 		2E28F7C71B5D77160061AE27 /* entry.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entry.plist; sourceTree = "<group>"; };
 		2E28F7C81B5D77160061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		2E28F7CC1B5D77160061AE27 /* libSluthware.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libSluthware.h; sourceTree = "<group>"; };
-		2E28F7CD1B5D77160061AE27 /* NSTimer+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+SW.h"; sourceTree = "<group>"; };
-		2E28F7CE1B5D77160061AE27 /* SWMCircle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMCircle.h; sourceTree = "<group>"; };
-		2E28F7CF1B5D77160061AE27 /* SWMLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMLine.h; sourceTree = "<group>"; };
-		2E28F7D01B5D77160061AE27 /* SWMQuadratic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMQuadratic.h; sourceTree = "<group>"; };
-		2E28F7D11B5D77160061AE27 /* TBAlertAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBAlertAction.h; sourceTree = "<group>"; };
-		2E28F7D21B5D77160061AE27 /* TBAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TBAlertController.h; sourceTree = "<group>"; };
-		2E28F7D31B5D77160061AE27 /* UIColor+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+SW.h"; sourceTree = "<group>"; };
-		2E28F7D41B5D77160061AE27 /* UIScrollView+SW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SW.h"; sourceTree = "<group>"; };
-		2E28F7D51B5D77160061AE27 /* UISnapBehaviorHorizontal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UISnapBehaviorHorizontal.h; sourceTree = "<group>"; };
-		2E28F7D61B5D77160061AE27 /* libsw.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libsw.h; sourceTree = "<group>"; };
-		2E28F7D71B5D77160061AE27 /* SWAppLauncher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAppLauncher.h; sourceTree = "<group>"; };
-		2E28F7D81B5D77160061AE27 /* SWPSListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListController.h; sourceTree = "<group>"; };
-		2E28F7D91B5D77160061AE27 /* SWPSListControllerHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSListControllerHeaderView.h; sourceTree = "<group>"; };
-		2E28F7DA1B5D77160061AE27 /* SWPSTwitterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWPSTwitterCell.h; sourceTree = "<group>"; };
-		2E28F7DB1B5D77160061AE27 /* SWSuperiorWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWSuperiorWindow.h; sourceTree = "<group>"; };
-		2E28F7DC1B5D77160061AE27 /* SWAcapellaPSListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAcapellaPSListController.h; sourceTree = "<group>"; };
 		2E28F7EC1B5D77160061AE27 /* SWAcapellaPSListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController.mm; sourceTree = "<group>"; };
 		2E6CF89D1B684B200046293E /* SWAcapellaPSListController_Transport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListController_Transport.mm; sourceTree = "<group>"; };
 		2EAB2F4E1B73A6DA00A99E80 /* SWAcapellaPSListItemsController_Actions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaPSListItemsController_Actions.mm; sourceTree = "<group>"; };
@@ -38,7 +22,7 @@
 		2E28F7C61B5D77160061AE27 /* acapellaprefs */ = {
 			isa = PBXGroup;
 			children = (
-				2E28F7C91B5D77160061AE27 /* public */,
+				2E033E641BA1253700422168 /* public */,
 				2E28F7C81B5D77160061AE27 /* Makefile */,
 				2E28F7C71B5D77160061AE27 /* entry.plist */,
 				2E28F7EC1B5D77160061AE27 /* SWAcapellaPSListController.mm */,
@@ -46,55 +30,15 @@
 				2E28F3341B7270CF00172ADB /* SWAcapellaPSListController_Gestures.mm */,
 				2EAB2F4E1B73A6DA00A99E80 /* SWAcapellaPSListItemsController_Actions.mm */,
 				2E6CF89D1B684B200046293E /* SWAcapellaPSListController_Transport.mm */,
+				2E28F3331B726B7900172ADB /* Resources */,
 			);
 			path = acapellaprefs;
-			sourceTree = "<group>";
-		};
-		2E28F7C91B5D77160061AE27 /* public */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F7CA1B5D77160061AE27 /* libsw */,
-				2E28F7DC1B5D77160061AE27 /* SWAcapellaPSListController.h */,
-			);
-			path = public;
-			sourceTree = "<group>";
-		};
-		2E28F7CA1B5D77160061AE27 /* libsw */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F7CB1B5D77160061AE27 /* libSluthware */,
-				2E28F7D61B5D77160061AE27 /* libsw.h */,
-				2E28F7D71B5D77160061AE27 /* SWAppLauncher.h */,
-				2E28F7D81B5D77160061AE27 /* SWPSListController.h */,
-				2E28F7D91B5D77160061AE27 /* SWPSListControllerHeaderView.h */,
-				2E28F7DA1B5D77160061AE27 /* SWPSTwitterCell.h */,
-				2E28F7DB1B5D77160061AE27 /* SWSuperiorWindow.h */,
-			);
-			path = libsw;
-			sourceTree = "<group>";
-		};
-		2E28F7CB1B5D77160061AE27 /* libSluthware */ = {
-			isa = PBXGroup;
-			children = (
-				2E28F7CC1B5D77160061AE27 /* libSluthware.h */,
-				2E28F7CD1B5D77160061AE27 /* NSTimer+SW.h */,
-				2E28F7CE1B5D77160061AE27 /* SWMCircle.h */,
-				2E28F7CF1B5D77160061AE27 /* SWMLine.h */,
-				2E28F7D01B5D77160061AE27 /* SWMQuadratic.h */,
-				2E28F7D11B5D77160061AE27 /* TBAlertAction.h */,
-				2E28F7D21B5D77160061AE27 /* TBAlertController.h */,
-				2E28F7D31B5D77160061AE27 /* UIColor+SW.h */,
-				2E28F7D41B5D77160061AE27 /* UIScrollView+SW.h */,
-				2E28F7D51B5D77160061AE27 /* UISnapBehaviorHorizontal.h */,
-			);
-			path = libSluthware;
 			sourceTree = "<group>";
 		};
 		2EE53EFD1A36BCBB00BEED8F = {
 			isa = PBXGroup;
 			children = (
 				2E28F7C61B5D77160061AE27 /* acapellaprefs */,
-				2E28F3331B726B7900172ADB /* Resources */,
 			);
 			sourceTree = "<group>";
 		};

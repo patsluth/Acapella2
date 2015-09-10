@@ -1,7 +1,7 @@
 
 #import "SWAcapella.h"
 
-#import "libSluthware.h"
+#import "libsw/libSluthware/libSluthware.h"
 #import "libsw/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"

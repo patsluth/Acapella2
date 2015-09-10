@@ -17,18 +17,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2E0A49DA1B688B6E005FE2BF /* MPVolumeController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPVolumeController.xm; sourceTree = "<group>"; };
-		2E0A49E11B68B20A005FE2BF /* SBLockScreenView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SBLockScreenView.xm; sourceTree = "<group>"; };
+		2E0A49DA1B688B6E005FE2BF /* MPVolumeController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPVolumeController.xm; sourceTree = "<group>"; };
+		2E0A49E11B68B20A005FE2BF /* SBLockScreenView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SBLockScreenView.xm; sourceTree = "<group>"; };
 		2E28F42A1B5D76A30061AE27 /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Acapella2.plist; sourceTree = "<group>"; };
 		2E28F5FB1B5D76A30061AE27 /* AcapellaTest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = AcapellaTest.xcodeproj; sourceTree = "<group>"; };
 		2E28F60C1B5D76A30061AE27 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		2E28F60D1B5D76A30061AE27 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		2E28F60E1B5D76A30061AE27 /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
-		2E28F60F1B5D76A40061AE27 /* MPUSystemMediaControlsViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUSystemMediaControlsViewController.xm; sourceTree = "<group>"; };
-		2E28F6101B5D76A40061AE27 /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
-		2E28F6111B5D76A40061AE27 /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
-		2E28F6121B5D76A40061AE27 /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
-		2EA5D4BB1B7BC26800F9A6E4 /* MPUTransportControlsView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUTransportControlsView.xm; sourceTree = "<group>"; };
+		2E28F60E1B5D76A30061AE27 /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
+		2E28F60F1B5D76A40061AE27 /* MPUSystemMediaControlsViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUSystemMediaControlsViewController.xm; sourceTree = "<group>"; };
+		2E28F6101B5D76A40061AE27 /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
+		2E28F6111B5D76A40061AE27 /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
+		2E28F6121B5D76A40061AE27 /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
+		2EA5D4BB1B7BC26800F9A6E4 /* MPUTransportControlsView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUTransportControlsView.xm; sourceTree = "<group>"; };
 		2EAFA92C1B6A86F500036B7F /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = final_release_debs; sourceTree = "<group>"; };
 		2EF59F481B759E5C00E7A0D4 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 /* End PBXFileReference section */

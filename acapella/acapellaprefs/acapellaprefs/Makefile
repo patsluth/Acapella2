@@ -19,8 +19,6 @@ AcapellaPrefs2_PRIVATE_FRAMEWORKS = Preferences
 AcapellaPrefs2_LIBRARIES = sw
 
 ADDITIONAL_CFLAGS = -Ipublic
-ADDITIONAL_CFLAGS += -Ipublic/libsw
-ADDITIONAL_CFLAGS += -Ipublic/libsw/libSluthware
 
 
 

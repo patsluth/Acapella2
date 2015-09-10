@@ -39,8 +39,6 @@ Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTe
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -IAcapellaTest/AcapellaTest/
-ADDITIONAL_CFLAGS += -Ipublic/libsw
-ADDITIONAL_CFLAGS += -Ipublic/libsw/libSluthware
 
 
 

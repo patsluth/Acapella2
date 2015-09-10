@@ -111,7 +111,7 @@
 {
     if (self.titles){
         
-        CALayer *layer = [self.titles.layer presentationLayer];
+        CALayer *layer = self.titles.layer.modelLayer;
         
         if (!layer){
             layer = self.titles.layer;
@@ -124,6 +124,7 @@
         [layer renderInContext:UIGraphicsGetCurrentContext()];
         
         layer.opacity = originalOpacity;
+        
     }
 }
 

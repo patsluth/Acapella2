@@ -10,7 +10,7 @@
 
 
 
-@interface MPUMediaControlsTitlesView : UIView
+@interface MPUMediaControlsTitlesView : UIView //MPUNowPlayingTitlesView
 {
 }
 

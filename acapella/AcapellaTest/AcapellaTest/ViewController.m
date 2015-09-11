@@ -116,7 +116,6 @@
         }
         [self.acapella.titlesCloneContainer setNeedsDisplay];
     }repeats:YES];
-
 }
 
 @end

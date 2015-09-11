@@ -1,4 +1,4 @@
-Package: com.patsluth.swacapella2
+Package: org.thebigboss.swacapella2
 Name: Acapella II
 Depends: firmware (>= 8.4), mobilesubstrate, com.patsluth.libsw (>= 1.0-10)
 Conflicts: com.patsluth.swgesturemusiccontrols, org.thebigboss.gesturemusiccontrols, org.thebigboss.acapella, com.patsluth.swacapella

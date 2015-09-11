@@ -159,13 +159,13 @@
 
 - (void)refreshTitleClone
 {
-    BOOL didExist = (self.titlesCloneContainer != nil);
+    if (!self.titlesCloneContainer){
+        return;
+    }
     
     [self setupTitleCloneContainer];
     
-    if (didExist){
-        self.titlesCloneContainer.clone.titles = self.titles; //refresh
-    }
+    self.titlesCloneContainer.clone.titles = self.titles; //refresh
 }
 
 #pragma mark - Gesture Recognizers
@@ -295,7 +295,15 @@
         //add original velocity
         UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
         [self.animator addBehavior:d];
-        [d addLinearVelocity:CGPointMake(self.titlesCloneContainer.velocity.x, 0.0) forItem:self.titlesCloneContainer];
+        
+        
+        CGFloat horizontalVelocity = self.titlesCloneContainer.velocity.x;
+        //clamp horizontal velocity to its own width*3 per second
+        horizontalVelocity = fminf(fabs(horizontalVelocity), CGRectGetWidth(self.titlesCloneContainer.bounds) * 4);
+        horizontalVelocity = copysignf(horizontalVelocity, self.titlesCloneContainer.velocity.x);
+        
+        [d addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesCloneContainer];
+        
         
         __block SWAcapella *bself = self;
         __block UIDynamicItemBehavior *bd = d;
@@ -373,6 +381,7 @@
 - (void)pulseAnimateView:(UIView *)view
 {
     if (!self.titlesCloneContainer){
+        [self setupTitleCloneContainer];
         [self refreshTitleClone];
     }
     

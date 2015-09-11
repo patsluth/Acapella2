@@ -43,6 +43,8 @@
 @property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readonly, strong, nonatomic) UILongPressGestureRecognizer *press;
 
+- (void)refreshTitleClone;
+
 - (void)finishWrapAround;
 - (void)pulseAnimateView:(UIView *)view;
 

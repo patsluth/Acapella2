@@ -1,0 +1,10 @@
+{
+	entry = {
+		bundle = AcapellaPrefs2;
+		cell = PSLinkCell;
+		detail = "SWAcapellaPSListController";
+		isController = 1;
+		icon = "Icon.png";
+		label = "Acapella II";
+	};
+}

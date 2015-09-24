@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>title</key>
+			<string>Control Center</string>
+			<key>key</key>
+			<string>cc</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Lock Screen</string>
+			<key>key</key>
+			<string>ls</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Music App Now Playing</string>
+			<key>key</key>
+			<string>manp</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Music App Mini Player</string>
+			<key>key</key>
+			<string>mamp</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>OnTapMusic</string>
+			<key>key</key>
+			<string>otm</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Vertex</string>
+			<key>key</key>
+			<string>vertex</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Auxo</string>
+			<key>key</key>
+			<string>auxo</string>
+		</dict>
+	</array>
+</dict>
+</plist>

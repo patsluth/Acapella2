@@ -10,49 +10,57 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>cc_</string>
+			<string>cc</string>
 			<key>label</key>
 			<string>Control Center</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>ls_</string>
+			<string>ls</string>
 			<key>label</key>
 			<string>Lock Screen</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>ma_nowplaying_</string>
+			<string>ma_nowplaying</string>
 			<key>label</key>
 			<string>Music App (Now Playing)</string>
+			<key>defaults</key>
+			<string>com.apple.Music</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>ma_mini_</string>
+			<string>ma_mini</string>
 			<key>label</key>
 			<string>Music App (Mini Player)</string>
+			<key>defaults</key>
+			<string>com.apple.Music</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -66,37 +74,66 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>otm_</string>
+			<string>otm</string>
 			<key>label</key>
 			<string>OnTapMusic</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>auxo_</string>
+			<string>auxo</string>
 			<key>label</key>
 			<string>Auxo</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SWAcapellaPSListController_Instance</string>
+			<string>SWAPSListController_Instance</string>
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>vertex_</string>
+			<string>vertex</string>
 			<key>label</key>
 			<string>Vertex</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Reset All Settings</string>
+			<key>confirmation</key>
+			<dict>
+				<key>title</key>
+				<string>Reset All Settings</string>
+				<key>prompt</key>
+				<string>Are you sure you want to reset all settings?</string>
+				<key>okTitle</key>
+				<string>Yes</string>
+				<key>cancelTitle</key>
+				<string>No</string>
+			</dict>
+			<key>action</key>
+			<string>resetAllSettings:</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -143,8 +180,6 @@
 			<string>© 2014 Pat Sluth - Sluthware</string>
 		</dict>
 		<dict>
-			<key>key</key>
-			<string>version</string>
 			<key>cell</key>
 			<string>PSTitleValueCell</string>
 			<key>get</key>

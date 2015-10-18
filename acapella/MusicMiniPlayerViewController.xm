@@ -14,7 +14,7 @@
 
 
 
-@interface MusicMiniPlayerViewController : UIViewController <UIGestureRecognizerDelegate>
+@interface MusicMiniPlayerViewController : UIViewController
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
@@ -104,6 +104,7 @@
         
         [self.acapella.tap addTarget:self action:@selector(onTap:)];
         [self.acapella.press addTarget:self action:@selector(onPress:)];
+        [self.acapella.press2 addTarget:self action:@selector(onPress:)];
         
         [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
         
@@ -144,45 +145,6 @@
     BOOL progressVisible = [[SWPrefs valueForKey:progressKey fallbackValue:@YES application:@"com.apple.Music"] boolValue];
     self.playbackProgressView.layer.opacity = progressVisible ? 1.0 : 0.0;
     
-}
-
-%new
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if (self.acapella){
-        
-        if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
-            
-            BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
-            
-            if (isControl){
-                return !((UIControl *)touch.view).enabled; //we can accept this touch if the control is enabled
-            }
-            
-            return !isControl; //not a control, recieve the touch
-            
-        }
-        
-    }
-    
-    return YES;
-}
-
-%new
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    if (self.acapella){
-        
-        if (self.acapella.pan == gestureRecognizer){
-            
-            CGPoint panVelocity = [self.acapella.pan velocityInView:self.acapella.pan.view];
-            return (fabs(panVelocity.x) > fabs(panVelocity.y)); //only accept horizontal pans
-            
-        }
-        
-    }
-    
-    return YES;
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2

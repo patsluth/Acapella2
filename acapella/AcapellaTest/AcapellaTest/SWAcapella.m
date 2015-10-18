@@ -27,18 +27,12 @@
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
 @property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
+@property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan2;
 @property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press;
+@property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press2;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
-
-
-
-
-
-
-@property (strong, nonatomic) void (^wrapAroundAction)(void);
-@property (strong, nonatomic) void (^finishWrapAroundAction)(void);
 
 @end
 
@@ -73,6 +67,10 @@
         [acapella.pan removeTarget:nil action:nil];
         acapella.pan = nil;
         
+        [acapella.referenceView removeGestureRecognizer:acapella.pan2];
+        [acapella.pan2 removeTarget:nil action:nil];
+        acapella.pan2 = nil;
+        
         [acapella.tap.view removeGestureRecognizer:acapella.tap];
         [acapella.tap removeTarget:nil action:nil];
         acapella.tap = nil;
@@ -80,6 +78,10 @@
         [acapella.press.view removeGestureRecognizer:acapella.press];
         [acapella.press removeTarget:nil action:nil];
         acapella.press = nil;
+        
+        [acapella.press2.view removeGestureRecognizer:acapella.press2];
+        [acapella.press2 removeTarget:nil action:nil];
+        acapella.press2 = nil;
         
         [acapella.referenceView layoutSubviews];
     }
@@ -125,18 +127,30 @@
     self.animator.delegate = self;
     
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
-    self.pan.delegate = self.owner;
+    self.pan.delegate = self;
+    self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
     [self.referenceView addGestureRecognizer:self.pan];
     
+    self.pan2 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
+    self.pan2.delegate = self;
+    self.pan2.minimumNumberOfTouches = self.pan2.maximumNumberOfTouches = 2;
+    [self.referenceView addGestureRecognizer:self.pan2];
+    
     self.tap = [[UITapGestureRecognizer alloc] init];
-    self.tap.delegate = self.owner;
-    self.tap.cancelsTouchesInView = YES;
+    self.tap.delegate = self;
     [self.referenceView addGestureRecognizer:self.tap];
     
     self.press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
-    self.press.delegate = self.owner;
+    self.press.delegate = self;
+    self.press.numberOfTouchesRequired = 1;
     self.press.minimumPressDuration = 0.7;
     [self.referenceView addGestureRecognizer:self.press];
+    
+    self.press2 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
+    self.press2.delegate = self;
+    self.press2.numberOfTouchesRequired = 2;
+    self.press2.minimumPressDuration = 0.7;
+    [self.referenceView addGestureRecognizer:self.press2];
 }
 
 - (void)setupTitleCloneContainer
@@ -168,12 +182,14 @@
     self.titlesCloneContainer.clone.titles = self.titles; //refresh
 }
 
-#pragma mark - Gesture Recognizers
+#pragma mark - UIGestureRecognizer
 
 - (void)onPan:(UIPanGestureRecognizer *)pan
 {
-    CGPoint panLocation = [pan locationInView:pan.view];
+    //smooth out multi touch pans by only following first finger location
+    CGPoint panLocation = (pan.numberOfTouches > 0) ? [pan locationOfTouch:0 inView:pan.view] : [pan locationInView:pan.view];
     panLocation.y = self.titles.superview.center.y;
+    
     
     if (pan.state == UIGestureRecognizerStateBegan){
         
@@ -224,7 +240,7 @@
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, self.titles.superview.center.y);
-                 [self didWrapAround:@(-1)];
+                [self didWrapAround:@(-1)];
                 
             } else if (center.x > offScreenRightX){
                 
@@ -250,10 +266,47 @@
 - (void)onPress:(UILongPressGestureRecognizer *)press
 {
 //    if (press.state == UIGestureRecognizerStateBegan){
-//        NSLog(@"BEGIN");
 //    } else if (press.state == UIGestureRecognizerStateEnded){
-//        NSLog(@"END");
-//    }8
+//    }
+    
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer]){
+        
+        BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
+        return isControl ? !((UIControl *)touch.view).enabled : !isControl;
+        
+    }
+    
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
+        [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+        
+        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
+        CGPoint panVelocity = [pan velocityInView:pan.view];
+        return (fabs(panVelocity.x) > fabs(panVelocity.y)); //only accept horizontal pans
+        
+    }
+    
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    //only allow system gesture recognizers to begin if ours have failed
+    return ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
+            ![self.referenceView.gestureRecognizers containsObject:otherGestureRecognizer]);
+    
+    return NO;
 }
 
 #pragma mark - UIDynamics
@@ -298,8 +351,8 @@
         
         
         CGFloat horizontalVelocity = self.titlesCloneContainer.velocity.x;
-        //clamp horizontal velocity to its own width*3 per second
-        horizontalVelocity = fminf(fabs(horizontalVelocity), CGRectGetWidth(self.titlesCloneContainer.bounds) * 4);
+        //clamp horizontal velocity to its own width*(variable) per second
+        horizontalVelocity = fminf(fabs(horizontalVelocity), CGRectGetWidth(self.titlesCloneContainer.bounds) * 3.5);
         horizontalVelocity = copysignf(horizontalVelocity, self.titlesCloneContainer.velocity.x);
         
         [d addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesCloneContainer];
@@ -365,7 +418,7 @@
 {
     //this method will get called if we stop dragging, but still have our finger down
     //check to see if we are dragging to make sure we dont remove all behaviours
-    if (self.pan.state == UIGestureRecognizerStateChanged){
+    if (self.pan.state == UIGestureRecognizerStateChanged || self.pan2.state == UIGestureRecognizerStateChanged){
         return;
     }
     

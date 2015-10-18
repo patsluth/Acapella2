@@ -18,7 +18,7 @@
 
 
 
-@interface SWAcapella : NSObject <UIDynamicAnimatorDelegate>
+@interface SWAcapella : NSObject <UIGestureRecognizerDelegate, UIDynamicAnimatorDelegate>
 {
 }
 
@@ -40,8 +40,10 @@
 @property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
 
 @property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan;
+@property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan2;
 @property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readonly, strong, nonatomic) UILongPressGestureRecognizer *press;
+@property (readonly, strong, nonatomic) UILongPressGestureRecognizer *press2;
 
 - (void)refreshTitleClone;
 

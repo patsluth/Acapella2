@@ -1,5 +1,5 @@
 //
-//  SWAcapellaPSListController.m
+//  SWAcapellaPSListController.mm
 //  acapellaprefs
 //
 //  Created by Pat Sluth on 2015-04-25.
@@ -29,21 +29,9 @@
 
 @implementation SWAcapellaPSListController
 
-#pragma mark - Override
-
-- (NSString *)bundlePath
+- (void)resetAllSettings:(PSSpecifier *)specifier
 {
-    return @"/Library/PreferenceBundles/AcapellaPrefs2.bundle";
-}
-
-- (NSString *)displayName
-{
-    return @"Acapella II";
-}
-
-- (NSString *)plistPath
-{
-    return @"/User/Library/Preferences/com.patsluth.AcapellaPrefs2.plist";
+    NSLog(@"REST");
 }
 
 #pragma mark Twitter

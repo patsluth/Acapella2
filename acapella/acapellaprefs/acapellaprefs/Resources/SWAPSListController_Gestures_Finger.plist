@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>Finger</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListController_Gestures_Force</string>
+			<key>isController</key>
+			<string>1</string>
+			<key>key</key>
+			<string>onefinger</string>
+			<key>label</key>
+			<string>One Finger</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListController_Gestures_Force</string>
+			<key>isController</key>
+			<string>1</string>
+			<key>key</key>
+			<string>twofinger</string>
+			<key>label</key>
+			<string>Two Finger</string>
+		</dict>
+	</array>
+</dict>
+</plist>

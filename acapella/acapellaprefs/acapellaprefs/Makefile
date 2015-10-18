@@ -12,7 +12,7 @@ TARGET = iphone:clang:latest
 
 BUNDLE_NAME = AcapellaPrefs2
 AcapellaPrefs2_CFLAGS = -fobjc-arc
-AcapellaPrefs2_FILES = SWAcapellaPSListController.mm SWAcapellaPSListController_Instance.mm SWAcapellaPSListController_Gestures.mm SWAcapellaPSListItemsController_Actions.mm SWAcapellaPSListController_Transport.mm
+AcapellaPrefs2_FILES = SWAcapellaPSListController.mm SWAPSListController_Gestures_Finger.mm SWAPSListController_Gestures_Force.mm SWAPSListController_Gestures.mm SWAPSListController_Instance.mm SWAPSListController_Transport.mm SWAPSListController.mm SWAPSListItemsController_Actions.mm
 AcapellaPrefs2_INSTALL_PATH = /Library/PreferenceBundles
 AcapellaPrefs2_FRAMEWORKS = UIKit
 AcapellaPrefs2_PRIVATE_FRAMEWORKS = Preferences
@@ -39,6 +39,7 @@ clean::
 
 
 internal-stage::
+	$(ECHO_NOTHING)pwd >> temp.txt; echo SWAcapellaPSListController >> temp.txt; cat temp.txt | tr '\n' ';' | ./exportPrefs; rm -r -f temp.txt;$(ECHO_END)
 	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
 	$(ECHO_NOTHING)cp entry.plist $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences/AcapellaPrefs2.plist$(ECHO_END)
 

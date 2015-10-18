@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>3D Touch</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>validValues</key>
+			<array>
+				<string>action_nil</string>
+				<string>action_heart</string>
+				<string>action_previoustrack</string>
+				<string>action_intervalrewind</string>
+				<string>action_playpause</string>
+				<string>action_nexttrack</string>
+				<string>action_intervalforward</string>
+				<string>action_upnext</string>
+				<string>action_share</string>
+				<string>action_toggleshuffle</string>
+				<string>action_togglerepeat</string>
+				<string>action_contextual</string>
+				<string>action_openapp</string>
+				<string>action_showratings</string>
+				<string>action_increasevolume</string>
+				<string>action_decreasevolume</string>
+				<string>action_equalizereverywhere</string>
+			</array>
+			<key>validTitles</key>
+			<array>
+				<string>None</string>
+				<string>Heart</string>
+				<string>Previous Track</string>
+				<string>Interval Rewind</string>
+				<string>Play</string>
+				<string>Next Track</string>
+				<string>Interval Forward</string>
+				<string>Up Next</string>
+				<string>Share</string>
+				<string>Shuffle</string>
+				<string>Repeat</string>
+				<string>Contextual</string>
+				<string>Open App</string>
+				<string>Rating</string>
+				<string>Increase Volume</string>
+				<string>Decrease Volume</string>
+				<string>EqualizerEverywhere</string>
+			</array>
+			<key>key</key>
+			<string>forcenone</string>
+			<key>label</key>
+			<string>None</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>validValues</key>
+			<array>
+				<string>action_nil</string>
+				<string>action_heart</string>
+				<string>action_previoustrack</string>
+				<string>action_intervalrewind</string>
+				<string>action_playpause</string>
+				<string>action_nexttrack</string>
+				<string>action_intervalforward</string>
+				<string>action_upnext</string>
+				<string>action_share</string>
+				<string>action_toggleshuffle</string>
+				<string>action_togglerepeat</string>
+				<string>action_contextual</string>
+				<string>action_openapp</string>
+				<string>action_showratings</string>
+				<string>action_increasevolume</string>
+				<string>action_decreasevolume</string>
+				<string>action_equalizereverywhere</string>
+			</array>
+			<key>validTitles</key>
+			<array>
+				<string>None</string>
+				<string>Heart</string>
+				<string>Previous Track</string>
+				<string>Interval Rewind</string>
+				<string>Play</string>
+				<string>Next Track</string>
+				<string>Interval Forward</string>
+				<string>Up Next</string>
+				<string>Share</string>
+				<string>Shuffle</string>
+				<string>Repeat</string>
+				<string>Contextual</string>
+				<string>Open App</string>
+				<string>Rating</string>
+				<string>Increase Volume</string>
+				<string>Decrease Volume</string>
+				<string>EqualizerEverywhere</string>
+			</array>
+			<key>key</key>
+			<string>forcepeek</string>
+			<key>enabled</key>
+			<false/>
+			<key>label</key>
+			<string>Peek</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>validValues</key>
+			<array>
+				<string>action_nil</string>
+				<string>action_heart</string>
+				<string>action_previoustrack</string>
+				<string>action_intervalrewind</string>
+				<string>action_playpause</string>
+				<string>action_nexttrack</string>
+				<string>action_intervalforward</string>
+				<string>action_upnext</string>
+				<string>action_share</string>
+				<string>action_toggleshuffle</string>
+				<string>action_togglerepeat</string>
+				<string>action_contextual</string>
+				<string>action_openapp</string>
+				<string>action_showratings</string>
+				<string>action_increasevolume</string>
+				<string>action_decreasevolume</string>
+				<string>action_equalizereverywhere</string>
+			</array>
+			<key>validTitles</key>
+			<array>
+				<string>None</string>
+				<string>Heart</string>
+				<string>Previous Track</string>
+				<string>Interval Rewind</string>
+				<string>Play</string>
+				<string>Next Track</string>
+				<string>Interval Forward</string>
+				<string>Up Next</string>
+				<string>Share</string>
+				<string>Shuffle</string>
+				<string>Repeat</string>
+				<string>Contextual</string>
+				<string>Open App</string>
+				<string>Rating</string>
+				<string>Increase Volume</string>
+				<string>Decrease Volume</string>
+				<string>EqualizerEverywhere</string>
+			</array>
+			<key>key</key>
+			<string>forcepop</string>
+			<key>enabled</key>
+			<false/>
+			<key>label</key>
+			<string>Pop</string>
+		</dict>
+	</array>
+</dict>
+</plist>

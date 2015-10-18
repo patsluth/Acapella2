@@ -57,6 +57,10 @@
 		2E75964519FDCCA600001BC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2E75966419FDCD5D00001BC7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75966519FDCD5D00001BC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2EC7AF981BB20DA0008A2612 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Main.strings; sourceTree = "<group>"; };
+		2EC7AF9A1BB20DCD008A2612 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2EC7AF9C1BB20DD3008A2612 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2EC7AF9D1BB20DD6008A2612 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2ECCE0221B67112900F8B253 /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +124,7 @@
 				2E75964219FDCCA600001BC7 /* Main.storyboard */,
 				2E75964519FDCCA600001BC7 /* Images.xcassets */,
 				2E75963819FDCCA600001BC7 /* Supporting Files */,
+				2EC7AF9B1BB20DCD008A2612 /* Localizable.strings */,
 			);
 			path = AcapellaTest;
 			sourceTree = "<group>";
@@ -173,7 +178,7 @@
 		2E75956119FD49F500001BC7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Pat Sluth";
 				TargetAttributes = {
 					2E75963519FDCCA600001BC7 = {
@@ -189,6 +194,7 @@
 			knownRegions = (
 				en,
 				Base,
+				tr,
 			);
 			mainGroup = 2E75956019FD49F500001BC7;
 			productRefGroup = 2E75956B19FD49F500001BC7 /* Products */;
@@ -234,8 +240,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				2E75964319FDCCA600001BC7 /* Base */,
+				2EC7AF981BB20DA0008A2612 /* tr */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2EC7AF9B1BB20DCD008A2612 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2EC7AF9A1BB20DCD008A2612 /* Base */,
+				2EC7AF9C1BB20DD3008A2612 /* en */,
+				2EC7AF9D1BB20DD6008A2612 /* tr */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -262,6 +279,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -377,6 +395,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.patsluth.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -409,6 +428,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.patsluth.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SEPARATE_STRIP = NO;
 				STRIP_INSTALLED_PRODUCT = YES;

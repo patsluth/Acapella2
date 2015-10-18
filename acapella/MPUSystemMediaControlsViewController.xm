@@ -115,6 +115,7 @@
         
         [self.acapella.tap addTarget:self action:@selector(onTap:)];
         [self.acapella.press addTarget:self action:@selector(onPress:)];
+        [self.acapella.press2 addTarget:self action:@selector(onPress:)];
         
         for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
             if ([v isKindOfClass:[UIButton class]]){
@@ -166,45 +167,6 @@
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     
     %orig(animated);
-}
-
-%new
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if (self.acapella){
-        
-        if (self.acapella.pan == gestureRecognizer || self.acapella.tap == gestureRecognizer){
-            
-            BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
-            
-            if (isControl){
-                return !((UIControl *)touch.view).enabled; //we can accept this touch if the control is enabled
-            }
-            
-            return !isControl; //not a control, recieve the touch
-            
-        }
-        
-    }
-    
-    return YES;
-}
-
-%new
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    if (self.acapella){
-        
-        if (self.acapella.pan == gestureRecognizer){
-            
-            CGPoint panVelocity = [self.acapella.pan velocityInView:self.acapella.pan.view];
-            return (fabs(panVelocity.x) > fabs(panVelocity.y)); //only accept horizontal pans
-            
-        }
-        
-    }
-    
-    return YES;
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -560,18 +522,23 @@
 %ctor
 {
     
+    CFPreferencesSetAppValue((__bridge CFStringRef)@"ls_gestures_tapleft_onefinger_forcenone",
+                             (__bridge CFPropertyListRef)@"action_playpause",
+                             (__bridge CFStringRef)@"com.patsluth.AcapellaPrefs2");
+    CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.patsluth.AcapellaPrefs2");
+    
     //TODO: REMOVE in the next 2 versions
-    NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"];
-                           
-    if (prefs){
-        for (id key in prefs){
-            
-            CFPreferencesSetAppValue((__bridge CFStringRef)key,
-                                     (__bridge CFPropertyListRef)[prefs valueForKey:key],
-                                     (__bridge CFStringRef)@"com.apple.Music");
-        }
-        CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.apple.Music");
-    }
+//    NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.patsluth.AcapellaPrefs2.plist"];
+//                           
+//    if (prefs){
+//        for (id key in prefs){
+//            
+//            CFPreferencesSetAppValue((__bridge CFStringRef)key,
+//                                     (__bridge CFPropertyListRef)[prefs valueForKey:key],
+//                                     (__bridge CFStringRef)@"com.apple.Music");
+//        }
+//        CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.apple.Music");
+//    }
 }
 
 

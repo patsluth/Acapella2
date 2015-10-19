@@ -9,84 +9,56 @@
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>Heart.png</string>
 			<key>key</key>
-			<string>heart_enabled</string>
-			<key>default</key>
-			<true/>
+			<string>heart</string>
 			<key>label</key>
 			<string>Heart</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>PreviousTrack</string>
 			<key>key</key>
-			<string>previoustrack_enabled</string>
-			<key>default</key>
-			<false/>
+			<string>previoustrack</string>
 			<key>label</key>
 			<string>Previous Track</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>IntervalRewind.png</string>
 			<key>key</key>
-			<string>intervalrewind_enabled</string>
-			<key>default</key>
-			<false/>
+			<string>intervalrewind</string>
 			<key>label</key>
 			<string>Interval Rewind</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>Play.png</string>
 			<key>key</key>
-			<string>play/pause_enabled</string>
-			<key>default</key>
-			<false/>
+			<string>playpause</string>
 			<key>label</key>
 			<string>Play/Pause</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>NextTrack.png</string>
 			<key>key</key>
-			<string>nextTrack_enabled</string>
-			<key>default</key>
-			<false/>
+			<string>nexttrack</string>
 			<key>label</key>
 			<string>Next Track</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>IntervalForward.png</string>
 			<key>key</key>
-			<string>intervalforward_enabled</string>
-			<key>default</key>
-			<false/>
+			<string>intervalforward</string>
 			<key>label</key>
 			<string>Interval Forward</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>UpNext.png</string>
 			<key>key</key>
-			<string>presentupnext_enabled</string>
-			<key>default</key>
-			<true/>
+			<string>upnext</string>
 			<key>label</key>
 			<string>Present Up Next</string>
 		</dict>
@@ -99,48 +71,32 @@
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>Share.png</string>
 			<key>key</key>
-			<string>share_enabled</string>
-			<key>default</key>
-			<true/>
+			<string>share</string>
 			<key>label</key>
 			<string>Share</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>Shuffle.png</string>
 			<key>key</key>
-			<string>shuffle_enabled</string>
-			<key>default</key>
-			<true/>
+			<string>shuffle</string>
 			<key>label</key>
 			<string>Shuffle</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>Repeat.png</string>
 			<key>key</key>
-			<string>repeat_enabled</string>
-			<key>default</key>
-			<true/>
+			<string>repeat</string>
 			<key>label</key>
 			<string>Repeat</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
-			<key>icon</key>
-			<string>Contextual.png</string>
 			<key>key</key>
-			<string>contextual_enabled</string>
-			<key>default</key>
-			<true/>
+			<string>contextual</string>
 			<key>label</key>
 			<string>Contextual</string>
 		</dict>

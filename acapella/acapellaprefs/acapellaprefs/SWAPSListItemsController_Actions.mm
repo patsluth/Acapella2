@@ -1,5 +1,5 @@
 //
-//  SWAcapellaPSListItemsController_Actions.mm
+//  SWAPSListItemsController_Actions.mm
 //  acapellaprefs
 //
 //  Created by Pat Sluth on 2015-04-25.
@@ -12,7 +12,7 @@
 
 
 
-@interface SWAcapellaPSListItemsController_Actions : PSListItemsController
+@interface SWAPSListItemsController_Actions : PSListItemsController
 {
 }
 
@@ -22,7 +22,7 @@
 
 
 
-@implementation SWAcapellaPSListItemsController_Actions
+@implementation SWAPSListItemsController_Actions
 
 - (id)tableView:(UITableView *)arg1 cellForRowAtIndexPath:(NSIndexPath *)arg2
 {

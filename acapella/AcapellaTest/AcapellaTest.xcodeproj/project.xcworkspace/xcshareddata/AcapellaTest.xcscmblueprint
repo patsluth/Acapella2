@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "7B245196B7185F0959EC1C82498FF5AF096E11DA" : 0,
+    "9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE" : 0,
+    "E2811579280C8FC45DBD8A3EB086096BA7A2E580" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "30396396-9BB1-4DE0-B4E3-91B7CFB85D0E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "7B245196B7185F0959EC1C82498FF5AF096E11DA" : "sluthware-ios-libraries\/",
+    "9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE" : "acapella2\/",
+    "E2811579280C8FC45DBD8A3EB086096BA7A2E580" : "..\/..\/..\/..\/opt\/theos"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AcapellaTest",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "acapella\/AcapellaTest\/AcapellaTest.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/patsluth\/sluthware-ios-libraries.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "7B245196B7185F0959EC1C82498FF5AF096E11DA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/patsluth\/acapella2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/DHowett\/theos.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E2811579280C8FC45DBD8A3EB086096BA7A2E580"
+    }
+  ]
+}

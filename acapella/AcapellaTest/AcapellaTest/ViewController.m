@@ -57,10 +57,6 @@
                                                       }]
                       ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN];
         
-        
-        
-        [self.view addGestureRecognizer:self.acapella.tap];
-        
     }
 }
 
@@ -94,18 +90,22 @@
 
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
+//    CGPoint location = [tap locationInView:tap.view];
+//    
+//    [self.animator removeAllBehaviors];
+//    
+//    UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
+//    
+//    [self.animator addBehavior:b];
+//    
+//    UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
+//    [self.animator addBehavior:s];
     
-    CGPoint location = [tap locationInView:tap.view];
-    
-    [self.animator removeAllBehaviors];
-    
-    UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
-    
-    [self.animator addBehavior:b];
-    
-    UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
-    [self.animator addBehavior:s];
-    
+}
+
+- (void)onPress:(UILongPressGestureRecognizer *)press
+{
+    NSLog(@"%@", @(press.numberOfTouchesRequired));
 }
 
 - (IBAction)buttonClick:(id)sender

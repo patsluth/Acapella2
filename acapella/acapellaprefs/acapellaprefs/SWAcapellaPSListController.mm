@@ -31,7 +31,22 @@
 
 - (void)resetAllSettings:(PSSpecifier *)specifier
 {
-    NSLog(@"REST");
+    NSDictionary *prefDefaults = [NSDictionary dictionaryWithContentsOfFile:[self.bundle pathForResource:@"acapellaPrefsDefaults" ofType:@".plist"]];
+    
+    for (NSString *key in prefDefaults){
+        
+        NSString *application = [key containsString:@"music"] ? @"com.apple.Music" : @"com.patsluth.AcapellaPrefs2";
+        
+        CFPreferencesSetAppValue((__bridge CFStringRef)key,
+                                 (__bridge CFPropertyListRef)[prefDefaults valueForKey:key],
+                                 (__bridge CFStringRef)application);
+        
+    }
+    
+    //syncronize so we can read right away
+    CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.patsluth.AcapellaPrefs2");
+    CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.apple.Music");
+    
 }
 
 #pragma mark Twitter

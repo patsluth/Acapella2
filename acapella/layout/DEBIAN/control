@@ -1,6 +1,6 @@
-Package: org.thebigboss.swacapella2
+Package: org.thebigboss.acapella2
 Name: Acapella II
-Depends: firmware (>= 8.4), mobilesubstrate, com.patsluth.libsw (>= 1.0-10)
+Depends: firmware (>= 8.4), mobilesubstrate, com.patsluth.libsw (>= 1.0-13)
 Conflicts: com.patsluth.swgesturemusiccontrols, org.thebigboss.gesturemusiccontrols, org.thebigboss.acapella, com.patsluth.swacapella
 Architecture: iphoneos-arm
 Description: Elegant, gesture based enhancements to the default iOS Music controls.

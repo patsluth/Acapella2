@@ -4,7 +4,7 @@
 
 
 THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.0-15
+PACKAGE_VERSION = 1.1
 
 
 
@@ -31,11 +31,11 @@ TARGET = iphone:clang:latest
 
 
 
-TWEAK_NAME = Acapella
-Acapella_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
-Acapella_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
-Acapella_LIBRARIES = substrate sw packageinfo
-Acapella_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTest/SWAcapellaTitlesCloneContainer.m AcapellaTest/AcapellaTest/SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm
+TWEAK_NAME = Acapella2
+Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
+Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
+Acapella2_LIBRARIES = substrate sw packageinfo
+Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTest/SWAcapellaTitlesCloneContainer.m AcapellaTest/AcapellaTest/SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm Prefs.xm
 
 ADDITIONAL_CFLAGS = -Ipublic
 ADDITIONAL_CFLAGS += -IAcapellaTest/AcapellaTest/

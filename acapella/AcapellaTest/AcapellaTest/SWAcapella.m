@@ -12,6 +12,7 @@
 
 #import "libsw/libSluthware/NSTimer+SW.h"
 #import "libsw/libSluthware/UISnapBehaviorHorizontal.h"
+#import "libsw/libSluthware/SWPrefs.h"
 
 #import <CoreGraphics/CoreGraphics.h>
 
@@ -26,9 +27,10 @@
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
+@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
+@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap2;
 @property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
 @property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan2;
-@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press;
 @property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press2;
 
@@ -63,17 +65,21 @@
         acapella.titlesCloneContainer = nil;
         acapella.titles.layer.opacity = 1.0;
         
-        [acapella.referenceView removeGestureRecognizer:acapella.pan];
-        [acapella.pan removeTarget:nil action:nil];
-        acapella.pan = nil;
-        
-        [acapella.referenceView removeGestureRecognizer:acapella.pan2];
-        [acapella.pan2 removeTarget:nil action:nil];
-        acapella.pan2 = nil;
-        
         [acapella.tap.view removeGestureRecognizer:acapella.tap];
         [acapella.tap removeTarget:nil action:nil];
         acapella.tap = nil;
+        
+        [acapella.tap2.view removeGestureRecognizer:acapella.tap2];
+        [acapella.tap2 removeTarget:nil action:nil];
+        acapella.tap2 = nil;
+        
+        [acapella.pan.view removeGestureRecognizer:acapella.pan];
+        [acapella.pan removeTarget:nil action:nil];
+        acapella.pan = nil;
+        
+        [acapella.pan2.view removeGestureRecognizer:acapella.pan2];
+        [acapella.pan2 removeTarget:nil action:nil];
+        acapella.pan2 = nil;
         
         [acapella.press.view removeGestureRecognizer:acapella.press];
         [acapella.press removeTarget:nil action:nil];
@@ -126,6 +132,15 @@
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
     self.animator.delegate = self;
     
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    self.tap.delegate = self;
+    [self.referenceView addGestureRecognizer:self.tap];
+    
+    self.tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    self.tap2.numberOfTouchesRequired = 2;
+    self.tap2.delegate = self;
+    [self.referenceView addGestureRecognizer:self.tap2];
+    
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan.delegate = self;
     self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
@@ -135,10 +150,6 @@
     self.pan2.delegate = self;
     self.pan2.minimumNumberOfTouches = self.pan2.maximumNumberOfTouches = 2;
     [self.referenceView addGestureRecognizer:self.pan2];
-    
-    self.tap = [[UITapGestureRecognizer alloc] init];
-    self.tap.delegate = self;
-    [self.referenceView addGestureRecognizer:self.tap];
     
     self.press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
     self.press.delegate = self;
@@ -184,12 +195,33 @@
 
 #pragma mark - UIGestureRecognizer
 
+- (void)onTap:(UITapGestureRecognizer *)tap
+{
+    CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
+    //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
+    SEL sel = nil;
+    
+    NSString *directionString = (xPercentage <= 0.25) ? @"tapleft" : (xPercentage > 0.75) ? @"tapright" : @"tapcentre";
+    NSString *fingerString = (tap.numberOfTouchesRequired == 1) ? @"onefinger" : (tap.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
+    
+    if (directionString && fingerString){
+        
+        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@", self.prefKeyPrefix, @"gestures", directionString, fingerString, @"forcenone"];
+        NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
+        sel = NSSelectorFromString(selString);
+        
+    }
+    
+    if (sel && [self.owner respondsToSelector:sel]){
+        [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+    }
+}
+
 - (void)onPan:(UIPanGestureRecognizer *)pan
 {
     //smooth out multi touch pans by only following first finger location
     CGPoint panLocation = (pan.numberOfTouches > 0) ? [pan locationOfTouch:0 inView:pan.view] : [pan locationInView:pan.view];
     panLocation.y = self.titles.superview.center.y;
-    
     
     if (pan.state == UIGestureRecognizerStateBegan){
         
@@ -240,13 +272,13 @@
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, self.titles.superview.center.y);
-                [self didWrapAround:@(-1)];
+                [self didWrapAround:-1 fingers:(pan == self.pan2) ? 2 : 1];
                 
             } else if (center.x > offScreenRightX){
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, self.titles.superview.center.y);
-                [self didWrapAround:@(1)];
+                [self didWrapAround:1 fingers:(pan == self.pan2) ? 2 : 1];
                 
             } else {
                 
@@ -265,10 +297,38 @@
 
 - (void)onPress:(UILongPressGestureRecognizer *)press
 {
-//    if (press.state == UIGestureRecognizerStateBegan){
-//    } else if (press.state == UIGestureRecognizerStateEnded){
+    CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
+    //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+    SEL sel = nil;
+    
+    if (press.state == UIGestureRecognizerStateBegan){
+        
+        NSString *directionString = (xPercentage <= 0.25) ? @"pressleft" : (xPercentage > 0.75) ? @"pressright" : @"presscentre";
+        NSString *fingerString = (press.numberOfTouchesRequired == 1) ? @"onefinger" : (press.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
+        
+        if (directionString && fingerString){
+            
+            NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@", self.prefKeyPrefix, @"gestures", directionString, fingerString, @"forcenone"];
+            NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
+            sel = NSSelectorFromString(selString);
+            
+        }
+        
+    }
+    
+//code to seek
+//    if (press.state == UIGestureRecognizerStateEnded){
+//        //SEEK BEGIN
+//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:1];
+//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:4];
+//        //SEEK END
+//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:1];
+//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:4];
 //    }
     
+    if (sel && [self.owner respondsToSelector:sel]){
+        [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -314,14 +374,31 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 // direction < 0 - decrease
 // direction = 0 - no change
 // direction > 0 - increase
-- (void)didWrapAround:(NSNumber *)direction
+// fingers = 1 or 2
+- (void)didWrapAround:(NSInteger)direction fingers:(NSInteger)fingers
 {
     self.titlesCloneContainer.tag = 6969;
     
-    SEL wrapAroundSelector = @selector(onAcapellaWrapAround:);
-    if ([self.owner respondsToSelector:wrapAroundSelector]){
-        [self.owner performSelectorOnMainThread:wrapAroundSelector withObject:direction waitUntilDone:NO];
+    
+    
+    SEL sel = nil;
+    
+    NSString *directionString = (direction < 0) ? @"swipeleft" : (direction > 0) ? @"swiperight" : nil;
+    NSString *fingerString = (fingers == 1) ? @"onefinger" : (fingers == 2) ? @"twofinger" : nil;
+    
+    if (directionString && fingerString){
+        
+        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@", self.prefKeyPrefix, @"gestures", directionString, fingerString, @"forcenone"];
+        NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
+        sel = NSSelectorFromString(selString);
+        
     }
+    
+    if (sel && [self.owner respondsToSelector:sel]){
+        [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+    }
+    
+    
     
     self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:1
                                                                 block:^{
@@ -474,49 +551,6 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
                          
                      }];
 
-}
-
-+ (NSString *)prefKeyByDrillingUpFromView:(UIView *)view
-{
-    //    id a = NSStringFromClass([self.view.superview class]);
-    //    id b = NSStringFromClass([self.view.superview.superview class]);
-    //    id c = NSStringFromClass([self.view.window.rootViewController class]);
-    //    NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
-    
-    UIView *curView = view.superview;
-    
-    while (curView){
-        
-        //Control Centre
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SBControlCenterRootView"]){
-            return @"cc_";
-        }
-        
-        //Lock Screen
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SBLockScreenView"]){
-            return @"ls_";
-        }
-        
-        //OnTapMusic - class will be null if tweak is not installed
-        if (objc_getClass("OTMView") && [NSStringFromClass([curView class]) isEqualToString:@"OTMView"]){
-            return @"otm_";
-        }
-        
-        //Auxo LE - class will be null if tweak is not installed
-        if (objc_getClass("AuxoCollectionView") && [NSStringFromClass([curView class]) isEqualToString:@"AuxoCollectionView"]){
-            return @"auxo_";
-        }
-        
-        //Vertex - Vertex has no classes ?
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SBAppSwitcherContainer"]){
-            return @"vertex_";
-        }
-        
-        curView = curView.superview;
-        
-    }
-    
-    return @"undefined_";
 }
 
 #pragma mark - Internal

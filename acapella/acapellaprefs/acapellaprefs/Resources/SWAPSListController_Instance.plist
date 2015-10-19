@@ -42,7 +42,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>progressSlider_enabled</string>
+			<string>progressslider</string>
 			<key>default</key>
 			<true/>
 			<key>label</key>
@@ -64,7 +64,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>volumeSlider_enabled</string>
+			<string>volumeslider</string>
 			<key>default</key>
 			<true/>
 			<key>label</key>

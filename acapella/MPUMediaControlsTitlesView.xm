@@ -1,7 +1,9 @@
 
 #import "SWAcapella.h"
 
-#import "libsw/SWPrefs.h"
+#import "MPUSystemMediaControlsViewController.h"
+
+#import "libsw/libSluthware/SWPrefs.h"
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -34,12 +36,12 @@
         
         if (!shouldOverride){ //sometimes acapella will be nil, so we will drill up
             
-            NSString *prefKeyPrefix = [SWAcapella prefKeyByDrillingUpFromView:self];
+            NSString *prefKeyPrefix = [%c(MPUSystemMediaControlsViewController) prefKeyPrefixByDrillingUp:self];
             
             if (prefKeyPrefix){
                 
-                NSString *enabledKey = [NSString stringWithFormat:@"%@%@", prefKeyPrefix, @"enabled"];
-                id enabled = [SWPrefs valueForKey:enabledKey fallbackValue:@YES application:@"com.patsluth.AcapellaPrefs2"];
+                NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"enabled"];
+                id enabled = [SWPrefs valueForKey:enabledKey application:PREF_APPLICATION];
                 shouldOverride = [enabled boolValue];
                 
             }

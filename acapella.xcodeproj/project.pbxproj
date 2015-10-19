@@ -10,7 +10,6 @@
 		2E3BD89F1BD42D6700B11FFD /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Acapella2.plist; path = acapella/Acapella2.plist; sourceTree = "<group>"; };
 		2E3BD8A01BD42D6700B11FFD /* acapellaprefs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = acapellaprefs; path = acapella/acapellaprefs; sourceTree = "<group>"; };
 		2E3BD8A21BD42D6700B11FFD /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = acapella/Assets; sourceTree = "<group>"; };
-		2E3BD8A31BD42D6700B11FFD /* debs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = debs; path = acapella/debs; sourceTree = "<group>"; };
 		2E3BD8A41BD42D6700B11FFD /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = final_release_debs; path = acapella/final_release_debs; sourceTree = "<group>"; };
 		2E3BD8A51BD42D6700B11FFD /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; name = layout; path = acapella/layout; sourceTree = "<group>"; };
 		2E3BD8A61BD42D6700B11FFD /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = acapella/Makefile; sourceTree = "<group>"; };
@@ -35,7 +34,6 @@
 				2E3BD89F1BD42D6700B11FFD /* Acapella2.plist */,
 				2E3BD8A01BD42D6700B11FFD /* acapellaprefs */,
 				2E3BD8A21BD42D6700B11FFD /* Assets */,
-				2E3BD8A31BD42D6700B11FFD /* debs */,
 				2E3BD8A41BD42D6700B11FFD /* final_release_debs */,
 				2E3BD8A51BD42D6700B11FFD /* layout */,
 				2E3BD8A61BD42D6700B11FFD /* Makefile */,

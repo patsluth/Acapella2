@@ -1,8 +1,4 @@
-{
-	Filter = {
-		Bundles = (
-			"com.apple.springboard",
-			"com.apple.Music",
-		);
-	};
-}
+Filter = {
+    Bundles = ("com.apple.springboard", "com.apple.Music");
+    Mode = "Any";
+};

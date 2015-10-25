@@ -93,7 +93,7 @@
         self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
         self.acapella.prefApplication = PREF_APPLICATION;
         
-        [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
+        [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:(id)self.acapella.pan];
         
     }
     

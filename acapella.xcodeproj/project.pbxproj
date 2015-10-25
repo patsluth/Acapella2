@@ -35,6 +35,9 @@
 				2E3BD8A41BD42D6700B11FFD /* final_release_debs */,
 				2E3BD8A51BD42D6700B11FFD /* layout */,
 				2E3BD8A61BD42D6700B11FFD /* Makefile */,
+				2E3BD8AE1BD42D6700B11FFD /* public */,
+				2E3BD8AF1BD42D6700B11FFD /* Resources */,
+				2E3BD8B11BD42D6700B11FFD /* theos */,
 				2E3BD8A71BD42D6700B11FFD /* MPUMediaControlsTitlesView.xm */,
 				2E3BD8A81BD42D6700B11FFD /* MPUSystemMediaControlsViewController.xm */,
 				2E3BD8A91BD42D6700B11FFD /* MPUTransportControlsView.xm */,
@@ -42,11 +45,8 @@
 				2E3BD8AB1BD42D6700B11FFD /* MusicMiniPlayerViewController.xm */,
 				2E3BD8AC1BD42D6700B11FFD /* MusicNowPlayingTitlesView.xm */,
 				2E3BD8AD1BD42D6700B11FFD /* MusicNowPlayingViewController.xm */,
-				2E3BD8AE1BD42D6700B11FFD /* public */,
-				2E3BD8AF1BD42D6700B11FFD /* Resources */,
-				2E3BD8B01BD42D6700B11FFD /* SBLockScreenView.xm */,
-				2E3BD8B11BD42D6700B11FFD /* theos */,
 				2E3BD8B21BD42D6700B11FFD /* Prefs.xm */,
+				2E3BD8B01BD42D6700B11FFD /* SBLockScreenView.xm */,
 			);
 			sourceTree = "<group>";
 		};

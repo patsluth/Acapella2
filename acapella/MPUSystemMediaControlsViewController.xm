@@ -45,7 +45,7 @@
     //    id a = NSStringFromClass([self.view.superview class]);
     //    id b = NSStringFromClass([self.view.superview.superview class]);
     //    id c = NSStringFromClass([self.view.window.rootViewController class]);
-    //    NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
+    //    HBLogInfo(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
     
     UIView *curView = view.superview;
     
@@ -112,7 +112,7 @@
     
     NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     
-    //NSLog(@"Acapella Preference Key Prefix %@", prefKeyPrefix);
+    //HBLogInfo(@"Acapella Preference Key Prefix %@", prefKeyPrefix);
     
     if (!self.acapella){
         

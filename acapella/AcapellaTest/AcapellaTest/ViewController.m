@@ -54,58 +54,12 @@
                                                       preInitializeAction:^(SWAcapella *a){
                                                           a.owner = self;
                                                           a.titles = self.dragView;
+                                                          a.prefKeyPrefix = @"pat";
+                                                          a.prefApplication = @"com.apple.Music";
                                                       }]
                       ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN];
         
     }
-}
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-   // if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
-        
-//        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-//        
-//        if (pan == self.acapella.pan){
-//            CGPoint panVelocity = [pan velocityInView:pan.view];
-//            
-////            if (fabs(panVelocity.y) > fabs(panVelocity.x)){
-////                return NO;
-////            }
-//        }
-//    }
-    
-    
-    return YES;
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if (self.acapella.tap == gestureRecognizer){
-        return ![touch.view isKindOfClass:[UISlider class]];
-    }
-    
-    return YES;
-}
-
-- (void)onTap:(UITapGestureRecognizer *)tap
-{
-//    CGPoint location = [tap locationInView:tap.view];
-//    
-//    [self.animator removeAllBehaviors];
-//    
-//    UIDynamicItemBehavior *b = [[UIDynamicItemBehavior alloc] initWithItems:@[self.button]];
-//    
-//    [self.animator addBehavior:b];
-//    
-//    UISnapBehavior *s = [[UISnapBehavior alloc] initWithItem:self.button snapToPoint:location];
-//    [self.animator addBehavior:s];
-    
-}
-
-- (void)onPress:(UILongPressGestureRecognizer *)press
-{
-    NSLog(@"%@", @(press.numberOfTouchesRequired));
 }
 
 - (IBAction)buttonClick:(id)sender

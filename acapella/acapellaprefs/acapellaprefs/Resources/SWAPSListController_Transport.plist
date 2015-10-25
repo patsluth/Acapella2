@@ -11,6 +11,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>heart</string>
+			<key>icon</key>
+			<string>Heart.png</string>
 			<key>label</key>
 			<string>Heart</string>
 		</dict>
@@ -19,6 +21,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>previoustrack</string>
+			<key>icon</key>
+			<string>Heart.png</string>
 			<key>label</key>
 			<string>Previous Track</string>
 		</dict>
@@ -27,6 +31,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>intervalrewind</string>
+			<key>icon</key>
+			<string>PreviousTrack.png</string>
 			<key>label</key>
 			<string>Interval Rewind</string>
 		</dict>
@@ -35,6 +41,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>playpause</string>
+			<key>icon</key>
+			<string>Play.png</string>
 			<key>label</key>
 			<string>Play/Pause</string>
 		</dict>
@@ -43,6 +51,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>nexttrack</string>
+			<key>icon</key>
+			<string>NextTrack.png</string>
 			<key>label</key>
 			<string>Next Track</string>
 		</dict>
@@ -51,6 +61,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>intervalforward</string>
+			<key>icon</key>
+			<string>IntervalForward.png</string>
 			<key>label</key>
 			<string>Interval Forward</string>
 		</dict>
@@ -59,6 +71,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>upnext</string>
+			<key>icon</key>
+			<string>UpNext.png</string>
 			<key>label</key>
 			<string>Present Up Next</string>
 		</dict>
@@ -73,6 +87,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>share</string>
+			<key>icon</key>
+			<string>Share.png</string>
 			<key>label</key>
 			<string>Share</string>
 		</dict>
@@ -81,6 +97,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>shuffle</string>
+			<key>icon</key>
+			<string>Shuffle.png</string>
 			<key>label</key>
 			<string>Shuffle</string>
 		</dict>
@@ -89,6 +107,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>repeat</string>
+			<key>icon</key>
+			<string>Repeat.png</string>
 			<key>label</key>
 			<string>Repeat</string>
 		</dict>
@@ -97,6 +117,8 @@
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>contextual</string>
+			<key>icon</key>
+			<string>Contextual.png</string>
 			<key>label</key>
 			<string>Contextual</string>
 		</dict>

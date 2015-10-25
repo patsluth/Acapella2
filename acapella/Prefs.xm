@@ -5,7 +5,7 @@
 
 #define ACAPELLA_PREFS_DEFAULTS_PATH @"/Library/PreferenceBundles/AcapellaPrefs2.bundle"
 
-%ctor
+%ctor //syncronize acapella default prefs
 {
     
     NSBundle *bundle = [NSBundle bundleWithPath:ACAPELLA_PREFS_DEFAULTS_PATH];

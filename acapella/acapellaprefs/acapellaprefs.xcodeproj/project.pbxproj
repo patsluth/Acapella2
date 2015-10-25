@@ -68,7 +68,9 @@
 		2EE53EFD1A36BCBB00BEED8F = {
 			isa = PBXGroup;
 			children = (
+				2E8F6C981BD3748500A2D626 /* exportPrefs */,
 				2E2F3E341BD01D5C001025A5 /* Makefile */,
+				2E8F6C971BD3748500A2D626 /* Products */,
 				2E2F3E2D1BD01D23001025A5 /* public */,
 				2E2F3E2E1BD01D2A001025A5 /* Resources */,
 				2E2F3E321BD01D49001025A5 /* SWAcapellaPSListController.mm */,
@@ -79,8 +81,6 @@
 				2E2F3E311BD01D49001025A5 /* SWAPSListController_Transport.mm */,
 				2E8F6C7B1BD354FC00A2D626 /* SWAPSListController.mm */,
 				2E2F3E331BD01D49001025A5 /* SWAPSListItemsController_Actions.mm */,
-				2E8F6C981BD3748500A2D626 /* exportPrefs */,
-				2E8F6C971BD3748500A2D626 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -197,6 +197,7 @@
 				2E8F6C9C1BD3748500A2D626 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2EE53F011A36BCBB00BEED8F /* Build configuration list for PBXProject "acapellaprefs" */ = {
 			isa = XCConfigurationList;

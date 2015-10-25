@@ -14,6 +14,10 @@
 @class SWAcapellaTitlesCloneContainer;
 @class SWAcapellaTitlesClone;
 
+@class UITapWithForceGestureRecognizer;
+@class UIPanWithForceGestureRecognizer;
+@class UILongPressWithForceGestureRecognizer;
+
 
 
 
@@ -38,12 +42,12 @@
 
 @property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
 
-@property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
-@property (readonly, strong, nonatomic) UITapGestureRecognizer *tap2;
-@property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan;
-@property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan2;
-@property (readonly, strong, nonatomic) UILongPressGestureRecognizer *press;
-@property (readonly, strong, nonatomic) UILongPressGestureRecognizer *press2;
+@property (readonly, strong, nonatomic) UITapWithForceGestureRecognizer *tap;
+@property (readonly, strong, nonatomic) UITapWithForceGestureRecognizer *tap2;
+@property (readonly, strong, nonatomic) UIPanWithForceGestureRecognizer *pan;
+@property (readonly, strong, nonatomic) UIPanWithForceGestureRecognizer *pan2;
+@property (readonly, strong, nonatomic) UILongPressWithForceGestureRecognizer *press;
+@property (readonly, strong, nonatomic) UILongPressWithForceGestureRecognizer *press2;
 
 - (void)refreshTitleClone;
 

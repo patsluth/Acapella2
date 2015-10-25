@@ -10,6 +10,9 @@
 #import "SWAcapellaTitlesCloneContainer.h"
 #import "SWAcapellaTitlesClone.h"
 
+#import "libsw/libSluthware/UITapWithForceGestureRecognizer.h"
+#import "libsw/libSluthware/UIPanWithForceGestureRecognizer.h"
+#import "libsw/libSluthware/UILongPressWithForceGestureRecognizer.h"
 #import "libsw/libSluthware/NSTimer+SW.h"
 #import "libsw/libSluthware/UISnapBehaviorHorizontal.h"
 #import "libsw/libSluthware/SWPrefs.h"
@@ -27,12 +30,12 @@
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
-@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
-@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap2;
-@property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
-@property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan2;
-@property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press;
-@property (readwrite, strong, nonatomic) UILongPressGestureRecognizer *press2;
+@property (readwrite, strong, nonatomic) UITapWithForceGestureRecognizer *tap;
+@property (readwrite, strong, nonatomic) UITapWithForceGestureRecognizer *tap2;
+@property (readwrite, strong, nonatomic) UIPanWithForceGestureRecognizer *pan;
+@property (readwrite, strong, nonatomic) UIPanWithForceGestureRecognizer *pan2;
+@property (readwrite, strong, nonatomic) UILongPressWithForceGestureRecognizer *press;
+@property (readwrite, strong, nonatomic) UILongPressWithForceGestureRecognizer *press2;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -101,7 +104,7 @@
 - (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
 {
     if (!referenceView){
-        NSLog(@"SWAcapella error - Can't create SWAcapella. No referenceView supplied.");
+        //NSLog(@"SWAcapella error - Can't create SWAcapella. No referenceView supplied.");
         return nil;
     }
     
@@ -123,7 +126,7 @@
 - (void)initialize
 {
     if (self.owner == nil || self.referenceView == nil){
-        NSLog(@"SWAcapella error - owner[%@] and referenceView[%@] cannot be nil", [self.owner class], [self.referenceView class]);
+        //NSLog(@"SWAcapella error - owner[%@] and referenceView[%@] cannot be nil", [self.owner class], [self.referenceView class]);
         return;
     }
     
@@ -132,32 +135,32 @@
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
     self.animator.delegate = self;
     
-    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    self.tap = [[UITapWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
     self.tap.delegate = self;
     [self.referenceView addGestureRecognizer:self.tap];
     
-    self.tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    self.tap2 = [[UITapWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
     self.tap2.numberOfTouchesRequired = 2;
     self.tap2.delegate = self;
     [self.referenceView addGestureRecognizer:self.tap2];
     
-    self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
+    self.pan = [[UIPanWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan.delegate = self;
     self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
     [self.referenceView addGestureRecognizer:self.pan];
     
-    self.pan2 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
+    self.pan2 = [[UIPanWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan2.delegate = self;
     self.pan2.minimumNumberOfTouches = self.pan2.maximumNumberOfTouches = 2;
     [self.referenceView addGestureRecognizer:self.pan2];
     
-    self.press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
+    self.press = [[UILongPressWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
     self.press.delegate = self;
     self.press.numberOfTouchesRequired = 1;
     self.press.minimumPressDuration = 0.7;
     [self.referenceView addGestureRecognizer:self.press];
     
-    self.press2 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
+    self.press2 = [[UILongPressWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
     self.press2.delegate = self;
     self.press2.numberOfTouchesRequired = 2;
     self.press2.minimumPressDuration = 0.7;
@@ -195,7 +198,7 @@
 
 #pragma mark - UIGestureRecognizer
 
-- (void)onTap:(UITapGestureRecognizer *)tap
+- (void)onTap:(UITapWithForceGestureRecognizer *)tap
 {
     CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
     //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
@@ -206,7 +209,12 @@
     
     if (directionString && fingerString){
         
-        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@", self.prefKeyPrefix, @"gestures", directionString, fingerString, @"forcenone"];
+        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
+                         self.prefKeyPrefix,
+                         @"gestures",
+                         directionString,
+                         fingerString,
+                         [self forceKeyForForcePercentage:tap.forcePercentage]];
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
         sel = NSSelectorFromString(selString);
         
@@ -217,7 +225,7 @@
     }
 }
 
-- (void)onPan:(UIPanGestureRecognizer *)pan
+- (void)onPan:(UIPanWithForceGestureRecognizer *)pan
 {
     //smooth out multi touch pans by only following first finger location
     CGPoint panLocation = (pan.numberOfTouches > 0) ? [pan locationOfTouch:0 inView:pan.view] : [pan locationInView:pan.view];
@@ -272,13 +280,13 @@
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, self.titles.superview.center.y);
-                [self didWrapAround:-1 fingers:(pan == self.pan2) ? 2 : 1];
+                [self didWrapAround:-1 pan:pan];
                 
             } else if (center.x > offScreenRightX){
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, self.titles.superview.center.y);
-                [self didWrapAround:1 fingers:(pan == self.pan2) ? 2 : 1];
+                [self didWrapAround:1 pan:pan];
                 
             } else {
                 
@@ -295,7 +303,7 @@
     }
 }
 
-- (void)onPress:(UILongPressGestureRecognizer *)press
+- (void)onPress:(UILongPressWithForceGestureRecognizer *)press
 {
     CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
     //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
@@ -308,7 +316,12 @@
         
         if (directionString && fingerString){
             
-            NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@", self.prefKeyPrefix, @"gestures", directionString, fingerString, @"forcenone"];
+            NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
+                             self.prefKeyPrefix,
+                             @"gestures",
+                             directionString,
+                             fingerString,
+                             [self forceKeyForForcePercentage:press.forcePercentage]];
             NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
             sel = NSSelectorFromString(selString);
             
@@ -371,24 +384,29 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 
 #pragma mark - UIDynamics
 
-// direction < 0 - decrease
-// direction = 0 - no change
-// direction > 0 - increase
-// fingers = 1 or 2
-- (void)didWrapAround:(NSInteger)direction fingers:(NSInteger)fingers
+/**
+ *  Handle wrap around
+ *
+ *  @param direction left=(<0) right=(>0)
+ *  @param pan UIPanWithForceGestureRecognizer that performed the wrap around
+ */
+- (void)didWrapAround:(NSInteger)direction pan:(UIPanWithForceGestureRecognizer *)pan
 {
     self.titlesCloneContainer.tag = 6969;
-    
-    
     
     SEL sel = nil;
     
     NSString *directionString = (direction < 0) ? @"swipeleft" : (direction > 0) ? @"swiperight" : nil;
-    NSString *fingerString = (fingers == 1) ? @"onefinger" : (fingers == 2) ? @"twofinger" : nil;
+    NSString *fingerString = (pan.minimumNumberOfTouches == 1) ? @"onefinger" : (pan.minimumNumberOfTouches == 2) ? @"twofinger" : nil;
     
     if (directionString && fingerString){
         
-        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@", self.prefKeyPrefix, @"gestures", directionString, fingerString, @"forcenone"];
+        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
+                         self.prefKeyPrefix,
+                         @"gestures",
+                         directionString,
+                         fingerString,
+                         [self forceKeyForForcePercentage:pan.forcePercentage]];
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
         sel = NSSelectorFromString(selString);
         
@@ -554,6 +572,24 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 }
 
 #pragma mark - Internal
+
+/**
+ *  Get the corresponding force preference key for a percentage
+ *
+ *  @param percentage between 0.0 and 1.0
+ *
+ *  @return force preference key
+ */
+- (NSString *)forceKeyForForcePercentage:(CGFloat)percentage
+{
+    if (percentage < 0.35){ //0% - 35%
+        return @"forcenone";
+    } else if (percentage >= 0.35 && percentage < 0.8){ //35% - 80%
+        return @"forcepeek";
+    } else { //80% - 100%
+        return @"forcepop";
+    }
+}
 
 - (void)setTitlesCloneContainer:(SWAcapellaTitlesCloneContainer *)titlesCloneContainer
 {

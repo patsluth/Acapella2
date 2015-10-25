@@ -3,22 +3,8 @@
 
 
 
-THEOS_PACKAGE_DIR_NAME = debs
-PACKAGE_VERSION = 1.1-1
-
-
-
-
-
-#USEWIFI = 1 ###COMMENT OUT TO USE USB
-
-ifdef USEWIFI
-	THEOS_DEVICE_IP = 192.168.1.120
-	THEOS_DEVICE_PORT = 22
-else
-	THEOS_DEVICE_IP = 127.0.0.1
-	THEOS_DEVICE_PORT = 2222
-endif
+#FINALPACKAGE = 1
+PACKAGE_VERSION = 1.1-2
 
 
 
@@ -33,11 +19,11 @@ TARGET = iphone:clang:latest
 
 TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
+Acapella2_FILES = SWAcapella.m SWAcapellaTitlesCloneContainer.m SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm Prefs.xm
 Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Acapella2_LIBRARIES = substrate sw packageinfo
-Acapella2_FILES = AcapellaTest/AcapellaTest/SWAcapella.m AcapellaTest/AcapellaTest/SWAcapellaTitlesCloneContainer.m AcapellaTest/AcapellaTest/SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm Prefs.xm
+
 ADDITIONAL_CFLAGS = -Ipublic
-ADDITIONAL_CFLAGS += -IAcapellaTest/AcapellaTest/
 
 
 

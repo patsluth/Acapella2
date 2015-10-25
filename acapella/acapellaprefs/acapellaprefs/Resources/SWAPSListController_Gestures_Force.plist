@@ -103,8 +103,6 @@
 			</array>
 			<key>key</key>
 			<string>forcepeek</string>
-			<key>enabled</key>
-			<false/>
 			<key>label</key>
 			<string>Peek</string>
 		</dict>
@@ -155,8 +153,6 @@
 			</array>
 			<key>key</key>
 			<string>forcepop</string>
-			<key>enabled</key>
-			<false/>
 			<key>label</key>
 			<string>Pop</string>
 		</dict>

@@ -10,7 +10,7 @@
 #import "SWAcapellaTitlesCloneContainer.h"
 #import "SWAcapellaTitlesClone.h"
 
-#import "libsw/libSluthware/UITapWithForceGestureRecognizer.h"
+#import "libsw/libSluthware/libSluthware.h"
 #import "libsw/libSluthware/UIPanWithForceGestureRecognizer.h"
 #import "libsw/libSluthware/UILongPressWithForceGestureRecognizer.h"
 #import "libsw/libSluthware/NSTimer+SW.h"
@@ -18,6 +18,13 @@
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import <CoreGraphics/CoreGraphics.h>
+//#import <AudioToolbox/AudioToolbox.h>
+
+#define SWA_SCALE_3DTOUCH_NONE CGAffineTransformMakeScale(1.0, 1.0)
+#define SWA_SCALE_3DTOUCH_PEEK CGAffineTransformMakeScale(1.06, 1.06)
+#define SWA_SCALE_3DTOUCH_POP CGAffineTransformMakeScale(1.11, 1.11)
+
+#define SWA_PULSE_SCALE = SWA_SCALE_3DTOUCH_PEEK;
 
 
 
@@ -30,8 +37,8 @@
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
-@property (readwrite, strong, nonatomic) UITapWithForceGestureRecognizer *tap;
-@property (readwrite, strong, nonatomic) UITapWithForceGestureRecognizer *tap2;
+@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
+@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap2;
 @property (readwrite, strong, nonatomic) UIPanWithForceGestureRecognizer *pan;
 @property (readwrite, strong, nonatomic) UIPanWithForceGestureRecognizer *pan2;
 @property (readwrite, strong, nonatomic) UILongPressWithForceGestureRecognizer *press;
@@ -135,35 +142,39 @@
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
     self.animator.delegate = self;
     
-    self.tap = [[UITapWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
     self.tap.delegate = self;
     [self.referenceView addGestureRecognizer:self.tap];
     
-    self.tap2 = [[UITapWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
-    self.tap2.numberOfTouchesRequired = 2;
+    self.tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
     self.tap2.delegate = self;
+    self.tap2.numberOfTouchesRequired = 2;
     [self.referenceView addGestureRecognizer:self.tap2];
     
     self.pan = [[UIPanWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan.delegate = self;
+    self.pan.forceDelegate = self;
     self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
     [self.referenceView addGestureRecognizer:self.pan];
     
     self.pan2 = [[UIPanWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan2.delegate = self;
+    self.pan2.forceDelegate = self;
     self.pan2.minimumNumberOfTouches = self.pan2.maximumNumberOfTouches = 2;
     [self.referenceView addGestureRecognizer:self.pan2];
     
     self.press = [[UILongPressWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
     self.press.delegate = self;
+    self.press.forceDelegate = self;
     self.press.numberOfTouchesRequired = 1;
-    self.press.minimumPressDuration = 0.7;
+    self.press.minimumPressDuration = 0.3;
     [self.referenceView addGestureRecognizer:self.press];
     
     self.press2 = [[UILongPressWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
     self.press2.delegate = self;
+    self.press2.forceDelegate = self;
     self.press2.numberOfTouchesRequired = 2;
-    self.press2.minimumPressDuration = 0.7;
+    self.press2.minimumPressDuration = 0.3;
     [self.referenceView addGestureRecognizer:self.press2];
 }
 
@@ -198,7 +209,7 @@
 
 #pragma mark - UIGestureRecognizer
 
-- (void)onTap:(UITapWithForceGestureRecognizer *)tap
+- (void)onTap:(UITapGestureRecognizer *)tap
 {
     CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
     //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
@@ -214,7 +225,7 @@
                          @"gestures",
                          directionString,
                          fingerString,
-                         [self forceKeyForForcePercentage:tap.forcePercentage]];
+                         [self forceKeyForForceType:UIForceTypeNone]]; //no force for taps
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
         sel = NSSelectorFromString(selString);
         
@@ -305,11 +316,15 @@
 
 - (void)onPress:(UILongPressWithForceGestureRecognizer *)press
 {
-    CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
-    //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
-    SEL sel = nil;
-    
     if (press.state == UIGestureRecognizerStateBegan){
+        
+        //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        
+    } else if (press.state == UIGestureRecognizerStateEnded){
+        
+        CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
+        //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+        SEL sel = nil;
         
         NSString *directionString = (xPercentage <= 0.25) ? @"pressleft" : (xPercentage > 0.75) ? @"pressright" : @"presscentre";
         NSString *fingerString = (press.numberOfTouchesRequired == 1) ? @"onefinger" : (press.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
@@ -321,26 +336,16 @@
                              @"gestures",
                              directionString,
                              fingerString,
-                             [self forceKeyForForcePercentage:press.forcePercentage]];
+                             [self forceKeyForForceType:press.forceType]];
             NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
             sel = NSSelectorFromString(selString);
             
         }
         
-    }
-    
-//code to seek
-//    if (press.state == UIGestureRecognizerStateEnded){
-//        //SEEK BEGIN
-//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:1];
-//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressBeginOnControlType:4];
-//        //SEEK END
-//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:1];
-//        [self transportControlsView:self.mediaControlsView.transportControlsView longPressEndOnControlType:4];
-//    }
-    
-    if (sel && [self.owner respondsToSelector:sel]){
-        [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        if (sel && [self.owner respondsToSelector:sel]){
+            [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        }
+        
     }
 }
 
@@ -382,6 +387,39 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
     return NO;
 }
 
+#pragma mark - UIForceGestureRecognizerDelegate
+
+- (void)onForceChange:(UIGestureRecognizer<UIForceGestureRecognizer> * _Nonnull)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        gestureRecognizer.state == UIGestureRecognizerStateChanged){
+        
+        switch (gestureRecognizer.forceType) {
+            case UIForceTypeNone:
+                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+                break;
+                
+            case UIForceTypePeek:
+                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_PEEK;
+                break;
+                
+            case UIForceTypePop:
+                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_POP;
+                break;
+                
+            default:
+                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+                break;
+        }
+        
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
+               gestureRecognizer.state == UIGestureRecognizerStateEnded){
+        
+        self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+        
+    }
+}
+
 #pragma mark - UIDynamics
 
 /**
@@ -406,7 +444,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
                          @"gestures",
                          directionString,
                          fingerString,
-                         [self forceKeyForForcePercentage:pan.forcePercentage]];
+                         [self forceKeyForForceType:pan.forceType]];
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
         sel = NSSelectorFromString(selString);
         
@@ -526,45 +564,30 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 
 #pragma mark - Public
 
-- (void)pulseAnimateView:(UIView *)view
+- (void)pulseAnimateView
 {
-    if (!self.titlesCloneContainer){
-        [self setupTitleCloneContainer];
-        [self refreshTitleClone];
-    }
-    
-    if (!view){
-        view = self.titlesCloneContainer;
-    }
-    
-    self.titles.layer.opacity = 0.0;
-    
-    [view.layer removeAllAnimations];
-    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
-    
     [UIView animateWithDuration:0.1
                           delay:0.0
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         view.transform = CGAffineTransformMakeScale(1.07, 1.07);
+                         
+                         self.referenceView.window.transform = SWA_SCALE_3DTOUCH_PEEK;
+                         
                      }completion:^(BOOL finished){
                          
                          if (finished){
                              
                              [UIView animateWithDuration:0.1
                                               animations:^{
-                                                  view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                                                  self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
                                               } completion:^(BOOL finished){
-                                                  view.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                                                  if (!self.animator.isRunning){
-                                                      self.titlesCloneContainer = nil;
-                                                  }
+                                                  self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
                                               }];
                              
                          } else {
-                             if (!self.animator.isRunning){
-                                 self.titlesCloneContainer = nil;
-                             }
+                            
+                             self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+                             
                          }
                          
                      }];
@@ -574,20 +597,28 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 #pragma mark - Internal
 
 /**
- *  Get the corresponding force preference key for a percentage
- *
- *  @param percentage between 0.0 and 1.0
+ *  Get the corresponding force preference key for a UIForceType
  *
  *  @return force preference key
  */
-- (NSString *)forceKeyForForcePercentage:(CGFloat)percentage
+- (NSString *)forceKeyForForceType:(UIForceType)forceType
 {
-    if (percentage < 0.35){ //0% - 35%
-        return @"forcenone";
-    } else if (percentage >= 0.35 && percentage < 0.8){ //35% - 80%
-        return @"forcepeek";
-    } else { //80% - 100%
-        return @"forcepop";
+    switch (forceType) {
+        case UIForceTypeNone:
+            return @"forcenone";
+            break;
+            
+        case UIForceTypePeek:
+            return @"forcepeek";
+            break;
+            
+        case UIForceTypePop:
+            return @"forcepop";
+            break;
+            
+        default:
+            return @"forcenone";
+            break;
     }
 }
 

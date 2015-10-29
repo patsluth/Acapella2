@@ -11,10 +11,11 @@
 
 #import <objc/runtime.h>
 
+#import "libsw/libSluthware/UIForceGestureRecognizerDelegate.h"
+
 @class SWAcapellaTitlesCloneContainer;
 @class SWAcapellaTitlesClone;
 
-@class UITapWithForceGestureRecognizer;
 @class UIPanWithForceGestureRecognizer;
 @class UILongPressWithForceGestureRecognizer;
 
@@ -22,7 +23,7 @@
 
 
 
-@interface SWAcapella : NSObject <UIGestureRecognizerDelegate, UIDynamicAnimatorDelegate>
+@interface SWAcapella : NSObject <UIGestureRecognizerDelegate, UIDynamicAnimatorDelegate, UIForceGestureRecognizerDelegate>
 {
 }
 
@@ -42,8 +43,8 @@
 
 @property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
 
-@property (readonly, strong, nonatomic) UITapWithForceGestureRecognizer *tap;
-@property (readonly, strong, nonatomic) UITapWithForceGestureRecognizer *tap2;
+@property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
+@property (readonly, strong, nonatomic) UITapGestureRecognizer *tap2;
 @property (readonly, strong, nonatomic) UIPanWithForceGestureRecognizer *pan;
 @property (readonly, strong, nonatomic) UIPanWithForceGestureRecognizer *pan2;
 @property (readonly, strong, nonatomic) UILongPressWithForceGestureRecognizer *press;
@@ -52,7 +53,7 @@
 - (void)refreshTitleClone;
 
 - (void)finishWrapAround;
-- (void)pulseAnimateView:(UIView *)view;
+- (void)pulseAnimateView;
 
 @end
 

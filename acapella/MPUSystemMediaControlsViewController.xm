@@ -10,7 +10,8 @@
 #import "MPUTransportControlMediaRemoteController.h"
 #import "MPUTransportControlsView.h"
 
-#import "substrate.h"
+#define MPU_SYSTEM_MEDIA_CONTROLS_VIEW MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView")
+#define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController")
 
 
 
@@ -45,7 +46,7 @@
     //    id a = NSStringFromClass([self.view.superview class]);
     //    id b = NSStringFromClass([self.view.superview.superview class]);
     //    id c = NSStringFromClass([self.view.window.rootViewController class]);
-    //    HBLogInfo(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
+    //    NSLogInfo(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
     
     UIView *curView = view.superview;
     
@@ -83,27 +84,21 @@
     return @"undefined";
 }
 
-%new
-- (MPUSystemMediaControlsView *)mediaControlsView
-{
-    return MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView");
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     %orig(animated);
     
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:6];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:1];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:2];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:3];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:4];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:5];
-    [self.mediaControlsView.transportControlsView reloadTransportButtonWithControlType:8];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:6];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:1];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:2];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:3];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:4];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:5];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:8];
     
-    [self.mediaControlsView layoutSubviews];
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW layoutSubviews];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -112,7 +107,7 @@
     
     NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     
-    //HBLogInfo(@"Acapella Preference Key Prefix %@", prefKeyPrefix);
+    //NSLogInfo(@"Acapella Preference Key Prefix %@", prefKeyPrefix);
     
     if (!self.acapella){
         
@@ -125,7 +120,7 @@
                 [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
                                                               preInitializeAction:^(SWAcapella *a){
                                                                   a.owner = self;
-                                                                  a.titles = self.mediaControlsView.trackInformationView;
+                                                                  a.titles = MPU_SYSTEM_MEDIA_CONTROLS_VIEW.trackInformationView;
                                                               }]
                               ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
                 
@@ -166,20 +161,20 @@
         NSString *volumeKey = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"volumeslider"];
         
         if (![[SWPrefs valueForKey:progressKey application:PREF_APPLICATION] boolValue]){
-            self.mediaControlsView.timeInformationView.layer.opacity = 0.0;
+            MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 0.0;
         } else {
-            self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
+            MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 1.0;
         }
         if (![[SWPrefs valueForKey:volumeKey application:PREF_APPLICATION] boolValue]){
-            self.mediaControlsView.volumeView.layer.opacity = 0.0;
+            MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 0.0;
         } else {
-            self.mediaControlsView.volumeView.layer.opacity = 1.0;
+            MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 1.0;
         }
         
     } else {
         
-        self.mediaControlsView.timeInformationView.layer.opacity = 1.0;
-        self.mediaControlsView.volumeView.layer.opacity = 1.0;
+        MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 1.0;
+        MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 1.0;
         
     }
     
@@ -187,6 +182,13 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    if (self.acapella){ //stop seeking
+        
+        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:1];
+        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:4];
+        
+    }
+    
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     
     %orig(animated);
@@ -258,15 +260,37 @@
 %new
 - (void)action_heart
 {
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:6];
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:6];
+}
+
+%new
+- (void)action_upnext
+{
 }
 
 %new
 - (void)action_previoustrack
 {
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:1];
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:1];
     
-    MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
+    MPUTransportControlMediaRemoteController *t = MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER;
+    
+    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
+        
+        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
+            [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
+        }
+        
+    }
+}
+
+//TODO:!!!
+%new
+- (void)action_nexttrack
+{
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:4];
+    
+    MPUTransportControlMediaRemoteController *t = MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER;
     
     if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
         if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
@@ -278,45 +302,66 @@
 %new
 - (void)action_intervalrewind
 {
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:2];
-}
-
-%new
-- (void)action_playpause
-{
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:3];
-    [self.acapella pulseAnimateView:self.acapella.referenceView];
-}
-
-%new
-- (void)action_nexttrack
-{
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:4];
-    
-    MPUTransportControlMediaRemoteController *t = MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController");
-    
-    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
-        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
-            [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
-        }
-    }
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:2];
 }
 
 %new
 - (void)action_intervalforward
 {
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:5];
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:5];
 }
 
 %new
-- (void)action_upnext
+- (void)action_seekrewind
 {
+    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressBeginOnControlType:1];
+    
+    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:1];
+    }
+}
+
+%new
+- (void)action_seekforward
+{
+    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressBeginOnControlType:4];
+    
+    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:4];
+    }
+}
+
+%new
+- (void)action_playpause
+{
+    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:1];
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:4];
+    
+    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    //if the 2 commands are different, then something happened when we told the transportControlView to
+    //stop seeking, meaning we were seeking
+    if (originalLPCommand == newLPCommand){
+        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:3];
+    }
+    
+    [self.acapella pulseAnimateView];
 }
 
 %new
 - (void)action_share
 {
-    [self transportControlsView:self.mediaControlsView.transportControlsView tapOnControlType:8];
+    [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:8];
 }
 
 %new
@@ -348,17 +393,19 @@
 }
 
 %new
-- (void)action_increasevolume
+- (void)action_decreasevolume
 {
-    id vc = [self.mediaControlsView.volumeView valueForKey:@"volumeController"];
-    [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(1) afterDelay:0.0];
+    id vc = [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView valueForKey:@"volumeController"];
+    [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
+
 }
 
 %new
-- (void)action_decreasevolume
+- (void)action_increasevolume
 {
-    id vc = [self.mediaControlsView.volumeView valueForKey:@"volumeController"];
-    [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
+    id vc = [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView valueForKey:@"volumeController"];
+    [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(1) afterDelay:0.0];
+    
 }
 
 %new

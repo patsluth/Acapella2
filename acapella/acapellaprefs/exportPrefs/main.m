@@ -38,59 +38,55 @@ static id prefValueForKey(NSString *key)
         }
         
         NSString *gesture = [parts objectAtIndex:2];
-        NSString *finger = [parts objectAtIndex:3];
-        NSString *force = [parts objectAtIndex:4];
+        //NSString *finger = [parts objectAtIndex:3];
+        //NSString *force = [parts objectAtIndex:4];
         
-        if ([finger isEqualToString:@"twofinger"] || ![force isEqualToString:@"forcenone"]){
-            return @"action_nil";
-        } else {
+        //if ([finger isEqualToString:@"twofinger"] || ![force isEqualToString:@"forcenone"]){
+        
+        if ([gesture containsString:@"tap"]){
             
-            if ([gesture containsString:@"tap"]){
-                
-                //no volume control for mini
-                if ([gesture containsString:@"centre"] || [prefix isEqualToString:@"musicmini"]){
-                    return @"action_playpause";
-                } else {
-                    if ([gesture containsString:@"left"]){
-                        return @"action_decreasevolume";
-                    } else if ([gesture containsString:@"right"]){
-                        return @"action_increasevolume";
-                    }
-                }
-                
-            } else if ([gesture containsString:@"swipe"]){
-                
+            //no volume control for mini
+            if ([gesture containsString:@"centre"] || [prefix isEqualToString:@"musicmini"]){
+                return @"action_playpause";
+            } else {
                 if ([gesture containsString:@"left"]){
-                    return @"action_nexttrack";
+                    return @"action_decreasevolume";
                 } else if ([gesture containsString:@"right"]){
-                    return @"action_previoustrack";
+                    return @"action_increasevolume";
                 }
-                
-            } else if ([gesture containsString:@"press"]){
-                
-                if ([gesture containsString:@"left"]){
-                    return @"action_intervalrewind";
-                } else if ([gesture containsString:@"centre"]){
-                    
-                    if ([prefix isEqualToString:@"musicnowplaying"]){
-                        return @"action_showratings";
-                    } else if ([prefix isEqualToString:@"musicmini"]){
-                        return @"action_contextual";
-                    } else {
-                        return @"action_openapp";
-                    }
-                    
-                } else if ([gesture containsString:@"right"]){
-                    return @"action_intervalforward";
-                }
-                
             }
-               
-            //should never hit this
-            NSLog(@"Error parsing gesture key %@", key);
-            return @"action_nil";
+            
+        } else if ([gesture containsString:@"swipe"]){
+            
+            if ([gesture containsString:@"left"]){
+                return @"action_nexttrack";
+            } else if ([gesture containsString:@"right"]){
+                return @"action_previoustrack";
+            }
+            
+        } else if ([gesture containsString:@"press"]){
+            
+            if ([gesture containsString:@"left"]){
+                return @"action_intervalrewind";
+            } else if ([gesture containsString:@"centre"]){
+                
+                if ([prefix isEqualToString:@"musicnowplaying"]){
+                    return @"action_showratings";
+                } else if ([prefix isEqualToString:@"musicmini"]){
+                    return @"action_contextual";
+                } else {
+                    return @"action_openapp";
+                }
+                
+            } else if ([gesture containsString:@"right"]){
+                return @"action_intervalforward";
+            }
             
         }
+        
+        //should never hit this
+        NSLog(@"Error parsing gesture key %@", key);
+        return @"action_nil";
         
     } else if ([option isEqualToString:@"progressslider"]){
         return @(YES);

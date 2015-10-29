@@ -25,14 +25,8 @@ ADDITIONAL_CFLAGS = -Ipublic
 
 
 include theos/makefiles/common.mk
-include $(THEOS_MAKE_PATH)/bundle.mk
-
-
-
-
-
-clean::
-	rm -rf .theos
+include theos/makefiles/bundle.mk
+include theos/makefiles/swcommon.mk
 
 
 

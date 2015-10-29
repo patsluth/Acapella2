@@ -3,7 +3,7 @@
 
 
 
-#FINALPACKAGE = 1
+FINALPACKAGE = 1
 PACKAGE_VERSION = 1.1-2
 
 
@@ -43,17 +43,10 @@ SUBPROJECTS += acapellaprefs/acapellaprefs
 
 
 include theos/makefiles/common.mk
-include $(THEOS_MAKE_PATH)/bundle.mk
-include $(THEOS_MAKE_PATH)/tweak.mk
-include $(THEOS_MAKE_PATH)/aggregate.mk
-
-
-
-
-
-clean::
-	rm -rf debs
-	rm -rf .theos
+include theos/makefiles/bundle.mk
+include theos/makefiles/tweak.mk
+include theos/makefiles/aggregate.mk
+include theos/makefiles/swcommon.mk
 
 
 
@@ -61,3 +54,7 @@ clean::
 
 after-install::
 	install.exec "killall -9 backboardd"
+
+
+
+

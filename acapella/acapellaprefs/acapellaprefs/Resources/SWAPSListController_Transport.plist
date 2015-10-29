@@ -20,31 +20,27 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>previoustrack</string>
+			<string>upnext</string>
 			<key>icon</key>
-			<string>Heart.png</string>
+			<string>UpNext.png</string>
 			<key>label</key>
-			<string>Previous Track</string>
+			<string>Up Next</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>intervalrewind</string>
+			<string>previoustrack</string>
 			<key>icon</key>
 			<string>PreviousTrack.png</string>
 			<key>label</key>
-			<string>Interval Rewind</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>key</key>
-			<string>playpause</string>
-			<key>icon</key>
-			<string>Play.png</string>
-			<key>label</key>
-			<string>Play/Pause</string>
+			<string>Previous Track</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -60,6 +56,16 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
+			<string>intervalrewind</string>
+			<key>icon</key>
+			<string>IntervalRewind.png</string>
+			<key>label</key>
+			<string>Interval Rewind</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
 			<string>intervalforward</string>
 			<key>icon</key>
 			<string>IntervalForward.png</string>
@@ -70,11 +76,11 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
-			<string>upnext</string>
+			<string>playpause</string>
 			<key>icon</key>
-			<string>UpNext.png</string>
+			<string>Play.png</string>
 			<key>label</key>
-			<string>Present Up Next</string>
+			<string>Play/Pause</string>
 		</dict>
 		<dict>
 			<key>cell</key>

@@ -56,7 +56,7 @@
 		2E9C908F1A36BC0F006622A8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 			};
 			buildConfigurationList = 2E9C90921A36BC0F006622A8 /* Build configuration list for PBXProject "acapella" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -79,6 +79,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};

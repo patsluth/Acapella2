@@ -131,11 +131,11 @@
 			isa = PBXGroup;
 			children = (
 				2EAD3A8D1BDD599E00FC765A /* SWAcapella.h */,
+				2EAD3A941BDD59A400FC765A /* SWAcapella.m */,
 				2EAD3A8E1BDD599E00FC765A /* SWAcapellaTitlesClone.h */,
+				2EAD3A951BDD59A400FC765A /* SWAcapellaTitlesClone.m */,
 				2EAD3A8F1BDD599E00FC765A /* SWAcapellaTitlesCloneContainer.h */,
 				2EAD3A931BDD59A400FC765A /* SWAcapellaTitlesCloneContainer.m */,
-				2EAD3A941BDD59A400FC765A /* SWAcapella.m */,
-				2EAD3A951BDD59A400FC765A /* SWAcapellaTitlesClone.m */,
 			);
 			name = src;
 			sourceTree = "<group>";

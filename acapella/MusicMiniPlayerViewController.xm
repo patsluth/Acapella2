@@ -8,10 +8,10 @@
 #import "MPUTransportControlsView.h"
 #import "MusicTabBarController.h"
 
-#import "substrate.h"
-
 #define PREF_KEY_PREFIX @"musicmini"
 #define PREF_APPLICATION @"com.apple.Music"
+
+#define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController")
 
 
 
@@ -22,6 +22,7 @@
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
 
+//new
 - (SWAcapella *)acapella;
 
 - (UIView *)titlesView;
@@ -33,6 +34,8 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2;
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
+- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2;
+- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2;
 
 @end
 
@@ -103,7 +106,15 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    if (self.acapella){ //stop seeking
+        
+        [self transportControlsView:self.transportControlsView longPressEndOnControlType:1];
+        [self transportControlsView:self.transportControlsView longPressEndOnControlType:4];
+        
+    }
+    
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+    
     %orig(animated);
 }
 
@@ -213,37 +224,6 @@
 }
 
 %new
-- (void)action_previoustrack
-{
-    [self transportControlsView:self.transportControlsView tapOnControlType:1];
-}
-
-%new
-- (void)action_intervalrewind
-{
-     [self transportControlsView:self.transportControlsView tapOnControlType:2];
-}
-
-%new
-- (void)action_playpause
-{
-    [self transportControlsView:self.transportControlsView tapOnControlType:3];
-    [self.acapella pulseAnimateView:nil];
-}
-
-%new
-- (void)action_nexttrack
-{
-    [self transportControlsView:self.transportControlsView tapOnControlType:4];
-}
-
-%new
-- (void)action_intervalforward
-{
-     [self transportControlsView:self.transportControlsView tapOnControlType:5];
-}
-
-%new
 - (void)action_upnext
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
@@ -266,6 +246,77 @@
                                                                        }];
         
     }
+}
+
+%new
+- (void)action_previoustrack
+{
+    [self transportControlsView:self.transportControlsView tapOnControlType:1];
+}
+
+%new
+- (void)action_nexttrack
+{
+    [self transportControlsView:self.transportControlsView tapOnControlType:4];
+}
+
+%new
+- (void)action_intervalrewind
+{
+     [self transportControlsView:self.transportControlsView tapOnControlType:2];
+}
+
+%new
+- (void)action_intervalforward
+{
+    [self transportControlsView:self.transportControlsView tapOnControlType:5];
+}
+
+%new
+- (void)action_seekrewind
+{
+    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    [self transportControlsView:self.transportControlsView longPressBeginOnControlType:1];
+    
+    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+        [self transportControlsView:self.transportControlsView longPressEndOnControlType:1];
+    }
+}
+
+%new
+- (void)action_seekforward
+{
+    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    [self transportControlsView:self.transportControlsView longPressBeginOnControlType:4];
+    
+    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+        [self transportControlsView:self.transportControlsView longPressEndOnControlType:4];
+    }
+}
+
+%new
+- (void)action_playpause
+{
+    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    [self transportControlsView:self.transportControlsView longPressEndOnControlType:1];
+    [self transportControlsView:self.transportControlsView longPressEndOnControlType:4];
+    
+    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+    
+    //if the 2 commands are different, then something happened when we told the transportControlView to
+    //stop seeking, meaning we were seeking
+    if (originalLPCommand == newLPCommand){
+        [self transportControlsView:self.transportControlsView tapOnControlType:3];
+    }
+    
+    [self.acapella pulseAnimateView];
 }
 
 %new
@@ -300,12 +351,12 @@
 }
 
 %new
-- (void)action_increasevolume
+- (void)action_decreasevolume
 {
 }
 
 %new
-- (void)action_decreasevolume
+- (void)action_increasevolume
 {
 }
 

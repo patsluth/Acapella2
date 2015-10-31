@@ -34,8 +34,8 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2;
 - (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2;
+- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2; //NS_AVAILABLE_IOS(9_0);
+- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2; //NS_AVAILABLE_IOS(9_0);
 
 @end
 
@@ -366,6 +366,37 @@
 }
 
 %end
+
+
+
+%group preiOS9
+
+%hook MusicMiniPlayerViewController //add these if pre iOS 9 so we dont crash calling them
+
+%new
+- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2
+{
+}
+
+%new
+- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2
+{
+}
+
+%end
+
+%end
+
+
+%ctor
+{
+    %init(_ungrouped);
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"9.0")){
+        %init(preiOS9);
+    }
+    
+}
 
 
 

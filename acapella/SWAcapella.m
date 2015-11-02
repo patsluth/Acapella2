@@ -227,12 +227,12 @@
                          fingerString,
                          [self forceKeyForForceType:UIForceTypeNone]]; //no force for taps
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-        sel = NSSelectorFromString(selString);
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
         
     }
     
     if (sel && [self.owner respondsToSelector:sel]){
-        [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        [self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
     }
 }
 
@@ -338,12 +338,12 @@
                              fingerString,
                              [self forceKeyForForceType:press.forceType]];
             NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-            sel = NSSelectorFromString(selString);
+            sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
             
         }
         
         if (sel && [self.owner respondsToSelector:sel]){
-            [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+            [self.owner performSelectorOnMainThread:sel withObject:press waitUntilDone:NO];
         }
         
     }
@@ -446,12 +446,12 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
                          fingerString,
                          [self forceKeyForForceType:pan.forceType]];
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-        sel = NSSelectorFromString(selString);
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
         
     }
     
     if (sel && [self.owner respondsToSelector:sel]){
-        [self.owner performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        [self.owner performSelectorOnMainThread:sel withObject:pan waitUntilDone:NO];
     }
     
     

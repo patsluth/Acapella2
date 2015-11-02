@@ -106,13 +106,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    if (self.acapella){ //stop seeking
-        
-        [self transportControlsView:self.transportControlsView longPressEndOnControlType:1];
-        [self transportControlsView:self.transportControlsView longPressEndOnControlType:4];
-        
-    }
-    
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     
     %orig(animated);
@@ -202,29 +195,24 @@
     }
 }
 
-//%new
-//- (void)onTap:(UITapGestureRecognizer *)tap
-//{
-//    //perform the original tap action if our action is nil
-//    if (!sel || (sel && [NSStringFromSelector(sel) isEqualToString:@"action_nil"])){
-//        [(MusicTabBarController *)self.parentViewController presentNowPlayingViewController];
-//    }
-//}
-
 #pragma mark - Actions
 
 %new
-- (void)action_none
+- (void)action_nil:(id)arg1
+{
+    //if tap and action is set to nil, perform the original tap action
+    if (arg1 && [arg1 isKindOfClass:[UITapGestureRecognizer class]]){
+        [(MusicTabBarController *)self.parentViewController presentNowPlayingViewController];
+    }
+}
+
+%new
+- (void)action_heart:(id)arg1
 {
 }
 
 %new
-- (void)action_heart
-{
-}
-
-%new
-- (void)action_upnext
+- (void)action_upnext:(id)arg1
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         
@@ -249,31 +237,31 @@
 }
 
 %new
-- (void)action_previoustrack
+- (void)action_previoustrack:(id)arg1
 {
     [self transportControlsView:self.transportControlsView tapOnControlType:1];
 }
 
 %new
-- (void)action_nexttrack
+- (void)action_nexttrack:(id)arg1
 {
     [self transportControlsView:self.transportControlsView tapOnControlType:4];
 }
 
 %new
-- (void)action_intervalrewind
+- (void)action_intervalrewind:(id)arg1
 {
      [self transportControlsView:self.transportControlsView tapOnControlType:2];
 }
 
 %new
-- (void)action_intervalforward
+- (void)action_intervalforward:(id)arg1
 {
     [self transportControlsView:self.transportControlsView tapOnControlType:5];
 }
 
 %new
-- (void)action_seekrewind
+- (void)action_seekrewind:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -287,7 +275,7 @@
 }
 
 %new
-- (void)action_seekforward
+- (void)action_seekforward:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -301,7 +289,7 @@
 }
 
 %new
-- (void)action_playpause
+- (void)action_playpause:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -320,58 +308,52 @@
 }
 
 %new
-- (void)action_share
+- (void)action_share:(id)arg1
 {
 }
 
 %new
-- (void)action_toggleshuffle
+- (void)action_toggleshuffle:(id)arg1
 {
 }
 
 %new
-- (void)action_togglerepeat
+- (void)action_togglerepeat:(id)arg1
 {
 }
 
 %new
-- (void)action_contextual
+- (void)action_contextual:(id)arg1
 {
     [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:11];
 }
 
 %new
-- (void)action_openapp
+- (void)action_openapp:(id)arg1
 {
 }
 
 %new
-- (void)action_showratings
+- (void)action_showratings:(id)arg1
 {
 }
 
 %new
-- (void)action_decreasevolume
+- (void)action_decreasevolume:(id)arg1
 {
 }
 
 %new
-- (void)action_increasevolume
+- (void)action_increasevolume:(id)arg1
 {
 }
 
 %new
-- (void)action_equalizereverywhere
+- (void)action_equalizereverywhere:(id)arg1
 {
 }
 
-%end
-
-
-
-%group preiOS9
-
-%hook MusicMiniPlayerViewController //add these if pre iOS 9 so we dont crash calling them
+%group preiOS9 //add these if pre iOS 9 so we dont crash calling them
 
 %new
 - (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2
@@ -386,6 +368,10 @@
 %end
 
 %end
+
+
+
+
 
 
 %ctor

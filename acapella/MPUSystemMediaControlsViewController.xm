@@ -107,8 +107,6 @@
     
     NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     
-    //NSLogInfo(@"Acapella Preference Key Prefix %@", prefKeyPrefix);
-    
     if (!self.acapella){
         
         if (prefKeyPrefix != nil){
@@ -178,17 +176,12 @@
         
     }
     
+    [MPU_SYSTEM_MEDIA_CONTROLS_VIEW layoutSubviews];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    if (self.acapella){ //stop seeking
-        
-        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:1];
-        [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:4];
-        
-    }
-    
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     
     %orig(animated);
@@ -253,23 +246,23 @@
 #pragma mark - Actions
 
 %new
-- (void)action_none
+- (void)action_nil:(id)arg1
 {
 }
 
 %new
-- (void)action_heart
+- (void)action_heart:(id)arg1
 {
     [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:6];
 }
 
 %new
-- (void)action_upnext
+- (void)action_upnext:(id)arg1
 {
 }
 
 %new
-- (void)action_previoustrack
+- (void)action_previoustrack:(id)arg1
 {
     [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:1];
     
@@ -284,9 +277,8 @@
     }
 }
 
-//TODO:!!!
 %new
-- (void)action_nexttrack
+- (void)action_nexttrack:(id)arg1
 {
     [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:4];
     
@@ -300,19 +292,19 @@
 }
 
 %new
-- (void)action_intervalrewind
+- (void)action_intervalrewind:(id)arg1
 {
     [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:2];
 }
 
 %new
-- (void)action_intervalforward
+- (void)action_intervalforward:(id)arg1
 {
     [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:5];
 }
 
 %new
-- (void)action_seekrewind
+- (void)action_seekrewind:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -326,7 +318,7 @@
 }
 
 %new
-- (void)action_seekforward
+- (void)action_seekforward:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -340,7 +332,7 @@
 }
 
 %new
-- (void)action_playpause
+- (void)action_playpause:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -359,28 +351,28 @@
 }
 
 %new
-- (void)action_share
+- (void)action_share:(id)arg1
 {
     [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:8];
 }
 
 %new
-- (void)action_toggleshuffle
+- (void)action_toggleshuffle:(id)arg1
 {
 }
 
 %new
-- (void)action_togglerepeat
+- (void)action_togglerepeat:(id)arg1
 {
 }
 
 %new
-- (void)action_contextual
+- (void)action_contextual:(id)arg1
 {
 }
 
 %new
-- (void)action_openapp
+- (void)action_openapp:(id)arg1
 {
     id x = [self valueForKey:@"_nowPlayingController"]; //MPUNowPlayingController
     id y = [x valueForKey:@"_currentNowPlayingAppDisplayID"]; //NSString
@@ -388,12 +380,12 @@
 }
 
 %new
-- (void)action_showratings
+- (void)action_showratings:(id)arg1
 {
 }
 
 %new
-- (void)action_decreasevolume
+- (void)action_decreasevolume:(id)arg1
 {
     id vc = [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView valueForKey:@"volumeController"];
     [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
@@ -401,7 +393,7 @@
 }
 
 %new
-- (void)action_increasevolume
+- (void)action_increasevolume:(id)arg1
 {
     id vc = [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView valueForKey:@"volumeController"];
     [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(1) afterDelay:0.0];
@@ -409,7 +401,7 @@
 }
 
 %new
-- (void)action_equalizereverywhere
+- (void)action_equalizereverywhere:(id)arg1
 {
     UIView *curView = self.acapella.referenceView.superview;
     

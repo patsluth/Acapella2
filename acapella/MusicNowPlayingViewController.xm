@@ -111,13 +111,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    if (self.acapella){ //stop seeking
-        
-        [self transportControlsView:self.transportControls longPressEndOnControlType:1];
-        [self transportControlsView:self.transportControls longPressEndOnControlType:4];
-        
-    }
-    
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     
     %orig(animated);
@@ -301,48 +294,48 @@
 #pragma mark - Actions
 
 %new
-- (void)action_none
+- (void)action_nil:(id)arg1
 {
 }
 
 %new
-- (void)action_heart
+- (void)action_heart:(id)arg1
 {
     [self transportControlsView:self.transportControls tapOnControlType:6];
 }
 
 %new
-- (void)action_upnext
+- (void)action_upnext:(id)arg1
 {
     [self transportControlsView:self.transportControls tapOnControlType:7];
 }
 
 %new
-- (void)action_previoustrack
+- (void)action_previoustrack:(id)arg1
 {
     [self transportControlsView:self.transportControls tapOnControlType:1];
 }
 
 %new
-- (void)action_nexttrack
+- (void)action_nexttrack:(id)arg1
 {
     [self transportControlsView:self.transportControls tapOnControlType:4];
 }
 
 %new
-- (void)action_intervalrewind
+- (void)action_intervalrewind:(id)arg1
 {
     [self transportControlsView:self.transportControls tapOnControlType:2];
 }
 
 %new
-- (void)action_intervalforward
+- (void)action_intervalforward:(id)arg1
 {
     [self transportControlsView:self.transportControls tapOnControlType:5];
 }
 
 %new
-- (void)action_seekrewind
+- (void)action_seekrewind:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -356,7 +349,7 @@
 }
 
 %new
-- (void)action_seekforward
+- (void)action_seekforward:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -370,7 +363,7 @@
 }
 
 %new
-- (void)action_playpause
+- (void)action_playpause:(id)arg1
 {
     unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
@@ -389,57 +382,57 @@
 }
 
 %new
-- (void)action_share
+- (void)action_share:(id)arg1
 {
     [self transportControlsView:self.secondaryTransportControls tapOnControlType:8];
 }
 
 %new
-- (void)action_toggleshuffle
+- (void)action_toggleshuffle:(id)arg1
 {
     [self transportControlsView:self.secondaryTransportControls tapOnControlType:10];
 }
 
 %new
-- (void)action_togglerepeat
+- (void)action_togglerepeat:(id)arg1
 {
     [self transportControlsView:self.secondaryTransportControls tapOnControlType:9];
 }
 
 %new
-- (void)action_contextual
+- (void)action_contextual:(id)arg1
 {
     [self transportControlsView:self.secondaryTransportControls tapOnControlType:11];
 }
 
 %new
-- (void)action_openapp
+- (void)action_openapp:(id)arg1
 {
 }
 
 %new
-- (void)action_showratings
+- (void)action_showratings:(id)arg1
 {
     self.acapella.titlesCloneContainer = nil;
     [self _setRatingsVisible:self.ratingControl.hidden];
 }
 
 %new
-- (void)action_decreasevolume
+- (void)action_decreasevolume:(id)arg1
 {
     id vc = [self.volumeSlider valueForKey:@"volumeController"];
     [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(-1) afterDelay:0.0];
 }
 
 %new
-- (void)action_increasevolume
+- (void)action_increasevolume:(id)arg1
 {
     id vc = [self.volumeSlider valueForKey:@"volumeController"];
     [vc performSelector:@selector(incrementVolumeInDirection:) withObject:@(1) afterDelay:0.0];
 }
 
 %new
-- (void)action_equalizereverywhere
+- (void)action_equalizereverywhere:(id)arg1
 {
 }
 

@@ -7,6 +7,7 @@
     "D160B3B43FD6C99968154BF16096C2906B2D8C37" : 0,
     "72C7A478705D53F39E89FE8E2D7FE4B3DF42000E" : 0,
     "9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE" : 0,
+    "0580934A31FE6B534D1F29C1585C298545C19D2E" : 0,
     "E2811579280C8FC45DBD8A3EB086096BA7A2E580" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "2D6244FF-F59B-4459-B227-AA3F6E27FC98",
@@ -14,12 +15,18 @@
     "D160B3B43FD6C99968154BF16096C2906B2D8C37" : "..\/..\/..\/..\/opt\/theos\/theos-ref",
     "72C7A478705D53F39E89FE8E2D7FE4B3DF42000E" : "..\/..\/..\/..\/opt\/theos\/include",
     "9331B300477AF4CA4EE435F8E0AB1FD036EA4FEE" : "acapella2\/",
+    "0580934A31FE6B534D1F29C1585C298545C19D2E" : "itunes-sync-flipswitch\/",
     "E2811579280C8FC45DBD8A3EB086096BA7A2E580" : "..\/..\/..\/..\/opt\/theos"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "acapella",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "acapella.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/patsluth\/itunes-sync-flipswitch.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0580934A31FE6B534D1F29C1585C298545C19D2E"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/hbang\/headers.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",

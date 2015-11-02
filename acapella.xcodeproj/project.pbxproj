@@ -22,7 +22,6 @@
 		2E3BD8AE1BD42D6700B11FFD /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; name = public; path = acapella/public; sourceTree = "<group>"; };
 		2E3BD8AF1BD42D6700B11FFD /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = acapella/Resources; sourceTree = "<group>"; };
 		2E3BD8B01BD42D6700B11FFD /* SBLockScreenView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = SBLockScreenView.xm; path = acapella/SBLockScreenView.xm; sourceTree = "<group>"; };
-		2E3BD8B11BD42D6700B11FFD /* theos */ = {isa = PBXFileReference; lastKnownFileType = folder; name = theos; path = acapella/theos; sourceTree = "<group>"; };
 		2E3BD8B21BD42D6700B11FFD /* Prefs.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = Prefs.xm; path = acapella/Prefs.xm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -37,7 +36,6 @@
 				2E3BD8A61BD42D6700B11FFD /* Makefile */,
 				2E3BD8AE1BD42D6700B11FFD /* public */,
 				2E3BD8AF1BD42D6700B11FFD /* Resources */,
-				2E3BD8B11BD42D6700B11FFD /* theos */,
 				2E3BD8A71BD42D6700B11FFD /* MPUMediaControlsTitlesView.xm */,
 				2E3BD8A81BD42D6700B11FFD /* MPUSystemMediaControlsViewController.xm */,
 				2E3BD8A91BD42D6700B11FFD /* MPUTransportControlsView.xm */,

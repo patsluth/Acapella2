@@ -1,0 +1,112 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		2EBB757D1BE97C5A00A3A82D /* AcapellaPrefs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AcapellaPrefs; sourceTree = "<group>"; };
+		2EBB757E1BE97C5A00A3A82D /* AcapellaTest */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AcapellaTest; sourceTree = "<group>"; };
+		2EBB757F1BE97C5A00A3A82D /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		2EBB75801BE97C5A00A3A82D /* final_release_debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = final_release_debs; sourceTree = "<group>"; };
+		2EBB75811BE97C5A00A3A82D /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
+		2EBB75821BE97C5A00A3A82D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		2EBB75831BE97C5A00A3A82D /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		2EBB75841BE97C5A00A3A82D /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Acapella2.plist; sourceTree = "<group>"; };
+		2EBB75881BE97C5A00A3A82D /* SWAcapella.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = "<group>"; };
+		2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
+		2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
+		2EBB758B1BE97C5A00A3A82D /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
+		2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUSystemMediaControlsViewController.xm; sourceTree = "<group>"; };
+		2EBB758E1BE97C5A00A3A82D /* MPUTransportControlsView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPUTransportControlsView.xm; sourceTree = "<group>"; };
+		2EBB758F1BE97C5A00A3A82D /* MPVolumeController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MPVolumeController.xm; sourceTree = "<group>"; };
+		2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
+		2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
+		2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
+		2EBB75931BE97C5A00A3A82D /* Prefs.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = Prefs.xm; sourceTree = "<group>"; };
+		2EBB75941BE97C5A00A3A82D /* SBLockScreenView.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SBLockScreenView.xm; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2EBB756F1BE97BB900A3A82D = {
+			isa = PBXGroup;
+			children = (
+				2EBB757D1BE97C5A00A3A82D /* AcapellaPrefs */,
+				2EBB757E1BE97C5A00A3A82D /* AcapellaTest */,
+				2EBB757F1BE97C5A00A3A82D /* Assets */,
+				2EBB75801BE97C5A00A3A82D /* final_release_debs */,
+				2EBB75811BE97C5A00A3A82D /* layout */,
+				2EBB758B1BE97C5A00A3A82D /* Makefile */,
+				2EBB75821BE97C5A00A3A82D /* public */,
+				2EBB75831BE97C5A00A3A82D /* Resources */,
+				2EBB75881BE97C5A00A3A82D /* SWAcapella.m */,
+				2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */,
+				2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */,
+				2EBB75841BE97C5A00A3A82D /* Acapella2.plist */,
+				2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */,
+				2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */,
+				2EBB758E1BE97C5A00A3A82D /* MPUTransportControlsView.xm */,
+				2EBB758F1BE97C5A00A3A82D /* MPVolumeController.xm */,
+				2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */,
+				2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */,
+				2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */,
+				2EBB75931BE97C5A00A3A82D /* Prefs.xm */,
+				2EBB75941BE97C5A00A3A82D /* SBLockScreenView.xm */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		2EBB75701BE97BB900A3A82D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+			};
+			buildConfigurationList = 2EBB75731BE97BB900A3A82D /* Build configuration list for PBXProject "Acapella2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2EBB756F1BE97BB900A3A82D;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		2EBB75741BE97BB900A3A82D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		2EBB75751BE97BB900A3A82D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2EBB75731BE97BB900A3A82D /* Build configuration list for PBXProject "Acapella2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EBB75741BE97BB900A3A82D /* Debug */,
+				2EBB75751BE97BB900A3A82D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2EBB75701BE97BB900A3A82D /* Project object */;
+}

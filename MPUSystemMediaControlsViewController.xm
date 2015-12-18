@@ -77,6 +77,11 @@
             return @"vertex";
         }
         
+        //Seng
+        if ([NSStringFromClass([curView class]) isEqualToString:@"SengMediaSectionView"]){
+            return @"seng";
+        }
+        
         curView = curView.superview;
         
     }

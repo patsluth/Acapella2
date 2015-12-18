@@ -114,6 +114,20 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>SWAPSListController_Instance</string>
+			<key>isController</key>
+			<string>1</string>
+			<key>key</key>
+			<string>seng</string>
+			<key>label</key>
+			<string>Seng</string>
+			<key>defaults</key>
+			<string>com.patsluth.AcapellaPrefs2</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 		</dict>
 		<dict>

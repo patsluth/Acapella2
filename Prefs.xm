@@ -7,7 +7,6 @@
 
 %ctor //syncronize acapella default prefs
 {
-    
     NSBundle *bundle = [NSBundle bundleWithPath:ACAPELLA_PREFS_DEFAULTS_PATH];
     NSDictionary *prefDefaults = [NSDictionary dictionaryWithContentsOfFile:[bundle pathForResource:@"acapellaPrefsDefaults" ofType:@".plist"]];
     

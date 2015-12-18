@@ -10,14 +10,14 @@
     NSBundle *bundle = [NSBundle bundleWithPath:ACAPELLA_PREFS_DEFAULTS_PATH];
     NSDictionary *prefDefaults = [NSDictionary dictionaryWithContentsOfFile:[bundle pathForResource:@"acapellaPrefsDefaults" ofType:@".plist"]];
     
-    for (NSString *key in prefDefaults){
+    for (NSString *key in prefDefaults) {
         
         NSString *application = [key containsString:@"music"] ? @"com.apple.Music" : @"com.patsluth.AcapellaPrefs2";
         
         id currentValue = (id)CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)key,
                                                                           (__bridge CFStringRef)application));
         
-        if (currentValue == nil){ //dont overwrite
+        if (currentValue == nil) { //dont overwrite
             CFPreferencesSetAppValue((__bridge CFStringRef)key,
                                      (__bridge CFPropertyListRef)[prefDefaults valueForKey:key],
                                      (__bridge CFStringRef)application);

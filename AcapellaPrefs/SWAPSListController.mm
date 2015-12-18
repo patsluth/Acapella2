@@ -35,11 +35,11 @@
     
     
     
-    for (PSSpecifier *specifier in original){ //concatenate keys and defaults
+    for (PSSpecifier *specifier in original) { //concatenate keys and defaults
         
         NSString *specifierKey = [specifier.properties valueForKey:@"key"];
         
-        if (specifierKey != nil){
+        if (specifierKey != nil) {
             specifierKey = [NSString stringWithFormat:@"%@_%@", key, specifierKey];
             [specifier.properties setValue:specifierKey forKey:@"key"];
         }
@@ -59,11 +59,11 @@
 
     NSString *key = specifier.properties[@"key"];
 
-    if (key){
+    if (key) {
 
         NSString *defaults = specifier.properties[@"defaults"];
 
-        if (defaults){
+        if (defaults) {
 
             //update the CFPreferences so we can read them right away
             CFPreferencesSetAppValue((__bridge CFStringRef)key, (__bridge CFPropertyListRef)value, (__bridge CFStringRef)defaults);

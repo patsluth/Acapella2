@@ -21,7 +21,7 @@
 {
     self = [super init];
     
-    if (self){
+    if (self) {
         [self initialize];
     }
     
@@ -32,7 +32,7 @@
 {
     self = [super initWithCoder:aDecoder];
     
-    if (self){
+    if (self) {
         [self initialize];
     }
     
@@ -43,7 +43,7 @@
 {
     self = [super initWithFrame:frame];
     
-    if (self){
+    if (self) {
         [self initialize];
     }
     

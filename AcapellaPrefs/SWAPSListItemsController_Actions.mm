@@ -28,7 +28,7 @@
 {
     PSTableCell *cell = [super tableView:arg1 cellForRowAtIndexPath:arg2];
     
-    if (cell && self.bundle){
+    if (cell && self.bundle) {
         NSString *imagePath = [self.bundle pathForResource:[cell.specifier.name stringByReplacingOccurrencesOfString:@" "
                                                                                                           withString:@""] ofType:@"png"];
         cell.imageView.image = [UIImage imageWithContentsOfFile:imagePath];

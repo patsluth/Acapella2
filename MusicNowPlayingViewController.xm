@@ -83,14 +83,14 @@
 {
     %orig(animated);
     
-    if (!self.acapella){
+    if (!self.acapella) {
         
         NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"enabled"];
         
-        if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]){
+        if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]) {
             
             [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.titlesView.superview
-                                                          preInitializeAction:^(SWAcapella *a){
+                                                          preInitializeAction:^(SWAcapella *a) {
                                                               a.owner = self;
                                                               a.titles = self.titlesView;
                                                           }]
@@ -100,7 +100,7 @@
         
     }
     
-    if (self.acapella){
+    if (self.acapella) {
         
         self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
         self.acapella.prefApplication = PREF_APPLICATION;
@@ -131,15 +131,15 @@
     self.volumeSlider.layer.opacity = volumeVisible ? 1.0 : 0.0;
     
     //Pinnning views responsible for drawing knobs
-    for (UIView *subview in self.vibrantEffectView.subviews){
-        if (%c(MPUPinningView) && [subview isKindOfClass:%c(MPUPinningView)]){
+    for (UIView *subview in self.vibrantEffectView.subviews) {
+        if (%c(MPUPinningView) && [subview isKindOfClass:%c(MPUPinningView)]) {
             
             id pinningSourceLayer = [subview valueForKey:@"pinningSourceLayer"];
             id progressLayer = [[self.playbackProgressSliderView valueForKey:@"_playbackProgressSlider"] valueForKey:@"layer"];
             
-            if (pinningSourceLayer == progressLayer){
+            if (pinningSourceLayer == progressLayer) {
                 subview.hidden = !progressVisible;
-            } else if (pinningSourceLayer == self.volumeSlider.layer){
+            } else if (pinningSourceLayer == self.volumeSlider.layer) {
                 subview.hidden = !volumeVisible;
             }
             
@@ -149,12 +149,12 @@
     
     
     //intelligently calcualate centre based on visible controls, which we dont want to do on iPAD
-    if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)){ return; }
+    if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)) { return; }
     
     
     CGFloat topGuideline = CGRectGetMinY(self.playbackProgressSliderView.frame);
     
-    if (self.playbackProgressSliderView.layer.opacity > 0.0){ //visible
+    if (self.playbackProgressSliderView.layer.opacity > 0.0) { //visible
         topGuideline += CGRectGetHeight(self.playbackProgressSliderView.bounds);
     }
     
@@ -162,15 +162,15 @@
     CGFloat bottomGuideline = CGRectGetMinY(self.transportControls.frame); //top of primary transport controls
     
     
-    if ([self.transportControls hidden_acapella]){
+    if ([self.transportControls hidden_acapella]) {
         
         bottomGuideline = CGRectGetMinY(self.volumeSlider.frame); //top of volume slider
         
-        if (self.volumeSlider.layer.opacity <= 0.0){ //hidden
+        if (self.volumeSlider.layer.opacity <= 0.0) { //hidden
             
             bottomGuideline = CGRectGetMinY(self.secondaryTransportControls.frame); //top of transport secondary controls
             
-            if ([self.secondaryTransportControls hidden_acapella]){
+            if ([self.secondaryTransportControls hidden_acapella]) {
                 bottomGuideline = CGRectGetMaxY(self.titlesView.superview.bounds); //bottom of screen
             }
             
@@ -207,58 +207,58 @@
     
     //TOP ROW
     NSString *key_Heart = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_heart"];
-    if (arg2 == 6 && ![[SWPrefs valueForKey:key_Heart application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 6 && ![[SWPrefs valueForKey:key_Heart application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_PrevTrack = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_previoustrack"];
-    if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_IntervalRewind = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_intervalrewind"];
-    if (arg2 == 2 && ![[SWPrefs valueForKey:key_IntervalRewind application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 2 && ![[SWPrefs valueForKey:key_IntervalRewind application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_PlayPause = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_playpause"];
-    if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_NextTrack = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_nexttrack"];
-    if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_IntervalForward = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_intervalforward"];
-    if (arg2 == 5 && ![[SWPrefs valueForKey:key_IntervalForward application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 5 && ![[SWPrefs valueForKey:key_IntervalForward application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_UpNext = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_upnext"];
-    if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     //BOTTOM ROW
     NSString *key_Share = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_share"];
-    if (arg2 == 8 && ![[SWPrefs valueForKey:key_Share application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 8 && ![[SWPrefs valueForKey:key_Share application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_Shuffle = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_shuffle"];
-    if (arg2 == 10 && ![[SWPrefs valueForKey:key_Shuffle application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 10 && ![[SWPrefs valueForKey:key_Shuffle application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_Repeat = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_repeat"];
-    if (arg2 == 9 && ![[SWPrefs valueForKey:key_Repeat application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 9 && ![[SWPrefs valueForKey:key_Repeat application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
     NSString *key_Contextual = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_contextual"];
-    if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual application:PREF_APPLICATION] boolValue]){
+    if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual application:PREF_APPLICATION] boolValue]) {
         return nil;
     }
     
@@ -268,14 +268,14 @@
 
 //- (void)_handleTapGestureRecognizerAction:(id)arg1 //tap on artwork
 //{
-//    //if (!self.acapella){
+//    //if (!self.acapella) {
 //        %orig(arg1);
 //    //}
 //}
 
 - (void)_showUpNext
 {
-    if (self.acapella){
+    if (self.acapella) {
         self.acapella.titlesCloneContainer = nil;
     }
     
@@ -284,7 +284,7 @@
 
 - (void)_showUpNext:(id)arg1
 {
-    if (self.acapella){
+    if (self.acapella) {
         self.acapella.titlesCloneContainer = nil;
     }
     
@@ -343,7 +343,7 @@
     
     unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
-    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+    if (originalLPCommand == newLPCommand) { //if the commands havent changed we are seeking, so we should stop seeking
         [self transportControlsView:self.transportControls longPressEndOnControlType:1];
     }
 }
@@ -357,7 +357,7 @@
     
     unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
-    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+    if (originalLPCommand == newLPCommand) { //if the commands havent changed we are seeking, so we should stop seeking
         [self transportControlsView:self.transportControls longPressEndOnControlType:4];
     }
 }
@@ -374,7 +374,7 @@
     
     //if the 2 commands are different, then something happened when we told the transportControlView to
     //stop seeking, meaning we were seeking
-    if (originalLPCommand == newLPCommand){
+    if (originalLPCommand == newLPCommand) {
         [self transportControlsView:self.transportControls tapOnControlType:3];
     }
     

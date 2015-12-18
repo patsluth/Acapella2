@@ -20,7 +20,7 @@ static id prefValueForKey(NSString *key)
 {
     NSArray *parts = [key componentsSeparatedByString:@"_"];
     
-    if (parts.count < 2){
+    if (parts.count < 2) {
         NSLog(@"Invalid Key %@", key);
         return nil;
     }
@@ -28,11 +28,11 @@ static id prefValueForKey(NSString *key)
     NSString *prefix = [parts objectAtIndex:0];
     NSString *option = [parts objectAtIndex:1];
     
-    if ([option isEqualToString:@"enabled"]){
+    if ([option isEqualToString:@"enabled"]) {
         return @(YES);
-    } else if ([option isEqualToString:@"gestures"]){
+    } else if ([option isEqualToString:@"gestures"]) {
         
-        if (parts.count < 5){
+        if (parts.count < 5) {
             NSLog(@"Invalid Gesture Key %@", key);
             return nil;
         }
@@ -41,44 +41,44 @@ static id prefValueForKey(NSString *key)
         //NSString *finger = [parts objectAtIndex:3];
         //NSString *force = [parts objectAtIndex:4];
         
-        //if ([finger isEqualToString:@"twofinger"] || ![force isEqualToString:@"forcenone"]){
+        //if ([finger isEqualToString:@"twofinger"] || ![force isEqualToString:@"forcenone"]) {
         
-        if ([gesture containsString:@"tap"]){
+        if ([gesture containsString:@"tap"]) {
             
             //no volume control for mini
-            if ([gesture containsString:@"centre"] || [prefix isEqualToString:@"musicmini"]){
+            if ([gesture containsString:@"centre"] || [prefix isEqualToString:@"musicmini"]) {
                 return @"action_playpause";
             } else {
-                if ([gesture containsString:@"left"]){
+                if ([gesture containsString:@"left"]) {
                     return @"action_decreasevolume";
-                } else if ([gesture containsString:@"right"]){
+                } else if ([gesture containsString:@"right"]) {
                     return @"action_increasevolume";
                 }
             }
             
-        } else if ([gesture containsString:@"swipe"]){
+        } else if ([gesture containsString:@"swipe"]) {
             
-            if ([gesture containsString:@"left"]){
+            if ([gesture containsString:@"left"]) {
                 return @"action_nexttrack";
-            } else if ([gesture containsString:@"right"]){
+            } else if ([gesture containsString:@"right"]) {
                 return @"action_previoustrack";
             }
             
-        } else if ([gesture containsString:@"press"]){
+        } else if ([gesture containsString:@"press"]) {
             
-            if ([gesture containsString:@"left"]){
+            if ([gesture containsString:@"left"]) {
                 return @"action_intervalrewind";
-            } else if ([gesture containsString:@"centre"]){
+            } else if ([gesture containsString:@"centre"]) {
                 
-                if ([prefix isEqualToString:@"musicnowplaying"]){
+                if ([prefix isEqualToString:@"musicnowplaying"]) {
                     return @"action_showratings";
-                } else if ([prefix isEqualToString:@"musicmini"]){
+                } else if ([prefix isEqualToString:@"musicmini"]) {
                     return @"action_contextual";
                 } else {
                     return @"action_openapp";
                 }
                 
-            } else if ([gesture containsString:@"right"]){
+            } else if ([gesture containsString:@"right"]) {
                 return @"action_intervalforward";
             }
             
@@ -88,46 +88,46 @@ static id prefValueForKey(NSString *key)
         NSLog(@"Error parsing gesture key %@", key);
         return @"action_nil";
         
-    } else if ([option isEqualToString:@"progressslider"]){
+    } else if ([option isEqualToString:@"progressslider"]) {
         return @(YES);
-    } else if ([option isEqualToString:@"transport"]){
+    } else if ([option isEqualToString:@"transport"]) {
         
-        if (parts.count < 3){
+        if (parts.count < 3) {
             NSLog(@"Invalid Transport Key %@", key);
             return nil;
         }
         
-        if ([prefix isEqualToString:@"musicmini"]){ //all transport controls disabled for mini
+        if ([prefix isEqualToString:@"musicmini"]) { //all transport controls disabled for mini
             return @(NO);
         }
         
         NSString *transport = [parts objectAtIndex:2];
         
-        if ([transport isEqualToString:@"heart"]){
+        if ([transport isEqualToString:@"heart"]) {
             return @(YES);
-        } else if ([transport isEqualToString:@"previoustrack"]){
+        } else if ([transport isEqualToString:@"previoustrack"]) {
             return @(NO);
-        } else if ([transport isEqualToString:@"intervalrewind"]){
+        } else if ([transport isEqualToString:@"intervalrewind"]) {
             return @(NO);
-        } else if ([transport isEqualToString:@"playpause"]){
+        } else if ([transport isEqualToString:@"playpause"]) {
             return @(NO);
-        } else if ([transport isEqualToString:@"nexttrack"]){
+        } else if ([transport isEqualToString:@"nexttrack"]) {
             return @(NO);
-        } else if ([transport isEqualToString:@"intervalforward"]){
+        } else if ([transport isEqualToString:@"intervalforward"]) {
             return @(NO);
-        } else if ([transport isEqualToString:@"upnext"]){
+        } else if ([transport isEqualToString:@"upnext"]) {
             return @(YES);
-        } else if ([transport isEqualToString:@"share"]){
+        } else if ([transport isEqualToString:@"share"]) {
             return @(YES);
-        } else if ([transport isEqualToString:@"shuffle"]){
+        } else if ([transport isEqualToString:@"shuffle"]) {
             return @(YES);
-        } else if ([transport isEqualToString:@"repeat"]){
+        } else if ([transport isEqualToString:@"repeat"]) {
             return @(YES);
-        } else if ([transport isEqualToString:@"contextual"]){
+        } else if ([transport isEqualToString:@"contextual"]) {
             return @(YES);
         }
         
-    } else if ([option isEqualToString:@"volumeslider"]){
+    } else if ([option isEqualToString:@"volumeslider"]) {
         return @(YES);
     }
     
@@ -144,7 +144,7 @@ static void writeKey(NSString *key, id value, NSString *directory)
     [dict setValue:value forKey:key];
     [dict writeToFile:filePath atomically:YES];
     
-//    if (![dict valueForKey:key]){
+//    if (![dict valueForKey:key]) {
 //        //New Key
 //    } else {
 //        //Key Exists
@@ -157,7 +157,7 @@ static void exportKeys(NSString *directory, NSString *detail, NSString *prevKey)
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@%@.plist", directory, detail]];
     
     
-    if (!dict && prevKey){ //no detail, output the key
+    if (!dict && prevKey) { //no detail, output the key
         
         writeKey(prevKey, prefValueForKey(prevKey), directory);
         
@@ -165,23 +165,23 @@ static void exportKeys(NSString *directory, NSString *detail, NSString *prevKey)
         
         NSArray *items = [dict valueForKey:@"items"];
         
-        for (NSDictionary *item in items){
+        for (NSDictionary *item in items) {
             
             NSString *key = [item valueForKey:@"key"];
             NSString *subDetail = [item valueForKey:@"detail"];
             
-            if (prevKey && key){ //append keys
+            if (prevKey && key) { //append keys
                 key = [NSString stringWithFormat:@"%@_%@", prevKey, key];
             }
             
-            if (subDetail){ //keep drilling down
+            if (subDetail) { //keep drilling down
                 
                 [item setValue:key forKey:@"key"];
                 exportKeys(directory, subDetail, key);
                 
             } else { //this is the final detail, output the key
                 
-                if (key){
+                if (key) {
                     writeKey(key, prefValueForKey(key), directory);
                 }
                 
@@ -201,7 +201,7 @@ int main(int argc, const char * argv[])
         NSString *input = [[NSString alloc] initWithData:[standardInput readDataToEndOfFile] encoding:NSUTF8StringEncoding];
         NSArray *arguments = [input componentsSeparatedByString:@";"];
         
-        if (arguments.count > 2){
+        if (arguments.count > 2) {
             
             NSString *directory = [NSString stringWithFormat:@"%@/Resources/", arguments[0]];
             NSString *rootDetail = arguments[1];

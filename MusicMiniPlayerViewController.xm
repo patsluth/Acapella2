@@ -74,14 +74,14 @@
 {
     %orig(animated);
     
-    if (!self.acapella){
+    if (!self.acapella) {
         
         NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"enabled"];
         
-        if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]){
+        if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]) {
             
             [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
-                                                          preInitializeAction:^(SWAcapella *a){
+                                                          preInitializeAction:^(SWAcapella *a) {
                                                               a.owner = self;
                                                               a.titles = self.titlesView;
                                                           }]
@@ -91,7 +91,7 @@
         
     }
     
-    if (self.acapella){
+    if (self.acapella) {
         
         self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
         self.acapella.prefApplication = PREF_APPLICATION;
@@ -118,12 +118,12 @@
     CGRect titlesFrame = self.titlesView.frame;
     
     //intelligently calcualate titles frame based on visible transport controls
-    if ([self.transportControlsView hidden_acapella]){
+    if ([self.transportControlsView hidden_acapella]) {
         titlesFrame.origin.x = 0.0;
         titlesFrame.size.width = self.secondaryTransportControlsView.frame.origin.x;
     }
     
-    if ([self.secondaryTransportControlsView hidden_acapella]){
+    if ([self.secondaryTransportControlsView hidden_acapella]) {
         titlesFrame.size.width = CGRectGetWidth(self.titlesView.superview.bounds) - titlesFrame.origin.x;
     }
     
@@ -153,32 +153,32 @@
     
     NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     
-    if (prefKeyPrefix != nil){
+    if (prefKeyPrefix != nil) {
         
         //LEFT SECTION
         NSString *key_PrevTrack = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_previoustrack"];
-        if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_PlayPause = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_playpause"];
-        if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_NextTrack = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_nexttrack"];
-        if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         //RIGHT SECTION
         NSString *key_UpNext = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_presentupnext"];
-        if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_Contextual = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_contextual"];
-        if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
@@ -190,7 +190,7 @@
 
 - (void)_tapRecognized:(id)arg1
 {
-    if (!self.acapella){
+    if (!self.acapella) {
         %orig(arg1);
     }
 }
@@ -201,7 +201,7 @@
 - (void)action_nil:(id)arg1
 {
     //if tap and action is set to nil, perform the original tap action
-    if (arg1 && [arg1 isKindOfClass:[UITapGestureRecognizer class]]){
+    if (arg1 && [arg1 isKindOfClass:[UITapGestureRecognizer class]]) {
         [(MusicTabBarController *)self.parentViewController presentNowPlayingViewController];
     }
 }
@@ -214,7 +214,7 @@
 %new
 - (void)action_upnext:(id)arg1
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         
         [self transportControlsView:self.secondaryTransportControlsView tapOnControlType:7];
         
@@ -224,10 +224,10 @@
         
         [(MusicTabBarController *)self.parentViewController presentViewController:nowPlaying
                                                                          animated:YES
-                                                                       completion:^(BOOL finished){
+                                                                       completion:^(BOOL finished) {
                                                                            
                                                                            SEL upNext = NSSelectorFromString(@"action_upnext");
-                                                                           if ([nowPlaying respondsToSelector:upNext]){
+                                                                           if ([nowPlaying respondsToSelector:upNext]) {
                                                                                [nowPlaying performSelector:upNext];
                                                                            }
                                                                            
@@ -269,7 +269,7 @@
     
     unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
-    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+    if (originalLPCommand == newLPCommand) { //if the commands havent changed we are seeking, so we should stop seeking
         [self transportControlsView:self.transportControlsView longPressEndOnControlType:1];
     }
 }
@@ -283,7 +283,7 @@
     
     unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
-    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+    if (originalLPCommand == newLPCommand) { //if the commands havent changed we are seeking, so we should stop seeking
         [self transportControlsView:self.transportControlsView longPressEndOnControlType:4];
     }
 }
@@ -300,7 +300,7 @@
     
     //if the 2 commands are different, then something happened when we told the transportControlView to
     //stop seeking, meaning we were seeking
-    if (originalLPCommand == newLPCommand){
+    if (originalLPCommand == newLPCommand) {
         [self transportControlsView:self.transportControlsView tapOnControlType:3];
     }
     
@@ -378,7 +378,7 @@
 {
     %init(_ungrouped);
     
-    if (SYSTEM_VERSION_LESS_THAN(@"9.0")){
+    if (SYSTEM_VERSION_LESS_THAN(@"9.0")) {
         %init(preiOS9);
     }
     

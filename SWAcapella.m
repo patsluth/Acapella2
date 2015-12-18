@@ -68,7 +68,7 @@
 
 + (void)removeAcapella:(SWAcapella *)acapella
 {
-    if (acapella){
+    if (acapella) {
         [acapella.animator removeAllBehaviors];
         acapella.animator = nil;
         
@@ -110,17 +110,17 @@
 
 - (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
 {
-    if (!referenceView){
+    if (!referenceView) {
         //NSLog(@"SWAcapella error - Can't create SWAcapella. No referenceView supplied.");
         return nil;
     }
     
     self = [super init];
     
-    if (self){
+    if (self) {
         self.referenceView = referenceView;
         
-        if (preInitializeAction){
+        if (preInitializeAction) {
             preInitializeAction(self);
         }
         
@@ -132,7 +132,7 @@
 
 - (void)initialize
 {
-    if (self.owner == nil || self.referenceView == nil){
+    if (self.owner == nil || self.referenceView == nil) {
         //NSLog(@"SWAcapella error - owner[%@] and referenceView[%@] cannot be nil", [self.owner class], [self.referenceView class]);
         return;
     }
@@ -180,7 +180,7 @@
 
 - (void)setupTitleCloneContainer
 {
-    if (!self.titlesCloneContainer){
+    if (!self.titlesCloneContainer) {
         
         self.titlesCloneContainer = [[SWAcapellaTitlesCloneContainer alloc] initWithFrame:self.titles.superview.frame];
         [self.referenceView addSubview:self.titlesCloneContainer];
@@ -198,7 +198,7 @@
 
 - (void)refreshTitleClone
 {
-    if (!self.titlesCloneContainer){
+    if (!self.titlesCloneContainer) {
         return;
     }
     
@@ -218,7 +218,7 @@
     NSString *directionString = (xPercentage <= 0.25) ? @"tapleft" : (xPercentage > 0.75) ? @"tapright" : @"tapcentre";
     NSString *fingerString = (tap.numberOfTouchesRequired == 1) ? @"onefinger" : (tap.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
     
-    if (directionString && fingerString){
+    if (directionString && fingerString) {
         
         NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
                          self.prefKeyPrefix,
@@ -231,7 +231,7 @@
         
     }
     
-    if (sel && [self.owner respondsToSelector:sel]){
+    if (sel && [self.owner respondsToSelector:sel]) {
         [self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
     }
 }
@@ -242,7 +242,7 @@
     CGPoint panLocation = (pan.numberOfTouches > 0) ? [pan locationOfTouch:0 inView:pan.view] : [pan locationInView:pan.view];
     panLocation.y = self.titles.superview.center.y;
     
-    if (pan.state == UIGestureRecognizerStateBegan){
+    if (pan.state == UIGestureRecognizerStateBegan) {
         
         [self.animator removeAllBehaviors];
         
@@ -257,11 +257,11 @@
         self.attachment.anchorPoint = panLocation;
         [self.animator addBehavior:self.attachment];
         
-    } else if (pan.state == UIGestureRecognizerStateChanged){
+    } else if (pan.state == UIGestureRecognizerStateChanged) {
         
         self.attachment.anchorPoint = panLocation;
         
-    } else if (pan.state == UIGestureRecognizerStateEnded){
+    } else if (pan.state == UIGestureRecognizerStateEnded) {
         
         [self.animator removeBehavior:self.attachment];
         
@@ -287,13 +287,13 @@
             CGFloat offScreenLeftX = -halfWidth;
             CGFloat offScreenRightX = CGRectGetWidth(bself.referenceView.bounds) + halfWidth;
             
-            if (center.x < offScreenLeftX){
+            if (center.x < offScreenLeftX) {
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, self.titles.superview.center.y);
                 [self didWrapAround:-1 pan:pan];
                 
-            } else if (center.x > offScreenRightX){
+            } else if (center.x > offScreenRightX) {
                 
                 [bself.animator removeAllBehaviors];
                 bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, self.titles.superview.center.y);
@@ -304,7 +304,7 @@
                 CGFloat absoluteVelocity = fabs([bd linearVelocityForItem:bself.titlesCloneContainer].x);
                 
                 //snap to center if we are moving to slow
-                if (absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)){
+                if (absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)) {
                     [bself snapToCenter];
                 }
                 
@@ -316,11 +316,11 @@
 
 - (void)onPress:(UILongPressWithForceGestureRecognizer *)press
 {
-    if (press.state == UIGestureRecognizerStateBegan){
+    if (press.state == UIGestureRecognizerStateBegan) {
         
         //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         
-    } else if (press.state == UIGestureRecognizerStateEnded){
+    } else if (press.state == UIGestureRecognizerStateEnded) {
         
         CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
         //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
@@ -329,7 +329,7 @@
         NSString *directionString = (xPercentage <= 0.25) ? @"pressleft" : (xPercentage > 0.75) ? @"pressright" : @"presscentre";
         NSString *fingerString = (press.numberOfTouchesRequired == 1) ? @"onefinger" : (press.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
         
-        if (directionString && fingerString){
+        if (directionString && fingerString) {
             
             NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
                              self.prefKeyPrefix,
@@ -342,7 +342,7 @@
             
         }
         
-        if (sel && [self.owner respondsToSelector:sel]){
+        if (sel && [self.owner respondsToSelector:sel]) {
             [self.owner performSelectorOnMainThread:sel withObject:press waitUntilDone:NO];
         }
         
@@ -353,7 +353,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer]){
+    if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer]) {
         
         BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
         return isControl ? !((UIControl *)touch.view).enabled : !isControl;
@@ -366,7 +366,7 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
-        [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+        [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint panVelocity = [pan velocityInView:pan.view];
@@ -392,7 +392,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 - (void)onForceChange:(UIGestureRecognizer<UIForceGestureRecognizer> * _Nonnull)gestureRecognizer
 {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
-        gestureRecognizer.state == UIGestureRecognizerStateChanged){
+        gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         
         switch (gestureRecognizer.forceType) {
             case UIForceTypeNone:
@@ -413,7 +413,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
         }
         
     } else if (gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
-               gestureRecognizer.state == UIGestureRecognizerStateEnded){
+               gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         
         self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
         
@@ -437,7 +437,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
     NSString *directionString = (direction < 0) ? @"swipeleft" : (direction > 0) ? @"swiperight" : nil;
     NSString *fingerString = (pan.minimumNumberOfTouches == 1) ? @"onefinger" : (pan.minimumNumberOfTouches == 2) ? @"twofinger" : nil;
     
-    if (directionString && fingerString){
+    if (directionString && fingerString) {
         
         NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
                          self.prefKeyPrefix,
@@ -450,7 +450,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
         
     }
     
-    if (sel && [self.owner respondsToSelector:sel]){
+    if (sel && [self.owner respondsToSelector:sel]) {
         [self.owner performSelectorOnMainThread:sel withObject:pan waitUntilDone:NO];
     }
     
@@ -464,7 +464,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 
 - (void)finishWrapAround
 {
-    if (!self.titlesCloneContainer){
+    if (!self.titlesCloneContainer) {
         return;
     }
 
@@ -472,7 +472,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 
     self.wrapAroundFallback = nil;
 
-    if (self.titlesCloneContainer.tag == 6969){ //waiting for wrap around tag
+    if (self.titlesCloneContainer.tag == 6969) { //waiting for wrap around tag
         
         [self.animator removeAllBehaviors];
 
@@ -500,7 +500,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
             
             BOOL toSlow = fabs(velocity) < CGRectGetMidX(bself.referenceView.bounds);
             
-            if (toSlow){
+            if (toSlow) {
                 [bself snapToCenter];
             } else {
                 
@@ -510,7 +510,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
                 //once we travel past the center, this value will be -ve as well. This also happens in the other direction
                 //except with positive values. So we know we have travelled past the center if our velocity and our distance from
                 //the center have the same sign (-ve && -ve || +ve && +ve)
-                if (((distanceFromCenter < 0) == (velocity < 0))){
+                if (((distanceFromCenter < 0) == (velocity < 0))) {
                     //this will cause the toSlow condition to be met much quicker, snapping it to the centre
                     bd.resistance = 60;
                 }
@@ -528,7 +528,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 {
     [self.animator removeAllBehaviors];
     
-    if (!self.titlesCloneContainer){
+    if (!self.titlesCloneContainer) {
         return;
     }
     
@@ -551,11 +551,11 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 {
     //this method will get called if we stop dragging, but still have our finger down
     //check to see if we are dragging to make sure we dont remove all behaviours
-    if (self.pan.state == UIGestureRecognizerStateChanged || self.pan2.state == UIGestureRecognizerStateChanged){
+    if (self.pan.state == UIGestureRecognizerStateChanged || self.pan2.state == UIGestureRecognizerStateChanged) {
         return;
     }
     
-    if (self.titlesCloneContainer && self.titlesCloneContainer.tag == 98765){
+    if (self.titlesCloneContainer && self.titlesCloneContainer.tag == 98765) {
         self.titlesCloneContainer = nil;
     }
     
@@ -573,14 +573,14 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
                          
                          self.referenceView.window.transform = SWA_SCALE_3DTOUCH_PEEK;
                          
-                     }completion:^(BOOL finished){
+                     }completion:^(BOOL finished) {
                          
-                         if (finished){
+                         if (finished) {
                              
                              [UIView animateWithDuration:0.1
                                               animations:^{
                                                   self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
-                                              } completion:^(BOOL finished){
+                                              } completion:^(BOOL finished) {
                                                   self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
                                               }];
                              
@@ -624,21 +624,21 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 
 - (void)setTitlesCloneContainer:(SWAcapellaTitlesCloneContainer *)titlesCloneContainer
 {
-    if (!titlesCloneContainer && _titlesCloneContainer){
+    if (!titlesCloneContainer && _titlesCloneContainer) {
         [_titlesCloneContainer removeFromSuperview];
         self.titles.layer.opacity = 1.0;
     }
     
     _titlesCloneContainer = titlesCloneContainer;
     
-    if (_titlesCloneContainer){
+    if (_titlesCloneContainer) {
         _titlesCloneContainer.clone.titles = self.titles;
     }
 }
 
 - (void)setWrapAroundFallback:(NSTimer *)wrapAroundFallback
 {
-    if (_wrapAroundFallback && !wrapAroundFallback){
+    if (_wrapAroundFallback && !wrapAroundFallback) {
         [_wrapAroundFallback invalidate];
     }
     

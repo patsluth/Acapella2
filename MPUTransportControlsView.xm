@@ -13,7 +13,7 @@
 {
     BOOL controlVisible = NO;
     
-    for (UIView *v in self.subviews){
+    for (UIView *v in self.subviews) {
         controlVisible = (controlVisible || !v.hidden);
     }
     

@@ -50,35 +50,36 @@
     
     UIView *curView = view.superview;
     
-    while (curView){
+    while (curView) {
         
         //Control Centre
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SBControlCenterRootView"]){
+        if (%c(SBControlCenterRootView) != NULL && [curView class] == %c(SBControlCenterRootView)) {
             return @"cc";
         }
         
         //Lock Screen
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SBLockScreenView"]){
+        if (%c(SBLockScreenView) != NULL && [curView class] == %c(SBLockScreenView)) {
             return @"ls";
         }
         
         //OnTapMusic - class will be null if tweak is not installed
-        if (objc_getClass("OTMView") && [NSStringFromClass([curView class]) isEqualToString:@"OTMView"]){
+        if (%c(OTMView) != NULL && [curView class] == %c(OTMView)) {
             return @"otm";
         }
         
         //Auxo LE - class will be null if tweak is not installed
-        if (objc_getClass("AuxoCollectionView") && [NSStringFromClass([curView class]) isEqualToString:@"AuxoCollectionView"]){
+        if (%c(AuxoCollectionView) != NULL && [curView class] == %c(AuxoCollectionView)) {
             return @"auxo";
         }
         
         //Vertex - Vertex has no classes ?
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SBAppSwitcherContainer"]){
+        if (%c(SBAppSwitcherContainer) != NULL && [curView class] == %c(SBAppSwitcherContainer)) {
             return @"vertex";
         }
         
         //Seng
-        if ([NSStringFromClass([curView class]) isEqualToString:@"SengMediaSectionView"]){
+        if ((%c(SengMediaSectionView) != NULL && [curView class] == %c(SengMediaSectionView)) ||
+            (%c(SengMediaTitlesSectionView) != NULL && [curView class] == %c(SengMediaTitlesSectionView))) {
             return @"seng";
         }
         
@@ -112,16 +113,16 @@
     
     NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     
-    if (!self.acapella){
+    if (!self.acapella) {
         
-        if (prefKeyPrefix != nil){
+        if (prefKeyPrefix != nil) {
             
             NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"enabled"];
             
-            if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]){
+            if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]) {
                 
                 [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
-                                                              preInitializeAction:^(SWAcapella *a){
+                                                              preInitializeAction:^(SWAcapella *a) {
                                                                   a.owner = self;
                                                                   a.titles = MPU_SYSTEM_MEDIA_CONTROLS_VIEW.trackInformationView;
                                                               }]
@@ -134,13 +135,13 @@
     }
     
     
-    if (self.acapella){
+    if (self.acapella) {
         
         self.acapella.prefKeyPrefix = prefKeyPrefix;
         self.acapella.prefApplication = PREF_APPLICATION;
         
-        for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
-            if ([v isKindOfClass:[UIButton class]]){
+        for (UIView *v in self.acapella.titles.subviews) { //button that handles titles tap
+            if ([v isKindOfClass:[UIButton class]]) {
                 UIButton *b = (UIButton *)v;
                 b.enabled = NO;
             }
@@ -148,8 +149,8 @@
         
     } else { //restore original state
         
-        for (UIView *v in self.acapella.titles.subviews){ //button that handles titles tap
-            if ([v isKindOfClass:[UIButton class]]){
+        for (UIView *v in self.acapella.titles.subviews) { //button that handles titles tap
+            if ([v isKindOfClass:[UIButton class]]) {
                 UIButton *b = (UIButton *)v;
                 b.enabled = YES;
             }
@@ -158,17 +159,17 @@
     }
     
     
-    if (prefKeyPrefix != nil){
+    if (prefKeyPrefix != nil) {
         
         NSString *progressKey = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"progressslider"];
         NSString *volumeKey = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"volumeslider"];
         
-        if (![[SWPrefs valueForKey:progressKey application:PREF_APPLICATION] boolValue]){
+        if (![[SWPrefs valueForKey:progressKey application:PREF_APPLICATION] boolValue]) {
             MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 0.0;
         } else {
             MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 1.0;
         }
-        if (![[SWPrefs valueForKey:volumeKey application:PREF_APPLICATION] boolValue]){
+        if (![[SWPrefs valueForKey:volumeKey application:PREF_APPLICATION] boolValue]) {
             MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 0.0;
         } else {
             MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 1.0;
@@ -205,40 +206,40 @@
     
     NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     
-    if (prefKeyPrefix != nil){
+    if (prefKeyPrefix != nil) {
     
         NSString *key_Heart = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_heart"];
-        if (arg2 == 6 && ![[SWPrefs valueForKey:key_Heart application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 6 && ![[SWPrefs valueForKey:key_Heart application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_PrevTrack = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_previoustrack"];
-        if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_IntervalRewind = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_intervalrewind"];
-        if (arg2 == 2 && ![[SWPrefs valueForKey:key_IntervalRewind application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 2 && ![[SWPrefs valueForKey:key_IntervalRewind application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_PlayPause = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_playpause"];
-        if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_NextTrack = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_nexttrack"];
-        if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_IntervalForward = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_intervalforward"];
-        if (arg2 == 5 && ![[SWPrefs valueForKey:key_IntervalForward application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 5 && ![[SWPrefs valueForKey:key_IntervalForward application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
         NSString *key_Share = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_share"];
-        if (arg2 == 8 && ![[SWPrefs valueForKey:key_Share application:PREF_APPLICATION] boolValue]){
+        if (arg2 == 8 && ![[SWPrefs valueForKey:key_Share application:PREF_APPLICATION] boolValue]) {
             return nil;
         }
         
@@ -273,9 +274,9 @@
     
     MPUTransportControlMediaRemoteController *t = MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER;
     
-    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
+    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]) { //wrap around instantly if nothing is playing
         
-        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
+        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]) {
             [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
         }
         
@@ -289,8 +290,8 @@
     
     MPUTransportControlMediaRemoteController *t = MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER;
     
-    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]){ //wrap around instantly if nothing is playing
-        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]){
+    if (![t.nowPlayingInfo valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]) { //wrap around instantly if nothing is playing
+        if ([self.acapella respondsToSelector:@selector(finishWrapAround)]) {
             [self.acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.0];
         }
     }
@@ -317,7 +318,7 @@
     
     unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
-    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+    if (originalLPCommand == newLPCommand) { //if the commands havent changed we are seeking, so we should stop seeking
         [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:1];
     }
 }
@@ -331,7 +332,7 @@
     
     unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
     
-    if (originalLPCommand == newLPCommand){ //if the commands havent changed we are seeking, so we should stop seeking
+    if (originalLPCommand == newLPCommand) { //if the commands havent changed we are seeking, so we should stop seeking
         [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView longPressEndOnControlType:4];
     }
 }
@@ -348,7 +349,7 @@
     
     //if the 2 commands are different, then something happened when we told the transportControlView to
     //stop seeking, meaning we were seeking
-    if (originalLPCommand == newLPCommand){
+    if (originalLPCommand == newLPCommand) {
         [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:3];
     }
     
@@ -410,9 +411,9 @@
 {
     UIView *curView = self.acapella.referenceView.superview;
     
-    while(curView){
+    while(curView) {
         
-        if ([curView isKindOfClass:NSClassFromString(@"SBEqualizerScrollView")]){
+        if ([curView isKindOfClass:NSClassFromString(@"SBEqualizerScrollView")]) {
             UIScrollView *ee = (UIScrollView *)curView;
             [ee setContentOffset:CGPointMake(CGRectGetWidth(ee.frame), 0.0) animated:YES];
             curView = nil;
@@ -436,21 +437,21 @@
     %orig();
     
     //intelligently calcualate centre based on visible controls
-    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad){
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
         
         CGFloat topGuideline = 0;
         
-        if (self.timeInformationView.layer.opacity > 0.0){ //visible
+        if (self.timeInformationView.layer.opacity > 0.0) { //visible
             topGuideline += CGRectGetMaxY(self.timeInformationView.frame);
         }
         
         
         CGFloat bottomGuideline = CGRectGetMaxY(self.bounds);
         
-        if (![self.transportControlsView hidden_acapella]){
+        if (![self.transportControlsView hidden_acapella]) {
             bottomGuideline = CGRectGetMinY(self.transportControlsView.frame);
         } else {
-            if (self.volumeView.layer.opacity > 0.0){ //visible
+            if (self.volumeView.layer.opacity > 0.0) { //visible
                 bottomGuideline = CGRectGetMinY(self.volumeView.frame);
             }
         }

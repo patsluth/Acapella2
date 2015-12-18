@@ -27,9 +27,9 @@
     
     float stepValue = 1.0 / 16.0; //16 is the number of squares in the volume hud
     
-    if ([direction integerValue] < 0){
+    if ([direction integerValue] < 0) {
         [self setVolumeValue:[self volumeValue] - stepValue];
-    } else if ([direction integerValue] > 0){
+    } else if ([direction integerValue] > 0) {
         [self setVolumeValue:[self volumeValue] + stepValue];
     }
 }

@@ -28,7 +28,7 @@
 {
     self = [super init];
     
-    if (self){
+    if (self) {
         [self initialize];
     }
     
@@ -39,7 +39,7 @@
 {
     self = [super initWithCoder:aDecoder];
     
-    if (self){
+    if (self) {
         [self initialize];
     }
     
@@ -50,7 +50,7 @@
 {
     self = [super initWithFrame:frame];
     
-    if (self){
+    if (self) {
         [self initialize];
     }
     
@@ -67,7 +67,7 @@
 {
     _titles = titles;
     
-    if (_titles){
+    if (_titles) {
         
         //wait for the next iteration, so we know the original text has been updated
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate date]];
@@ -90,7 +90,7 @@
 //    
 //    CGFloat xxxxx = CACurrentMediaTime();
 //
-//    for (UIView *v in self.subviews){
+//    for (UIView *v in self.subviews) {
 //        [v removeFromSuperview];
 //    }
 //
@@ -109,11 +109,11 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    if (self.titles){
+    if (self.titles) {
         
         CALayer *layer = self.titles.layer.modelLayer;
         
-        if (!layer){
+        if (!layer) {
             layer = self.titles.layer;
         }
         

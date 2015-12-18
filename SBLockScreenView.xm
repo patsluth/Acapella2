@@ -13,7 +13,7 @@
     NSString *x = NSStringFromClass([arg3.view class]);
     NSString *y = NSStringFromClass(%c(MPUSystemMediaControlsView));
     
-    if ([x isEqualToString:y]){
+    if ([x isEqualToString:y]) {
         return NO;
     }
     
@@ -25,7 +25,7 @@
     NSString *x = NSStringFromClass([arg2.view class]);
     NSString *y = NSStringFromClass(%c(MPUSystemMediaControlsView));
     
-    if ([x isEqualToString:y]){
+    if ([x isEqualToString:y]) {
         return NO;
     }
     

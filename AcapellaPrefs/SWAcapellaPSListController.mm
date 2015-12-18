@@ -33,7 +33,7 @@
 {
     NSDictionary *prefDefaults = [NSDictionary dictionaryWithContentsOfFile:[self.bundle pathForResource:@"acapellaPrefsDefaults" ofType:@".plist"]];
     
-    for (NSString *key in prefDefaults){
+    for (NSString *key in prefDefaults) {
         
         NSString *application = [key containsString:@"music"] ? @"com.apple.Music" : @"com.patsluth.AcapellaPrefs2";
         

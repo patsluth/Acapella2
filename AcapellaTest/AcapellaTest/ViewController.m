@@ -48,10 +48,10 @@
     
     
     
-    if (!self.acapella){
+    if (!self.acapella) {
         
         [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
-                                                      preInitializeAction:^(SWAcapella *a){
+                                                      preInitializeAction:^(SWAcapella *a) {
                                                           a.owner = self;
                                                           a.titles = self.dragView;
                                                           a.prefKeyPrefix = @"pat";
@@ -65,7 +65,7 @@
 - (IBAction)buttonClick:(id)sender
 {
     [NSTimer scheduledTimerWithTimeInterval:2 block:^{
-        for (UILabel *l in self.dragView.subviews){
+        for (UILabel *l in self.dragView.subviews) {
             l.text = [NSString stringWithFormat:@"%d", rand()];
         }
         [self.acapella.titlesCloneContainer setNeedsDisplay];

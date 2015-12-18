@@ -26,7 +26,7 @@
     
     SWAcapella *acapella = [SWAcapella acapellaForObject:self];
     
-    if (acapella){
+    if (acapella) {
         [acapella finishWrapAround];
     }
 }

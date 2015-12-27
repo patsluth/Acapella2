@@ -12,15 +12,14 @@
 
     for (NSString *key in prefsDefaults) {
 
-        NSString *application = [key containsString:@"music"] ? @"com.apple.Music" : @"com.patsluth.AcapellaPrefs2";
+        CFStringRef application = [key containsString:@"music"] ? CFSTR("com.apple.Music") : CFSTR("com.patsluth.AcapellaPrefs2");
 
-        id currentValue = (id)CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)key,
-                                                                          (__bridge CFStringRef)application));
+        id currentValue = (id)CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)key, application));
 
         if (currentValue == nil) { //dont overwrite
             CFPreferencesSetAppValue((__bridge CFStringRef)key,
                                      (__bridge CFPropertyListRef)[prefsDefaults valueForKey:key],
-                                     (__bridge CFStringRef)application);
+                                     application);
 
         }
 
@@ -28,7 +27,7 @@
     }
 
     //syncronize so we can read right away
-    CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.patsluth.AcapellaPrefs2");
-    CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.apple.Music");
+    CFPreferencesAppSynchronize(CFSTR("com.patsluth.AcapellaPrefs2"));
+    CFPreferencesAppSynchronize(CFSTR("com.apple.Music"));
 
 }

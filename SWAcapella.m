@@ -18,7 +18,6 @@
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import <CoreGraphics/CoreGraphics.h>
-//#import <AudioToolbox/AudioToolbox.h>
 
 #define SWA_SCALE_3DTOUCH_NONE CGAffineTransformMakeScale(1.0, 1.0)
 #define SWA_SCALE_3DTOUCH_PEEK CGAffineTransformMakeScale(1.06, 1.06)
@@ -54,7 +53,7 @@
 
 @implementation SWAcapella
 
-#pragma mark - Associated Object
+#pragma mark - Associated Objects
 
 + (SWAcapella *)acapellaForObject:(id)object
 {

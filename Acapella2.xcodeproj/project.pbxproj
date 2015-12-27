@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2EBB757D1BE97C5A00A3A82D /* AcapellaPrefs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AcapellaPrefs; sourceTree = "<group>"; };
-		2EBB757E1BE97C5A00A3A82D /* AcapellaTest */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AcapellaTest; sourceTree = "<group>"; };
 		2EBB757F1BE97C5A00A3A82D /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		2EBB75811BE97C5A00A3A82D /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
 		2EBB75821BE97C5A00A3A82D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
@@ -33,8 +31,6 @@
 		2EBB756F1BE97BB900A3A82D = {
 			isa = PBXGroup;
 			children = (
-				2EBB757D1BE97C5A00A3A82D /* AcapellaPrefs */,
-				2EBB757E1BE97C5A00A3A82D /* AcapellaTest */,
 				2EBB757F1BE97C5A00A3A82D /* Assets */,
 				2EBB75811BE97C5A00A3A82D /* layout */,
 				2EBB758B1BE97C5A00A3A82D /* Makefile */,

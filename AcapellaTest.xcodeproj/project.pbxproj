@@ -15,13 +15,13 @@
 		2E3BD8F71BD43D3E00B11FFD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75964019FDCCA600001BC7 /* ViewController.m */; };
 		2E3BD8F81BD43E2F00B11FFD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E75966519FDCD5D00001BC7 /* main.m */; };
 		2E3BD9041BD43ED300B11FFD /* libSluthware.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E3BD9031BD43ED300B11FFD /* libSluthware.a */; };
+		2E55EDB01C27203500853B1D /* SWAcapella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E55EDAF1C27203500853B1D /* SWAcapella.h */; };
+		2E55EDB21C27203900853B1D /* SWAcapellaTitlesClone.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E55EDB11C27203900853B1D /* SWAcapellaTitlesClone.h */; };
+		2E55EDB41C27203C00853B1D /* SWAcapellaTitlesCloneContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E55EDB31C27203C00853B1D /* SWAcapellaTitlesCloneContainer.h */; };
+		2E55EDB81C27204300853B1D /* SWAcapella.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E55EDB51C27204300853B1D /* SWAcapella.m */; };
+		2E55EDB91C27204300853B1D /* SWAcapellaTitlesClone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E55EDB61C27204300853B1D /* SWAcapellaTitlesClone.m */; };
+		2E55EDBA1C27204300853B1D /* SWAcapellaTitlesCloneContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E55EDB71C27204300853B1D /* SWAcapellaTitlesCloneContainer.m */; };
 		2E75964619FDCCA600001BC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E75964519FDCCA600001BC7 /* Images.xcassets */; };
-		2EAD3A901BDD599E00FC765A /* SWAcapella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAD3A8D1BDD599E00FC765A /* SWAcapella.h */; };
-		2EAD3A911BDD599E00FC765A /* SWAcapellaTitlesClone.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAD3A8E1BDD599E00FC765A /* SWAcapellaTitlesClone.h */; };
-		2EAD3A921BDD599E00FC765A /* SWAcapellaTitlesCloneContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAD3A8F1BDD599E00FC765A /* SWAcapellaTitlesCloneContainer.h */; };
-		2EAD3A961BDD59A400FC765A /* SWAcapellaTitlesCloneContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EAD3A931BDD59A400FC765A /* SWAcapellaTitlesCloneContainer.m */; };
-		2EAD3A971BDD59A400FC765A /* SWAcapella.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EAD3A941BDD59A400FC765A /* SWAcapella.m */; };
-		2EAD3A981BDD59A400FC765A /* SWAcapellaTitlesClone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EAD3A951BDD59A400FC765A /* SWAcapellaTitlesClone.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +42,12 @@
 		2E334F621AE857FC002046A1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2E334F641AE85822002046A1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2E3BD9031BD43ED300B11FFD /* libSluthware.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSluthware.a; path = ../../../../../../../opt/theos/lib/libSluthware.a; sourceTree = "<group>"; };
+		2E55EDAF1C27203500853B1D /* SWAcapella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapella.h; path = public/SWAcapella.h; sourceTree = SOURCE_ROOT; };
+		2E55EDB11C27203900853B1D /* SWAcapellaTitlesClone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapellaTitlesClone.h; path = public/SWAcapellaTitlesClone.h; sourceTree = SOURCE_ROOT; };
+		2E55EDB31C27203C00853B1D /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapellaTitlesCloneContainer.h; path = public/SWAcapellaTitlesCloneContainer.h; sourceTree = SOURCE_ROOT; };
+		2E55EDB51C27204300853B1D /* SWAcapella.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = SOURCE_ROOT; };
+		2E55EDB61C27204300853B1D /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesClone.m; sourceTree = SOURCE_ROOT; };
+		2E55EDB71C27204300853B1D /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = SOURCE_ROOT; };
 		2E75963619FDCCA600001BC7 /* AcapellaTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcapellaTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E75963C19FDCCA600001BC7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2E75963D19FDCCA600001BC7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -51,13 +57,6 @@
 		2E75964519FDCCA600001BC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2E75966419FDCD5D00001BC7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E75966519FDCD5D00001BC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2EAD3A8D1BDD599E00FC765A /* SWAcapella.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapella.h; path = ../../public/SWAcapella.h; sourceTree = "<group>"; };
-		2EAD3A8E1BDD599E00FC765A /* SWAcapellaTitlesClone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapellaTitlesClone.h; path = ../../public/SWAcapellaTitlesClone.h; sourceTree = "<group>"; };
-		2EAD3A8F1BDD599E00FC765A /* SWAcapellaTitlesCloneContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWAcapellaTitlesCloneContainer.h; path = ../../public/SWAcapellaTitlesCloneContainer.h; sourceTree = "<group>"; };
-		2EAD3A931BDD59A400FC765A /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWAcapellaTitlesCloneContainer.m; path = ../../SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
-		2EAD3A941BDD59A400FC765A /* SWAcapella.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWAcapella.m; path = ../../SWAcapella.m; sourceTree = "<group>"; };
-		2EAD3A951BDD59A400FC765A /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWAcapellaTitlesClone.m; path = ../../SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
-		2EC7AF981BB20DA0008A2612 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Main.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,12 +129,12 @@
 		2EAD3A8C1BDD599400FC765A /* src */ = {
 			isa = PBXGroup;
 			children = (
-				2EAD3A8D1BDD599E00FC765A /* SWAcapella.h */,
-				2EAD3A941BDD59A400FC765A /* SWAcapella.m */,
-				2EAD3A8E1BDD599E00FC765A /* SWAcapellaTitlesClone.h */,
-				2EAD3A951BDD59A400FC765A /* SWAcapellaTitlesClone.m */,
-				2EAD3A8F1BDD599E00FC765A /* SWAcapellaTitlesCloneContainer.h */,
-				2EAD3A931BDD59A400FC765A /* SWAcapellaTitlesCloneContainer.m */,
+				2E55EDAF1C27203500853B1D /* SWAcapella.h */,
+				2E55EDB51C27204300853B1D /* SWAcapella.m */,
+				2E55EDB11C27203900853B1D /* SWAcapellaTitlesClone.h */,
+				2E55EDB61C27204300853B1D /* SWAcapellaTitlesClone.m */,
+				2E55EDB31C27203C00853B1D /* SWAcapellaTitlesCloneContainer.h */,
+				2E55EDB71C27204300853B1D /* SWAcapellaTitlesCloneContainer.m */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -147,9 +146,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EAD3A911BDD599E00FC765A /* SWAcapellaTitlesClone.h in Headers */,
-				2EAD3A921BDD599E00FC765A /* SWAcapellaTitlesCloneContainer.h in Headers */,
-				2EAD3A901BDD599E00FC765A /* SWAcapella.h in Headers */,
+				2E55EDB21C27203900853B1D /* SWAcapellaTitlesClone.h in Headers */,
+				2E55EDB41C27203C00853B1D /* SWAcapellaTitlesCloneContainer.h in Headers */,
+				2E55EDB01C27203500853B1D /* SWAcapella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,11 +225,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E55EDB81C27204300853B1D /* SWAcapella.m in Sources */,
 				2E3BD8F51BD43D3E00B11FFD /* AppDelegate.m in Sources */,
-				2EAD3A981BDD59A400FC765A /* SWAcapellaTitlesClone.m in Sources */,
+				2E55EDBA1C27204300853B1D /* SWAcapellaTitlesCloneContainer.m in Sources */,
 				2E3BD8F71BD43D3E00B11FFD /* ViewController.m in Sources */,
-				2EAD3A961BDD59A400FC765A /* SWAcapellaTitlesCloneContainer.m in Sources */,
-				2EAD3A971BDD59A400FC765A /* SWAcapella.m in Sources */,
+				2E55EDB91C27204300853B1D /* SWAcapellaTitlesClone.m in Sources */,
 				2E3BD8F81BD43E2F00B11FFD /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,7 +241,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				2E75964319FDCCA600001BC7 /* Base */,
-				2EC7AF981BB20DA0008A2612 /* tr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

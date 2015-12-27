@@ -136,7 +136,7 @@ static id prefValueForKey(NSString *key)
 
 static void writeKey(NSString *key, id value, NSString *directory)
 {
-    NSString *filePath = [NSString stringWithFormat:@"%@acapellaPrefsDefaults.plist", directory];
+    NSString *filePath = [NSString stringWithFormat:@"%@prefsDefaults.plist", directory];
     
     NSMutableDictionary *dict = [NSMutableDictionary new];
     [dict addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:filePath]];

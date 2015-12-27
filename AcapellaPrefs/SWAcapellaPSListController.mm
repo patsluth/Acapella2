@@ -8,10 +8,7 @@
 
 #import "SWAcapellaPSListController.h"
 
-#import <Preferences/Preferences.h>
-
 #import "libsw/libSluthware/libSluthware.h"
-#import "libsw/SWPSTwitterCell.h"
 
 
 
@@ -31,7 +28,7 @@
 
 - (void)resetAllSettings:(PSSpecifier *)specifier
 {
-    NSDictionary *prefDefaults = [NSDictionary dictionaryWithContentsOfFile:[self.bundle pathForResource:@"acapellaPrefsDefaults" ofType:@".plist"]];
+    NSDictionary *prefDefaults = [NSDictionary dictionaryWithContentsOfFile:[self.bundle pathForResource:@"prefsDefaults" ofType:@".plist"]];
     
     for (NSString *key in prefDefaults) {
         
@@ -47,13 +44,6 @@
     CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.patsluth.AcapellaPrefs2");
     CFPreferencesAppSynchronize((__bridge CFStringRef)@"com.apple.Music");
     
-}
-
-#pragma mark Twitter
-
-- (void)viewTwitterProfile:(PSSpecifier *)specifier
-{
-    [SWPSTwitterCell performActionWithSpecifier:specifier];
 }
 
 @end

@@ -4,14 +4,15 @@
 
 
 FINALPACKAGE = 1
-PACKAGE_VERSION = 1.1-9
+DEBUG = 0
+PACKAGE_VERSION = 1.1-10
 
 
 
 
 
 ARCHS = armv7 armv7s arm64
-TARGET = iphone:clang:latest
+TARGET = iphone:clang:latest:7.0
 
 
 
@@ -20,7 +21,7 @@ TARGET = iphone:clang:latest
 TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
 Acapella2_FILES = SWAcapella.m SWAcapellaTitlesCloneContainer.m SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm Prefs.xm
-Acapella2_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
+Acapella2_FRAMEWORKS = CoreFoundation Foundation UIKit CoreGraphics QuartzCore
 Acapella2_LIBRARIES = substrate sw packageinfo
 
 ADDITIONAL_CFLAGS = -Ipublic

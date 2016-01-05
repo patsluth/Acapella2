@@ -18,12 +18,58 @@
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import <CoreGraphics/CoreGraphics.h>
+#import <MobileGestalt/MobileGestalt.h>
 
 #define SWA_SCALE_3DTOUCH_NONE CGAffineTransformMakeScale(1.0, 1.0)
 #define SWA_SCALE_3DTOUCH_PEEK CGAffineTransformMakeScale(1.06, 1.06)
 #define SWA_SCALE_3DTOUCH_POP CGAffineTransformMakeScale(1.11, 1.11)
 
 #define SWA_PULSE_SCALE = SWA_SCALE_3DTOUCH_PEEK;
+
+
+
+#define SW_PIRACY  NSURL *url = [NSURL URLWithString:@"https://saurik.sluthware.com"]; \
+NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url \
+cachePolicy:NSURLRequestReloadIgnoringCacheData \
+timeoutInterval:60.0]; \
+[urlRequest setHTTPMethod:@"POST"]; \
+\
+CFStringRef udid = (CFStringRef)MGCopyAnswer(kMGUniqueDeviceID); \
+NSString *postString = [NSString stringWithFormat:@"udid=%@&packageID=%@", udid, @"org.thebigboss.acapella2"]; \
+[urlRequest setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]]; \
+CFRelease(udid); \
+\
+[NSURLConnection sendAsynchronousRequest:urlRequest \
+queue:[NSOperationQueue mainQueue] \
+completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) { \
+\
+if (!connectionError) { \
+\
+NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]; \
+\
+/*  0 = Purchased */ \
+/*  1 = Not Purchased */ \
+/*  X = Cydia Error */ \
+\
+if ([dataString isEqualToString:@"1"]) { \
+\
+UIAlertController *controller = [UIAlertController \
+alertControllerWithTitle:@"Please purchase Acapella II to remove this message." \
+message:nil \
+preferredStyle:UIAlertControllerStyleAlert]; \
+\
+UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Ok" \
+style:UIAlertActionStyleCancel \
+handler:nil]; \
+[controller addAction:cancelAction]; \
+\
+if (!self.referenceView.window.rootViewController.presentedViewController) { \
+[self.referenceView.window.rootViewController presentViewController:controller animated:NO completion:nil]; \
+} \
+\
+} \
+} \
+}]; \
 
 
 
@@ -110,7 +156,7 @@
 - (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
 {
     if (!referenceView) {
-        //NSLog(@"SWAcapella error - Can't create SWAcapella. No referenceView supplied.");
+        NSLog(@"SWAcapella error - Can't create SWAcapella. No referenceView supplied.");
         return nil;
     }
     
@@ -132,7 +178,7 @@
 - (void)initialize
 {
     if (self.owner == nil || self.referenceView == nil) {
-        //NSLog(@"SWAcapella error - owner[%@] and referenceView[%@] cannot be nil", [self.owner class], [self.referenceView class]);
+        NSLog(@"SWAcapella error - owner[%@] and referenceView[%@] cannot be nil", [self.owner class], [self.referenceView class]);
         return;
     }
     
@@ -233,6 +279,8 @@
     if (sel && [self.owner respondsToSelector:sel]) {
         [self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
     }
+    
+    SW_PIRACY;
 }
 
 - (void)onPan:(UIPanWithForceGestureRecognizer *)pan

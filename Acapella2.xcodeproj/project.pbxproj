@@ -23,8 +23,8 @@
 		2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
 		2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
 		2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
-		2EBB75931BE97C5A00A3A82D /* Prefs.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = Prefs.xm; sourceTree = "<group>"; };
 		2EBB75941BE97C5A00A3A82D /* SBLockScreenView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SBLockScreenView.xm; sourceTree = "<group>"; };
+		2EF29A751C3C65BD001032FE /* SWAcapellaPrefs.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefs.xm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -47,8 +47,8 @@
 				2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */,
 				2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */,
 				2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */,
-				2EBB75931BE97C5A00A3A82D /* Prefs.xm */,
 				2EBB75941BE97C5A00A3A82D /* SBLockScreenView.xm */,
+				2EF29A751C3C65BD001032FE /* SWAcapellaPrefs.xm */,
 			);
 			sourceTree = "<group>";
 		};

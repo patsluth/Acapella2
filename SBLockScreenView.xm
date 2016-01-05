@@ -10,10 +10,7 @@
 
 - (BOOL)presentingController:(id)arg1 gestureRecognizer:(UIGestureRecognizer *)arg2 shouldReceiveTouch:(UITouch *)arg3
 {
-    NSString *x = NSStringFromClass([arg3.view class]);
-    NSString *y = NSStringFromClass(%c(MPUSystemMediaControlsView));
-    
-    if ([x isEqualToString:y]) {
+    if ([arg3.view isKindOfClass:%c(MPUSystemMediaControlsView)]) {
         return NO;
     }
     
@@ -22,10 +19,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)arg1 shouldReceiveTouch:(UITouch *)arg2
 {
-    NSString *x = NSStringFromClass([arg2.view class]);
-    NSString *y = NSStringFromClass(%c(MPUSystemMediaControlsView));
-    
-    if ([x isEqualToString:y]) {
+    if ([arg2.view isKindOfClass:%c(MPUSystemMediaControlsView)]) {
         return NO;
     }
     
@@ -33,3 +27,11 @@
 }
 
 %end
+
+
+
+
+%ctor //syncronize acapella default prefs
+{
+    NSLog(@"PAT TEST %@", %c(SBLockScreenHintManager));
+}

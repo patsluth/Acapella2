@@ -183,7 +183,6 @@
     }
     
     [MPU_SYSTEM_MEDIA_CONTROLS_VIEW layoutSubviews];
-    
 }
 
 - (void)viewWillDisappear:(BOOL)animated

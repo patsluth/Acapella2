@@ -6,6 +6,8 @@
 //
 //
 
+#import "MPUTransportControlsView+SW.h"
+
 #import "SWAcapella.h"
 #import "SWAcapellaMediaItemPreviewViewController.h"
 
@@ -13,7 +15,6 @@
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
-#import "MPUTransportControlsView.h"
 #import "MusicTabBarController.h"
 
 #define PREF_KEY_PREFIX @"musicmini"
@@ -132,12 +133,12 @@
     CGRect titlesFrame = self.titlesView.frame;
     
     //intelligently calcualate titles frame based on visible transport controls
-    if ([self.transportControlsView hidden_acapella]) {
+    if ([self.transportControlsView acapella_hidden]) {
         titlesFrame.origin.x = 0.0;
         titlesFrame.size.width = self.secondaryTransportControlsView.frame.origin.x;
     }
     
-    if ([self.secondaryTransportControlsView hidden_acapella]) {
+    if ([self.secondaryTransportControlsView acapella_hidden]) {
         titlesFrame.size.width = CGRectGetWidth(self.titlesView.superview.bounds) - titlesFrame.origin.x;
     }
     

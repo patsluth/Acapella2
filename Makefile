@@ -18,6 +18,9 @@ else
 endif
 TARGET = iphone:clang:latest:7.0
 
+THEOS_DEVICE_IP=192.168.1.113
+THEOS_DEVICE_PORT=22
+
 
 
 

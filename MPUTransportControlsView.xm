@@ -6,7 +6,7 @@
 //
 //
 
-#import "MPUTransportControlsView.h"
+#import "MPUTransportControlsView+SW.h"
 
 
 
@@ -16,7 +16,7 @@
 
 //return YES if any subviews arent hidden
 %new
-- (BOOL)hidden_acapella
+- (BOOL)acapella_hidden
 {
     BOOL controlVisible = NO;
     

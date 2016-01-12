@@ -6,7 +6,8 @@
 //
 //
 
-#import "MPUSystemMediaControlsViewController.h"
+#import "MPUSystemMediaControlsViewController+SW.h"
+#import "MPUTransportControlsView+SW.h"
 
 #import "SWAcapella.h"
 #import "SWAcapellaMediaItemPreviewViewController.h"
@@ -16,7 +17,7 @@
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
-#import "MPUTransportControlsView.h"
+
 
 #define MPU_SYSTEM_MEDIA_CONTROLS_VIEW MSHookIvar<MPUSystemMediaControlsView *>(self, "_mediaControlsView")
 #define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController")
@@ -167,7 +168,7 @@
 }
 
 %new
-+ (NSString *)prefKeyPrefixByDrillingUp:(UIView *)view
++ (NSString *)acapella_prefKeyPrefixByDrillingUp:(UIView *)view
 {
     //    id a = NSStringFromClass([self.view.superview class]);
     //    id b = NSStringFromClass([self.view.superview.superview class]);
@@ -493,7 +494,7 @@
         
         CGFloat bottomGuideline = CGRectGetMaxY(self.bounds);
         
-        if (![self.transportControlsView hidden_acapella]) {
+        if (![self.transportControlsView acapella_hidden]) {
             bottomGuideline = CGRectGetMinY(self.transportControlsView.frame);
         } else {
             if (self.volumeView.layer.opacity > 0.0) { //visible

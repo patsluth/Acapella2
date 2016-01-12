@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaMediaItemPreviewViewController.xm; sourceTree = "<group>"; };
+		2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaMediaItemPreviewViewController.xm; sourceTree = "<group>"; };
 		2EBB75811BE97C5A00A3A82D /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
 		2EBB75821BE97C5A00A3A82D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
-		2EBB75881BE97C5A00A3A82D /* SWAcapella.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = "<group>"; };
-		2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
-		2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
+		2EBB75881BE97C5A00A3A82D /* SWAcapella.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapella.m; sourceTree = "<group>"; };
+		2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
+		2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
 		2EBB758B1BE97C5A00A3A82D /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
 		2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUSystemMediaControlsViewController.xm; sourceTree = "<group>"; };

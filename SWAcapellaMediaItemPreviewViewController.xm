@@ -56,6 +56,7 @@
         self.itemLabelTop = [[UILabel alloc] init];
         [self.view addSubview:self.itemLabelTop];
         self.itemLabelTop.translatesAutoresizingMaskIntoConstraints = NO;
+        self.itemLabelTop.font = [UIFont fontWithName:@".SFUIText-Medium" size:17.0];
         self.itemLabelTop.lineBreakMode = NSLineBreakByTruncatingTail;
         self.itemLabelTop.backgroundColor = [UIColor clearColor];
         self.itemLabelTop.text = @"Nothing Playing";
@@ -64,6 +65,7 @@
         self.itemLabelMiddle = [[UILabel alloc] init];
         [self.view addSubview:self.itemLabelMiddle];
         self.itemLabelMiddle.translatesAutoresizingMaskIntoConstraints = NO;
+        self.itemLabelMiddle.font = [UIFont fontWithName:@".SFUIText-Regular" size:12.0];
         self.itemLabelMiddle.lineBreakMode = NSLineBreakByTruncatingTail;
         self.itemLabelMiddle.backgroundColor = [UIColor clearColor];
         
@@ -71,6 +73,8 @@
         self.itemLabelBottom = [[UILabel alloc] init];
         [self.view addSubview:self.itemLabelBottom];
         self.itemLabelBottom.translatesAutoresizingMaskIntoConstraints = NO;
+        self.itemLabelBottom.font = [UIFont fontWithName:@".SFUIText-Regular" size:12.0];
+        self.itemLabelBottom.alpha = 0.4;
         self.itemLabelBottom.lineBreakMode = NSLineBreakByTruncatingTail;
         self.itemLabelBottom.backgroundColor = [UIColor clearColor];
         
@@ -82,9 +86,11 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
-    CGFloat artworkInset = 16; // inset copied from MusicContextualActionsHeaderViewController (Used in cello)
-    
+
+    // insets copied from MusicContextualActionsHeaderViewController (Used in cello)
+    CGFloat artworkInset = 16;
+    CGFloat labelInset = 12;
+
     // Subract the artworkInset from the top and bottom so it is even
     [self.itemArtwork.widthAnchor constraintEqualToAnchor:self.view.heightAnchor multiplier:1.0 constant:(artworkInset * -2)].active = YES;
     [self.itemArtwork.heightAnchor constraintEqualToAnchor:self.itemArtwork.widthAnchor multiplier:1.0].active = YES;
@@ -92,19 +98,20 @@
     [self.itemArtwork.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor].active = YES;
     
     
-    [self.itemLabelTop.topAnchor constraintEqualToAnchor:self.itemArtwork.topAnchor].active = YES;
-    [self.itemLabelTop.leftAnchor constraintEqualToAnchor:self.itemArtwork.rightAnchor constant:artworkInset].active = YES;
-    [self.itemLabelTop.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:-artworkInset].active = YES;
+    [self.itemLabelTop.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:labelInset].active = YES;
+    [self.itemLabelTop.leftAnchor constraintEqualToAnchor:self.itemArtwork.rightAnchor constant:labelInset].active = YES;
+    [self.itemLabelTop.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:-labelInset].active = YES;
     
     
     [self.itemLabelMiddle.topAnchor constraintEqualToAnchor:self.itemLabelTop.bottomAnchor].active = YES;
-    [self.itemLabelMiddle.leftAnchor constraintEqualToAnchor:self.itemArtwork.rightAnchor constant:artworkInset].active = YES;
-    [self.itemLabelMiddle.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:-artworkInset].active = YES;
+    [self.itemLabelMiddle.leftAnchor constraintEqualToAnchor:self.itemArtwork.rightAnchor constant:labelInset].active = YES;
+    [self.itemLabelMiddle.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:-labelInset].active = YES;
     
     
-    [self.itemLabelBottom.topAnchor constraintEqualToAnchor:self.itemLabelMiddle.bottomAnchor].active = YES;
-    [self.itemLabelBottom.leftAnchor constraintEqualToAnchor:self.itemArtwork.rightAnchor constant:artworkInset].active = YES;
-    [self.itemLabelBottom.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:-artworkInset].active = YES;
+    // 1.5 multiplier copied from MusicContextualActionsHeaderViewController (Used in cello)
+    [self.itemLabelBottom.topAnchor constraintEqualToAnchor:self.itemLabelMiddle.bottomAnchor constant:1.5].active = YES;
+    [self.itemLabelBottom.leftAnchor constraintEqualToAnchor:self.itemArtwork.rightAnchor constant:labelInset].active = YES;
+    [self.itemLabelBottom.rightAnchor constraintEqualToAnchor:self.view.rightAnchor constant:-labelInset].active = YES;
 }
 
 - (void)configureWithCurrentNowPlayingInfo
@@ -117,8 +124,8 @@
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 
                 NSData *artworkData = [nowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtworkData];
-                UIImage *artworkImage = [[UIImage alloc] initWithData:artworkData];
-                
+                UIImage *artworkImage = [[UIImage alloc] initWithData:artworkData scale:[[UIScreen mainScreen] scale]];
+
                 if (!artworkImage) { // Load apple default missing artwork image
                     NSBundle *bundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/FuseUI.framework"];
                     artworkImage = [UIImage imageNamed:@"MissingSongArtworkGenericProxy" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -127,13 +134,33 @@
                 self.itemArtwork.image = artworkImage;
                 
                 self.itemLabelTop.text = [nowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
-                self.itemLabelMiddle.text = [nowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
-                self.itemLabelBottom.text = [nowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoAlbum];
+                self.itemLabelMiddle.text = [nowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoAlbum];
+                self.itemLabelBottom.text = [nowPlayingInfo valueForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
                 
             });
         }
         
     });
+}
+
+- (NSArray<id<UIPreviewActionItem>> *)previewActionItems
+{
+    UIPreviewAction *previewAction = [UIPreviewAction actionWithTitle:@"PAT"
+                                                                style:UIPreviewActionStyleDefault
+                                                              handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                                              }];
+    
+    UIPreviewAction *previewAction2 = [UIPreviewAction actionWithTitle:@"PAT2"
+                                                                style:UIPreviewActionStyleDefault
+                                                              handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                                              }];
+    
+    UIPreviewAction *previewAction3 = [UIPreviewAction actionWithTitle:@"PAT3"
+                                                                style:UIPreviewActionStyleDefault
+                                                              handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                                              }];
+    
+    return @[previewAction, previewAction2, previewAction3];
 }
 
 @end

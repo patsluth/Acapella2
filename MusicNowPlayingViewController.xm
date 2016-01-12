@@ -6,6 +6,8 @@
 //
 //
 
+#import "MPUTransportControlsView+SW.h"
+
 #import "SWAcapella.h"
 #import "SWAcapellaMediaItemPreviewViewController.h"
 
@@ -13,7 +15,6 @@
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
-#import "MPUTransportControlsView.h"
 
 #define PREF_KEY_PREFIX @"musicnowplaying"
 #define PREF_APPLICATION @"com.apple.Music"
@@ -176,7 +177,7 @@
     CGFloat bottomGuideline = CGRectGetMinY(self.transportControls.frame); //top of primary transport controls
     
     
-    if ([self.transportControls hidden_acapella]) {
+    if ([self.transportControls acapella_hidden]) {
         
         bottomGuideline = CGRectGetMinY(self.volumeSlider.frame); //top of volume slider
         
@@ -184,7 +185,7 @@
             
             bottomGuideline = CGRectGetMinY(self.secondaryTransportControls.frame); //top of transport secondary controls
             
-            if ([self.secondaryTransportControls hidden_acapella]) {
+            if ([self.secondaryTransportControls acapella_hidden]) {
                 bottomGuideline = CGRectGetMaxY(self.titlesView.superview.bounds); //bottom of screen
             }
             

@@ -6,14 +6,14 @@
 //
 //
 
-#import "SWAcapella.h"
-
-#import "MPUSystemMediaControlsViewController.h"
-
-#import "libsw/libSluthware/SWPrefs.h"
-
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+
+#import "SWAcapella.h"
+
+#import "MPUSystemMediaControlsViewController+SW.h"
+
+#import "libsw/libSluthware/SWPrefs.h"
 
 
 
@@ -43,7 +43,7 @@
         
         if (!shouldOverride) { //sometimes acapella will be nil, so we will drill up
             
-            NSString *prefKeyPrefix = [%c(MPUSystemMediaControlsViewController) prefKeyPrefixByDrillingUp:self];
+            NSString *prefKeyPrefix = [%c(MPUSystemMediaControlsViewController) acapella_prefKeyPrefixByDrillingUp:self];
             
             if (prefKeyPrefix) {
                 

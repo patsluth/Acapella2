@@ -10,8 +10,6 @@
 {
 }
 
-//%new
-- (BOOL)hidden_acapella;
 - (void)reloadTransportButtonWithControlType:(NSInteger)arg1;
 
 @end

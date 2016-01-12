@@ -1,5 +1,13 @@
+//
+//  MusicMiniPlayerViewController.xm
+//  Acapella2
+//
+//  Created by Pat Sluth on 2015-12-27.
+//
+//
 
 #import "SWAcapella.h"
+#import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
 #import "libsw/libSluthware/SWPrefs.h"
@@ -17,7 +25,9 @@
 
 
 
-@interface MusicMiniPlayerViewController : UIViewController
+#pragma mark - MusicMiniPlayerViewController
+
+@interface MusicMiniPlayerViewController : UIViewController <UIViewControllerPreviewingDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
@@ -45,11 +55,7 @@
 
 %hook MusicMiniPlayerViewController
 
-%new
-- (SWAcapella *)acapella
-{
-    return [SWAcapella acapellaForObject:self];
-}
+#pragma mark - Init
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -96,7 +102,15 @@
         self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
         self.acapella.prefApplication = PREF_APPLICATION;
         
-        [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:(id)self.acapella.pan];
+        [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
+        
+        // Register/Unregister for UIViewControllerPreviewing
+        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+            (self.traitCollection.forceTouchCapability ==  UIForceTouchCapabilityAvailable)) {
+            
+            [self registerForPreviewingWithDelegate:self sourceView:self.view];
+            
+        }
         
     }
     
@@ -136,6 +150,14 @@
     BOOL progressVisible = [[SWPrefs valueForKey:progressKey application:PREF_APPLICATION] boolValue];
     self.playbackProgressView.layer.opacity = progressVisible ? 1.0 : 0.0;
     
+}
+
+#pragma mark - Acapella(Helper)
+
+%new
+- (SWAcapella *)acapella
+{
+    return [SWAcapella acapellaForObject:self];
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -195,7 +217,7 @@
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Acaplla(Actions)
 
 %new
 - (void)action_nil:(id)arg1
@@ -352,6 +374,28 @@
 - (void)action_equalizereverywhere:(id)arg1
 {
 }
+
+#pragma mark - UIViewControllerPreviewing
+
+%new // peek
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+{
+    if (self.presentedViewController) {
+        return nil;
+    }
+    
+    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] init];
+    [previewViewController configureWithCurrentNowPlayingInfo];
+    
+    return previewViewController;
+}
+
+%new // pop
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+{
+}
+
+#pragma mark - logos
 
 %group preiOS9 //add these if pre iOS 9 so we dont crash calling them
 

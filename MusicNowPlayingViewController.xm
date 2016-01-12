@@ -1,5 +1,13 @@
+//
+//  MusicNowPlayingViewController.xm
+//  Acapella2
+//
+//  Created by Pat Sluth on 2015-12-27.
+//
+//
 
 #import "SWAcapella.h"
+#import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
 #import "libsw/libSluthware/SWPrefs.h"
@@ -16,7 +24,9 @@
 
 
 
-@interface MusicNowPlayingViewController : UIViewController
+#pragma mark - MusicNowPlayingViewController
+
+@interface MusicNowPlayingViewController : UIViewController <UIGestureRecognizerDelegate, UIViewControllerPreviewingDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
@@ -48,11 +58,7 @@
 
 %hook MusicNowPlayingViewController
 
-%new
-- (SWAcapella *)acapella
-{
-    return [SWAcapella acapellaForObject:self];
-}
+#pragma mark - Init
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -104,6 +110,14 @@
         
         self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
         self.acapella.prefApplication = PREF_APPLICATION;
+        
+        // Register/Unregister for UIViewControllerPreviewing
+        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+            (self.traitCollection.forceTouchCapability ==  UIForceTouchCapabilityAvailable)) {
+            
+            [self registerForPreviewingWithDelegate:self sourceView:self.view];
+            
+        }
         
     }
     
@@ -182,6 +196,14 @@
     NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
     self.titlesView.center = CGPointMake(self.titlesView.center.x, midPoint);
     
+}
+
+#pragma mark - Acapella(Helper)
+
+%new
+- (SWAcapella *)acapella
+{
+    return [SWAcapella acapellaForObject:self];
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -291,7 +313,7 @@
     %orig(arg1);
 }
 
-#pragma mark - Actions
+#pragma mark - Acaplla(Actions)
 
 %new
 - (void)action_nil:(id)arg1
@@ -433,6 +455,38 @@
 
 %new
 - (void)action_equalizereverywhere:(id)arg1
+{
+}
+
+#pragma mark - UIViewControllerPreviewing
+
+%new // peek
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+{
+    if (self.presentedViewController) {
+        return nil;
+    }
+    
+    // Show the entire media control area as the source rect, not just the titles view
+    CGRect sourceRect = self.playbackProgressSliderView.frame;
+    sourceRect.size.height = CGRectGetHeight(self.view.bounds) - sourceRect.origin.y;
+    previewingContext.sourceRect = sourceRect;
+    
+    if (CGRectContainsPoint(sourceRect, location)) { // Don't allow previewing if outside the media control area
+        
+        SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] init];
+        [previewViewController configureWithCurrentNowPlayingInfo];
+        
+        return previewViewController;
+        
+    }
+    
+    
+    return nil;
+}
+
+%new // pop
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
 {
 }
 

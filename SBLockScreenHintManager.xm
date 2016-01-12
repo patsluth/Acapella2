@@ -1,3 +1,10 @@
+//
+//  SBLockScreenHintManager.xm
+//  Acapella2
+//
+//  Created by Pat Sluth on 2015-12-27.
+//
+//
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>

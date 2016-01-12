@@ -1,7 +1,15 @@
+//
+//  MPUSystemMediaControlsViewController.xm
+//  Acapella2
+//
+//  Created by Pat Sluth on 2015-12-27.
+//
+//
 
 #import "MPUSystemMediaControlsViewController.h"
 
 #import "SWAcapella.h"
+#import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
 #import "libsw/SWAppLauncher.h"
@@ -16,6 +24,8 @@
 
 
 
+
+#pragma mark - MPUSystemMediaControlsView
 
 @interface MPUSystemMediaControlsView : UIView
 {
@@ -32,63 +42,11 @@
 
 
 
+#pragma mark - MPUSystemMediaControlsViewController
+
 %hook MPUSystemMediaControlsViewController
 
-%new
-- (SWAcapella *)acapella
-{
-    return [SWAcapella acapellaForObject:self];
-}
-
-%new
-+ (NSString *)prefKeyPrefixByDrillingUp:(UIView *)view
-{
-    //    id a = NSStringFromClass([self.view.superview class]);
-    //    id b = NSStringFromClass([self.view.superview.superview class]);
-    //    id c = NSStringFromClass([self.view.window.rootViewController class]);
-    //    NSLogInfo(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
-    
-    UIView *curView = view.superview;
-    
-    while (curView) {
-        
-        //Control Centre
-        if (%c(SBControlCenterRootView) != NULL && [curView class] == %c(SBControlCenterRootView)) {
-            return @"cc";
-        }
-        
-        //Lock Screen
-        if (%c(SBLockScreenView) != NULL && [curView class] == %c(SBLockScreenView)) {
-            return @"ls";
-        }
-        
-        //OnTapMusic - class will be null if tweak is not installed
-        if (%c(OTMView) != NULL && [curView class] == %c(OTMView)) {
-            return @"otm";
-        }
-        
-        //Auxo LE - class will be null if tweak is not installed
-        if (%c(AuxoCollectionView) != NULL && [curView class] == %c(AuxoCollectionView)) {
-            return @"auxo";
-        }
-        
-        //Vertex - Vertex has no classes ?
-        if (%c(SBAppSwitcherContainer) != NULL && [curView class] == %c(SBAppSwitcherContainer)) {
-            return @"vertex";
-        }
-        
-        //Seng
-        if ((%c(SengMediaSectionView) != NULL && [curView class] == %c(SengMediaSectionView)) ||
-            (%c(SengMediaTitlesSectionView) != NULL && [curView class] == %c(SengMediaTitlesSectionView))) {
-            return @"seng";
-        }
-        
-        curView = curView.superview;
-        
-    }
-    
-    return @"undefined";
-}
+#pragma mark - Init
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -147,6 +105,14 @@
             }
         }
         
+        // Register/Unregister for UIViewControllerPreviewing
+        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+            (self.traitCollection.forceTouchCapability ==  UIForceTouchCapabilityAvailable)) {
+            
+            [self registerForPreviewingWithDelegate:self sourceView:self.view];
+            
+        }
+        
     } else { //restore original state
         
         for (UIView *v in self.acapella.titles.subviews) { //button that handles titles tap
@@ -190,6 +156,64 @@
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     
     %orig(animated);
+}
+
+#pragma mark - Acapella(Helper)
+
+%new
+- (SWAcapella *)acapella
+{
+    return [SWAcapella acapellaForObject:self];
+}
+
+%new
++ (NSString *)prefKeyPrefixByDrillingUp:(UIView *)view
+{
+    //    id a = NSStringFromClass([self.view.superview class]);
+    //    id b = NSStringFromClass([self.view.superview.superview class]);
+    //    id c = NSStringFromClass([self.view.window.rootViewController class]);
+    //    NSLogInfo(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
+    
+    UIView *curView = view.superview;
+    
+    while (curView) {
+        
+        //Control Centre
+        if (%c(SBControlCenterRootView) != NULL && [curView class] == %c(SBControlCenterRootView)) {
+            return @"cc";
+        }
+        
+        //Lock Screen
+        if (%c(SBLockScreenView) != NULL && [curView class] == %c(SBLockScreenView)) {
+            return @"ls";
+        }
+        
+        //OnTapMusic - class will be null if tweak is not installed
+        if (%c(OTMView) != NULL && [curView class] == %c(OTMView)) {
+            return @"otm";
+        }
+        
+        //Auxo LE - class will be null if tweak is not installed
+        if (%c(AuxoCollectionView) != NULL && [curView class] == %c(AuxoCollectionView)) {
+            return @"auxo";
+        }
+        
+        //Vertex - Vertex has no classes ?
+        if (%c(SBAppSwitcherContainer) != NULL && [curView class] == %c(SBAppSwitcherContainer)) {
+            return @"vertex";
+        }
+        
+        //Seng
+        if ((%c(SengMediaSectionView) != NULL && [curView class] == %c(SengMediaSectionView)) ||
+            (%c(SengMediaTitlesSectionView) != NULL && [curView class] == %c(SengMediaTitlesSectionView))) {
+            return @"seng";
+        }
+        
+        curView = curView.superview;
+        
+    }
+    
+    return @"undefined";
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -248,7 +272,7 @@
     return %orig(arg1, arg2);
 }
 
-#pragma mark - Actions
+#pragma mark - Acapella(Actions)
 
 %new
 - (void)action_nil:(id)arg1
@@ -423,11 +447,33 @@
     }
 }
 
+#pragma mark - UIViewControllerPreviewing
+
+%new // peek
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+{
+    if (self.presentedViewController) {
+        return nil;
+    }
+    
+    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] init];
+    [previewViewController configureWithCurrentNowPlayingInfo];
+    
+    return previewViewController;
+}
+
+%new // pop
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+{
+}
+
 %end
 
 
 
 
+
+#pragma mark - MPUSystemMediaControlsView
 
 %hook MPUSystemMediaControlsView
 

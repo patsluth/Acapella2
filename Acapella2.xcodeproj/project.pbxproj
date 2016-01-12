@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2EBB757F1BE97C5A00A3A82D /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */ = {isa = PBXFileReference; lastKnownFileType = text; path = SWAcapellaMediaItemPreviewViewController.xm; sourceTree = "<group>"; };
 		2EBB75811BE97C5A00A3A82D /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
 		2EBB75821BE97C5A00A3A82D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
-		2EBB75831BE97C5A00A3A82D /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
-		2EBB75841BE97C5A00A3A82D /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Acapella2.plist; sourceTree = "<group>"; };
 		2EBB75881BE97C5A00A3A82D /* SWAcapella.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapella.m; sourceTree = "<group>"; };
 		2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesClone.m; sourceTree = "<group>"; };
 		2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWAcapellaTitlesCloneContainer.m; sourceTree = "<group>"; };
@@ -23,7 +21,7 @@
 		2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicMiniPlayerViewController.xm; sourceTree = "<group>"; };
 		2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
 		2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
-		2EBB75941BE97C5A00A3A82D /* SBLockScreenView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SBLockScreenView.xm; sourceTree = "<group>"; };
+		2EBB75941BE97C5A00A3A82D /* SBLockScreenHintManager.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SBLockScreenHintManager.xm; sourceTree = "<group>"; };
 		2EF29A751C3C65BD001032FE /* SWAcapellaPrefs.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefs.xm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -31,15 +29,9 @@
 		2EBB756F1BE97BB900A3A82D = {
 			isa = PBXGroup;
 			children = (
-				2EBB757F1BE97C5A00A3A82D /* Assets */,
 				2EBB75811BE97C5A00A3A82D /* layout */,
-				2EBB758B1BE97C5A00A3A82D /* Makefile */,
 				2EBB75821BE97C5A00A3A82D /* public */,
-				2EBB75831BE97C5A00A3A82D /* Resources */,
-				2EBB75881BE97C5A00A3A82D /* SWAcapella.m */,
-				2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */,
-				2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */,
-				2EBB75841BE97C5A00A3A82D /* Acapella2.plist */,
+				2EBB758B1BE97C5A00A3A82D /* Makefile */,
 				2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */,
 				2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */,
 				2EBB758E1BE97C5A00A3A82D /* MPUTransportControlsView.xm */,
@@ -47,8 +39,12 @@
 				2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */,
 				2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */,
 				2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */,
-				2EBB75941BE97C5A00A3A82D /* SBLockScreenView.xm */,
+				2EBB75941BE97C5A00A3A82D /* SBLockScreenHintManager.xm */,
+				2EBB75881BE97C5A00A3A82D /* SWAcapella.m */,
+				2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */,
 				2EF29A751C3C65BD001032FE /* SWAcapellaPrefs.xm */,
+				2EBB75891BE97C5A00A3A82D /* SWAcapellaTitlesClone.m */,
+				2EBB758A1BE97C5A00A3A82D /* SWAcapellaTitlesCloneContainer.m */,
 			);
 			sourceTree = "<group>";
 		};

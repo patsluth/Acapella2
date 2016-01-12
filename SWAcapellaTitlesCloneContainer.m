@@ -1,6 +1,6 @@
 //
 //  SWAcapellaTitlesCloneContainer.m
-//  acapella
+//  Acapella2
 //
 //  Created by Pat Sluth on 2015-07-27.
 //

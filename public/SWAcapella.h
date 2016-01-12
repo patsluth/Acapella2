@@ -45,10 +45,7 @@
 
 @property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readonly, strong, nonatomic) UITapGestureRecognizer *tap2;
-@property (readonly, strong, nonatomic) UIPanWithForceGestureRecognizer *pan;
-@property (readonly, strong, nonatomic) UIPanWithForceGestureRecognizer *pan2;
-@property (readonly, strong, nonatomic) UILongPressWithForceGestureRecognizer *press;
-@property (readonly, strong, nonatomic) UILongPressWithForceGestureRecognizer *press2;
+@property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan;
 
 - (void)refreshTitleClone;
 

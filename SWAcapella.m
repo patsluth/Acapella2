@@ -1,6 +1,6 @@
 //
 //  SWAcapella.m
-//  AcapellaKit
+//  Acapella2
 //
 //  Created by Pat Sluth on 2015-07-08.
 //  Copyright (c) 2015 Pat Sluth. All rights reserved.
@@ -11,10 +11,9 @@
 #import "SWAcapellaTitlesClone.h"
 
 #import "libsw/libSluthware/libSluthware.h"
-#import "libsw/libSluthware/UIPanWithForceGestureRecognizer.h"
-#import "libsw/libSluthware/UILongPressWithForceGestureRecognizer.h"
-#import "libsw/libSluthware/NSTimer+SW.h"
+//TODO: REMOVE
 #import "libsw/libSluthware/UISnapBehaviorHorizontal.h"
+#import "libsw/libSluthware/NSTimer+SW.h"
 #import "libsw/libSluthware/SWPrefs.h"
 
 #import <CoreGraphics/CoreGraphics.h>
@@ -84,10 +83,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 @property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
 @property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap2;
-@property (readwrite, strong, nonatomic) UIPanWithForceGestureRecognizer *pan;
-@property (readwrite, strong, nonatomic) UIPanWithForceGestureRecognizer *pan2;
-@property (readwrite, strong, nonatomic) UILongPressWithForceGestureRecognizer *press;
-@property (readwrite, strong, nonatomic) UILongPressWithForceGestureRecognizer *press2;
+@property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -131,19 +127,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         [acapella.pan.view removeGestureRecognizer:acapella.pan];
         [acapella.pan removeTarget:nil action:nil];
         acapella.pan = nil;
-        
-        [acapella.pan2.view removeGestureRecognizer:acapella.pan2];
-        [acapella.pan2 removeTarget:nil action:nil];
-        acapella.pan2 = nil;
-        
-        [acapella.press.view removeGestureRecognizer:acapella.press];
-        [acapella.press removeTarget:nil action:nil];
-        acapella.press = nil;
-        
-        [acapella.press2.view removeGestureRecognizer:acapella.press2];
-        [acapella.press2 removeTarget:nil action:nil];
-        acapella.press2 = nil;
-        
         [acapella.referenceView layoutSubviews];
     }
     
@@ -196,31 +179,10 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     self.tap2.numberOfTouchesRequired = 2;
     [self.referenceView addGestureRecognizer:self.tap2];
     
-    self.pan = [[UIPanWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
+    self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan.delegate = self;
-    self.pan.forceDelegate = self;
     self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
     [self.referenceView addGestureRecognizer:self.pan];
-    
-    self.pan2 = [[UIPanWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
-    self.pan2.delegate = self;
-    self.pan2.forceDelegate = self;
-    self.pan2.minimumNumberOfTouches = self.pan2.maximumNumberOfTouches = 2;
-    [self.referenceView addGestureRecognizer:self.pan2];
-    
-    self.press = [[UILongPressWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
-    self.press.delegate = self;
-    self.press.forceDelegate = self;
-    self.press.numberOfTouchesRequired = 1;
-    self.press.minimumPressDuration = 0.3;
-    [self.referenceView addGestureRecognizer:self.press];
-    
-    self.press2 = [[UILongPressWithForceGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
-    self.press2.delegate = self;
-    self.press2.forceDelegate = self;
-    self.press2.numberOfTouchesRequired = 2;
-    self.press2.minimumPressDuration = 0.3;
-    [self.referenceView addGestureRecognizer:self.press2];
 }
 
 - (void)setupTitleCloneContainer
@@ -270,7 +232,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
                          @"gestures",
                          directionString,
                          fingerString,
-                         [self forceKeyForForceType:UIForceTypeNone]]; //no force for taps
+                         @"forcenone"]; //no force for taps
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
         sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
         
@@ -283,10 +245,9 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     SW_PIRACY;
 }
 
-- (void)onPan:(UIPanWithForceGestureRecognizer *)pan
+- (void)onPan:(UIPanGestureRecognizer *)pan
 {
-    //smooth out multi touch pans by only following first finger location
-    CGPoint panLocation = (pan.numberOfTouches > 0) ? [pan locationOfTouch:0 inView:pan.view] : [pan locationInView:pan.view];
+    CGPoint panLocation = [pan locationInView:pan.view];
     panLocation.y = self.titles.superview.center.y;
     
     if (pan.state == UIGestureRecognizerStateBegan) {
@@ -361,40 +322,38 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     }
 }
 
-- (void)onPress:(UILongPressWithForceGestureRecognizer *)press
-{
-    if (press.state == UIGestureRecognizerStateBegan) {
-        
-        //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-        
-    } else if (press.state == UIGestureRecognizerStateEnded) {
-        
-        CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
-        //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
-        SEL sel = nil;
-        
-        NSString *directionString = (xPercentage <= 0.25) ? @"pressleft" : (xPercentage > 0.75) ? @"pressright" : @"presscentre";
-        NSString *fingerString = (press.numberOfTouchesRequired == 1) ? @"onefinger" : (press.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
-        
-        if (directionString && fingerString) {
-            
-            NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
-                             self.prefKeyPrefix,
-                             @"gestures",
-                             directionString,
-                             fingerString,
-                             [self forceKeyForForceType:press.forceType]];
-            NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-            sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
-            
-        }
-        
-        if (sel && [self.owner respondsToSelector:sel]) {
-            [self.owner performSelectorOnMainThread:sel withObject:press waitUntilDone:NO];
-        }
-        
-    }
-}
+//- (void)onPress:(UILongPressGestureRecognizer *)press
+//{
+//    if (press.state == UIGestureRecognizerStateBegan) {
+//        
+//    } else if (press.state == UIGestureRecognizerStateEnded) {
+//        
+//        CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
+//        //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+//        SEL sel = nil;
+//        
+//        NSString *directionString = (xPercentage <= 0.25) ? @"pressleft" : (xPercentage > 0.75) ? @"pressright" : @"presscentre";
+//        NSString *fingerString = (press.numberOfTouchesRequired == 1) ? @"onefinger" : (press.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
+//        
+//        if (directionString && fingerString) {
+//            
+//            NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
+//                             self.prefKeyPrefix,
+//                             @"gestures",
+//                             directionString,
+//                             fingerString,
+//                             @"forcenone"];
+//            NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
+//            sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
+//            
+//        }
+//        
+//        if (sel && [self.owner respondsToSelector:sel]) {
+//            [self.owner performSelectorOnMainThread:sel withObject:press waitUntilDone:NO];
+//        }
+//        
+//    }
+//}
 
 #pragma mark - UIGestureRecognizerDelegate
 
@@ -424,48 +383,15 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     return YES;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    //only allow system gesture recognizers to begin if ours have failed
-    return ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
-            ![self.referenceView.gestureRecognizers containsObject:otherGestureRecognizer]);
-    
-    return NO;
-}
-
-#pragma mark - UIForceGestureRecognizerDelegate
-
-- (void)onForceChange:(UIGestureRecognizer<UIForceGestureRecognizer> * _Nonnull)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
-        gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        
-        switch (gestureRecognizer.forceType) {
-            case UIForceTypeNone:
-                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
-                break;
-                
-            case UIForceTypePeek:
-                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_PEEK;
-                break;
-                
-            case UIForceTypePop:
-                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_POP;
-                break;
-                
-            default:
-                self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
-                break;
-        }
-        
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
-               gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        
-        self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
-        
-    }
-}
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+//shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+//{
+//    //only allow system gesture recognizers to begin if ours have failed
+//    return ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
+//            ![self.referenceView.gestureRecognizers containsObject:otherGestureRecognizer]);
+//    
+//    return NO;
+//}
 
 #pragma mark - UIDynamics
 
@@ -473,9 +399,9 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
  *  Handle wrap around
  *
  *  @param direction left=(<0) right=(>0)
- *  @param pan UIPanWithForceGestureRecognizer that performed the wrap around
+ *  @param pan UIPanGestureRecognizer that performed the wrap around
  */
-- (void)didWrapAround:(NSInteger)direction pan:(UIPanWithForceGestureRecognizer *)pan
+- (void)didWrapAround:(NSInteger)direction pan:(UIPanGestureRecognizer *)pan
 {
     self.titlesCloneContainer.tag = 6969;
     
@@ -491,7 +417,7 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
                          @"gestures",
                          directionString,
                          fingerString,
-                         [self forceKeyForForceType:pan.forceType]];
+                         @"forcenone"];
         NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
         sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
         
@@ -598,7 +524,11 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
 {
     //this method will get called if we stop dragging, but still have our finger down
     //check to see if we are dragging to make sure we dont remove all behaviours
-    if (self.pan.state == UIGestureRecognizerStateChanged || self.pan2.state == UIGestureRecognizerStateChanged) {
+    
+    
+    
+    //TODO: CHECK CONTENT OFFSET
+    if (self.pan.state == UIGestureRecognizerStateChanged) {
         return;
     }
     
@@ -648,26 +578,27 @@ shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRec
  *
  *  @return force preference key
  */
-- (NSString *)forceKeyForForceType:(UIForceType)forceType
-{
-    switch (forceType) {
-        case UIForceTypeNone:
-            return @"forcenone";
-            break;
-            
-        case UIForceTypePeek:
-            return @"forcepeek";
-            break;
-            
-        case UIForceTypePop:
-            return @"forcepop";
-            break;
-            
-        default:
-            return @"forcenone";
-            break;
-    }
-}
+//- (NSString *)forceKeyForForceType:(UIForceType)forceType
+//{
+//    return nil;
+////    switch (forceType) {
+////        case UIForceTypeNone:
+////            return @"forcenone";
+////            break;
+////            
+////        case UIForceTypePeek:
+////            return @"forcepeek";
+////            break;
+////            
+////        case UIForceTypePop:
+////            return @"forcepop";
+////            break;
+////            
+////        default:
+////            return @"forcenone";
+////            break;
+////    }
+//}
 
 - (void)setTitlesCloneContainer:(SWAcapellaTitlesCloneContainer *)titlesCloneContainer
 {

@@ -4,6 +4,7 @@
 
 @class SWAcapella;
 @class MPUSystemMediaControlsView;
+@class MPUNowPlayingController;
 
 #define PREF_KEY_PREFIX [self.class prefKeyPrefixByDrillingUp:self.view]
 #define PREF_APPLICATION @"com.patsluth.AcapellaPrefs2"
@@ -12,9 +13,10 @@
 
 
 
-@interface MPUSystemMediaControlsViewController : UIViewController
+@interface MPUSystemMediaControlsViewController : UIViewController <UIViewControllerPreviewingDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
+    MPUNowPlayingController *_nowPlayingController;
 }
 
 //new

@@ -3,15 +3,19 @@
 
 
 
-FINALPACKAGE = 1
-DEBUG = 0
+FINALPACKAGE = 0
+DEBUG = 1
 PACKAGE_VERSION = 1.1-11
 
 
 
 
 
-ARCHS = armv7 armv7s arm64
+ifeq ($(DEBUG), 1)
+    ARCHS = arm64
+else
+    ARCHS = armv7 armv7s arm64
+endif
 TARGET = iphone:clang:latest:7.0
 
 
@@ -20,8 +24,26 @@ TARGET = iphone:clang:latest:7.0
 
 TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
-Acapella2_FILES = SWAcapella.m SWAcapellaTitlesCloneContainer.m SWAcapellaTitlesClone.m MPUSystemMediaControlsViewController.xm MPUTransportControlsView.xm MPVolumeController.xm MusicMiniPlayerViewController.xm MusicNowPlayingViewController.xm MusicNowPlayingTitlesView.xm MPUMediaControlsTitlesView.xm SBLockScreenView.xm SWAcapellaPrefs.xm
+Acapella2_FILES = MPUMediaControlsTitlesView.xm \
+                    MPUSystemMediaControlsViewController.xm \
+                    MPUTransportControlsView.xm \
+                    MPVolumeController.xm \
+                    MusicMiniPlayerViewController.xm \
+                    MusicNowPlayingTitlesView.xm \
+                    MusicNowPlayingViewController.xm \
+                    SBLockScreenHintManager.xm \
+                    SWAcapella.m \
+                    SWAcapellaMediaItemPreviewViewController.xm \
+                    SWAcapellaPrefs.xm \
+                    SWAcapellaTitlesClone.m \
+                    SWAcapellaTitlesCloneContainer.m \
+
+ifeq ($(DEBUG), 1)
+    Acapella2_CFLAGS += -Wno-unused-variable
+endif
+
 Acapella2_FRAMEWORKS = CoreFoundation Foundation UIKit CoreGraphics QuartzCore
+Acapella2_PRIVATE_FRAMEWORKS = MediaRemote
 Acapella2_LIBRARIES = substrate sw packageinfo MobileGestalt
 
 ADDITIONAL_CFLAGS = -Ipublic
@@ -54,7 +76,9 @@ include theos/makefiles/swcommon.mk
 
 
 after-install::
-	install.exec "killall -9 backboardd"
+	$(ECHO_NOTHING)install.exec "killall -9 Music > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
+	$(ECHO_NOTHING)install.exec "killall -9 Preferences > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
+	$(ECHO_NOTHING)install.exec "killall -9 backboardd > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 
 
 

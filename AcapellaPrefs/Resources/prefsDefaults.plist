@@ -4,101 +4,21 @@
 <dict>
 	<key>auxo_enabled</key>
 	<true/>
-	<key>auxo_gestures_presscentre_onefinger_forcenone</key>
+	<key>auxo_gestures_popactioncentre</key>
 	<string>action_openapp</string>
-	<key>auxo_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>auxo_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>auxo_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_openapp</string>
-	<key>auxo_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>auxo_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>auxo_gestures_pressleft_onefinger_forcenone</key>
+	<key>auxo_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>auxo_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>auxo_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>auxo_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>auxo_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>auxo_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>auxo_gestures_pressright_onefinger_forcenone</key>
+	<key>auxo_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>auxo_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>auxo_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>auxo_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>auxo_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>auxo_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>auxo_gestures_swipeleft_onefinger_forcenone</key>
+	<key>auxo_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>auxo_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>auxo_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>auxo_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>auxo_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>auxo_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>auxo_gestures_swiperight_onefinger_forcenone</key>
+	<key>auxo_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>auxo_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>auxo_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>auxo_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>auxo_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>auxo_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>auxo_gestures_tapcentre_onefinger_forcenone</key>
+	<key>auxo_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>auxo_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>auxo_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>auxo_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>auxo_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>auxo_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>auxo_gestures_tapleft_onefinger_forcenone</key>
+	<key>auxo_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>auxo_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>auxo_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>auxo_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>auxo_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>auxo_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>auxo_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>auxo_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>auxo_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>auxo_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>auxo_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>auxo_gestures_tapright_twofinger_forcepop</key>
+	<key>auxo_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>auxo_progressslider</key>
 	<true/>
@@ -128,101 +48,21 @@
 	<true/>
 	<key>cc_enabled</key>
 	<true/>
-	<key>cc_gestures_presscentre_onefinger_forcenone</key>
+	<key>cc_gestures_popactioncentre</key>
 	<string>action_openapp</string>
-	<key>cc_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>cc_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>cc_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_openapp</string>
-	<key>cc_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>cc_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>cc_gestures_pressleft_onefinger_forcenone</key>
+	<key>cc_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>cc_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>cc_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>cc_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>cc_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>cc_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>cc_gestures_pressright_onefinger_forcenone</key>
+	<key>cc_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>cc_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>cc_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>cc_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>cc_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>cc_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>cc_gestures_swipeleft_onefinger_forcenone</key>
+	<key>cc_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>cc_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>cc_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>cc_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>cc_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>cc_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>cc_gestures_swiperight_onefinger_forcenone</key>
+	<key>cc_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>cc_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>cc_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>cc_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>cc_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>cc_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>cc_gestures_tapcentre_onefinger_forcenone</key>
+	<key>cc_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>cc_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>cc_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>cc_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>cc_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>cc_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>cc_gestures_tapleft_onefinger_forcenone</key>
+	<key>cc_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>cc_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>cc_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>cc_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>cc_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>cc_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>cc_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>cc_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>cc_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>cc_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>cc_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>cc_gestures_tapright_twofinger_forcepop</key>
+	<key>cc_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>cc_progressslider</key>
 	<true/>
@@ -252,101 +92,21 @@
 	<true/>
 	<key>ls_enabled</key>
 	<true/>
-	<key>ls_gestures_presscentre_onefinger_forcenone</key>
+	<key>ls_gestures_popactioncentre</key>
 	<string>action_openapp</string>
-	<key>ls_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>ls_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>ls_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_openapp</string>
-	<key>ls_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>ls_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>ls_gestures_pressleft_onefinger_forcenone</key>
+	<key>ls_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>ls_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>ls_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>ls_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>ls_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>ls_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>ls_gestures_pressright_onefinger_forcenone</key>
+	<key>ls_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>ls_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>ls_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>ls_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>ls_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>ls_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>ls_gestures_swipeleft_onefinger_forcenone</key>
+	<key>ls_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>ls_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>ls_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>ls_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>ls_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>ls_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>ls_gestures_swiperight_onefinger_forcenone</key>
+	<key>ls_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>ls_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>ls_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>ls_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>ls_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>ls_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>ls_gestures_tapcentre_onefinger_forcenone</key>
+	<key>ls_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>ls_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>ls_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>ls_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>ls_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>ls_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>ls_gestures_tapleft_onefinger_forcenone</key>
+	<key>ls_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>ls_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>ls_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>ls_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>ls_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>ls_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>ls_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>ls_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>ls_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>ls_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>ls_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>ls_gestures_tapright_twofinger_forcepop</key>
+	<key>ls_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>ls_progressslider</key>
 	<true/>
@@ -376,101 +136,21 @@
 	<true/>
 	<key>musicmini_enabled</key>
 	<true/>
-	<key>musicmini_gestures_presscentre_onefinger_forcenone</key>
+	<key>musicmini_gestures_popactioncentre</key>
 	<string>action_contextual</string>
-	<key>musicmini_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_contextual</string>
-	<key>musicmini_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_contextual</string>
-	<key>musicmini_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_contextual</string>
-	<key>musicmini_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_contextual</string>
-	<key>musicmini_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_contextual</string>
-	<key>musicmini_gestures_pressleft_onefinger_forcenone</key>
+	<key>musicmini_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_pressright_onefinger_forcenone</key>
+	<key>musicmini_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>musicmini_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>musicmini_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>musicmini_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>musicmini_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>musicmini_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>musicmini_gestures_swipeleft_onefinger_forcenone</key>
+	<key>musicmini_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>musicmini_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>musicmini_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>musicmini_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>musicmini_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>musicmini_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>musicmini_gestures_swiperight_onefinger_forcenone</key>
+	<key>musicmini_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>musicmini_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>musicmini_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>musicmini_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>musicmini_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>musicmini_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>musicmini_gestures_tapcentre_onefinger_forcenone</key>
+	<key>musicmini_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>musicmini_gestures_tapcentre_onefinger_forcepeek</key>
+	<key>musicmini_gestures_tapleft</key>
 	<string>action_playpause</string>
-	<key>musicmini_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapleft_onefinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapright_onefinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapright_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapright_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicmini_gestures_tapright_twofinger_forcepop</key>
+	<key>musicmini_gestures_tapright</key>
 	<string>action_playpause</string>
 	<key>musicmini_progressslider</key>
 	<true/>
@@ -500,101 +180,21 @@
 	<true/>
 	<key>musicnowplaying_enabled</key>
 	<true/>
-	<key>musicnowplaying_gestures_presscentre_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_popactioncentre</key>
 	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_pressleft_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_pressright_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>musicnowplaying_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>musicnowplaying_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>musicnowplaying_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>musicnowplaying_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>musicnowplaying_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>musicnowplaying_gestures_swipeleft_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>musicnowplaying_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>musicnowplaying_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>musicnowplaying_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>musicnowplaying_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>musicnowplaying_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>musicnowplaying_gestures_swiperight_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>musicnowplaying_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>musicnowplaying_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>musicnowplaying_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>musicnowplaying_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>musicnowplaying_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>musicnowplaying_gestures_tapcentre_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>musicnowplaying_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicnowplaying_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicnowplaying_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>musicnowplaying_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>musicnowplaying_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>musicnowplaying_gestures_tapleft_onefinger_forcenone</key>
+	<key>musicnowplaying_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>musicnowplaying_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>musicnowplaying_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>musicnowplaying_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>musicnowplaying_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>musicnowplaying_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>musicnowplaying_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>musicnowplaying_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>musicnowplaying_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>musicnowplaying_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>musicnowplaying_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>musicnowplaying_gestures_tapright_twofinger_forcepop</key>
+	<key>musicnowplaying_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>musicnowplaying_progressslider</key>
 	<true/>
@@ -624,101 +224,21 @@
 	<true/>
 	<key>otm_enabled</key>
 	<true/>
-	<key>otm_gestures_presscentre_onefinger_forcenone</key>
+	<key>otm_gestures_popactioncentre</key>
 	<string>action_openapp</string>
-	<key>otm_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>otm_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>otm_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_openapp</string>
-	<key>otm_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>otm_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>otm_gestures_pressleft_onefinger_forcenone</key>
+	<key>otm_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>otm_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>otm_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>otm_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>otm_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>otm_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>otm_gestures_pressright_onefinger_forcenone</key>
+	<key>otm_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>otm_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>otm_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>otm_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>otm_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>otm_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>otm_gestures_swipeleft_onefinger_forcenone</key>
+	<key>otm_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>otm_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>otm_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>otm_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>otm_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>otm_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>otm_gestures_swiperight_onefinger_forcenone</key>
+	<key>otm_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>otm_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>otm_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>otm_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>otm_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>otm_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>otm_gestures_tapcentre_onefinger_forcenone</key>
+	<key>otm_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>otm_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>otm_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>otm_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>otm_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>otm_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>otm_gestures_tapleft_onefinger_forcenone</key>
+	<key>otm_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>otm_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>otm_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>otm_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>otm_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>otm_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>otm_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>otm_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>otm_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>otm_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>otm_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>otm_gestures_tapright_twofinger_forcepop</key>
+	<key>otm_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>otm_progressslider</key>
 	<true/>
@@ -748,101 +268,21 @@
 	<true/>
 	<key>seng_enabled</key>
 	<true/>
-	<key>seng_gestures_presscentre_onefinger_forcenone</key>
+	<key>seng_gestures_popactioncentre</key>
 	<string>action_openapp</string>
-	<key>seng_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>seng_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>seng_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_openapp</string>
-	<key>seng_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>seng_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>seng_gestures_pressleft_onefinger_forcenone</key>
+	<key>seng_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>seng_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>seng_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>seng_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>seng_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>seng_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>seng_gestures_pressright_onefinger_forcenone</key>
+	<key>seng_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>seng_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>seng_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>seng_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>seng_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>seng_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>seng_gestures_swipeleft_onefinger_forcenone</key>
+	<key>seng_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>seng_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>seng_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>seng_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>seng_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>seng_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>seng_gestures_swiperight_onefinger_forcenone</key>
+	<key>seng_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>seng_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>seng_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>seng_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>seng_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>seng_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>seng_gestures_tapcentre_onefinger_forcenone</key>
+	<key>seng_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>seng_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>seng_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>seng_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>seng_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>seng_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>seng_gestures_tapleft_onefinger_forcenone</key>
+	<key>seng_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>seng_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>seng_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>seng_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>seng_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>seng_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>seng_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>seng_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>seng_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>seng_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>seng_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>seng_gestures_tapright_twofinger_forcepop</key>
+	<key>seng_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>seng_progressslider</key>
 	<true/>
@@ -872,101 +312,21 @@
 	<true/>
 	<key>vertex_enabled</key>
 	<true/>
-	<key>vertex_gestures_presscentre_onefinger_forcenone</key>
+	<key>vertex_gestures_popactioncentre</key>
 	<string>action_openapp</string>
-	<key>vertex_gestures_presscentre_onefinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>vertex_gestures_presscentre_onefinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>vertex_gestures_presscentre_twofinger_forcenone</key>
-	<string>action_openapp</string>
-	<key>vertex_gestures_presscentre_twofinger_forcepeek</key>
-	<string>action_openapp</string>
-	<key>vertex_gestures_presscentre_twofinger_forcepop</key>
-	<string>action_openapp</string>
-	<key>vertex_gestures_pressleft_onefinger_forcenone</key>
+	<key>vertex_gestures_popactionleft</key>
 	<string>action_intervalrewind</string>
-	<key>vertex_gestures_pressleft_onefinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>vertex_gestures_pressleft_onefinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>vertex_gestures_pressleft_twofinger_forcenone</key>
-	<string>action_intervalrewind</string>
-	<key>vertex_gestures_pressleft_twofinger_forcepeek</key>
-	<string>action_intervalrewind</string>
-	<key>vertex_gestures_pressleft_twofinger_forcepop</key>
-	<string>action_intervalrewind</string>
-	<key>vertex_gestures_pressright_onefinger_forcenone</key>
+	<key>vertex_gestures_popactionright</key>
 	<string>action_intervalforward</string>
-	<key>vertex_gestures_pressright_onefinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>vertex_gestures_pressright_onefinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>vertex_gestures_pressright_twofinger_forcenone</key>
-	<string>action_intervalforward</string>
-	<key>vertex_gestures_pressright_twofinger_forcepeek</key>
-	<string>action_intervalforward</string>
-	<key>vertex_gestures_pressright_twofinger_forcepop</key>
-	<string>action_intervalforward</string>
-	<key>vertex_gestures_swipeleft_onefinger_forcenone</key>
+	<key>vertex_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
-	<key>vertex_gestures_swipeleft_onefinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>vertex_gestures_swipeleft_onefinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>vertex_gestures_swipeleft_twofinger_forcenone</key>
-	<string>action_nexttrack</string>
-	<key>vertex_gestures_swipeleft_twofinger_forcepeek</key>
-	<string>action_nexttrack</string>
-	<key>vertex_gestures_swipeleft_twofinger_forcepop</key>
-	<string>action_nexttrack</string>
-	<key>vertex_gestures_swiperight_onefinger_forcenone</key>
+	<key>vertex_gestures_swiperight</key>
 	<string>action_previoustrack</string>
-	<key>vertex_gestures_swiperight_onefinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>vertex_gestures_swiperight_onefinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>vertex_gestures_swiperight_twofinger_forcenone</key>
-	<string>action_previoustrack</string>
-	<key>vertex_gestures_swiperight_twofinger_forcepeek</key>
-	<string>action_previoustrack</string>
-	<key>vertex_gestures_swiperight_twofinger_forcepop</key>
-	<string>action_previoustrack</string>
-	<key>vertex_gestures_tapcentre_onefinger_forcenone</key>
+	<key>vertex_gestures_tapcentre</key>
 	<string>action_playpause</string>
-	<key>vertex_gestures_tapcentre_onefinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>vertex_gestures_tapcentre_onefinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>vertex_gestures_tapcentre_twofinger_forcenone</key>
-	<string>action_playpause</string>
-	<key>vertex_gestures_tapcentre_twofinger_forcepeek</key>
-	<string>action_playpause</string>
-	<key>vertex_gestures_tapcentre_twofinger_forcepop</key>
-	<string>action_playpause</string>
-	<key>vertex_gestures_tapleft_onefinger_forcenone</key>
+	<key>vertex_gestures_tapleft</key>
 	<string>action_decreasevolume</string>
-	<key>vertex_gestures_tapleft_onefinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>vertex_gestures_tapleft_onefinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>vertex_gestures_tapleft_twofinger_forcenone</key>
-	<string>action_decreasevolume</string>
-	<key>vertex_gestures_tapleft_twofinger_forcepeek</key>
-	<string>action_decreasevolume</string>
-	<key>vertex_gestures_tapleft_twofinger_forcepop</key>
-	<string>action_decreasevolume</string>
-	<key>vertex_gestures_tapright_onefinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>vertex_gestures_tapright_onefinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>vertex_gestures_tapright_onefinger_forcepop</key>
-	<string>action_increasevolume</string>
-	<key>vertex_gestures_tapright_twofinger_forcenone</key>
-	<string>action_increasevolume</string>
-	<key>vertex_gestures_tapright_twofinger_forcepeek</key>
-	<string>action_increasevolume</string>
-	<key>vertex_gestures_tapright_twofinger_forcepop</key>
+	<key>vertex_gestures_tapright</key>
 	<string>action_increasevolume</string>
 	<key>vertex_progressslider</key>
 	<true/>

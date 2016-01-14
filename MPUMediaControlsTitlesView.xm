@@ -10,10 +10,9 @@
 #import <Foundation/Foundation.h>
 
 #import "SWAcapella.h"
+#import "SWAcapellaPrefs.h"
 
 #import "MPUSystemMediaControlsViewController+SW.h"
-
-#import "libsw/libSluthware/SWPrefs.h"
 
 
 
@@ -33,29 +32,13 @@
 
 - (void)updateTrackInformationWithNowPlayingInfo:(NSDictionary *)arg1
 {
-    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
-    
-    //dont override if we dont have an acapella (disabled in this section)
-    //TODO: Localization
+    // Dont override if we dont have an acapella (disabled in this section)
+    // TODO: Localization
     if (arg1.count == 0) {
         
-        BOOL shouldOverride = (acapella != nil);
+        SWAcapellaPrefs *acapellaPrefs = objc_getAssociatedObject(self, @selector(_acapellaPrefs));
         
-        if (!shouldOverride) { //sometimes acapella will be nil, so we will drill up
-            
-            NSString *prefKeyPrefix = [%c(MPUSystemMediaControlsViewController) acapella_prefKeyPrefixByDrillingUp:self];
-            
-            if (prefKeyPrefix) {
-                
-                NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"enabled"];
-                id enabled = [SWPrefs valueForKey:enabledKey application:PREF_APPLICATION];
-                shouldOverride = [enabled boolValue];
-                
-            }
-            
-        }
-        
-        if (shouldOverride) {
+        if (acapellaPrefs.enabled) {
             arg1 = @{@"kMRMediaRemoteNowPlayingInfoTitle" : @"Acapella",
                      @"kMRMediaRemoteNowPlayingInfoArtist" : @"Tap To Play"};
         }
@@ -63,6 +46,8 @@
     }
     
     %orig(arg1);
+    
+    SWAcapella *acapella = [SWAcapella acapellaForObject:self];
     
     if (acapella) {
         [acapella finishWrapAround];

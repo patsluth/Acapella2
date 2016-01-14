@@ -9,10 +9,10 @@
 #import "MPUTransportControlsView+SW.h"
 
 #import "SWAcapella.h"
+#import "SWAcapellaPrefs.h"
 #import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
-#import "libsw/libSluthware/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
 #import "MusicTabBarController.h"
@@ -20,7 +20,8 @@
 #define PREF_KEY_PREFIX @"musicmini"
 #define PREF_APPLICATION @"com.apple.Music"
 
-#define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController")
+#define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController \
+                                                            *>(self, "_transportControlMediaRemoteController")
 
 
 
@@ -28,13 +29,11 @@
 
 #pragma mark - MusicMiniPlayerViewController
 
-@interface MusicMiniPlayerViewController : UIViewController <UIViewControllerPreviewingDelegate>
+//TOOD: MOVE
+@interface MusicMiniPlayerViewController : UIViewController <SWAcapellaDelegate, UIViewControllerPreviewingDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
-
-//new
-- (SWAcapella *)acapella;
 
 - (UIView *)titlesView;
 - (UIView *)playbackProgressView;
@@ -62,6 +61,9 @@
 {
     %orig(animated);
     
+    // Initialize prefs for this instance
+    self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
     
@@ -83,14 +85,14 @@
     
     if (!self.acapella) {
         
-        NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"enabled"];
-        
-        if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]) {
+        if (self.acapellaPrefs.enabled) {
             
             [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
                                                           preInitializeAction:^(SWAcapella *a) {
+                                                              
                                                               a.owner = self;
                                                               a.titles = self.titlesView;
+                                                              
                                                           }]
                           ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
@@ -99,9 +101,6 @@
     }
     
     if (self.acapella) {
-        
-        self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
-        self.acapella.prefApplication = PREF_APPLICATION;
         
         [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
         
@@ -122,6 +121,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+    self.acapellaPrefs = nil;
     
     %orig(animated);
 }
@@ -146,10 +146,12 @@
     self.titlesView.frame = titlesFrame;
     
     
-    //show/hide progress slider
-    NSString *progressKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"progressslider"];
-    BOOL progressVisible = [[SWPrefs valueForKey:progressKey application:PREF_APPLICATION] boolValue];
-    self.playbackProgressView.layer.opacity = progressVisible ? 1.0 : 0.0;
+    // Show/Hide progress slider
+    if (self.acapellaPrefs.enabled && !self.acapellaPrefs.progressslider) {
+        self.playbackProgressView.layer.opacity = 0.0;
+    } else {
+        self.playbackProgressView.layer.opacity = 1.0;
+    }
     
 }
 
@@ -174,34 +176,27 @@
     //7 present up next (IPAD)
     //11 contextual
     
-    NSString *prefKeyPrefix = PREF_KEY_PREFIX;
-    
-    if (prefKeyPrefix != nil) {
+    if (self.acapellaPrefs.enabled) {
         
         //LEFT SECTION
-        NSString *key_PrevTrack = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_previoustrack"];
-        if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]) {
+        if (arg2 == 1 && !self.acapellaPrefs.transport_previoustrack) {
             return nil;
         }
         
-        NSString *key_PlayPause = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_playpause"];
-        if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]) {
+        if (arg2 == 3 && !self.acapellaPrefs.transport_playpause) {
             return nil;
         }
         
-        NSString *key_NextTrack = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_nexttrack"];
-        if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]) {
+        if (arg2 == 4 && !self.acapellaPrefs.transport_nexttrack) {
             return nil;
         }
         
         //RIGHT SECTION
-        NSString *key_UpNext = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_presentupnext"];
-        if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext application:PREF_APPLICATION] boolValue]) {
+        if (arg2 == 7 && !self.acapellaPrefs.transport_upnext) {
             return nil;
         }
         
-        NSString *key_Contextual = [NSString stringWithFormat:@"%@_%@", prefKeyPrefix, @"transport_contextual"];
-        if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual application:PREF_APPLICATION] boolValue]) {
+        if (arg2 == 11 && !self.acapellaPrefs.transport_contextual) {
             return nil;
         }
         
@@ -243,18 +238,16 @@
         
     } else {
         
-        id nowPlaying = [(MusicTabBarController *)self.parentViewController nowPlayingViewController];
+        UIViewController<SWAcapellaDelegate> *nowPlayingViewController;
+        nowPlayingViewController = [(MusicTabBarController *)self.parentViewController nowPlayingViewController];
         
-        [(MusicTabBarController *)self.parentViewController presentViewController:nowPlaying
-                                                                         animated:YES
-                                                                       completion:^(BOOL finished) {
-                                                                           
-                                                                           SEL upNext = NSSelectorFromString(@"action_upnext");
-                                                                           if ([nowPlaying respondsToSelector:upNext]) {
-                                                                               [nowPlaying performSelector:upNext];
-                                                                           }
-                                                                           
-                                                                       }];
+        [self.parentViewController presentViewController:nowPlayingViewController
+                                                animated:YES
+                                              completion:^() {
+                                                  
+                                                  [nowPlayingViewController action_upnext:nil];
+                                                  
+                                              }];
         
     }
 }
@@ -326,8 +319,6 @@
     if (originalLPCommand == newLPCommand) {
         [self transportControlsView:self.transportControlsView tapOnControlType:3];
     }
-    
-    [self.acapella pulseAnimateView];
 }
 
 %new
@@ -385,15 +376,63 @@
         return nil;
     }
     
-    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] init];
+    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] initWithDelegate:self];
     [previewViewController configureWithCurrentNowPlayingInfo];
+    
+    
+    CGFloat xPercentage = location.x / CGRectGetWidth(self.view.bounds);
+    
+    if (xPercentage <= 0.25) { // left
+        
+        previewViewController.popAction = self.acapellaPrefs.gestures_popactionleft;
+        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalRewindAction],
+                                                             [previewViewController seekRewindAction]];
+        
+    } else if (xPercentage > 0.75) { // right
+        
+        previewViewController.popAction = self.acapellaPrefs.gestures_popactionright;
+        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalForwardAction],
+                                                             [previewViewController seekForwardAction]];
+        
+    } else { // centre
+        
+        previewViewController.popAction = self.acapellaPrefs.gestures_popactioncentre;
+        previewViewController.acapellaPreviewActionItems = @[[previewViewController upNextAction],
+                                                             [previewViewController contextualAction]];
+        
+    }
+    
     
     return previewViewController;
 }
 
 %new // pop
-- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerToCommit
 {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        
+        SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", viewControllerToCommit.popAction]);
+        
+        if (sel && [self respondsToSelector:sel]) {
+            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        }
+        
+    });
+}
+
+#pragma mark - Associated Objects
+
+%new
+- (SWAcapellaPrefs *)acapellaPrefs
+{
+    return objc_getAssociatedObject(self, @selector(_acapellaPrefs));
+}
+
+%new
+- (void)setAcapellaPrefs:(SWAcapellaPrefs *)acapellaPrefs
+{
+    objc_setAssociatedObject(self, @selector(_acapellaPrefs), acapellaPrefs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 #pragma mark - logos

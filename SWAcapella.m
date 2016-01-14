@@ -7,6 +7,7 @@
 //
 
 #import "SWAcapella.h"
+#import "SWAcapellaPrefs.h"
 #import "SWAcapellaTitlesCloneContainer.h"
 #import "SWAcapellaTitlesClone.h"
 
@@ -53,7 +54,7 @@ NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8String
 if ([dataString isEqualToString:@"1"]) { \
 \
 UIAlertController *controller = [UIAlertController \
-alertControllerWithTitle:@"Please purchase Acapella II to remove this message." \
+alertControllerWithTitle:[NSString stringWithFormat:@"%@", @(arc4random())] \
 message:nil \
 preferredStyle:UIAlertControllerStyleAlert]; \
 \
@@ -82,7 +83,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
 @property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
-@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap2;
 @property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
@@ -110,6 +110,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 + (void)removeAcapella:(SWAcapella *)acapella
 {
     if (acapella) {
+        
         [acapella.animator removeAllBehaviors];
         acapella.animator = nil;
         
@@ -120,14 +121,11 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         [acapella.tap removeTarget:nil action:nil];
         acapella.tap = nil;
         
-        [acapella.tap2.view removeGestureRecognizer:acapella.tap2];
-        [acapella.tap2 removeTarget:nil action:nil];
-        acapella.tap2 = nil;
-        
         [acapella.pan.view removeGestureRecognizer:acapella.pan];
         [acapella.pan removeTarget:nil action:nil];
         acapella.pan = nil;
         [acapella.referenceView layoutSubviews];
+        
     }
     
     [SWAcapella setAcapella:nil ForObject:acapella.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
@@ -174,11 +172,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     self.tap.delegate = self;
     [self.referenceView addGestureRecognizer:self.tap];
     
-    self.tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
-    self.tap2.delegate = self;
-    self.tap2.numberOfTouchesRequired = 2;
-    [self.referenceView addGestureRecognizer:self.tap2];
-    
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
     self.pan.delegate = self;
     self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
@@ -220,27 +213,24 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 {
     CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
     //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
+    
     SEL sel = nil;
     
-    NSString *directionString = (xPercentage <= 0.25) ? @"tapleft" : (xPercentage > 0.75) ? @"tapright" : @"tapcentre";
-    NSString *fingerString = (tap.numberOfTouchesRequired == 1) ? @"onefinger" : (tap.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
-    
-    if (directionString && fingerString) {
-        
-        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
-                         self.prefKeyPrefix,
-                         @"gestures",
-                         directionString,
-                         fingerString,
-                         @"forcenone"]; //no force for taps
-        NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
-        
+    if (xPercentage <= 0.25) { // left
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapleft]);
+    } else if (xPercentage > 0.75) { // right
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapright]);
+    } else { // centre
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapcentre]);
     }
     
     if (sel && [self.owner respondsToSelector:sel]) {
         [self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
     }
+    
+    
+    [self pulseAnimateView];
+    
     
     SW_PIRACY;
 }
@@ -283,37 +273,37 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         [self.animator addBehavior:d];
         [d addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titlesCloneContainer];
         
-        __block SWAcapella *bself = self;
-        __block UIDynamicItemBehavior *bd = d;
+        __unsafe_unretained SWAcapella *weakSelf = self;
+        __unsafe_unretained UIDynamicItemBehavior *weakD = d;
         
         d.action = ^{
             
-            bself.titlesCloneContainer.velocity = [bd linearVelocityForItem:bself.titlesCloneContainer];
+            weakSelf.titlesCloneContainer.velocity = [weakD linearVelocityForItem:weakSelf.titlesCloneContainer];
             
-            CGPoint center = bself.titlesCloneContainer.center;
-            CGFloat halfWidth = CGRectGetWidth(bself.titlesCloneContainer.bounds) / 2.0;
+            CGPoint center = weakSelf.titlesCloneContainer.center;
+            CGFloat halfWidth = CGRectGetWidth(weakSelf.titlesCloneContainer.bounds) / 2.0;
             CGFloat offScreenLeftX = -halfWidth;
-            CGFloat offScreenRightX = CGRectGetWidth(bself.referenceView.bounds) + halfWidth;
+            CGFloat offScreenRightX = CGRectGetWidth(weakSelf.referenceView.bounds) + halfWidth;
             
             if (center.x < offScreenLeftX) {
                 
-                [bself.animator removeAllBehaviors];
-                bself.titlesCloneContainer.center = CGPointMake(offScreenRightX, self.titles.superview.center.y);
-                [self didWrapAround:-1 pan:pan];
+                [weakSelf.animator removeAllBehaviors];
+                weakSelf.titlesCloneContainer.center = CGPointMake(offScreenRightX, weakSelf.titles.superview.center.y);
+                [weakSelf didWrapAround:-1 pan:pan];
                 
             } else if (center.x > offScreenRightX) {
                 
-                [bself.animator removeAllBehaviors];
-                bself.titlesCloneContainer.center = CGPointMake(offScreenLeftX, self.titles.superview.center.y);
-                [self didWrapAround:1 pan:pan];
+                [weakSelf.animator removeAllBehaviors];
+                weakSelf.titlesCloneContainer.center = CGPointMake(offScreenLeftX, weakSelf.titles.superview.center.y);
+                [weakSelf didWrapAround:1 pan:pan];
                 
             } else {
                 
-                CGFloat absoluteVelocity = fabs([bd linearVelocityForItem:bself.titlesCloneContainer].x);
+                CGFloat absoluteVelocity = fabs([weakD linearVelocityForItem:weakSelf.titlesCloneContainer].x);
                 
                 //snap to center if we are moving to slow
-                if (absoluteVelocity < CGRectGetMidX(bself.referenceView.bounds)) {
-                    [bself snapToCenter];
+                if (absoluteVelocity < CGRectGetMidX(weakSelf.referenceView.bounds)) {
+                    [weakSelf snapToCenter];
                 }
                 
             }
@@ -321,39 +311,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         };
     }
 }
-
-//- (void)onPress:(UILongPressGestureRecognizer *)press
-//{
-//    if (press.state == UIGestureRecognizerStateBegan) {
-//        
-//    } else if (press.state == UIGestureRecognizerStateEnded) {
-//        
-//        CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
-//        //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
-//        SEL sel = nil;
-//        
-//        NSString *directionString = (xPercentage <= 0.25) ? @"pressleft" : (xPercentage > 0.75) ? @"pressright" : @"presscentre";
-//        NSString *fingerString = (press.numberOfTouchesRequired == 1) ? @"onefinger" : (press.numberOfTouchesRequired == 2) ? @"twofinger" : nil;
-//        
-//        if (directionString && fingerString) {
-//            
-//            NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
-//                             self.prefKeyPrefix,
-//                             @"gestures",
-//                             directionString,
-//                             fingerString,
-//                             @"forcenone"];
-//            NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-//            sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
-//            
-//        }
-//        
-//        if (sel && [self.owner respondsToSelector:sel]) {
-//            [self.owner performSelectorOnMainThread:sel withObject:press waitUntilDone:NO];
-//        }
-//        
-//    }
-//}
 
 #pragma mark - UIGestureRecognizerDelegate
 
@@ -407,26 +364,15 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     
     SEL sel = nil;
     
-    NSString *directionString = (direction < 0) ? @"swipeleft" : (direction > 0) ? @"swiperight" : nil;
-    NSString *fingerString = (pan.minimumNumberOfTouches == 1) ? @"onefinger" : (pan.minimumNumberOfTouches == 2) ? @"twofinger" : nil;
-    
-    if (directionString && fingerString) {
-        
-        NSString *key = [NSString stringWithFormat:@"%@_%@_%@_%@_%@",
-                         self.prefKeyPrefix,
-                         @"gestures",
-                         directionString,
-                         fingerString,
-                         @"forcenone"];
-        NSString *selString = [SWPrefs valueForKey:key application:self.prefApplication];
-        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", selString]);
-        
+    if (direction < 0) { // left
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_swipeleft]);
+    } else if (direction > 0) { // right
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_swiperight]);
     }
     
     if (sel && [self.owner respondsToSelector:sel]) {
         [self.owner performSelectorOnMainThread:sel withObject:pan waitUntilDone:NO];
     }
-    
     
     
     self.wrapAroundFallback = [NSTimer scheduledTimerWithTimeInterval:1
@@ -464,20 +410,20 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         [d addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesCloneContainer];
         
         
-        __block SWAcapella *bself = self;
-        __block UIDynamicItemBehavior *bd = d;
+        __unsafe_unretained SWAcapella *weakSelf = self;
+        __unsafe_unretained UIDynamicItemBehavior *weakD = d;
         
         d.action = ^{
             
-            CGFloat velocity = [bd linearVelocityForItem:bself.titlesCloneContainer].x;
+            CGFloat velocity = [weakD linearVelocityForItem:weakSelf.titlesCloneContainer].x;
             
-            BOOL toSlow = fabs(velocity) < CGRectGetMidX(bself.referenceView.bounds);
+            BOOL toSlow = fabs(velocity) < CGRectGetMidX(weakSelf.referenceView.bounds);
             
             if (toSlow) {
-                [bself snapToCenter];
+                [weakSelf snapToCenter];
             } else {
                 
-                CGFloat distanceFromCenter = bself.titlesCloneContainer.center.x - bself.titles.superview.center.x;
+                CGFloat distanceFromCenter = weakSelf.titlesCloneContainer.center.x - weakSelf.titles.superview.center.x;
                 
                 //if we have a -ve velocity, after we wrap around we will have a positive value for distanceFromCenter
                 //once we travel past the center, this value will be -ve as well. This also happens in the other direction
@@ -485,7 +431,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
                 //the center have the same sign (-ve && -ve || +ve && +ve)
                 if (((distanceFromCenter < 0) == (velocity < 0))) {
                     //this will cause the toSlow condition to be met much quicker, snapping it to the centre
-                    bd.resistance = 60;
+                    weakD.resistance = 60;
                 }
                 
             }

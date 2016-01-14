@@ -9,17 +9,18 @@
 #import "MPUTransportControlsView+SW.h"
 
 #import "SWAcapella.h"
+#import "SWAcapellaPrefs.h"
 #import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
-#import "libsw/libSluthware/SWPrefs.h"
 
 #import "MPUTransportControlMediaRemoteController.h"
 
 #define PREF_KEY_PREFIX @"musicnowplaying"
 #define PREF_APPLICATION @"com.apple.Music"
 
-#define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController *>(self, "_transportControlMediaRemoteController")
+#define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController \
+                                                            *>(self, "_transportControlMediaRemoteController")
 
 
 
@@ -27,13 +28,10 @@
 
 #pragma mark - MusicNowPlayingViewController
 
-@interface MusicNowPlayingViewController : UIViewController <UIGestureRecognizerDelegate, UIViewControllerPreviewingDelegate>
+@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, UIGestureRecognizerDelegate, UIViewControllerPreviewingDelegate>
 {
     //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
 }
-
-//new
-- (SWAcapella *)acapella;
 
 - (UIView *)playbackProgressSliderView;
 - (UIView *)titlesView;
@@ -65,6 +63,9 @@
 {
     %orig(animated);
     
+    // Initialize prefs for this instance
+    self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
     
@@ -92,14 +93,14 @@
     
     if (!self.acapella) {
         
-        NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"enabled"];
-        
-        if ([[SWPrefs valueForKey:enabledKey application:PREF_APPLICATION] boolValue]) {
+        if (self.acapellaPrefs.enabled) {
             
             [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.titlesView.superview
                                                           preInitializeAction:^(SWAcapella *a) {
+                                                              
                                                               a.owner = self;
                                                               a.titles = self.titlesView;
+                                                              
                                                           }]
                           ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
@@ -108,9 +109,6 @@
     }
     
     if (self.acapella) {
-        
-        self.acapella.prefKeyPrefix = PREF_KEY_PREFIX;
-        self.acapella.prefApplication = PREF_APPLICATION;
         
         // Register/Unregister for UIViewControllerPreviewing
         if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
@@ -127,6 +125,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+    self.acapellaPrefs = nil;
     
     %orig(animated);
 }
@@ -135,17 +134,19 @@
 {
     %orig();
     
-    NSString *progressKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"progressslider"];
-    NSString *volumeKey = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"volumeslider"];
+    BOOL progressVisible = YES;
+    BOOL volumeVisible = YES;
     
-    BOOL progressVisible = [[SWPrefs valueForKey:progressKey application:PREF_APPLICATION] boolValue];
-    BOOL volumeVisible = [[SWPrefs valueForKey:volumeKey application:PREF_APPLICATION] boolValue];
+    if (self.acapellaPrefs.enabled) {
+        progressVisible = self.acapellaPrefs.progressslider;
+        volumeVisible = self.acapellaPrefs.volumeslider;
+    }
     
-    //show/hide sliders
+    // Show/Hide sliders
     self.playbackProgressSliderView.layer.opacity = progressVisible ? 1.0 : 0.0;
     self.volumeSlider.layer.opacity = volumeVisible ? 1.0 : 0.0;
     
-    //Pinnning views responsible for drawing knobs
+    // Pinnning views responsible for drawing knobs
     for (UIView *subview in self.vibrantEffectView.subviews) {
         if (%c(MPUPinningView) && [subview isKindOfClass:%c(MPUPinningView)]) {
             
@@ -227,62 +228,54 @@
     //9 repeat
     //11 contextual
     
-    
-    //TOP ROW
-    NSString *key_Heart = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_heart"];
-    if (arg2 == 6 && ![[SWPrefs valueForKey:key_Heart application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_PrevTrack = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_previoustrack"];
-    if (arg2 == 1 && ![[SWPrefs valueForKey:key_PrevTrack application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_IntervalRewind = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_intervalrewind"];
-    if (arg2 == 2 && ![[SWPrefs valueForKey:key_IntervalRewind application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_PlayPause = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_playpause"];
-    if (arg2 == 3 && ![[SWPrefs valueForKey:key_PlayPause application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_NextTrack = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_nexttrack"];
-    if (arg2 == 4 && ![[SWPrefs valueForKey:key_NextTrack application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_IntervalForward = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_intervalforward"];
-    if (arg2 == 5 && ![[SWPrefs valueForKey:key_IntervalForward application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_UpNext = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_upnext"];
-    if (arg2 == 7 && ![[SWPrefs valueForKey:key_UpNext application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    //BOTTOM ROW
-    NSString *key_Share = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_share"];
-    if (arg2 == 8 && ![[SWPrefs valueForKey:key_Share application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_Shuffle = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_shuffle"];
-    if (arg2 == 10 && ![[SWPrefs valueForKey:key_Shuffle application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_Repeat = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_repeat"];
-    if (arg2 == 9 && ![[SWPrefs valueForKey:key_Repeat application:PREF_APPLICATION] boolValue]) {
-        return nil;
-    }
-    
-    NSString *key_Contextual = [NSString stringWithFormat:@"%@_%@", PREF_KEY_PREFIX, @"transport_contextual"];
-    if (arg2 == 11 && ![[SWPrefs valueForKey:key_Contextual application:PREF_APPLICATION] boolValue]) {
-        return nil;
+    if (self.acapellaPrefs.enabled) {
+        
+        //TOP ROW
+        if (arg2 == 6 && !self.acapellaPrefs.transport_heart) {
+            return nil;
+        }
+        
+        if (arg2 == 1 && !self.acapellaPrefs.transport_previoustrack) {
+            return nil;
+        }
+        
+        if (arg2 == 2 && !self.acapellaPrefs.transport_intervalrewind) {
+            return nil;
+        }
+        
+        if (arg2 == 3 && !self.acapellaPrefs.transport_playpause) {
+            return nil;
+        }
+        
+        if (arg2 == 4 && !self.acapellaPrefs.transport_nexttrack) {
+            return nil;
+        }
+        
+        if (arg2 == 5 && !self.acapellaPrefs.transport_intervalforward) {
+            return nil;
+        }
+        
+        if (arg2 == 7 && !self.acapellaPrefs.transport_upnext) {
+            return nil;
+        }
+        
+        //BOTTOM ROW
+        if (arg2 == 8 && !self.acapellaPrefs.transport_share) {
+            return nil;
+        }
+        
+        if (arg2 == 10 && !self.acapellaPrefs.transport_shuffle) {
+            return nil;
+        }
+        
+        if (arg2 == 9 && !self.acapellaPrefs.transport_repeat) {
+            return nil;
+        }
+        
+        if (arg2 == 11 && !self.acapellaPrefs.transport_contextual) {
+            return nil;
+        }
+        
     }
     
     
@@ -400,8 +393,6 @@
     if (originalLPCommand == newLPCommand) {
         [self transportControlsView:self.transportControls tapOnControlType:3];
     }
-    
-    [self.acapella pulseAnimateView];
 }
 
 %new
@@ -475,8 +466,35 @@
     
     if (CGRectContainsPoint(sourceRect, location)) { // Don't allow previewing if outside the media control area
         
-        SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] init];
+        SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] initWithDelegate:self];
         [previewViewController configureWithCurrentNowPlayingInfo];
+        
+        
+        CGFloat xPercentage = location.x / CGRectGetWidth(self.view.bounds);
+        
+        if (xPercentage <= 0.25) { // left
+            
+            previewViewController.popAction = self.acapellaPrefs.gestures_popactionleft;
+            previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalRewindAction],
+                                                                 [previewViewController seekRewindAction]];
+            
+        } else if (xPercentage > 0.75) { // right
+            
+            previewViewController.popAction = self.acapellaPrefs.gestures_popactionright;
+            previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalForwardAction],
+                                                                 [previewViewController seekForwardAction]];
+            
+        } else { // centre
+            
+            previewViewController.popAction = self.acapellaPrefs.gestures_popactioncentre;
+            previewViewController.acapellaPreviewActionItems = @[[previewViewController heartAction],
+                                                                 [previewViewController upNextAction],
+                                                                 [previewViewController shareAction],
+                                                                 [previewViewController contextualAction],
+                                                                 [previewViewController showRatingsAction]];
+            
+        }
+        
         
         return previewViewController;
         
@@ -487,8 +505,32 @@
 }
 
 %new // pop
-- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerToCommit
 {
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        
+        SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", viewControllerToCommit.popAction]);
+        
+        if (sel && [self respondsToSelector:sel]) {
+            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+        }
+        
+    });
+}
+
+#pragma mark - Associated Objects
+
+%new
+- (SWAcapellaPrefs *)acapellaPrefs
+{
+    return objc_getAssociatedObject(self, @selector(_acapellaPrefs));
+}
+
+%new
+- (void)setAcapellaPrefs:(SWAcapellaPrefs *)acapellaPrefs
+{
+    objc_setAssociatedObject(self, @selector(_acapellaPrefs), acapellaPrefs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 %end

@@ -32,11 +32,15 @@
 
 @implementation SWAcapellaMediaItemPreviewViewController
 
-- (id)init
+#pragma mark - Init
+
+- (id)initWithDelegate:(UIViewController<SWAcapellaDelegate> *)delegate
 {
     self = [super init];
     
     if (self) {
+        
+        self.delegate = delegate;
         
         // Height copied from MusicContextualActionsHeaderViewController (Used in cello)
         self.preferredContentSize = CGSizeMake(0.0, 124);
@@ -143,24 +147,178 @@
     });
 }
 
+#pragma mark - UIPreviewActions
+
+// UIPreviewActions
+- (UIPreviewAction *)heartAction
+{
+    return [UIPreviewAction actionWithTitle:@"Heart"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_heart:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)upNextAction
+{
+    return [UIPreviewAction actionWithTitle:@"Up Next"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_upnext:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)previousTrackAction
+{
+    return [UIPreviewAction actionWithTitle:@"Previous Track"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_previoustrack:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)nextTrackAction
+{
+    return [UIPreviewAction actionWithTitle:@"Next Track"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_nexttrack:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)intervalRewindAction
+{
+    return [UIPreviewAction actionWithTitle:@"Interval Rewind"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_intervalrewind:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)intervalForwardAction
+{
+    return [UIPreviewAction actionWithTitle:@"Interval Forward"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_intervalforward:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)seekRewindAction
+{
+    return [UIPreviewAction actionWithTitle:@"Seek Rewind"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_seekrewind:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)seekForwardAction
+{
+    return [UIPreviewAction actionWithTitle:@"Seek Forward"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_seekforward:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)playPauseAction
+{
+    return [UIPreviewAction actionWithTitle:@"Play/Pause"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_playpause:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)shareAction
+{
+    return [UIPreviewAction actionWithTitle:@"Share"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_share:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)shuffleAction
+{
+    return [UIPreviewAction actionWithTitle:@"Toggle Shuffle"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_toggleshuffle:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)toggleRepeatAction
+{
+    return [UIPreviewAction actionWithTitle:@"Toggle Repeat"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_togglerepeat:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)contextualAction
+{
+    return [UIPreviewAction actionWithTitle:@"Contextual"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_contextual:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)openAppAction
+{
+    return [UIPreviewAction actionWithTitle:@"Up Now Playing App"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_openapp:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)showRatingsAction
+{
+    return [UIPreviewAction actionWithTitle:@"Show Ratings"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_showratings:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)decreaseVolumeAction
+{
+    return [UIPreviewAction actionWithTitle:@"Decrease Volume"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_decreasevolume:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)increaseVolumeAction
+{
+    return [UIPreviewAction actionWithTitle:@"Increase Volume"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_increasevolume:nil];
+                                    }];
+}
+
+- (UIPreviewAction *)equalizerEverywhereAction
+{
+    return [UIPreviewAction actionWithTitle:@"Equalizer Everywhere"
+                                      style:UIPreviewActionStyleDefault
+                                    handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
+                                        [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_equalizereverywhere:nil];
+                                    }];
+}
+
 - (NSArray<id<UIPreviewActionItem>> *)previewActionItems
 {
-    UIPreviewAction *previewAction = [UIPreviewAction actionWithTitle:@"PAT"
-                                                                style:UIPreviewActionStyleDefault
-                                                              handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
-                                                              }];
+    if (self.acapellaPreviewActionItems && self.acapellaPreviewActionItems.count > 0) {
+        return self.acapellaPreviewActionItems;
+    }
     
-    UIPreviewAction *previewAction2 = [UIPreviewAction actionWithTitle:@"PAT2"
-                                                                style:UIPreviewActionStyleDefault
-                                                              handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
-                                                              }];
-    
-    UIPreviewAction *previewAction3 = [UIPreviewAction actionWithTitle:@"PAT3"
-                                                                style:UIPreviewActionStyleDefault
-                                                              handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
-                                                              }];
-    
-    return @[previewAction, previewAction2, previewAction3];
+    return [super previewActionItems];
 }
 
 @end

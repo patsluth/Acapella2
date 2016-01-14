@@ -40,5 +40,4 @@
 
 %ctor //syncronize acapella default prefs
 {
-    NSLog(@"PAT TEST %@", %c(SBLockScreenHintManager));
 }

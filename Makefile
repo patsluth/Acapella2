@@ -3,9 +3,9 @@
 
 
 
-FINALPACKAGE = 0
-DEBUG = 1
-PACKAGE_VERSION = 1.1-11
+FINALPACKAGE = 1
+DEBUG = 0
+PACKAGE_VERSION = 1.1-12~beta
 
 
 
@@ -17,9 +17,6 @@ else
     ARCHS = armv7 armv7s arm64
 endif
 TARGET = iphone:clang:latest:7.0
-
-THEOS_DEVICE_IP=192.168.1.113
-THEOS_DEVICE_PORT=22
 
 
 

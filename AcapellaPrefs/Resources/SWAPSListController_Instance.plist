@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>title</key>
-	<string>Acapella II</string>
+	<string>Instance</string>
 	<key>items</key>
 	<array>
 		<dict>
@@ -35,8 +35,6 @@
 			<true/>
 			<key>label</key>
 			<string></string>
-			<key>footerText</key>
-			<string>Note - These settings will be applied even if Acapella is not enabled for this instance</string>
 		</dict>
 		<dict>
 			<key>cell</key>

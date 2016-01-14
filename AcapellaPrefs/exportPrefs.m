@@ -32,16 +32,12 @@ static id prefValueForKey(NSString *key)
         return @(YES);
     } else if ([option isEqualToString:@"gestures"]) {
         
-        if (parts.count < 5) {
-            NSLog(@"Invalid Gesture Key %@", key);
-            return nil;
-        }
+//        if (parts.count < 5) {
+//            NSLog(@"Invalid Gesture Key %@", key);
+//            return nil;
+//        }
         
         NSString *gesture = [parts objectAtIndex:2];
-        //NSString *finger = [parts objectAtIndex:3];
-        //NSString *force = [parts objectAtIndex:4];
-        
-        //if ([finger isEqualToString:@"twofinger"] || ![force isEqualToString:@"forcenone"]) {
         
         if ([gesture containsString:@"tap"]) {
             
@@ -64,7 +60,7 @@ static id prefValueForKey(NSString *key)
                 return @"action_previoustrack";
             }
             
-        } else if ([gesture containsString:@"press"]) {
+        } else if ([gesture containsString:@"popaction"]) {
             
             if ([gesture containsString:@"left"]) {
                 return @"action_intervalrewind";

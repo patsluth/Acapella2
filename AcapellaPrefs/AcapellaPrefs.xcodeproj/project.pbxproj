@@ -104,7 +104,7 @@
 		2EBB75771BE97BF500A3A82D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					2EBB75BE1BE97E4600A3A82D = {
 						CreatedOnToolsVersion = 7.1;
@@ -143,6 +143,8 @@
 		2EBB757B1BE97BF500A3A82D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};

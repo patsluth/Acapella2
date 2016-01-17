@@ -94,9 +94,9 @@
 			<key>valuesDataSource</key>
 			<string>actionValues:</string>
 			<key>key</key>
-			<string>popactionleft</string>
+			<string>pressleft</string>
 			<key>label</key>
-			<string>Pop Action Left</string>
+			<string>Press Left</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -108,9 +108,9 @@
 			<key>valuesDataSource</key>
 			<string>actionValues:</string>
 			<key>key</key>
-			<string>popactioncentre</string>
+			<string>presscentre</string>
 			<key>label</key>
-			<string>Pop Action Centre</string>
+			<string>Press Centre</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -122,9 +122,9 @@
 			<key>valuesDataSource</key>
 			<string>actionValues:</string>
 			<key>key</key>
-			<string>popactionright</string>
+			<string>pressright</string>
 			<key>label</key>
-			<string>Pop Action Right</string>
+			<string>Press Right</string>
 		</dict>
 	</array>
 </dict>

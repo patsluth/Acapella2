@@ -11,7 +11,7 @@
 
 #import "SWAcapella.h"
 #import "SWAcapellaPrefs.h"
-#import "SWAcapellaMediaItemPreviewViewController.h"
+//#import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
 #import "libsw/SWAppLauncher.h"
@@ -54,8 +54,11 @@
 {
     %orig(animated);
     
+    NSString *prefKeyPrefix = PREF_KEY_PREFIX;
     // Initialize prefs for this instance
-    self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    if (prefKeyPrefix) {
+        self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    }
     
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
@@ -73,6 +76,13 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     %orig(animated);
+    
+    
+    // special case where the pref key prefix could not be found in viewWillAppear, but it will always be ready here
+    if (!self.acapellaPrefs) {
+        [self viewWillAppear:NO];
+    }
+    
     
     if (!self.acapella) {
         
@@ -100,14 +110,6 @@
                 UIButton *b = (UIButton *)v;
                 b.enabled = NO;
             }
-        }
-        
-        // Register/Unregister for UIViewControllerPreviewing
-        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
-            (self.traitCollection.forceTouchCapability ==  UIForceTouchCapabilityAvailable)) {
-            
-            [self registerForPreviewingWithDelegate:self sourceView:self.view];
-            
         }
         
         // Show/Hide progress slider
@@ -161,55 +163,62 @@
 %new
 + (NSString *)acapella_prefKeyPrefixByDrillingUp:(UIView *)view
 {
-//    id a = NSStringFromClass([view.superview class]);
-//    id b = NSStringFromClass([view.superview.superview class]);
-//    id c = NSStringFromClass([view.window.rootViewController class]);
-//    NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
-    
     UIView *curView = view.superview;
     
     while (curView) {
         
-        //Control Centre
-        if (
-            (%c(SBControlCenterRootView) && [curView class] == %c(SBControlCenterRootView)) ||
-            //(%c(SBControlCenterSectionView) && [curView class] == %c(SBControlCenterSectionView)) || // Interfering with seng
-            (%c(SBControlCenterContentView) && [curView class] == %c(SBControlCenterContentView))
-            ) {
-            return @"cc";
-        }
+#ifdef DEBUG
+        id a = NSStringFromClass([curView class]);
+        id b = NSStringFromClass([curView.superview class]);
+        id c = NSStringFromClass([curView.window.rootViewController class]);
+        NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
+#endif
         
-        //Lock Screen
-        if (%c(SBLockScreenView) && [curView class] == %c(SBLockScreenView)) {
-            return @"ls";
-        }
-        
-        //OnTapMusic - class will be null if tweak is not installed
-        if (%c(OTMView) && [curView class] == %c(OTMView)) {
-            return @"otm";
-        }
-        
-        //Auxo LE - class will be null if tweak is not installed
-        if (%c(AuxoCollectionView) && [curView class] == %c(AuxoCollectionView)) {
-            return @"auxo";
-        }
-        
-        //Vertex - Vertex has no classes ?
-        if (%c(SBAppSwitcherContainer) && [curView class] == %c(SBAppSwitcherContainer)) {
-            return @"vertex";
-        }
-        
-        //Seng
-        if ((%c(SengMediaSectionView) && [curView class] == %c(SengMediaSectionView)) ||
-            (%c(SengMediaTitlesSectionView) && [curView class] == %c(SengMediaTitlesSectionView))) {
-            return @"seng";
+        @autoreleasepool {
+            
+            // Control Centre
+            if (
+                (%c(SBControlCenterRootView) && [curView class] == %c(SBControlCenterRootView)) ||
+                //(%c(SBControlCenterSectionView) && [curView class] == %c(SBControlCenterSectionView)) || // Interfering with seng
+                (%c(SBControlCenterContentView) && [curView class] == %c(SBControlCenterContentView))
+                ) {
+                return @"cc";
+            }
+            
+            // Lock Screen
+            if (%c(SBLockScreenView) && ([curView class] == %c(SBLockScreenView) ||
+                                                               [curView class] == %c(SBLockScreenScrollView))) {
+                return @"ls";
+            }
+            
+            // OnTapMusic - class will be null if tweak is not installed
+            if (%c(OTMView) && [curView class] == %c(OTMView)) {
+                return @"otm";
+            }
+            
+            // Auxo LE - class will be null if tweak is not installed
+            if (%c(AuxoCollectionView) && [curView class] == %c(AuxoCollectionView)) {
+                return @"auxo";
+            }
+            
+            // Vertex - Vertex has no classes ?
+            if (%c(SBAppSwitcherContainer) && [curView class] == %c(SBAppSwitcherContainer)) {
+                return @"vertex";
+            }
+            
+            // Seng
+            if ((%c(SengMediaSectionView) && [curView class] == %c(SengMediaSectionView)) ||
+                (%c(SengMediaTitlesSectionView) && [curView class] == %c(SengMediaTitlesSectionView))) {
+                return @"seng";
+            }
+            
         }
         
         curView = curView.superview;
         
     }
     
-    return @"undefined";
+    return nil;
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -362,6 +371,8 @@
     if (originalLPCommand == newLPCommand) {
         [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:3];
     }
+    
+    [self.acapella pulseAnimateView];
 }
 
 %new
@@ -432,61 +443,70 @@
     }
 }
 
-#pragma mark - UIViewControllerPreviewing
-
-%new // peek
-- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
-{
-    if (self.presentedViewController) {
-        return nil;
-    }
-    
-    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] initWithDelegate:self];
-    [previewViewController configureWithCurrentNowPlayingInfo];
-    
-    
-    CGFloat xPercentage = location.x / CGRectGetWidth(self.view.bounds);
-    
-    if (xPercentage <= 0.25) { // left
-        
-        previewViewController.popAction = self.acapellaPrefs.gestures_popactionleft;
-        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalRewindAction],
-                                                             [previewViewController seekRewindAction]];
-        
-    } else if (xPercentage > 0.75) { // right
-        
-        previewViewController.popAction = self.acapellaPrefs.gestures_popactionright;
-        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalForwardAction],
-                                                             [previewViewController seekForwardAction]];
-        
-    } else { // centre
-        
-        previewViewController.popAction = self.acapellaPrefs.gestures_popactioncentre;
-        previewViewController.acapellaPreviewActionItems = @[[previewViewController heartAction],
-                                                             [previewViewController shareAction],
-                                                             [previewViewController openAppAction],
-                                                             [previewViewController equalizerEverywhereAction]];
-        
-    }
-    
-    
-    return previewViewController;
-}
-
-%new // pop
-- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
-commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerToCommit
-{
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        
-        SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", viewControllerToCommit.popAction]);
-        
-        if (sel && [self respondsToSelector:sel]) {
-            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
-        }
-        
-    });
-}
+//#pragma mark - UIViewControllerPreviewing
+//
+//%new // peek
+//- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+//{
+//    @autoreleasepool {
+//        
+//    if (!self.acapella || self.presentedViewController) {
+//        return nil;
+//    }
+//    
+//    
+//    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] initWithDelegate:self];
+//    [previewViewController configureWithCurrentNowPlayingInfo];
+//    
+//    
+//    CGFloat xPercentage = location.x / CGRectGetWidth(self.view.bounds);
+//    
+//    if (xPercentage <= 0.25) { // left
+//        
+//        previewViewController.popAction = self.acapellaPrefs.gestures_popactionleft;
+//        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalRewindAction],
+//                                                             [previewViewController seekRewindAction]];
+//        
+//    } else if (xPercentage > 0.75) { // right
+//        
+//        previewViewController.popAction = self.acapellaPrefs.gestures_popactionright;
+//        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalForwardAction],
+//                                                             [previewViewController seekForwardAction]];
+//        
+//    } else { // centre
+//        
+//        previewViewController.popAction = self.acapellaPrefs.gestures_popactioncentre;
+//        previewViewController.acapellaPreviewActionItems = @[[previewViewController heartAction],
+//                                                             [previewViewController shareAction],
+//                                                             [previewViewController openAppAction],
+//                                                             [previewViewController equalizerEverywhereAction]];
+//        
+//    }
+//    
+//    
+//    return previewViewController;
+//        
+//    }
+//}
+//
+//%new // pop
+//- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+//commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerToCommit
+//{
+//    dispatch_async(dispatch_get_main_queue(), ^(void) {
+//        
+//        SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", viewControllerToCommit.popAction]);
+//        
+//        if (sel && [self respondsToSelector:sel]) {
+//            
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {
+//                [self performSelector:sel];
+//            }];
+//            
+//        }
+//        
+//    });
+//}
 
 #pragma mark - Associated Objects
 
@@ -544,6 +564,67 @@ commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerT
         self.trackInformationView.center = CGPointMake(self.trackInformationView.center.x, midPoint);
         
     }
+}
+
+%end
+
+
+
+
+
+@interface UIPreviewItemController
+
++ (void)test;
+
+@end
+
+
+%hook UIPreviewItemController
+
+%new
++ (void)test
+{
+    NSLog(@"PAT TEST");
+}
+
+- (id)init
+{
+    NSLog(@"PAT SEX");
+    return %orig();
+}
+
+- (void)preparePreviewIndicatorViewInSourceView:(id)arg1 updateScreen:(BOOL)arg2
+{
+    NSLog(@"PAT preparePreviewIndicatorViewInSourceView %@", arg1);
+    
+    %orig(arg1, NO);
+}
+
+%end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%hook UIPreviewPresentationController
+
+- (BOOL)_sourceViewSnapshotAndScaleTransformSuppressed
+{
+    BOOL x = %orig();
+    
+    NSLog(@"PAT _sourceViewSnapshotAndScaleTransformSuppressed %@", @(x));
+    
+    return x;
 }
 
 %end

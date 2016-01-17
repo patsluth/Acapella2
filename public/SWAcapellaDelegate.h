@@ -15,7 +15,7 @@
 
 
 
-@protocol SWAcapellaDelegate <NSObject>
+@protocol SWAcapellaDelegate <NSObject, UIViewControllerPreviewingDelegate>
 
 @required
 

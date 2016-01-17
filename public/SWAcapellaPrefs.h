@@ -26,9 +26,12 @@
 @property (strong, nonatomic, readonly) NSString *gestures_tapright;
 @property (strong, nonatomic, readonly) NSString *gestures_swipeleft;
 @property (strong, nonatomic, readonly) NSString *gestures_swiperight;
-@property (strong, nonatomic, readonly) NSString *gestures_popactionleft;
-@property (strong, nonatomic, readonly) NSString *gestures_popactioncentre;
-@property (strong, nonatomic, readonly) NSString *gestures_popactionright;
+@property (strong, nonatomic, readonly) NSString *gestures_pressleft;
+@property (strong, nonatomic, readonly) NSString *gestures_presscentre;
+@property (strong, nonatomic, readonly) NSString *gestures_pressright;
+//@property (strong, nonatomic, readonly) NSString *gestures_popactionleft;
+//@property (strong, nonatomic, readonly) NSString *gestures_popactioncentre;
+//@property (strong, nonatomic, readonly) NSString *gestures_popactionright;
 // UI(Progress Slider)
 @property (nonatomic, readonly) BOOL progressslider;
 // UI(Transport)

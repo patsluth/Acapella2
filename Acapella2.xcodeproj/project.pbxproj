@@ -75,7 +75,6 @@
 		2EBB75741BE97BB900A3A82D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_TESTABILITY = YES;
 			};
 			name = Debug;
 		};

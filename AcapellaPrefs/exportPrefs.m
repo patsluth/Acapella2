@@ -60,7 +60,7 @@ static id prefValueForKey(NSString *key)
                 return @"action_previoustrack";
             }
             
-        } else if ([gesture containsString:@"popaction"]) {
+        } else if ([gesture containsString:@"press"] || [gesture containsString:@"popaction"]) {
             
             if ([gesture containsString:@"left"]) {
                 return @"action_intervalrewind";

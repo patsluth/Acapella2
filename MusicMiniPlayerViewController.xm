@@ -10,7 +10,7 @@
 
 #import "SWAcapella.h"
 #import "SWAcapellaPrefs.h"
-#import "SWAcapellaMediaItemPreviewViewController.h"
+//#import "SWAcapellaMediaItemPreviewViewController.h"
 
 #import "libsw/libSluthware/libSluthware.h"
 
@@ -103,14 +103,6 @@
     if (self.acapella) {
         
         [self.nowPlayingPresentationPanRecognizer requireGestureRecognizerToFail:self.acapella.pan];
-        
-        // Register/Unregister for UIViewControllerPreviewing
-        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
-            (self.traitCollection.forceTouchCapability ==  UIForceTouchCapabilityAvailable)) {
-            
-            [self registerForPreviewingWithDelegate:self sourceView:self.view];
-            
-        }
         
     }
     
@@ -319,6 +311,8 @@
     if (originalLPCommand == newLPCommand) {
         [self transportControlsView:self.transportControlsView tapOnControlType:3];
     }
+    
+    [self.acapella pulseAnimateView];
 }
 
 %new
@@ -367,59 +361,59 @@
 {
 }
 
-#pragma mark - UIViewControllerPreviewing
-
-%new // peek
-- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
-{
-    if (self.presentedViewController) {
-        return nil;
-    }
-    
-    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] initWithDelegate:self];
-    [previewViewController configureWithCurrentNowPlayingInfo];
-    
-    
-    CGFloat xPercentage = location.x / CGRectGetWidth(self.view.bounds);
-    
-    if (xPercentage <= 0.25) { // left
-        
-        previewViewController.popAction = self.acapellaPrefs.gestures_popactionleft;
-        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalRewindAction],
-                                                             [previewViewController seekRewindAction]];
-        
-    } else if (xPercentage > 0.75) { // right
-        
-        previewViewController.popAction = self.acapellaPrefs.gestures_popactionright;
-        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalForwardAction],
-                                                             [previewViewController seekForwardAction]];
-        
-    } else { // centre
-        
-        previewViewController.popAction = self.acapellaPrefs.gestures_popactioncentre;
-        previewViewController.acapellaPreviewActionItems = @[[previewViewController upNextAction],
-                                                             [previewViewController contextualAction]];
-        
-    }
-    
-    
-    return previewViewController;
-}
-
-%new // pop
-- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
-commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerToCommit
-{
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        
-        SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", viewControllerToCommit.popAction]);
-        
-        if (sel && [self respondsToSelector:sel]) {
-            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
-        }
-        
-    });
-}
+//#pragma mark - UIViewControllerPreviewing
+//
+//%new // peek
+//- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+//{
+//    if (!self.acapella || self.presentedViewController) {
+//        return nil;
+//    }
+//    
+//    SWAcapellaMediaItemPreviewViewController *previewViewController = [[SWAcapellaMediaItemPreviewViewController alloc] initWithDelegate:self];
+//    [previewViewController configureWithCurrentNowPlayingInfo];
+//    
+//    
+//    CGFloat xPercentage = location.x / CGRectGetWidth(self.view.bounds);
+//    
+//    if (xPercentage <= 0.25) { // left
+//        
+//        previewViewController.popAction = self.acapellaPrefs.gestures_popactionleft;
+//        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalRewindAction],
+//                                                             [previewViewController seekRewindAction]];
+//        
+//    } else if (xPercentage > 0.75) { // right
+//        
+//        previewViewController.popAction = self.acapellaPrefs.gestures_popactionright;
+//        previewViewController.acapellaPreviewActionItems = @[[previewViewController intervalForwardAction],
+//                                                             [previewViewController seekForwardAction]];
+//        
+//    } else { // centre
+//        
+//        previewViewController.popAction = self.acapellaPrefs.gestures_popactioncentre;
+//        previewViewController.acapellaPreviewActionItems = @[[previewViewController upNextAction],
+//                                                             [previewViewController contextualAction]];
+//        
+//    }
+//    
+//    
+//    return previewViewController;
+//}
+//
+//%new // pop
+//- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+//commitViewController:(SWAcapellaMediaItemPreviewViewController *)viewControllerToCommit
+//{
+//    dispatch_async(dispatch_get_main_queue(), ^(void) {
+//        
+//        SEL sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", viewControllerToCommit.popAction]);
+//        
+//        if (sel && [self respondsToSelector:sel]) {
+//            [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:NO];
+//        }
+//        
+//    });
+//}
 
 #pragma mark - Associated Objects
 

@@ -4,11 +4,11 @@
 <dict>
 	<key>auxo_enabled</key>
 	<true/>
-	<key>auxo_gestures_popactioncentre</key>
+	<key>auxo_gestures_presscentre</key>
 	<string>action_openapp</string>
-	<key>auxo_gestures_popactionleft</key>
+	<key>auxo_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>auxo_gestures_popactionright</key>
+	<key>auxo_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>auxo_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -48,11 +48,11 @@
 	<true/>
 	<key>cc_enabled</key>
 	<true/>
-	<key>cc_gestures_popactioncentre</key>
+	<key>cc_gestures_presscentre</key>
 	<string>action_openapp</string>
-	<key>cc_gestures_popactionleft</key>
+	<key>cc_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>cc_gestures_popactionright</key>
+	<key>cc_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>cc_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -92,11 +92,11 @@
 	<true/>
 	<key>ls_enabled</key>
 	<true/>
-	<key>ls_gestures_popactioncentre</key>
+	<key>ls_gestures_presscentre</key>
 	<string>action_openapp</string>
-	<key>ls_gestures_popactionleft</key>
+	<key>ls_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>ls_gestures_popactionright</key>
+	<key>ls_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>ls_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -136,11 +136,11 @@
 	<true/>
 	<key>musicmini_enabled</key>
 	<true/>
-	<key>musicmini_gestures_popactioncentre</key>
+	<key>musicmini_gestures_presscentre</key>
 	<string>action_contextual</string>
-	<key>musicmini_gestures_popactionleft</key>
+	<key>musicmini_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>musicmini_gestures_popactionright</key>
+	<key>musicmini_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>musicmini_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -180,11 +180,11 @@
 	<true/>
 	<key>musicnowplaying_enabled</key>
 	<true/>
-	<key>musicnowplaying_gestures_popactioncentre</key>
+	<key>musicnowplaying_gestures_presscentre</key>
 	<string>action_showratings</string>
-	<key>musicnowplaying_gestures_popactionleft</key>
+	<key>musicnowplaying_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>musicnowplaying_gestures_popactionright</key>
+	<key>musicnowplaying_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>musicnowplaying_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -224,11 +224,11 @@
 	<true/>
 	<key>otm_enabled</key>
 	<true/>
-	<key>otm_gestures_popactioncentre</key>
+	<key>otm_gestures_presscentre</key>
 	<string>action_openapp</string>
-	<key>otm_gestures_popactionleft</key>
+	<key>otm_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>otm_gestures_popactionright</key>
+	<key>otm_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>otm_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -268,11 +268,11 @@
 	<true/>
 	<key>seng_enabled</key>
 	<true/>
-	<key>seng_gestures_popactioncentre</key>
+	<key>seng_gestures_presscentre</key>
 	<string>action_openapp</string>
-	<key>seng_gestures_popactionleft</key>
+	<key>seng_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>seng_gestures_popactionright</key>
+	<key>seng_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>seng_gestures_swipeleft</key>
 	<string>action_nexttrack</string>
@@ -312,11 +312,11 @@
 	<true/>
 	<key>vertex_enabled</key>
 	<true/>
-	<key>vertex_gestures_popactioncentre</key>
+	<key>vertex_gestures_presscentre</key>
 	<string>action_openapp</string>
-	<key>vertex_gestures_popactionleft</key>
+	<key>vertex_gestures_pressleft</key>
 	<string>action_intervalrewind</string>
-	<key>vertex_gestures_popactionright</key>
+	<key>vertex_gestures_pressright</key>
 	<string>action_intervalforward</string>
 	<key>vertex_gestures_swipeleft</key>
 	<string>action_nexttrack</string>

@@ -40,7 +40,7 @@
     
     if (self) {
         
-        self.delegate = delegate;
+        //self.delegate = delegate;
         
         // Height copied from MusicContextualActionsHeaderViewController (Used in cello)
         self.preferredContentSize = CGSizeMake(0.0, 124);
@@ -269,7 +269,7 @@
 
 - (UIPreviewAction *)openAppAction
 {
-    return [UIPreviewAction actionWithTitle:@"Up Now Playing App"
+    return [UIPreviewAction actionWithTitle:@"Open Now Playing App"
                                       style:UIPreviewActionStyleDefault
                                     handler:^(id<UIPreviewActionItem> action, UIViewController *previewViewController) {
                                         [((SWAcapellaMediaItemPreviewViewController *)previewViewController).delegate action_openapp:nil];

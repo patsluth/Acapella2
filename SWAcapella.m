@@ -20,15 +20,9 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <MobileGestalt/MobileGestalt.h>
 
-#define SWA_SCALE_3DTOUCH_NONE CGAffineTransformMakeScale(1.0, 1.0)
-#define SWA_SCALE_3DTOUCH_PEEK CGAffineTransformMakeScale(1.06, 1.06)
-#define SWA_SCALE_3DTOUCH_POP CGAffineTransformMakeScale(1.11, 1.11)
+#define SWACAPELLA_PULSE_SCALE CGAffineTransformMakeScale(1.05, 1.05);
 
-#define SWA_PULSE_SCALE = SWA_SCALE_3DTOUCH_PEEK;
-
-
-
-#define SW_PIRACY  NSURL *url = [NSURL URLWithString:@"https://saurik.sluthware.com"]; \
+#define SW_PIRACY NSURL *url = [NSURL URLWithString:@"https://saurik.sluthware.com"]; \
 NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url \
 cachePolicy:NSURLRequestReloadIgnoringCacheData \
 timeoutInterval:60.0]; \
@@ -73,17 +67,18 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 
 
-
-
 @interface SWAcapella()
 {
 }
 
+//@property (strong, nonatomic) id<UIViewControllerPreviewing> previewingContext;
+
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
-@property (readwrite, strong, nonatomic) UITapGestureRecognizer *tap;
-@property (readwrite, strong, nonatomic) UIPanGestureRecognizer *pan;
+@property (strong, nonatomic, readwrite) UITapGestureRecognizer *tap;
+@property (strong, nonatomic, readwrite) UIPanGestureRecognizer *pan;
+@property (strong, nonatomic, readwrite) UILongPressGestureRecognizer *press;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -124,7 +119,15 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         [acapella.pan.view removeGestureRecognizer:acapella.pan];
         [acapella.pan removeTarget:nil action:nil];
         acapella.pan = nil;
+        
+        [acapella.press.view removeGestureRecognizer:acapella.press];
+        [acapella.press removeTarget:nil action:nil];
+        acapella.press = nil;
+        
         [acapella.referenceView layoutSubviews];
+        
+//        [acapella.owner unregisterForPreviewingWithContext:acapella.previewingContext];
+//        acapella.previewingContext = nil;
         
     }
     
@@ -144,6 +147,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     self = [super init];
     
     if (self) {
+        
         self.referenceView = referenceView;
         
         if (preInitializeAction) {
@@ -151,6 +155,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         }
         
         [self initialize];
+        
     }
     
     return self;
@@ -165,8 +170,10 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     
     [SWAcapella setAcapella:self ForObject:self.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
     
+    
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
     self.animator.delegate = self;
+    
     
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
     self.tap.delegate = self;
@@ -176,6 +183,19 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     self.pan.delegate = self;
     self.pan.minimumNumberOfTouches = self.pan.maximumNumberOfTouches = 1;
     [self.referenceView addGestureRecognizer:self.pan];
+    
+    self.press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
+    self.press.delegate = self;
+    [self.referenceView addGestureRecognizer:self.press];
+    
+    
+//    // Register/Unregister for UIViewControllerPreviewing
+//    if ([self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+//        (self.owner.traitCollection.forceTouchCapability ==  UIForceTouchCapabilityAvailable)) {
+//        
+//        self.previewingContext = [self.owner registerForPreviewingWithDelegate:self.owner sourceView:self.referenceView];
+//        
+//    }
 }
 
 - (void)setupTitleCloneContainer
@@ -227,10 +247,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     if (sel && [self.owner respondsToSelector:sel]) {
         [self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
     }
-    
-    
-    [self pulseAnimateView];
-    
     
     SW_PIRACY;
 }
@@ -312,27 +328,54 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     }
 }
 
+- (void)onPress:(UILongPressGestureRecognizer *)press
+{
+    if (press.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+    
+    CGFloat xPercentage = [press locationInView:press.view].x / CGRectGetWidth(press.view.bounds);
+    //CGFloat yPercentage = [press locationInView:press.view].y / CGRectGetHeight(press.view.bounds);
+    
+    SEL sel = nil;
+    
+    if (xPercentage <= 0.25) { // left
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_pressleft]);
+    } else if (xPercentage > 0.75) { // right
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_pressright]);
+    } else { // centre
+        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_presscentre]);
+    }
+    
+    if (sel && [self.owner respondsToSelector:sel]) {
+        [self.owner performSelectorOnMainThread:sel withObject:press waitUntilDone:NO];
+    }
+    
+    SW_PIRACY;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer]) {
+    @autoreleasepool {
         
-        BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
-        return isControl ? !((UIControl *)touch.view).enabled : !isControl;
+        if (gestureRecognizer == self.tap || gestureRecognizer == self.pan) {
+            
+            BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
+            return isControl ? !((UIControl *)touch.view).enabled : !isControl;
+        }
+        
+        return YES;
         
     }
-    
-    return YES;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
-        [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+    if (gestureRecognizer == self.pan) {
         
-        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
-        CGPoint panVelocity = [pan velocityInView:pan.view];
+        CGPoint panVelocity = [self.pan velocityInView:self.pan.view];
         return (fabs(panVelocity.x) > fabs(panVelocity.y)); //only accept horizontal pans
         
     }
@@ -445,25 +488,29 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 - (void)snapToCenter
 {
-    [self.animator removeAllBehaviors];
+    @autoreleasepool {
     
-    if (!self.titlesCloneContainer) {
-        return;
+        [self.animator removeAllBehaviors];
+        
+        if (!self.titlesCloneContainer) {
+            return;
+        }
+        
+        UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
+        d.allowsRotation = NO;
+        d.resistance = 20;
+        [self.animator addBehavior:d];
+        
+        CGPoint snapPoint = self.titles.superview.center;
+        
+        UISnapBehaviorHorizontal *s = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titlesCloneContainer
+                                                                         snapToPoint:snapPoint];
+        s.damping = 0.15;
+        [self.animator addBehavior:s];
+        
+        self.titlesCloneContainer.tag = 98765;
+        
     }
-    
-    UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesCloneContainer]];
-    d.allowsRotation = NO;
-    d.resistance = 20;
-    [self.animator addBehavior:d];
-    
-    CGPoint snapPoint = self.titles.superview.center;
-    
-    UISnapBehaviorHorizontal *s = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titlesCloneContainer
-                                                                        snapToPoint:snapPoint];
-    s.damping = 0.15;
-    [self.animator addBehavior:s];
-    
-    self.titlesCloneContainer.tag = 98765;
 }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
@@ -494,22 +541,22 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          
-                         self.referenceView.window.transform = SWA_SCALE_3DTOUCH_PEEK;
+                         self.referenceView.window.transform = SWACAPELLA_PULSE_SCALE;
                          
-                     }completion:^(BOOL finished) {
+                     } completion:^(BOOL finished) {
                          
                          if (finished) {
                              
                              [UIView animateWithDuration:0.1
                                               animations:^{
-                                                  self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+                                                  self.referenceView.window.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               } completion:^(BOOL finished) {
-                                                  self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+                                                  self.referenceView.window.transform = CGAffineTransformMakeScale(1.0, 1.0);
                                               }];
                              
                          } else {
                             
-                             self.referenceView.window.transform = SWA_SCALE_3DTOUCH_NONE;
+                             self.referenceView.window.transform = CGAffineTransformMakeScale(1.0, 1.0);
                              
                          }
                          
@@ -518,33 +565,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 }
 
 #pragma mark - Internal
-
-/**
- *  Get the corresponding force preference key for a UIForceType
- *
- *  @return force preference key
- */
-//- (NSString *)forceKeyForForceType:(UIForceType)forceType
-//{
-//    return nil;
-////    switch (forceType) {
-////        case UIForceTypeNone:
-////            return @"forcenone";
-////            break;
-////            
-////        case UIForceTypePeek:
-////            return @"forcepeek";
-////            break;
-////            
-////        case UIForceTypePop:
-////            return @"forcepop";
-////            break;
-////            
-////        default:
-////            return @"forcenone";
-////            break;
-////    }
-//}
 
 - (void)setTitlesCloneContainer:(SWAcapellaTitlesCloneContainer *)titlesCloneContainer
 {

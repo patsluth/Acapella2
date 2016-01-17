@@ -31,15 +31,16 @@
 
 
 // This is the object which keeps a strong reference to this acapella associated object
-@property (weak, nonatomic) NSObject<SWAcapellaDelegate> *owner;
+@property (weak, nonatomic) UIViewController<SWAcapellaDelegate> *owner;
 
 @property (weak, nonatomic) UIView *referenceView;
 @property (weak, nonatomic) UIView *titles;
 
 @property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
 
-@property (readonly, strong, nonatomic) UITapGestureRecognizer *tap;
-@property (readonly, strong, nonatomic) UIPanGestureRecognizer *pan;
+@property (strong, nonatomic, readonly) UITapGestureRecognizer *tap;
+@property (strong, nonatomic, readonly) UIPanGestureRecognizer *pan;
+@property (strong, nonatomic, readonly) UILongPressGestureRecognizer *press;
 
 /**
  *  Init an acapella with a reference view. Update the newly created acapellas values before it is fully initialized in preInitializeAction

@@ -17,9 +17,6 @@
 #import "MPUTransportControlMediaRemoteController.h"
 #import "MusicTabBarController.h"
 
-#define PREF_KEY_PREFIX @"musicmini"
-#define PREF_APPLICATION @"com.apple.Music"
-
 #define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController \
                                                             *>(self, "_transportControlMediaRemoteController")
 
@@ -61,8 +58,12 @@
 {
     %orig(animated);
     
+    
     // Initialize prefs for this instance
-    self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    if (self.acapellaKeyPrefix) {
+        self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithKeyPrefix:self.acapellaKeyPrefix];
+    }
+    
     
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
@@ -82,6 +83,13 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     %orig(animated);
+    
+    
+    // special case where the pref key prefix is not ready in viewWillAppear, but it will always be ready here
+    if (!self.acapellaPrefs) {
+        [self viewWillAppear:NO];
+    }
+    
     
     if (!self.acapella) {
         
@@ -148,6 +156,25 @@
 }
 
 #pragma mark - Acapella(Helper)
+
+%new
+- (NSString *)acapellaKeyPrefix
+{
+//    @autoreleasepool {
+//        
+//        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+//        
+//        if (%c(MusicTabBarController) && [rootVC class] == %c(MusicTabBarController)) { // Music App
+            return @"musicmini";
+//        } else if (%c(MTMusicTabController) && [rootVC class] == %c(MTMusicTabController)) { // Podcast App
+//            return @"podcastsmini";
+//        }
+//            
+//        
+//    }
+    
+    return nil;
+}
 
 %new
 - (SWAcapella *)acapella

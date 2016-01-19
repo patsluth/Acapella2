@@ -53,27 +53,6 @@
     return original;
 }
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier
-{
-    [super setPreferenceValue:value specifier:specifier];
-
-    NSString *key = specifier.properties[@"key"];
-
-    if (key) {
-
-        NSString *defaults = specifier.properties[@"defaults"];
-
-        if (defaults) {
-
-            //update the CFPreferences so we can read them right away
-            CFPreferencesSetAppValue((__bridge CFStringRef)key, (__bridge CFPropertyListRef)value, (__bridge CFStringRef)defaults);
-            CFPreferencesAppSynchronize((__bridge CFStringRef)defaults);
-
-        }
-
-    }
-}
-
 @end
 
 

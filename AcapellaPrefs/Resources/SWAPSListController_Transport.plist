@@ -128,6 +128,32 @@
 			<key>label</key>
 			<string>Contextual</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Podcast</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>playbackrate</string>
+			<key>icon</key>
+			<string>None.png</string>
+			<key>label</key>
+			<string>Playback Rate</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>sleeptimer</string>
+			<key>icon</key>
+			<string>None.png</string>
+			<key>label</key>
+			<string>Sleep Timer</string>
+		</dict>
 	</array>
 </dict>
 </plist>

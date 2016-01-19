@@ -14,11 +14,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>cc</string>
+			<string>acapella2_cc</string>
 			<key>label</key>
 			<string>Control Center</string>
 			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -28,11 +28,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>ls</string>
+			<string>acapella2_ls</string>
 			<key>label</key>
 			<string>Lock Screen</string>
 			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -42,11 +42,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>musicnowplaying</string>
+			<string>acapella2_musicnowplaying</string>
 			<key>label</key>
 			<string>Music App (Now Playing)</string>
 			<key>defaults</key>
-			<string>com.apple.Music</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -56,11 +56,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>musicmini</string>
+			<string>acapella2_musicmini</string>
 			<key>label</key>
 			<string>Music App (Mini Player)</string>
 			<key>defaults</key>
-			<string>com.apple.Music</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -78,11 +78,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>otm</string>
+			<string>acapella2_otm</string>
 			<key>label</key>
 			<string>OnTapMusic</string>
 			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -92,11 +92,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>auxo</string>
+			<string>acapella2_auxo</string>
 			<key>label</key>
 			<string>Auxo</string>
 			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -106,11 +106,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>vertex</string>
+			<string>acapella2_vertex</string>
 			<key>label</key>
 			<string>Vertex</string>
 			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -120,11 +120,11 @@
 			<key>isController</key>
 			<string>1</string>
 			<key>key</key>
-			<string>seng</string>
+			<string>acapella2_seng</string>
 			<key>label</key>
 			<string>Seng</string>
 			<key>defaults</key>
-			<string>com.patsluth.AcapellaPrefs2</string>
+			<string>com.patsluth.acapella2</string>
 		</dict>
 		<dict>
 			<key>cell</key>

@@ -15,7 +15,6 @@
 }
 
 
-@property (strong, nonatomic, readonly) NSString *application;
 @property (strong, nonatomic, readonly) NSString *keyPrefix;
 
 // In same order as the preference pane layout :P
@@ -46,11 +45,12 @@
 @property (nonatomic, readonly) BOOL transport_shuffle;
 @property (nonatomic, readonly) BOOL transport_repeat;
 @property (nonatomic, readonly) BOOL transport_contextual;
+@property (nonatomic, readonly) BOOL transport_playbackrate; // podcast
+@property (nonatomic, readonly) BOOL transport_sleeptimer; // podcast
 // UI(Volume Slider)
 @property (nonatomic, readonly) BOOL volumeslider;
 
-
-- (id)initWithApplication:(NSString *)application keyPrefix:(NSString *)keyPrefix;
+- (id)initWithKeyPrefix:(NSString *)keyPrefix;
 
 - (void)refreshPrefs;
 

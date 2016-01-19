@@ -16,9 +16,6 @@
 
 #import "MPUTransportControlMediaRemoteController.h"
 
-#define PREF_KEY_PREFIX @"musicnowplaying"
-#define PREF_APPLICATION @"com.apple.Music"
-
 #define MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER MSHookIvar<MPUTransportControlMediaRemoteController \
                                                             *>(self, "_transportControlMediaRemoteController")
 
@@ -63,13 +60,17 @@
 {
     %orig(animated);
     
+    
     // Initialize prefs for this instance
-    self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    if (self.acapellaKeyPrefix) {
+        self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithKeyPrefix:self.acapellaKeyPrefix];
+    }
     
-    //Reload our transport buttons
-    //See [self transportControlsView:arg1 buttonForControlType:arg2];
     
-    //TOP ROW
+    // Reload our transport buttons
+    // See [self transportControlsView:arg1 buttonForControlType:arg2];
+    
+    // TOP ROW
     [self.transportControls reloadTransportButtonWithControlType:6];
     [self.transportControls reloadTransportButtonWithControlType:1];
     [self.transportControls reloadTransportButtonWithControlType:2];
@@ -78,11 +79,16 @@
     [self.transportControls reloadTransportButtonWithControlType:5];
     [self.transportControls reloadTransportButtonWithControlType:7];
     
-    //BOTTOM ROW
+    // BOTTOM ROW
     [self.secondaryTransportControls reloadTransportButtonWithControlType:8];
     [self.secondaryTransportControls reloadTransportButtonWithControlType:10];
     [self.secondaryTransportControls reloadTransportButtonWithControlType:9];
     [self.secondaryTransportControls reloadTransportButtonWithControlType:11];
+    
+    // PODCAST TOP ROW
+    [self.transportControls reloadTransportButtonWithControlType:12];
+    // PODCAST BOTTOM ROW
+    [self.secondaryTransportControls reloadTransportButtonWithControlType:13];
     
     [self viewDidLayoutSubviews];
 }
@@ -90,6 +96,13 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     %orig(animated);
+    
+    
+    // special case where the pref key prefix is not ready in viewWillAppear, but it will always be ready here
+    if (!self.acapellaPrefs) {
+        [self viewWillAppear:NO];
+    }
+    
     
     if (!self.acapella) {
         
@@ -197,6 +210,25 @@
 #pragma mark - Acapella(Helper)
 
 %new
+- (NSString *)acapellaKeyPrefix
+{
+//    @autoreleasepool {
+//        
+//        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+//        
+//        if (%c(MusicTabBarController) && [rootVC class] == %c(MusicTabBarController)) { // Music App
+            return @"musicnowplaying";
+//        } else if (%c(MTMusicTabController) && [rootVC class] == %c(MTMusicTabController)) { // Podcast App
+//            return @"podcastsnowplaying";
+//        }
+//        
+//        
+//    }
+    
+    return nil;
+}
+
+%new
 - (SWAcapella *)acapella
 {
     return [SWAcapella acapellaForObject:self];
@@ -207,24 +239,29 @@
     //TRANSPORT CONTROL TYPES
     //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
     
-    //TOP ROW
-    //6 like/ban
-    //1 rewind
-    //2 interval rewind
-    //3 play/pause
-    //4 forward
-    //5 interval forward
-    //7 present up next
+    // TOP ROW
+    // 6 like/ban
+    // 1 rewind
+    // 2 interval rewind
+    // 3 play/pause
+    // 4 forward
+    // 5 interval forward
+    // 7 present up next
     
-    //BOTTOM ROW
-    //8 share
-    //10 shuffle
-    //9 repeat
-    //11 contextual
+    // BOTTOM ROW
+    // 8 share
+    // 10 shuffle
+    // 9 repeat
+    // 11 contextual
+    
+    // PODCAST TOP ROW
+    // 12 playback rate (1x, 2x etc. )
+    // PODCAST BOTTOM ROW
+    // 13 sleep timer
     
     if (self.acapellaPrefs.enabled) {
         
-        //TOP ROW
+        // TOP ROW
         if (arg2 == 6 && !self.acapellaPrefs.transport_heart) {
             return nil;
         }
@@ -253,7 +290,7 @@
             return nil;
         }
         
-        //BOTTOM ROW
+        // BOTTOM ROW
         if (arg2 == 8 && !self.acapellaPrefs.transport_share) {
             return nil;
         }
@@ -267,6 +304,16 @@
         }
         
         if (arg2 == 11 && !self.acapellaPrefs.transport_contextual) {
+            return nil;
+        }
+        
+        // PODCAST TOP ROW
+        if (arg2 == 12 && !self.acapellaPrefs.transport_playbackrate) {
+            return nil;
+        }
+
+        // PODCAST BOTTOM ROW
+        if (arg2 == 13 && !self.acapellaPrefs.transport_sleeptimer) {
             return nil;
         }
         
@@ -375,18 +422,18 @@
 %new
 - (void)action_playpause:(id)arg1
 {
-    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
-    
-    [self transportControlsView:self.transportControls longPressEndOnControlType:1];
-    [self transportControlsView:self.transportControls longPressEndOnControlType:4];
-    
-    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
-    
-    //if the 2 commands are different, then something happened when we told the transportControlView to
-    //stop seeking, meaning we were seeking
-    if (originalLPCommand == newLPCommand) {
+//    unsigned int originalLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+//    
+//    [self transportControlsView:self.transportControls longPressEndOnControlType:1];
+//    [self transportControlsView:self.transportControls longPressEndOnControlType:4];
+//    
+//    unsigned int newLPCommand = MSHookIvar<unsigned int>(MPU_TRANSPORT_MEDIA_REMOTE_CONTROLLER, "_runningLongPressCommand");
+//    
+//    //if the 2 commands are different, then something happened when we told the transportControlView to
+//    //stop seeking, meaning we were seeking
+//    if (originalLPCommand == newLPCommand) {
         [self transportControlsView:self.transportControls tapOnControlType:3];
-    }
+    //}
     
     [self.acapella pulseAnimateView];
 }
@@ -528,6 +575,19 @@
 {
     objc_setAssociatedObject(self, @selector(_acapellaPrefs), acapellaPrefs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
+
+#pragma mark - Testing
+
+#ifdef DEBUG
+
+//- (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2
+//{
+//    %orig(arg1, arg2);
+//    
+//    NSLog(@"tapOnControlType %@", @(arg2));
+//}
+
+#endif
 
 %end
 

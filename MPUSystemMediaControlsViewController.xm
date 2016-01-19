@@ -54,11 +54,12 @@
 {
     %orig(animated);
     
-    NSString *prefKeyPrefix = PREF_KEY_PREFIX;
+    
     // Initialize prefs for this instance
-    if (prefKeyPrefix) {
-        self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithApplication:PREF_APPLICATION keyPrefix:PREF_KEY_PREFIX];
+    if (self.acapellaKeyPrefix) {
+        self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithKeyPrefix:self.acapellaKeyPrefix];
     }
+    
     
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
@@ -78,7 +79,7 @@
     %orig(animated);
     
     
-    // special case where the pref key prefix could not be found in viewWillAppear, but it will always be ready here
+    // special case where the pref key prefix is not ready in viewWillAppear, but it will always be ready here
     if (!self.acapellaPrefs) {
         [self viewWillAppear:NO];
     }
@@ -155,15 +156,9 @@
 #pragma mark - Acapella(Helper)
 
 %new
-- (SWAcapella *)acapella
+- (NSString *)acapellaKeyPrefix
 {
-    return [SWAcapella acapellaForObject:self];
-}
-
-%new
-+ (NSString *)acapella_prefKeyPrefixByDrillingUp:(UIView *)view
-{
-    UIView *curView = view.superview;
+    UIView *curView = self.view.superview;
     
     while (curView) {
         
@@ -187,7 +182,7 @@
             
             // Lock Screen
             if (%c(SBLockScreenView) && ([curView class] == %c(SBLockScreenView) ||
-                                                               [curView class] == %c(SBLockScreenScrollView))) {
+                                         [curView class] == %c(SBLockScreenScrollView))) {
                 return @"ls";
             }
             
@@ -219,6 +214,12 @@
     }
     
     return nil;
+}
+
+%new
+- (SWAcapella *)acapella
+{
+    return [SWAcapella acapellaForObject:self];
 }
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
@@ -564,67 +565,6 @@
         self.trackInformationView.center = CGPointMake(self.trackInformationView.center.x, midPoint);
         
     }
-}
-
-%end
-
-
-
-
-
-@interface UIPreviewItemController
-
-+ (void)test;
-
-@end
-
-
-%hook UIPreviewItemController
-
-%new
-+ (void)test
-{
-    NSLog(@"PAT TEST");
-}
-
-- (id)init
-{
-    NSLog(@"PAT SEX");
-    return %orig();
-}
-
-- (void)preparePreviewIndicatorViewInSourceView:(id)arg1 updateScreen:(BOOL)arg2
-{
-    NSLog(@"PAT preparePreviewIndicatorViewInSourceView %@", arg1);
-    
-    %orig(arg1, NO);
-}
-
-%end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%hook UIPreviewPresentationController
-
-- (BOOL)_sourceViewSnapshotAndScaleTransformSuppressed
-{
-    BOOL x = %orig();
-    
-    NSLog(@"PAT _sourceViewSnapshotAndScaleTransformSuppressed %@", @(x));
-    
-    return x;
 }
 
 %end

@@ -22,6 +22,7 @@
 		2EBB75911BE97C5A00A3A82D /* MusicNowPlayingTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingTitlesView.xm; sourceTree = "<group>"; };
 		2EBB75921BE97C5A00A3A82D /* MusicNowPlayingViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MusicNowPlayingViewController.xm; sourceTree = "<group>"; };
 		2EBB75941BE97C5A00A3A82D /* SBLockScreenHintManager.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SBLockScreenHintManager.xm; sourceTree = "<group>"; };
+		2EE2DC0D1C4C9F2700B2C929 /* MPUTransportControl.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUTransportControl.xm; sourceTree = "<group>"; };
 		2EF29A751C3C65BD001032FE /* SWAcapellaPrefs.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaPrefs.xm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -34,6 +35,7 @@
 				2EBB758B1BE97C5A00A3A82D /* Makefile */,
 				2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */,
 				2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */,
+				2EE2DC0D1C4C9F2700B2C929 /* MPUTransportControl.xm */,
 				2EBB758E1BE97C5A00A3A82D /* MPUTransportControlsView.xm */,
 				2EBB758F1BE97C5A00A3A82D /* MPVolumeController.xm */,
 				2EBB75901BE97C5A00A3A82D /* MusicMiniPlayerViewController.xm */,

@@ -25,8 +25,9 @@ static id prefValueForKey(NSString *key)
         return nil;
     }
     
-    NSString *prefix = [parts objectAtIndex:0];
-    NSString *option = [parts objectAtIndex:1];
+    //NSString *app = [parts objectAtIndex:0]; // acapella2
+    NSString *prefix = [parts objectAtIndex:1]; //cc, ls, etc..
+    NSString *option = [parts objectAtIndex:2];
     
     if ([option isEqualToString:@"enabled"]) {
         return @(YES);
@@ -37,7 +38,7 @@ static id prefValueForKey(NSString *key)
 //            return nil;
 //        }
         
-        NSString *gesture = [parts objectAtIndex:2];
+        NSString *gesture = [parts objectAtIndex:3];
         
         if ([gesture containsString:@"tap"]) {
             
@@ -97,7 +98,7 @@ static id prefValueForKey(NSString *key)
             return @(NO);
         }
         
-        NSString *transport = [parts objectAtIndex:2];
+        NSString *transport = [parts objectAtIndex:3];
         
         if ([transport isEqualToString:@"heart"]) {
             return @(YES);
@@ -120,6 +121,10 @@ static id prefValueForKey(NSString *key)
         } else if ([transport isEqualToString:@"repeat"]) {
             return @(YES);
         } else if ([transport isEqualToString:@"contextual"]) {
+            return @(YES);
+        } else if ([transport isEqualToString:@"playbackrate"]) {
+            return @(YES);
+        } else if ([transport isEqualToString:@"sleeptimer"]) {
             return @(YES);
         }
         

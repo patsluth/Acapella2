@@ -19,6 +19,7 @@
 
 @required
 
+@property (strong, nonatomic) NSString *acapellaKeyPrefix;
 @property (strong, nonatomic) SWAcapellaPrefs *acapellaPrefs;
 
 - (SWAcapella *)acapella;

@@ -8,8 +8,6 @@
 
 #import "SWAcapellaPrefs.h"
 
-#define PREFS_DEFAULTS_PATH @"/Library/PreferenceBundles/AcapellaPrefs2.bundle"
-
 
 
 
@@ -20,7 +18,6 @@
 
 #pragma mark -
 
-@property (strong, nonatomic, readwrite) NSString *application;
 @property (strong, nonatomic, readwrite) NSString *keyPrefix;
 
 // In same order as the preference pane layout :P
@@ -57,6 +54,8 @@
 @property (nonatomic, readwrite) BOOL transport_shuffle;
 @property (nonatomic, readwrite) BOOL transport_repeat;
 @property (nonatomic, readwrite) BOOL transport_contextual;
+@property (nonatomic, readwrite) BOOL transport_playbackrate; // podcast
+@property (nonatomic, readwrite) BOOL transport_sleeptimer; // podcast
 
 #pragma mark UI(Volume Slider)
 
@@ -74,7 +73,7 @@
 
 #pragma mark - Init
 
-- (id)initWithApplication:(NSString *)application keyPrefix:(NSString *)keyPrefix
+- (id)initWithKeyPrefix:(NSString *)keyPrefix
 {
     self = [super init];
     
@@ -82,7 +81,6 @@
         
         [self initialize];
         
-        self.application = application;
         self.keyPrefix = keyPrefix;
         
         [self refreshPrefs];
@@ -145,43 +143,45 @@
 {
     #pragma mark - Initialize Keys
     
-    NSString *enabledKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"enabled"];
+    NSString *enabledKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"enabled"];
     
     #pragma mark Gestures
     
-    NSString *gestures_tapleftKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_tapleft"];
-    NSString *gestures_tapcentreKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_tapcentre"];
-    NSString *gestures_taprightKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_tapright"];
-    NSString *gestures_swipeleftKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_swipeleft"];
-    NSString *gestures_swiperightKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_swiperight"];
-    NSString *gestures_pressleftKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_pressleft"];
-    NSString *gestures_presscentreKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_presscentre"];
-    NSString *gestures_pressrightKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_pressright"];
-//    NSString *gestures_popactionleftKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_popactionleft"];
-//    NSString *gestures_popactioncentreKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_popactioncentre"];
-//    NSString *gestures_popactionrightKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"gestures_popactionright"];
+    NSString *gestures_tapleftKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_tapleft"];
+    NSString *gestures_tapcentreKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_tapcentre"];
+    NSString *gestures_taprightKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_tapright"];
+    NSString *gestures_swipeleftKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_swipeleft"];
+    NSString *gestures_swiperightKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_swiperight"];
+    NSString *gestures_pressleftKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_pressleft"];
+    NSString *gestures_presscentreKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_presscentre"];
+    NSString *gestures_pressrightKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_pressright"];
+//    NSString *gestures_popactionleftKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_popactionleft"];
+//    NSString *gestures_popactioncentreKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_popactioncentre"];
+//    NSString *gestures_popactionrightKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_popactionright"];
     
     #pragma mark UI(Progress Slider)
     
-    NSString *progresssliderKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"progressslider"];
+    NSString *progresssliderKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"progressslider"];
     
     #pragma mark UI(Transport)
     
-    NSString *transport_heartKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_heart"];
-    NSString *transport_upnextKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_upnext"];
-    NSString *transport_previoustrackKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_previoustrack"];
-    NSString *transport_nexttrackKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_nexttrack"];
-    NSString *transport_intervalrewindKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_intervalrewind"];
-    NSString *transport_intervalforwardKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_intervalforward"];
-    NSString *transport_playpauseKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_playpause"];
-    NSString *transport_shareKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_share"];
-    NSString *transport_shuffleKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_shuffle"];
-    NSString *transport_repeatKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_repeat"];
-    NSString *transport_contextualKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"transport_contextual"];
+    NSString *transport_heartKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_heart"];
+    NSString *transport_upnextKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_upnext"];
+    NSString *transport_previoustrackKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_previoustrack"];
+    NSString *transport_nexttrackKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_nexttrack"];
+    NSString *transport_intervalrewindKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_intervalrewind"];
+    NSString *transport_intervalforwardKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_intervalforward"];
+    NSString *transport_playpauseKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_playpause"];
+    NSString *transport_shareKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_share"];
+    NSString *transport_shuffleKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_shuffle"];
+    NSString *transport_repeatKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_repeat"];
+    NSString *transport_contextualKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_contextual"];
+    NSString *transport_playbackrateKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_playbackrate"];
+    NSString *transport_sleeptimerKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"transport_sleeptimer"];
     
     #pragma mark UI(Volume Slider)
     
-    NSString *volumesliderKey = [NSString stringWithFormat:@"%@_%@", self.keyPrefix, @"volumeslider"];
+    NSString *volumesliderKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"volumeslider"];
     
     
     
@@ -189,64 +189,50 @@
     
     #pragma mark - Load Values For Keys
     
-    CFStringRef applicationCF = (__bridge CFStringRef)self.application;
+    NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.acapella2.plist"];
     
-    [self getAppBooleanForKey:enabledKey output:&self->_enabled];
+    self.enabled = [[prefs valueForKey:enabledKey] boolValue];
     
     #pragma mark Gestures
     
-    self.gestures_tapleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_tapleftKey, applicationCF));
-    self.gestures_tapcentre = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_tapcentreKey, applicationCF));
-    self.gestures_tapright = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_taprightKey, applicationCF));
-    self.gestures_swipeleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_swipeleftKey, applicationCF));
-    self.gestures_swiperight = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_swiperightKey, applicationCF));
-    self.gestures_pressleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_pressleftKey, applicationCF));
-    self.gestures_presscentre = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_presscentreKey, applicationCF));
-    self.gestures_pressright = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_pressrightKey, applicationCF));
-//    self.gestures_popactionleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionleftKey, applicationCF));
-//    self.gestures_popactioncentre = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactioncentreKey, applicationCF));
-//    self.gestures_popactionright = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionrightKey, applicationCF));
+    self.gestures_tapleft = [prefs valueForKey:gestures_tapleftKey];
+    self.gestures_tapcentre = [prefs valueForKey:gestures_tapcentreKey];
+    self.gestures_tapright = [prefs valueForKey:gestures_taprightKey];
+    self.gestures_swipeleft = [prefs valueForKey:gestures_swipeleftKey];
+    self.gestures_swiperight = [prefs valueForKey:gestures_swiperightKey];
+    self.gestures_pressleft = [prefs valueForKey:gestures_pressleftKey];
+    self.gestures_presscentre = [prefs valueForKey:gestures_presscentreKey];
+    self.gestures_pressright = [prefs valueForKey:gestures_pressrightKey];
+    //    self.gestures_popactionleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionleftKey, applicationCF));
+    //    self.gestures_popactioncentre = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactioncentreKey, applicationCF));
+    //    self.gestures_popactionright = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionrightKey, applicationCF));
     
     #pragma mark UI(Progress Slider)
     
-    [self getAppBooleanForKey:progresssliderKey output:&self->_progressslider];
+    self.progressslider = [[prefs valueForKey:progresssliderKey] boolValue];
     
     #pragma mark UI(Transport)
     
-    [self getAppBooleanForKey:transport_heartKey output:&self->_transport_heart];
-    [self getAppBooleanForKey:transport_upnextKey output:&self->_transport_upnext];
-    [self getAppBooleanForKey:transport_previoustrackKey output:&self->_transport_previoustrack];
-    [self getAppBooleanForKey:transport_nexttrackKey output:&self->_transport_nexttrack];
-    [self getAppBooleanForKey:transport_intervalrewindKey output:&self->_transport_intervalrewind];
-    [self getAppBooleanForKey:transport_intervalforwardKey output:&self->_transport_intervalforward];
-    [self getAppBooleanForKey:transport_playpauseKey output:&self->_transport_playpause];
-    [self getAppBooleanForKey:transport_shareKey output:&self->_transport_share];
-    [self getAppBooleanForKey:transport_shuffleKey output:&self->_transport_shuffle];
-    [self getAppBooleanForKey:transport_repeatKey output:&self->_transport_repeat];
-    [self getAppBooleanForKey:transport_contextualKey output:&self->_transport_contextual];
+    self.transport_heart = [[prefs valueForKey:transport_heartKey] boolValue];
+    self.transport_upnext = [[prefs valueForKey:transport_upnextKey] boolValue];
+    self.transport_previoustrack = [[prefs valueForKey:transport_previoustrackKey] boolValue];
+    self.transport_nexttrack = [[prefs valueForKey:transport_nexttrackKey] boolValue];
+    self.transport_intervalrewind = [[prefs valueForKey:transport_intervalrewindKey] boolValue];
+    self.transport_intervalforward = [[prefs valueForKey:transport_intervalforwardKey] boolValue];
+    self.transport_playpause = [[prefs valueForKey:transport_playpauseKey] boolValue];
+    self.transport_share = [[prefs valueForKey:transport_shareKey] boolValue];
+    self.transport_shuffle = [[prefs valueForKey:transport_shuffleKey] boolValue];
+    self.transport_repeat = [[prefs valueForKey:transport_repeatKey] boolValue];
+    self.transport_contextual = [[prefs valueForKey:transport_contextualKey] boolValue];
+    self.transport_playbackrate = [[prefs valueForKey:transport_playbackrateKey] boolValue];
+    self.transport_sleeptimer = [[prefs valueForKey:transport_sleeptimerKey] boolValue];
     
     #pragma mark UI(Volume Slider)
     
-    [self getAppBooleanForKey:volumesliderKey output:&self->_volumeslider];
+    self.volumeslider = [[prefs valueForKey:volumesliderKey] boolValue];
     
     #pragma mark -
     
-}
-
-/**
- *  Helper method to get BOOL pref value if key exists. Will remain as default value if key does not exist
- */
-- (void)getAppBooleanForKey:(NSString *)key output:(inout BOOL *)output
-{
-    Boolean keyExistsAndHasValidFormat = NO;
-    
-    BOOL value = (BOOL)CFPreferencesGetAppBooleanValue((__bridge CFStringRef)key,
-                                                       (__bridge CFStringRef)self.application,
-                                                       &keyExistsAndHasValidFormat);
-    
-    if (keyExistsAndHasValidFormat) {
-        *output = value;
-    }
 }
 
 @end
@@ -255,34 +241,34 @@
 
 
 
-
-#pragma mark - Logos
+#pragma mark -  Logos
 
 %ctor //syncronize acapella default prefs
 {
-    NSBundle *bundle = [NSBundle bundleWithPath:PREFS_DEFAULTS_PATH];
-    NSDictionary *prefsDefaults = [NSDictionary dictionaryWithContentsOfFile:[bundle pathForResource:@"prefsDefaults" ofType:@".plist"]];
+    NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/AcapellaPrefs2.bundle"];
+    
+    NSString *prefsDefaultsPath = [bundle pathForResource:@"prefsDefaults" ofType:@".plist"];
+    NSString *prefsPath = @"/User/Library/Preferences/com.patsluth.acapella2.plist";
+    
+    NSDictionary *prefsDefaults = [NSDictionary dictionaryWithContentsOfFile:prefsDefaultsPath];
+    NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsPath]];
     
     for (NSString *key in prefsDefaults) {
         
-        CFStringRef application = [key containsString:@"music"] ? CFSTR("com.apple.Music") : CFSTR("com.patsluth.AcapellaPrefs2");
-        
-        id currentValue = (id)CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)key, application));
-        
-        if (currentValue == nil) { //dont overwrite
+        if ([prefs valueForKey:key] == nil) { // update value, dont overwrite
+            
+            [prefs setValue:[prefsDefaults valueForKey:key] forKey:key];
             CFPreferencesSetAppValue((__bridge CFStringRef)key,
                                      (__bridge CFPropertyListRef)[prefsDefaults valueForKey:key],
-                                     application);
+                                     CFSTR("com.patsluth.acapella2"));
             
         }
         
-        
     }
     
-    //syncronize so we can read right away
-    CFPreferencesAppSynchronize(CFSTR("com.patsluth.AcapellaPrefs2"));
-    CFPreferencesAppSynchronize(CFSTR("com.apple.Music"));
-    
+    // syncronize so we can read right away
+    [prefs writeToFile:prefsPath atomically:NO];
+    CFPreferencesAppSynchronize(CFSTR("com.patsluth.acapella2"));
 }
 
 

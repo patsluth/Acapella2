@@ -28,21 +28,24 @@
 
 - (void)resetAllSettings:(PSSpecifier *)specifier
 {
-    NSDictionary *prefsDefaults = [NSDictionary dictionaryWithContentsOfFile:[self.bundle pathForResource:@"prefsDefaults" ofType:@".plist"]];
+    NSString *prefsDefaultsPath = [self.bundle pathForResource:@"prefsDefaults" ofType:@".plist"];
+    NSString *prefsPath = @"/User/Library/Preferences/com.patsluth.acapella2.plist";
+    
+    NSDictionary *prefsDefaults = [NSDictionary dictionaryWithContentsOfFile:prefsDefaultsPath];
+    NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsPath]];
     
     for (NSString *key in prefsDefaults) {
         
-        CFStringRef application = [key containsString:@"music"] ? CFSTR("com.apple.Music") : CFSTR("com.patsluth.AcapellaPrefs2");
-        
+        [prefs setValue:[prefsDefaults valueForKey:key] forKey:key];
         CFPreferencesSetAppValue((__bridge CFStringRef)key,
                                  (__bridge CFPropertyListRef)[prefsDefaults valueForKey:key],
-                                 application);
+                                 CFSTR("com.patsluth.acapella2"));
         
     }
     
-    //syncronize so we can read right away
-    CFPreferencesAppSynchronize(CFSTR("com.patsluth.AcapellaPrefs2"));
-    CFPreferencesAppSynchronize(CFSTR("com.apple.Music"));
+    // syncronize so we can read right away
+    [prefs writeToFile:prefsPath atomically:YES];
+    CFPreferencesAppSynchronize(CFSTR("com.patsluth.acapella2"));
     
     [self reloadSpecifiers];
 }

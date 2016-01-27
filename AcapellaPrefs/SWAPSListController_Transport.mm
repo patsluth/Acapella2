@@ -6,15 +6,15 @@
 //
 //
 
-#import "SWAPSListController.h"
-
 #import <Preferences/Preferences.h>
 
+#import "SWAcapellaBasePSListController.h"
 
 
 
 
-@interface SWAPSListController_Transport : SWAPSListController
+
+@interface SWAPSListController_Transport : SWAcapellaBasePSListController
 {
 }
 

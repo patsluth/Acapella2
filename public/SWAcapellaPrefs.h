@@ -6,11 +6,13 @@
 //
 //
 
+#import "libsw/libSluthware/SWPrefs.h"
 
 
 
 
-@interface SWAcapellaPrefs : NSObject
+
+@interface SWAcapellaPrefs : SWPrefs
 {
 }
 
@@ -51,8 +53,6 @@
 @property (nonatomic, readonly) BOOL volumeslider;
 
 - (id)initWithKeyPrefix:(NSString *)keyPrefix;
-
-- (void)refreshPrefs;
 
 @end
 

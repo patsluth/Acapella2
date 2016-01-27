@@ -32,7 +32,7 @@
 		2EBB759B1BE97C8700A3A82D /* SWAPSListController_Gestures.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAPSListController_Gestures.mm; sourceTree = "<group>"; };
 		2EBB759C1BE97C8700A3A82D /* SWAPSListController_Instance.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAPSListController_Instance.mm; sourceTree = "<group>"; };
 		2EBB759D1BE97C8700A3A82D /* SWAPSListController_Transport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAPSListController_Transport.mm; sourceTree = "<group>"; };
-		2EBB759E1BE97C8700A3A82D /* SWAPSListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAPSListController.mm; sourceTree = "<group>"; };
+		2EBB759E1BE97C8700A3A82D /* SWAcapellaBasePSListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAcapellaBasePSListController.mm; sourceTree = "<group>"; };
 		2EBB759F1BE97C8700A3A82D /* SWAPSListItemsController_Actions.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SWAPSListItemsController_Actions.mm; sourceTree = "<group>"; };
 		2EBB75A11BE97C8700A3A82D /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2EBB75BF1BE97E4600A3A82D /* exportPrefs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = exportPrefs; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,17 +54,17 @@
 		2EBB75761BE97BF500A3A82D = {
 			isa = PBXGroup;
 			children = (
-				2EBB75951BE97C8700A3A82D /* public */,
 				2EBB75961BE97C8700A3A82D /* Resources */,
+				2EBB75951BE97C8700A3A82D /* public */,
+				2EBB75971BE97C8700A3A82D /* entry.plist */,
 				2EBB75A11BE97C8700A3A82D /* Makefile */,
+				2EBB759E1BE97C8700A3A82D /* SWAcapellaBasePSListController.mm */,
 				2EBB75981BE97C8700A3A82D /* SWAcapellaPSListController.mm */,
 				2EE37A4D1C45A14500907D5A /* SWAPSContextualActionsPSViewController.mm */,
 				2EBB759B1BE97C8700A3A82D /* SWAPSListController_Gestures.mm */,
 				2EBB759C1BE97C8700A3A82D /* SWAPSListController_Instance.mm */,
 				2EBB759D1BE97C8700A3A82D /* SWAPSListController_Transport.mm */,
-				2EBB759E1BE97C8700A3A82D /* SWAPSListController.mm */,
 				2EBB759F1BE97C8700A3A82D /* SWAPSListItemsController_Actions.mm */,
-				2EBB75971BE97C8700A3A82D /* entry.plist */,
 				2EBB75C01BE97E4600A3A82D /* exportPrefs */,
 			);
 			sourceTree = "<group>";

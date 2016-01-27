@@ -75,18 +75,21 @@
 
 - (id)initWithKeyPrefix:(NSString *)keyPrefix
 {
-    self = [super init];
-    
+	NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/AcapellaPrefs2.bundle"];
+	NSString *preferencePath = @"/var/mobile/Library/Preferences/com.patsluth.acapella2.plist";
+	NSString *defaultsPath = [bundle pathForResource:@"prefsDefaults" ofType:@".plist"];
+	
+	self = [super initWithPreferenceFilePath:preferencePath
+								defaultsPath:defaultsPath
+								 application:@"com.patsluth.acapella2"];
+	
     if (self) {
         
-        [self initialize];
-        
         self.keyPrefix = keyPrefix;
-        
-        [self refreshPrefs];
+		[self refreshPrefs];
         
     }
-    
+	
     return self;
 }
 
@@ -139,6 +142,8 @@
     
 }
 
+#pragma mark - SWPrefs
+
 - (void)refreshPrefs
 {
     #pragma mark - Initialize Keys
@@ -189,87 +194,51 @@
     
     #pragma mark - Load Values For Keys
     
-    NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:@"/User/Library/Preferences/com.patsluth.acapella2.plist"];
-    
-    self.enabled = [[prefs valueForKey:enabledKey] boolValue];
+    self.enabled = [[self.preferences valueForKey:enabledKey] boolValue];
     
     #pragma mark Gestures
     
-    self.gestures_tapleft = [prefs valueForKey:gestures_tapleftKey];
-    self.gestures_tapcentre = [prefs valueForKey:gestures_tapcentreKey];
-    self.gestures_tapright = [prefs valueForKey:gestures_taprightKey];
-    self.gestures_swipeleft = [prefs valueForKey:gestures_swipeleftKey];
-    self.gestures_swiperight = [prefs valueForKey:gestures_swiperightKey];
-    self.gestures_pressleft = [prefs valueForKey:gestures_pressleftKey];
-    self.gestures_presscentre = [prefs valueForKey:gestures_presscentreKey];
-    self.gestures_pressright = [prefs valueForKey:gestures_pressrightKey];
+    self.gestures_tapleft = [self.preferences valueForKey:gestures_tapleftKey];
+    self.gestures_tapcentre = [self.preferences valueForKey:gestures_tapcentreKey];
+    self.gestures_tapright = [self.preferences valueForKey:gestures_taprightKey];
+    self.gestures_swipeleft = [self.preferences valueForKey:gestures_swipeleftKey];
+    self.gestures_swiperight = [self.preferences valueForKey:gestures_swiperightKey];
+    self.gestures_pressleft = [self.preferences valueForKey:gestures_pressleftKey];
+    self.gestures_presscentre = [self.preferences valueForKey:gestures_presscentreKey];
+    self.gestures_pressright = [self.preferences valueForKey:gestures_pressrightKey];
     //    self.gestures_popactionleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionleftKey, applicationCF));
     //    self.gestures_popactioncentre = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactioncentreKey, applicationCF));
     //    self.gestures_popactionright = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionrightKey, applicationCF));
     
     #pragma mark UI(Progress Slider)
     
-    self.progressslider = [[prefs valueForKey:progresssliderKey] boolValue];
+    self.progressslider = [[self.preferences valueForKey:progresssliderKey] boolValue];
     
     #pragma mark UI(Transport)
     
-    self.transport_heart = [[prefs valueForKey:transport_heartKey] boolValue];
-    self.transport_upnext = [[prefs valueForKey:transport_upnextKey] boolValue];
-    self.transport_previoustrack = [[prefs valueForKey:transport_previoustrackKey] boolValue];
-    self.transport_nexttrack = [[prefs valueForKey:transport_nexttrackKey] boolValue];
-    self.transport_intervalrewind = [[prefs valueForKey:transport_intervalrewindKey] boolValue];
-    self.transport_intervalforward = [[prefs valueForKey:transport_intervalforwardKey] boolValue];
-    self.transport_playpause = [[prefs valueForKey:transport_playpauseKey] boolValue];
-    self.transport_share = [[prefs valueForKey:transport_shareKey] boolValue];
-    self.transport_shuffle = [[prefs valueForKey:transport_shuffleKey] boolValue];
-    self.transport_repeat = [[prefs valueForKey:transport_repeatKey] boolValue];
-    self.transport_contextual = [[prefs valueForKey:transport_contextualKey] boolValue];
-    self.transport_playbackrate = [[prefs valueForKey:transport_playbackrateKey] boolValue];
-    self.transport_sleeptimer = [[prefs valueForKey:transport_sleeptimerKey] boolValue];
+    self.transport_heart = [[self.preferences valueForKey:transport_heartKey] boolValue];
+    self.transport_upnext = [[self.preferences valueForKey:transport_upnextKey] boolValue];
+    self.transport_previoustrack = [[self.preferences valueForKey:transport_previoustrackKey] boolValue];
+    self.transport_nexttrack = [[self.preferences valueForKey:transport_nexttrackKey] boolValue];
+    self.transport_intervalrewind = [[self.preferences valueForKey:transport_intervalrewindKey] boolValue];
+    self.transport_intervalforward = [[self.preferences valueForKey:transport_intervalforwardKey] boolValue];
+    self.transport_playpause = [[self.preferences valueForKey:transport_playpauseKey] boolValue];
+    self.transport_share = [[self.preferences valueForKey:transport_shareKey] boolValue];
+    self.transport_shuffle = [[self.preferences valueForKey:transport_shuffleKey] boolValue];
+    self.transport_repeat = [[self.preferences valueForKey:transport_repeatKey] boolValue];
+    self.transport_contextual = [[self.preferences valueForKey:transport_contextualKey] boolValue];
+    self.transport_playbackrate = [[self.preferences valueForKey:transport_playbackrateKey] boolValue];
+    self.transport_sleeptimer = [[self.preferences valueForKey:transport_sleeptimerKey] boolValue];
     
     #pragma mark UI(Volume Slider)
     
-    self.volumeslider = [[prefs valueForKey:volumesliderKey] boolValue];
+    self.volumeslider = [[self.preferences valueForKey:volumesliderKey] boolValue];
     
     #pragma mark -
     
 }
 
 @end
-
-
-
-
-
-#pragma mark -  Logos
-
-%ctor //syncronize acapella default prefs
-{
-    NSBundle *bundle = [NSBundle bundleWithPath:@"/Library/PreferenceBundles/AcapellaPrefs2.bundle"];
-    
-    NSString *prefsDefaultsPath = [bundle pathForResource:@"prefsDefaults" ofType:@".plist"];
-    NSString *prefsPath = @"/User/Library/Preferences/com.patsluth.acapella2.plist";
-    
-    NSDictionary *prefsDefaults = [NSDictionary dictionaryWithContentsOfFile:prefsDefaultsPath];
-    NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithDictionary:[NSDictionary dictionaryWithContentsOfFile:prefsPath]];
-    
-    for (NSString *key in prefsDefaults) {
-        
-        if ([prefs valueForKey:key] == nil) { // update value, dont overwrite
-            
-            [prefs setValue:[prefsDefaults valueForKey:key] forKey:key];
-            CFPreferencesSetAppValue((__bridge CFStringRef)key,
-                                     (__bridge CFPropertyListRef)[prefsDefaults valueForKey:key],
-                                     CFSTR("com.patsluth.acapella2"));
-            
-        }
-        
-    }
-    
-    // syncronize so we can read right away
-    [prefs writeToFile:prefsPath atomically:NO];
-    CFPreferencesAppSynchronize(CFSTR("com.patsluth.acapella2"));
-}
 
 
 

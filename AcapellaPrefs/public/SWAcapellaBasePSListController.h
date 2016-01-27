@@ -1,5 +1,5 @@
 //
-//  SWAcapellaPSListController.h
+//  SWAcapellaBasePSListController.h.h
 //  AcapellaPrefs
 //
 //  Created by Pat Sluth on 2015-04-25.
@@ -14,7 +14,7 @@
 
 
 
-@interface SWAPSListController : SWPSListController
+@interface SWAcapellaBasePSListController : SWPSListController
 {
 }
 

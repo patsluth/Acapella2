@@ -8,13 +8,13 @@
 
 #import <Preferences/Preferences.h>
 
-#import "libsw/SWPSListController.h"
+#import "SWAcapellaBasePSListController.h"
 
 
 
 
 
-@interface SWAcapellaPSListController : SWPSListController
+@interface SWAcapellaPSListController : SWAcapellaBasePSListController
 {
 }
 

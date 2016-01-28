@@ -146,6 +146,8 @@
 
 - (void)refreshPrefs
 {
+	[super refreshPrefs];
+	
     #pragma mark - Initialize Keys
     
     NSString *enabledKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"enabled"];

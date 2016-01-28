@@ -44,7 +44,7 @@
 			<key>key</key>
 			<string>acapella2_musicnowplaying</string>
 			<key>label</key>
-			<string>Music App (Now Playing)</string>
+			<string>Music/Podcasts (Now Playing)</string>
 			<key>defaults</key>
 			<string>com.patsluth.acapella2</string>
 		</dict>
@@ -58,7 +58,7 @@
 			<key>key</key>
 			<string>acapella2_musicmini</string>
 			<key>label</key>
-			<string>Music App (Mini Player)</string>
+			<string>Music/Podcasts (Mini Player)</string>
 			<key>defaults</key>
 			<string>com.patsluth.acapella2</string>
 		</dict>
@@ -67,8 +67,6 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Third Party</string>
-			<key>footerText</key>
-			<string>Send a request to make Acapella compatible with other third party tweaks/apps!</string>
 		</dict>
 		<dict>
 			<key>cell</key>

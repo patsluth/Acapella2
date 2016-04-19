@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>Gestures</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>tapleft</string>
+			<key>label</key>
+			<string>Tap Left</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>tapcentre</string>
+			<key>label</key>
+			<string>Tap Centre</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>tapright</string>
+			<key>label</key>
+			<string>Tap Right</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>swipeleft</string>
+			<key>label</key>
+			<string>Swipe Left</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>swiperight</string>
+			<key>label</key>
+			<string>Swipe Right</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>pressleft</string>
+			<key>label</key>
+			<string>Press Left</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>presscentre</string>
+			<key>label</key>
+			<string>Press Centre</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>SWAPSListItemsController_Actions</string>
+			<key>titlesDataSource</key>
+			<string>actionTitles:</string>
+			<key>valuesDataSource</key>
+			<string>actionValues:</string>
+			<key>key</key>
+			<string>pressright</string>
+			<key>label</key>
+			<string>Press Right</string>
+		</dict>
+	</array>
+</dict>
+</plist>

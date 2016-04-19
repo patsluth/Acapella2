@@ -6,21 +6,20 @@
 //  Copyright (c) 2015 Pat Sluth. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
+@import UIKit;
+@import Foundation;
 
 #import <objc/runtime.h>
 
 #import "SWAcapellaDelegate.h"
 
-@class SWAcapellaTitlesCloneContainer;
-@class SWAcapellaTitlesClone;
+#import <UIKit/UIInteractionProgressObserver.h>
 
 
 
 
 
-@interface SWAcapella : NSObject <UIGestureRecognizerDelegate, UIDynamicAnimatorDelegate>
+@interface SWAcapella : NSObject <UIGestureRecognizerDelegate, UIDynamicAnimatorDelegate, UIInteractionProgressObserver>
 {
 }
 
@@ -36,8 +35,6 @@
 @property (weak, nonatomic) UIView *referenceView;
 @property (weak, nonatomic) UIView *titles;
 
-@property (strong, nonatomic) SWAcapellaTitlesCloneContainer *titlesCloneContainer;
-
 @property (strong, nonatomic, readonly) UITapGestureRecognizer *tap;
 @property (strong, nonatomic, readonly) UIPanGestureRecognizer *pan;
 @property (strong, nonatomic, readonly) UILongPressGestureRecognizer *press;
@@ -52,9 +49,13 @@
  */
 - (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
 
-- (void)refreshTitleClone;
-
+/**
+ *  Tell Acapella titles view is ready to wrap around and snap back to centre
+ */
 - (void)finishWrapAround;
+/**
+ *  Perform animation that 'pulses' the view. (Increase then decrease in size, like a hearbeat)
+ */
 - (void)pulseAnimateView;
 
 @end

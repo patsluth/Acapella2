@@ -129,7 +129,17 @@
 - (void)viewDidLayoutSubviews
 {
     %orig();
-    
+	
+	
+	// Show/Hide progress slider
+	if (self.acapellaPrefs.enabled && !self.acapellaPrefs.progressslider) {
+		self.playbackProgressView.layer.opacity = 0.0;
+	} else {
+		self.playbackProgressView.layer.opacity = 1.0;
+	}
+	
+	
+	// Update titles constraints
     CGRect titlesFrame = self.titlesView.frame;
     
     //intelligently calcualate titles frame based on visible transport controls
@@ -141,18 +151,8 @@
     if ([self.secondaryTransportControlsView acapella_hidden]) {
         titlesFrame.size.width = CGRectGetWidth(self.titlesView.superview.bounds) - titlesFrame.origin.x;
     }
-    
-    
-    self.titlesView.frame = titlesFrame;
-    
-    
-    // Show/Hide progress slider
-    if (self.acapellaPrefs.enabled && !self.acapellaPrefs.progressslider) {
-        self.playbackProgressView.layer.opacity = 0.0;
-    } else {
-        self.playbackProgressView.layer.opacity = 1.0;
-    }
-    
+	
+	self.titlesView.frame = titlesFrame;
 }
 
 #pragma mark - Acapella(Helper)

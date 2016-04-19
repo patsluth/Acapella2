@@ -33,9 +33,9 @@
 @property (strong, nonatomic, readwrite) NSString *gestures_pressleft;
 @property (strong, nonatomic, readwrite) NSString *gestures_presscentre;
 @property (strong, nonatomic, readwrite) NSString *gestures_pressright;
-//@property (strong, nonatomic, readwrite) NSString *gestures_popactionleft;
-//@property (strong, nonatomic, readwrite) NSString *gestures_popactioncentre;
-//@property (strong, nonatomic, readwrite) NSString *gestures_popactionright;
+@property (strong, nonatomic, readwrite) NSString *gestures_popactionleft;
+@property (strong, nonatomic, readwrite) NSString *gestures_popactioncentre;
+@property (strong, nonatomic, readwrite) NSString *gestures_popactionright;
 
 #pragma mark UI(Progress Slider)
 
@@ -112,9 +112,9 @@
     self.gestures_pressleft = @"";
     self.gestures_presscentre = @"";
     self.gestures_pressright = @"";
-//    self.gestures_popactionleft = @"";
-//    self.gestures_popactioncentre = @"";
-//    self.gestures_popactionright = @"";
+    self.gestures_popactionleft = @"";
+    self.gestures_popactioncentre = @"";
+    self.gestures_popactionright = @"";
     
 #pragma mark UI(Progress Slider)
     

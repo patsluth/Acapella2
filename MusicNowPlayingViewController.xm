@@ -98,7 +98,7 @@
     %orig(animated);
     
     
-    // special case where the pref key prefix is not ready in viewWillAppear, but it will always be ready here
+    // Special case where the pref key prefix is not ready in viewWillAppear, but it will always be ready here
     if (!self.acapellaPrefs) {
         [self viewWillAppear:NO];
     }
@@ -121,20 +121,17 @@
         
     }
     
-    if (self.acapella) {
-        
-        
-        
-    }
-    
+//    if (self.acapella) {
+//    }
+	
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewDidDisappear:(BOOL)animated
 {
+	%orig(animated);
+	
     [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     self.acapellaPrefs = nil;
-    
-    %orig(animated);
 }
 
 - (void)viewDidLayoutSubviews
@@ -171,40 +168,41 @@
     
     
     
-    //intelligently calcualate centre based on visible controls, which we dont want to do on iPAD
+    // Intelligently calcualate centre based on visible controls, which we dont want to do on iPAD
     if ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)) { return; }
     
     
     CGFloat topGuideline = CGRectGetMinY(self.playbackProgressSliderView.frame);
     
-    if (self.playbackProgressSliderView.layer.opacity > 0.0) { //visible
+    if (self.playbackProgressSliderView.layer.opacity > 0.0) { // Visible
         topGuideline += CGRectGetHeight(self.playbackProgressSliderView.bounds);
     }
     
     
-    CGFloat bottomGuideline = CGRectGetMinY(self.transportControls.frame); //top of primary transport controls
+    CGFloat bottomGuideline = CGRectGetMinY(self.transportControls.frame); // Top of primary transport controls
     
     
     if ([self.transportControls acapella_hidden]) {
         
-        bottomGuideline = CGRectGetMinY(self.volumeSlider.frame); //top of volume slider
+        bottomGuideline = CGRectGetMinY(self.volumeSlider.frame); // Top of volume slider
         
-        if (self.volumeSlider.layer.opacity <= 0.0) { //hidden
+        if (self.volumeSlider.layer.opacity <= 0.0) { // Hidden
             
-            bottomGuideline = CGRectGetMinY(self.secondaryTransportControls.frame); //top of transport secondary controls
+            bottomGuideline = CGRectGetMinY(self.secondaryTransportControls.frame); // Top of transport secondary controls
             
             if ([self.secondaryTransportControls acapella_hidden]) {
-                bottomGuideline = CGRectGetMaxY(self.titlesView.superview.bounds); //bottom of screen
+                bottomGuideline = CGRectGetMaxY(self.titlesView.superview.bounds); // Bottom of screen
             }
             
         }
         
     }
-    
-    //the midpoint between the currently visible views. This is where we will place our titles
-    NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
-    self.titlesView.center = CGPointMake(self.titlesView.center.x, midPoint);
-    
+	
+	
+	// The midpoint between the currently visible views. This is where we will place our titles
+	NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
+	self.titlesView.center = CGPointMake(self.titlesView.center.x, midPoint);
+	
 }
 
 #pragma mark - Acapella(Helper)
@@ -236,8 +234,8 @@
 
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
-    //TRANSPORT CONTROL TYPES
-    //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
+    // TRANSPORT CONTROL TYPES
+    // THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS
     
     // TOP ROW
     // 6 like/ban
@@ -330,21 +328,29 @@
 //    //}
 //}
 
+/**
+ *  Called when dismissing the UpNext view controller
+ *
+ *  @param arg1
+ */
+- (void)dismissDetailViewController:(id)arg1
+{
+	self.titlesView.hidden = NO;
+	
+	%orig(arg1);
+}
+
 - (void)_showUpNext
 {
-    if (self.acapella) {
-        self.acapella.titlesCloneContainer = nil;
-    }
-    
+	self.titlesView.hidden = YES;
+	
     %orig();
 }
 
 - (void)_showUpNext:(id)arg1
 {
-    if (self.acapella) {
-        self.acapella.titlesCloneContainer = nil;
-    }
-    
+	self.titlesView.hidden = YES;
+	
     %orig(arg1);
 }
 
@@ -470,7 +476,6 @@
 %new
 - (void)action_showratings:(id)arg1
 {
-    self.acapella.titlesCloneContainer = nil;
     [self _setRatingsVisible:self.ratingControl.hidden];
 }
 
@@ -493,8 +498,8 @@
 {
 }
 
-//#pragma mark - UIViewControllerPreviewing
-//
+#pragma mark - UIViewControllerPreviewing
+
 //%new // peek
 //- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
 //{
@@ -575,19 +580,6 @@
 {
     objc_setAssociatedObject(self, @selector(_acapellaPrefs), acapellaPrefs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-
-#pragma mark - Testing
-
-#ifdef DEBUG
-
-//- (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2
-//{
-//    %orig(arg1, arg2);
-//    
-//    NSLog(@"tapOnControlType %@", @(arg2));
-//}
-
-#endif
 
 %end
 

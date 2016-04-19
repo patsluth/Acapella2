@@ -6,8 +6,8 @@
 //
 //
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
+@import UIKit;
+@import Foundation;
 
 #import "SWAcapella.h"
 #import "SWAcapellaPrefs.h"
@@ -50,7 +50,7 @@
     SWAcapella *acapella = [SWAcapella acapellaForObject:self];
     
     if (acapella) {
-        [acapella finishWrapAround];
+		[acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.1];
     }
 }
 

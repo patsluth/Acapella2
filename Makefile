@@ -3,9 +3,9 @@
 
 
 
-FINALPACKAGE = 1
-DEBUG = 0
-PACKAGE_VERSION = 1.1-14
+FINALPACKAGE = 0
+DEBUG = 1
+PACKAGE_VERSION = 1.1-15
 
 
 
@@ -33,13 +33,12 @@ Acapella2_FILES = MPUMediaControlsTitlesView.xm \
                     MusicNowPlayingTitlesView.xm \
                     MusicNowPlayingViewController.xm \
                     SBLockScreenHintManager.xm \
-                    SWAcapella.m \
+					SWAcapella.m \
                     SWAcapellaPrefs.xm \
-                    SWAcapellaTitlesClone.m \
-                    SWAcapellaTitlesCloneContainer.m \
 
 ifeq ($(DEBUG), 1)
-    Acapella2_CFLAGS += -Wno-unused-variable
+	Acapella2_CFLAGS += -Wno-unused-variable
+	Acapella2_FILES += SWAcapellaDebug.xm
 endif
 
 Acapella2_FRAMEWORKS = CoreFoundation Foundation UIKit CoreGraphics QuartzCore

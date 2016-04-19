@@ -400,6 +400,7 @@
 %new
 - (void)action_openapp:(id)arg1
 {
+	return;
     id x = [self valueForKey:@"_nowPlayingController"]; //MPUNowPlayingController
     id y = [x valueForKey:@"_currentNowPlayingAppDisplayID"]; //NSString
     [%c(SWAppLauncher) launchAppWithBundleIDLockscreenFriendly:y];

@@ -8,6 +8,8 @@
 
 #import "MPUSystemMediaControlsViewController+SW.h"
 #import "MPUTransportControlsView+SW.h"
+#import "MPUMediaControlsTitlesView+SW.h"
+#import "FuseUI/MPUSystemMediaControlsView.h"
 
 #import "SWAcapella.h"
 #import "SWAcapellaPrefs.h"
@@ -27,23 +29,6 @@
 
 
 
-#pragma mark - MPUSystemMediaControlsView
-
-@interface MPUSystemMediaControlsView : UIView
-{
-}
-
-- (UIView *)timeInformationView;
-- (UIView *)trackInformationView;
-- (MPUTransportControlsView *)transportControlsView;
-- (UIView *)volumeView;
-
-@end
-
-
-
-
-
 #pragma mark - MPUSystemMediaControlsViewController
 
 %hook MPUSystemMediaControlsViewController
@@ -53,14 +38,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     %orig(animated);
-    
-    
-    // Initialize prefs for this instance
+	
+	
+	// Initialize prefs for this instance
     if (self.acapellaKeyPrefix) {
         self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithKeyPrefix:self.acapellaKeyPrefix];
     }
-    
-    
+	
+	
     //Reload our transport buttons
     //See [self transportControlsView:arg1 buttonForControlType:arg2];
     [MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView reloadTransportButtonWithControlType:6];
@@ -147,11 +132,16 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
+	[SWAcapella removeAcapella:[SWAcapella acapellaForObject:self]];
     self.acapellaPrefs = nil;
     
     %orig(animated);
 }
+
+//- (void)viewDidLayoutSubviews
+//{
+//	%orig();
+//}
 
 #pragma mark - Acapella(Helper)
 
@@ -169,50 +159,50 @@
         NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
 #endif
         
-        @autoreleasepool {
-            
-            // Control Centre
-            if (
-                (%c(SBControlCenterRootView) && [curView class] == %c(SBControlCenterRootView)) ||
-                //(%c(SBControlCenterSectionView) && [curView class] == %c(SBControlCenterSectionView)) || // Interfering with seng
-                (%c(SBControlCenterContentView) && [curView class] == %c(SBControlCenterContentView))
-                ) {
-                return @"cc";
-            }
-            
-            // Lock Screen
-            if (%c(SBLockScreenView) && ([curView class] == %c(SBLockScreenView) ||
-                                         [curView class] == %c(SBLockScreenScrollView))) {
-                return @"ls";
-            }
-            
-            // OnTapMusic - class will be null if tweak is not installed
-            if (%c(OTMView) && [curView class] == %c(OTMView)) {
-                return @"otm";
-            }
-            
-            // Auxo LE - class will be null if tweak is not installed
-            if (%c(AuxoCollectionView) && [curView class] == %c(AuxoCollectionView)) {
-                return @"auxo";
-            }
-            
-            // Vertex - Vertex has no classes ?
-            if (%c(SBAppSwitcherContainer) && [curView class] == %c(SBAppSwitcherContainer)) {
-                return @"vertex";
-            }
-            
-            // Seng
-            if ((%c(SengMediaSectionView) && [curView class] == %c(SengMediaSectionView)) ||
-                (%c(SengMediaTitlesSectionView) && [curView class] == %c(SengMediaTitlesSectionView))) {
-                return @"seng";
-            }
-            
-        }
-        
+		@autoreleasepool {
+			
+			// Control Centre
+			if (
+				(%c(SBControlCenterRootView) && [curView class] == %c(SBControlCenterRootView)) ||
+				//(%c(SBControlCenterSectionView) && [curView class] == %c(SBControlCenterSectionView)) || // Interfering with seng
+				(%c(SBControlCenterContentView) && [curView class] == %c(SBControlCenterContentView))
+				) {
+				return @"cc";
+			}
+			
+			// Lock Screen
+			if (%c(SBLockScreenView) && ([curView class] == %c(SBLockScreenView) ||
+										 [curView class] == %c(SBLockScreenScrollView))) {
+				return @"ls";
+			}
+			
+			// OnTapMusic - class will be null if tweak is not installed
+			if (%c(OTMView) && [curView class] == %c(OTMView)) {
+				return @"otm";
+			}
+			
+			// Auxo LE - class will be null if tweak is not installed
+			if (%c(AuxoCollectionView) && [curView class] == %c(AuxoCollectionView)) {
+				return @"auxo";
+			}
+			
+			// Vertex - Vertex has no classes ?
+			if (%c(SBAppSwitcherContainer) && [curView class] == %c(SBAppSwitcherContainer)) {
+				return @"vertex";
+			}
+			
+			// Seng
+			if ((%c(SengMediaSectionView) && [curView class] == %c(SengMediaSectionView)) ||
+				(%c(SengMediaTitlesSectionView) && [curView class] == %c(SengMediaTitlesSectionView))) {
+				return @"seng";
+			}
+			
+		}
+		
         curView = curView.superview;
-        
+		
     }
-    
+	
     return nil;
 }
 
@@ -232,6 +222,12 @@
     //4 forward
     //5 interval forward
     //8 share
+	
+	// Sometimes this won't be ready until the view has appeared, so return nil so the buttons don't flash
+	// once if acapella is enabled
+	if (!self.acapellaPrefs) {
+		return nil;
+	}
     
     if (self.acapellaPrefs.enabled) {
     
@@ -400,7 +396,6 @@
 %new
 - (void)action_openapp:(id)arg1
 {
-	return;
     id x = [self valueForKey:@"_nowPlayingController"]; //MPUNowPlayingController
     id y = [x valueForKey:@"_currentNowPlayingAppDisplayID"]; //NSString
     [%c(SWAppLauncher) launchAppWithBundleIDLockscreenFriendly:y];
@@ -445,13 +440,16 @@
     }
 }
 
+#pragma mark - ColorFlow
+
 //#pragma mark - UIViewControllerPreviewing
 //
 //%new // peek
 //- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
 //{
-//    @autoreleasepool {
-//        
+//    @autoreleasepool
+//	  {
+//
 //    if (!self.acapella || self.presentedViewController) {
 //        return nil;
 //    }
@@ -536,10 +534,55 @@
 
 %hook MPUSystemMediaControlsView
 
+- (void)cfw_colorize:(id)arg1
+{
+	%orig(arg1);
+	
+	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
+	
+	if (acapella && acapella.titlesClone) {
+		
+		MPUMediaControlsTitlesView *clone = (MPUMediaControlsTitlesView *)acapella.titlesClone;
+		
+		clone._titleLabel.textColor = self.trackInformationView._titleLabel.textColor;
+		clone._detailLabel.textColor = self.trackInformationView._detailLabel.textColor;
+		
+		
+		UIImageView *explicitImageView = MSHookIvar<UIImageView *>(self.trackInformationView, "_explicitImageView");
+		
+		if (explicitImageView) {
+			clone.explicitImage = explicitImageView.image;
+			MSHookIvar<UIImageView *>(clone, "_explicitImageView").image = clone.explicitImage;
+		}
+		
+	}
+	
+}
+
+- (void)cfw_revert
+{
+	%orig();
+	
+	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
+	
+	if (acapella && acapella.titlesClone) {
+		
+		MPUMediaControlsTitlesView *clone = (MPUMediaControlsTitlesView *)acapella.titlesClone;
+		
+		clone._titleLabel.textColor = self.trackInformationView._titleLabel.textColor;
+		clone._detailLabel.textColor = self.trackInformationView._detailLabel.textColor;
+		
+	}
+}
+
 - (void)layoutSubviews
 {
+//	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
+	
+	
     %orig();
-    
+	
+	
     //intelligently calcualate centre based on visible controls
     if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
         
@@ -569,6 +612,15 @@
 }
 
 %end
+
+
+
+
+
+%ctor
+{
+	dlopen("/Library/MobileSubstrate/DynamicLibraries/ColorFlow2.dylib", RTLD_NOW);
+}
 
 
 

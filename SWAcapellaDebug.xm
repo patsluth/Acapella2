@@ -8,135 +8,132 @@
 
 #import "libsw/libSluthware/libSluthware.h"
 
+#import "UIKit/UIPreviewForceInteractionProgress.h"
 
 
 
 
 
-@interface UIPreviewForceInteractionProgress : NSObject
-
-@end
-
-%hook UIPreviewForceInteractionProgress
-
-- (id)_initWithObservable:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3
-{
-	id orig = %orig(arg1, arg2, arg3);
-	
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"arg3:[%@]", @(arg3));
-	NSLog(@"retunVal:[%@]", orig);
-	LOG_METHOD_END
-	
-	return orig;
-}
-
-- (id)_initWithObservable:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3 useLinearClassifier:(BOOL)arg4
-{
-	id orig = %orig(arg1, arg2, arg3, arg4);
-	
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"arg3:[%@]", @(arg3));
-	NSLog(@"arg4:[%@]", @(arg3));
-	NSLog(@"retunVal:[%@]", orig);
-	LOG_METHOD_END
-	
-	return orig;
-}
-
-- (id)_initWithView:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3 useLinearClassifier:(BOOL)arg4
-{
-	id orig = %orig(arg1, arg2, arg3, arg4);
-	
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"arg3:[%@]", @(arg3));
-	NSLog(@"arg4:[%@]", @(arg4));
-	NSLog(@"retunVal:[%@]", orig);
-	LOG_METHOD_END
-	
-	return orig;
-}
-
-- (id)initWithView:(id)arg1 targetState:(int)arg2
-{
-	id orig = %orig(arg1, arg2);
-	
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"retunVal:[%@]", orig);
-	LOG_METHOD_END
-	
-	return orig;
-}
-
-- (id)initWithView:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3
-{
-	id orig = %orig(arg1, arg2, arg3);
-	
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"arg3:[%@]", @(arg3));
-	NSLog(@"retunVal:[%@]", orig);
-	LOG_METHOD_END
-	
-	return orig;
-}
-
-- (id)initWithGestureRecognizer:(id)arg1 minimumRequiredState:(long long)arg2
-{
-	id orig = %orig(arg1, arg2);
-	
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"retunVal:[%@]", orig);
-	LOG_METHOD_END
-	
-	return orig;
-}
-
-- (void)_forceLevelClassifier:(id)arg1 didUpdateProgress:(double)arg2 toForceLevel:(long long)arg3
-{
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	NSLog(@"arg3:[%@]", @(arg3));
-	LOG_METHOD_END
-	
-	%orig(arg1, arg2, arg3);
-}
-
-- (void)_forceLevelClassifier:(id)arg1 currentForceLevelDidChange:(int)arg2
-{
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	NSLog(@"arg2:[%@]", @(arg2));
-	
-	
-	
-	LOG_METHOD_END
-	
-	%orig(arg1, arg2);
-}
-
-- (void)_forceLevelClassifierDidReset:(id)arg1
-{
-	LOG_METHOD_START
-	NSLog(@"arg1:[%@]", arg1);
-	LOG_METHOD_END
-	
-	%orig(arg1);
-}
-
-%end
+//%hook UIPreviewForceInteractionProgress
+//
+//- (id)_initWithObservable:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3
+//{
+//	id orig = %orig(arg1, arg2, arg3);
+//	
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"arg3:[%@]", @(arg3));
+//	NSLog(@"retunVal:[%@]", orig);
+//	LOG_METHOD_END
+//	
+//	return orig;
+//}
+//
+//- (id)_initWithObservable:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3 useLinearClassifier:(BOOL)arg4
+//{
+//	id orig = %orig(arg1, arg2, arg3, arg4);
+//	
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"arg3:[%@]", @(arg3));
+//	NSLog(@"arg4:[%@]", @(arg3));
+//	NSLog(@"retunVal:[%@]", orig);
+//	LOG_METHOD_END
+//	
+//	return orig;
+//}
+//
+//- (id)_initWithView:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3 useLinearClassifier:(BOOL)arg4
+//{
+//	id orig = %orig(arg1, arg2, arg3, arg4);
+//	
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"arg3:[%@]", @(arg3));
+//	NSLog(@"arg4:[%@]", @(arg4));
+//	NSLog(@"retunVal:[%@]", orig);
+//	LOG_METHOD_END
+//	
+//	return orig;
+//}
+//
+//- (id)initWithView:(id)arg1 targetState:(int)arg2
+//{
+//	id orig = %orig(arg1, arg2);
+//	
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"retunVal:[%@]", orig);
+//	LOG_METHOD_END
+//	
+//	return orig;
+//}
+//
+//- (id)initWithView:(id)arg1 targetState:(int)arg2 minimumRequiredState:(int)arg3
+//{
+//	id orig = %orig(arg1, arg2, arg3);
+//	
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"arg3:[%@]", @(arg3));
+//	NSLog(@"retunVal:[%@]", orig);
+//	LOG_METHOD_END
+//	
+//	return orig;
+//}
+//
+//- (id)initWithGestureRecognizer:(id)arg1 minimumRequiredState:(long long)arg2
+//{
+//	id orig = %orig(arg1, arg2);
+//	
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"retunVal:[%@]", orig);
+//	LOG_METHOD_END
+//	
+//	return orig;
+//}
+//
+//- (void)_forceLevelClassifier:(id)arg1 didUpdateProgress:(double)arg2 toForceLevel:(long long)arg3
+//{
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	NSLog(@"arg3:[%@]", @(arg3));
+//	LOG_METHOD_END
+//	
+//	%orig(arg1, arg2, arg3);
+//}
+//
+//- (void)_forceLevelClassifier:(id)arg1 currentForceLevelDidChange:(int)arg2
+//{
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	NSLog(@"arg2:[%@]", @(arg2));
+//	
+//	
+//	
+//	LOG_METHOD_END
+//	
+//	%orig(arg1, arg2);
+//}
+//
+//- (void)_forceLevelClassifierDidReset:(id)arg1
+//{
+//	LOG_METHOD_START
+//	NSLog(@"arg1:[%@]", arg1);
+//	LOG_METHOD_END
+//	
+//	%orig(arg1);
+//}
+//
+//%end
 
 
 
@@ -237,6 +234,7 @@
 
 
 
+
 // Disable snapshot effects
 //%hook UIPreviewPresentationController
 //
@@ -272,7 +270,11 @@
 
 //%hook _UIPreviewTransitionController
 //
-//+(void)performCommitTransitionWithDelegate:(id)arg1 forViewController:(id)arg2 previewViewController:(id)arg3 previewInteractionController:(id)arg4 completion:(/*^block*/id)arg5
+//+(void)performCommitTransitionWithDelegate:(id)arg1
+//forViewController:(id)arg2
+//previewViewController:(id)arg3
+//previewInteractionController:(id)arg4
+//completion:(/*^block*/id)arg5
 //{
 //	
 //}
@@ -296,11 +298,6 @@
 //}
 //
 //%end
-
-
-
-
-
 
 
 

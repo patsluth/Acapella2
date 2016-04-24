@@ -12,8 +12,21 @@
 #import <objc/runtime.h>
 
 #import "SWAcapellaDelegate.h"
+#import "SWAcapellaTitlesProtocol.h"
 
 #import <UIKit/UIInteractionProgressObserver.h>
+
+
+
+
+
+typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
+	SWAcapellaTitlesStateNone,
+	SWAcapellaTitlesStatePanning,
+	SWAcapellaTitlesStateWaitingToFinishWrapAround,
+	SWAcapellaTitlesStateWrappingAround,
+	SWAcapellaTitlesStateForceScaling
+};
 
 
 
@@ -33,7 +46,8 @@
 @property (weak, nonatomic) UIViewController<SWAcapellaDelegate> *owner;
 
 @property (weak, nonatomic) UIView *referenceView;
-@property (weak, nonatomic) UIView *titles;
+@property (weak, nonatomic) UIView<SWAcapellaTitlesProtocol> *titles;
+@property (strong, nonatomic, readonly) UIView *titlesClone;
 
 @property (strong, nonatomic, readonly) UITapGestureRecognizer *tap;
 @property (strong, nonatomic, readonly) UIPanGestureRecognizer *pan;

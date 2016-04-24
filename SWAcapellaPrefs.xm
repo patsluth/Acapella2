@@ -33,9 +33,6 @@
 @property (strong, nonatomic, readwrite) NSString *gestures_pressleft;
 @property (strong, nonatomic, readwrite) NSString *gestures_presscentre;
 @property (strong, nonatomic, readwrite) NSString *gestures_pressright;
-@property (strong, nonatomic, readwrite) NSString *gestures_popactionleft;
-@property (strong, nonatomic, readwrite) NSString *gestures_popactioncentre;
-@property (strong, nonatomic, readwrite) NSString *gestures_popactionright;
 
 #pragma mark UI(Progress Slider)
 
@@ -112,9 +109,6 @@
     self.gestures_pressleft = @"";
     self.gestures_presscentre = @"";
     self.gestures_pressright = @"";
-    self.gestures_popactionleft = @"";
-    self.gestures_popactioncentre = @"";
-    self.gestures_popactionright = @"";
     
 #pragma mark UI(Progress Slider)
     
@@ -162,9 +156,6 @@
     NSString *gestures_pressleftKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_pressleft"];
     NSString *gestures_presscentreKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_presscentre"];
     NSString *gestures_pressrightKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_pressright"];
-//    NSString *gestures_popactionleftKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_popactionleft"];
-//    NSString *gestures_popactioncentreKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_popactioncentre"];
-//    NSString *gestures_popactionrightKey = [NSString stringWithFormat:@"acapella2_%@_%@", self.keyPrefix, @"gestures_popactionright"];
     
     #pragma mark UI(Progress Slider)
     
@@ -208,9 +199,6 @@
     self.gestures_pressleft = [self.preferences valueForKey:gestures_pressleftKey];
     self.gestures_presscentre = [self.preferences valueForKey:gestures_presscentreKey];
     self.gestures_pressright = [self.preferences valueForKey:gestures_pressrightKey];
-    //    self.gestures_popactionleft = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionleftKey, applicationCF));
-    //    self.gestures_popactioncentre = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactioncentreKey, applicationCF));
-    //    self.gestures_popactionright = CFBridgingRelease(CFPreferencesCopyAppValue((__bridge CFStringRef)gestures_popactionrightKey, applicationCF));
     
     #pragma mark UI(Progress Slider)
     

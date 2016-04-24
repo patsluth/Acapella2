@@ -6,6 +6,7 @@
 //
 //
 
+#import "MusicMiniPlayerViewController+SW.h"
 #import "MPUTransportControlsView+SW.h"
 
 #import "SWAcapella.h"
@@ -25,30 +26,6 @@
 
 
 #pragma mark - MusicMiniPlayerViewController
-
-//TOOD: MOVE
-@interface MusicMiniPlayerViewController : UIViewController <SWAcapellaDelegate, UIViewControllerPreviewingDelegate>
-{
-    //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
-}
-
-- (UIView *)titlesView;
-- (UIView *)playbackProgressView;
-- (MPUTransportControlsView *)transportControlsView;
-- (MPUTransportControlsView *)secondaryTransportControlsView;
-
-- (UIPanGestureRecognizer *)nowPlayingPresentationPanRecognizer;
-
-- (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2; //NS_AVAILABLE_IOS(9_0);
-- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2; //NS_AVAILABLE_IOS(9_0);
-
-@end
-
-
-
-
 
 %hook MusicMiniPlayerViewController
 
@@ -128,11 +105,11 @@
 
 - (void)viewDidLayoutSubviews
 {
-    %orig();
+	%orig();
 	
 	
 	// Show/Hide progress slider
-	if (self.acapellaPrefs.enabled && !self.acapellaPrefs.progressslider) {
+	if (self.acapellaPrefs && self.acapellaPrefs.enabled && !self.acapellaPrefs.progressslider) {
 		self.playbackProgressView.layer.opacity = 0.0;
 	} else {
 		self.playbackProgressView.layer.opacity = 1.0;
@@ -153,6 +130,7 @@
     }
 	
 	self.titlesView.frame = titlesFrame;
+	
 }
 
 #pragma mark - Acapella(Helper)
@@ -160,20 +138,19 @@
 %new
 - (NSString *)acapellaKeyPrefix
 {
-//    @autoreleasepool {
-//        
-//        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-//        
-//        if (%c(MusicTabBarController) && [rootVC class] == %c(MusicTabBarController)) { // Music App
-            return @"musicmini";
-//        } else if (%c(MTMusicTabController) && [rootVC class] == %c(MTMusicTabController)) { // Podcast App
-//            return @"podcastsmini";
-//        }
-//            
-//        
-//    }
-    
-    return nil;
+	@autoreleasepool {
+//		UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+//		
+//		if (%c(MusicTabBarController) && [rootVC class] == %c(MusicTabBarController)) { // Music App
+			return @"musicmini";
+//		} else if (%c(MTMusicTabController) && [rootVC class] == %c(MTMusicTabController)) { // Podcast App
+//			return @"podcastsmini";
+//		}
+//		
+//		
+	}
+	
+	return nil;
 }
 
 %new
@@ -194,7 +171,15 @@
     //RIGHT SECTION
     //7 present up next (IPAD)
     //11 contextual
-    
+	
+	
+	// Sometimes this won't be ready until the view has appeared, so return nil so the buttons don't flash
+	// once if acapella is enabled
+	if (!self.acapellaPrefs) {
+		return nil;
+	}
+	
+	
     if (self.acapellaPrefs.enabled) {
         
         //LEFT SECTION
@@ -223,6 +208,15 @@
     
     
     return %orig(arg1, arg2);
+}
+
+- (void)_panRecognized:(id)arg1
+{
+//	if (self.acapella && self.acapella.blockingGestures) {
+//		return;
+//	}
+	
+	%orig(arg1);
 }
 
 - (void)_tapRecognized:(id)arg1

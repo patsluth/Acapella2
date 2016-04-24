@@ -6,6 +6,7 @@
 //
 //
 
+#import "MusicNowPlayingViewController+SW.h"
 #import "MPUTransportControlsView+SW.h"
 
 #import "SWAcapella.h"
@@ -25,39 +26,24 @@
 
 #pragma mark - MusicNowPlayingViewController
 
-@interface MusicNowPlayingViewController : UIViewController <SWAcapellaDelegate, UIGestureRecognizerDelegate, UIViewControllerPreviewingDelegate>
-{
-    //MPUTransportControlMediaRemoteController *_transportControlMediaRemoteController;
-}
-
-- (UIView *)playbackProgressSliderView;
-- (UIView *)titlesView;
-- (MPUTransportControlsView *)transportControls;
-- (MPUTransportControlsView *)secondaryTransportControls;
-- (UIView *)volumeSlider;
-
-- (UIView *)vibrantEffectView; //MPUVibrantContentEffectView.h
-
-- (UIView *)ratingControl;
-- (void)_setRatingsVisible:(BOOL)arg1;
-
-- (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 tapOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressBeginOnControlType:(NSInteger)arg2;
-- (void)transportControlsView:(id)arg1 longPressEndOnControlType:(NSInteger)arg2;
-
-@end
-
-
-
-
-
 %hook MusicNowPlayingViewController
 
 #pragma mark - Init
 
 - (void)viewWillAppear:(BOOL)animated
 {
+	// Fixes animation issues when transforming the reference view
+	[self.titlesView.superview.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.titlesView.superview
+																					attribute:NSLayoutAttributeCenterX
+																					relatedBy:NSLayoutRelationEqual
+																					   toItem:self.titlesView.superview.superview
+																					attribute:NSLayoutAttributeCenterX
+																				   multiplier:1.0
+																					 constant:0.0]];
+	//	[self.titlesView.superview.centerXAnchor constraintEqualToAnchor:self.titlesView.superview.superview.centerXAnchor].active = YES;
+	
+	
+	
     %orig(animated);
     
     
@@ -120,9 +106,10 @@
         }
         
     }
-    
-//    if (self.acapella) {
-//    }
+	
+//	if (self.acapella) {
+//	}
+	[self viewDidLayoutSubviews];
 	
 }
 
@@ -136,16 +123,20 @@
 
 - (void)viewDidLayoutSubviews
 {
-    %orig();
-    
+	%orig();
+	
+	
     BOOL progressVisible = YES;
     BOOL volumeVisible = YES;
     
-    if (self.acapellaPrefs.enabled) {
+    if (self.acapellaPrefs && self.acapellaPrefs.enabled) {
         progressVisible = self.acapellaPrefs.progressslider;
-        volumeVisible = self.acapellaPrefs.volumeslider;
-    }
-    
+		volumeVisible = self.acapellaPrefs.volumeslider;
+		self.dismissButton.hidden = YES;
+	} else {
+		self.dismissButton.hidden = NO;
+	}
+		
     // Show/Hide sliders
     self.playbackProgressSliderView.layer.opacity = progressVisible ? 1.0 : 0.0;
     self.volumeSlider.layer.opacity = volumeVisible ? 1.0 : 0.0;
@@ -210,19 +201,18 @@
 %new
 - (NSString *)acapellaKeyPrefix
 {
-//    @autoreleasepool {
-//        
-//        UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-//        
-//        if (%c(MusicTabBarController) && [rootVC class] == %c(MusicTabBarController)) { // Music App
-            return @"musicnowplaying";
-//        } else if (%c(MTMusicTabController) && [rootVC class] == %c(MTMusicTabController)) { // Podcast App
-//            return @"podcastsnowplaying";
-//        }
-//        
-//        
-//    }
-    
+	@autoreleasepool {
+//
+//		UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+//		
+//		if (%c(MusicTabBarController) && [rootVC class] == %c(MusicTabBarController)) { // Music App
+			return @"musicnowplaying";
+//		} else if (%c(MTMusicTabController) && [rootVC class] == %c(MTMusicTabController)) { // Podcast App
+//			return @"podcastsnowplaying";
+//		}
+//		
+	}
+
     return nil;
 }
 
@@ -256,6 +246,14 @@
     // 12 playback rate (1x, 2x etc. )
     // PODCAST BOTTOM ROW
     // 13 sleep timer
+	
+	
+	// Sometimes this won't be ready until the view has appeared, so return nil so the buttons don't flash
+	// once if acapella is enabled
+	if (!self.acapellaPrefs) {
+		return nil;
+	}
+	
     
     if (self.acapellaPrefs.enabled) {
         
@@ -321,12 +319,22 @@
     return %orig(arg1, arg2);
 }
 
-//- (void)_handleTapGestureRecognizerAction:(id)arg1 //tap on artwork
-//{
-//    //if (!self.acapella) {
-//        %orig(arg1);
-//    //}
-//}
+- (void)_handleTapGestureRecognizerAction:(UITapGestureRecognizer *)arg1 //tap on artwork
+{
+	if (self.acapella) {
+		
+//		if (self.acapella.blockingGestures) {
+//			return;
+//		}
+		
+		// touch is on the artwork view
+		if (![[arg1.view hitTest:[arg1 locationInView:arg1.view] withEvent:nil] isDescendantOfView:self.currentItemViewControllerContainerView]) {
+			return;
+		}
+	}
+	
+	%orig(arg1);
+}
 
 /**
  *  Called when dismissing the UpNext view controller
@@ -335,23 +343,39 @@
  */
 - (void)dismissDetailViewController:(id)arg1
 {
-	self.titlesView.hidden = NO;
-	
 	%orig(arg1);
+	
+	[self _setRatingsVisible:NO];
 }
 
 - (void)_showUpNext
 {
-	self.titlesView.hidden = YES;
+	if (self.acapella) {
+		self.acapella.titles.hidden = YES;
+		self.acapella.titlesClone.hidden = YES;
+	}
 	
     %orig();
 }
 
 - (void)_showUpNext:(id)arg1
 {
-	self.titlesView.hidden = YES;
+	if (self.acapella) {
+		self.acapella.titles.hidden = YES;
+		self.acapella.titlesClone.hidden = YES;
+	}
 	
-    %orig(arg1);
+	%orig(arg1);
+}
+
+- (void)_setRatingsVisible:(BOOL)arg1
+{
+	%orig(arg1);
+	
+	if (self.acapella) {
+		self.acapella.titlesClone.hidden = arg1;
+		self.acapella.titles.hidden = !self.acapella.titlesClone.hidden;
+	}
 }
 
 #pragma mark - Acaplla(Actions)
@@ -580,6 +604,13 @@
 {
     objc_setAssociatedObject(self, @selector(_acapellaPrefs), acapellaPrefs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
+
+#pragma mark - Testing
+
+//- (void)_setRatingsVisible:(BOOL)arg1
+//{
+//	%orig(arg1);
+//}
 
 %end
 

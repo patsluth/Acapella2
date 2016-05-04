@@ -1,6 +1,6 @@
 //
 //  SWAcapella.h
-//  AcapellaKit
+//  Acapella2
 //
 //  Created by Pat Sluth on 2015-07-08.
 //  Copyright (c) 2015 Pat Sluth. All rights reserved.
@@ -11,6 +11,7 @@
 
 #import <objc/runtime.h>
 
+#import "SWAcapellaTitlesClone.h"
 #import "SWAcapellaDelegate.h"
 #import "SWAcapellaTitlesProtocol.h"
 
@@ -25,6 +26,7 @@ typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
 	SWAcapellaTitlesStatePanning,
 	SWAcapellaTitlesStateWaitingToFinishWrapAround,
 	SWAcapellaTitlesStateWrappingAround,
+	SWAcapellaTitlesStateSnappingToCenter,
 	SWAcapellaTitlesStateForceScaling
 };
 
@@ -47,7 +49,7 @@ typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
 
 @property (weak, nonatomic) UIView *referenceView;
 @property (weak, nonatomic) UIView<SWAcapellaTitlesProtocol> *titles;
-@property (strong, nonatomic, readonly) UIView *titlesClone;
+@property (strong, nonatomic, readonly) SWAcapellaTitlesClone *titlesClone;
 
 @property (strong, nonatomic, readonly) UITapGestureRecognizer *tap;
 @property (strong, nonatomic, readonly) UIPanGestureRecognizer *pan;

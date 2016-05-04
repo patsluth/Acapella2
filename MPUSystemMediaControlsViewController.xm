@@ -534,47 +534,6 @@
 
 %hook MPUSystemMediaControlsView
 
-- (void)cfw_colorize:(id)arg1
-{
-	%orig(arg1);
-	
-	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
-	
-	if (acapella && acapella.titlesClone) {
-		
-		MPUMediaControlsTitlesView *clone = (MPUMediaControlsTitlesView *)acapella.titlesClone;
-		
-		clone._titleLabel.textColor = self.trackInformationView._titleLabel.textColor;
-		clone._detailLabel.textColor = self.trackInformationView._detailLabel.textColor;
-		
-		
-		UIImageView *explicitImageView = MSHookIvar<UIImageView *>(self.trackInformationView, "_explicitImageView");
-		
-		if (explicitImageView) {
-			clone.explicitImage = explicitImageView.image;
-			MSHookIvar<UIImageView *>(clone, "_explicitImageView").image = clone.explicitImage;
-		}
-		
-	}
-	
-}
-
-- (void)cfw_revert
-{
-	%orig();
-	
-	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
-	
-	if (acapella && acapella.titlesClone) {
-		
-		MPUMediaControlsTitlesView *clone = (MPUMediaControlsTitlesView *)acapella.titlesClone;
-		
-		clone._titleLabel.textColor = self.trackInformationView._titleLabel.textColor;
-		clone._detailLabel.textColor = self.trackInformationView._detailLabel.textColor;
-		
-	}
-}
-
 - (void)layoutSubviews
 {
 //	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
@@ -619,7 +578,7 @@
 
 %ctor
 {
-	dlopen("/Library/MobileSubstrate/DynamicLibraries/ColorFlow2.dylib", RTLD_NOW);
+//	dlopen("/Library/MobileSubstrate/DynamicLibraries/ColorFlow2.dylib", RTLD_NOW);
 }
 
 

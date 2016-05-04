@@ -49,10 +49,10 @@
 	
 	SWAcapella *acapella = [SWAcapella acapellaForObject:self];
 	
-	if (acapella && acapella.titlesClone && acapella.titlesClone != self) {
+	if (acapella) {
 		
-		MPUMediaControlsTitlesView *clone = (MPUMediaControlsTitlesView *)acapella.titlesClone;
-		[clone updateTrackInformationWithNowPlayingInfo:arg1];
+//		MPUMediaControlsTitlesView *clone = (MPUMediaControlsTitlesView *)acapella.titlesClone;
+//		[clone updateTrackInformationWithNowPlayingInfo:arg1];
 		
 		[NSObject cancelPreviousPerformRequestsWithTarget:acapella selector:@selector(finishWrapAround) object:nil];
 		[acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.1];

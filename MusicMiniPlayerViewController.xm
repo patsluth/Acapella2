@@ -210,14 +210,10 @@
     return %orig(arg1, arg2);
 }
 
-- (void)_panRecognized:(id)arg1
-{
-//	if (self.acapella && self.acapella.blockingGestures) {
-//		return;
-//	}
-	
-	%orig(arg1);
-}
+//- (void)_panRecognized:(id)arg1
+//{
+//	%orig(arg1);
+//}
 
 - (void)_tapRecognized:(id)arg1
 {

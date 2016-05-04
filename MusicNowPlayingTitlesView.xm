@@ -27,10 +27,7 @@
 	
 	SWAcapella *acapella = [SWAcapella acapellaForObject:self];
 	
-	if (acapella && acapella.titlesClone) {
-		
-		MusicNowPlayingTitlesView *clone = (MusicNowPlayingTitlesView *)acapella.titlesClone;
-		[clone setAttributedTexts:self.attributedTexts];
+	if (acapella) {
 		
 		[NSObject cancelPreviousPerformRequestsWithTarget:acapella selector:@selector(finishWrapAround) object:nil];
 		[acapella performSelector:@selector(finishWrapAround) withObject:nil afterDelay:0.1];

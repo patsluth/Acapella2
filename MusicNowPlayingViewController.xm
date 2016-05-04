@@ -32,19 +32,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	// Fixes animation issues when transforming the reference view
-	[self.titlesView.superview.superview addConstraint:[NSLayoutConstraint constraintWithItem:self.titlesView.superview
-																					attribute:NSLayoutAttributeCenterX
-																					relatedBy:NSLayoutRelationEqual
-																					   toItem:self.titlesView.superview.superview
-																					attribute:NSLayoutAttributeCenterX
-																				   multiplier:1.0
-																					 constant:0.0]];
-	//	[self.titlesView.superview.centerXAnchor constraintEqualToAnchor:self.titlesView.superview.superview.centerXAnchor].active = YES;
-	
-	
-	
-    %orig(animated);
+	%orig(animated);
     
     
     // Initialize prefs for this instance
@@ -323,10 +311,6 @@
 {
 	if (self.acapella) {
 		
-//		if (self.acapella.blockingGestures) {
-//			return;
-//		}
-		
 		// touch is on the artwork view
 		if (![[arg1.view hitTest:[arg1 locationInView:arg1.view] withEvent:nil] isDescendantOfView:self.currentItemViewControllerContainerView]) {
 			return;
@@ -351,8 +335,8 @@
 - (void)_showUpNext
 {
 	if (self.acapella) {
-		self.acapella.titles.hidden = YES;
 		self.acapella.titlesClone.hidden = YES;
+		self.acapella.titles.layer.opacity = 0.0;
 	}
 	
     %orig();
@@ -361,8 +345,8 @@
 - (void)_showUpNext:(id)arg1
 {
 	if (self.acapella) {
-		self.acapella.titles.hidden = YES;
 		self.acapella.titlesClone.hidden = YES;
+		self.acapella.titles.layer.opacity = 0.0;
 	}
 	
 	%orig(arg1);
@@ -374,7 +358,7 @@
 	
 	if (self.acapella) {
 		self.acapella.titlesClone.hidden = arg1;
-		self.acapella.titles.hidden = !self.acapella.titlesClone.hidden;
+		self.acapella.titles.layer.opacity = self.acapella.titlesClone.hidden ? 1.0 : 0.0;
 	}
 }
 

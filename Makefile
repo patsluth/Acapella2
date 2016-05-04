@@ -34,6 +34,7 @@ Acapella2_FILES = MPUMediaControlsTitlesView.xm \
                     MusicNowPlayingViewController.xm \
                     SBLockScreenHintManager.xm \
 					SWAcapella.m \
+					SWAcapellaTitlesClone.m \
                     SWAcapellaPrefs.xm \
 
 ifeq ($(DEBUG), 1)

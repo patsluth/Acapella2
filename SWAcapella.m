@@ -79,8 +79,10 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 //@property (strong, nonatomic) id<UIViewControllerPreviewing> previewingContext;
 @property (strong, nonatomic) UIPreviewForceInteractionProgress *forceInteractionProgress;
 
-@property (strong, nonatomic, readwrite) UIView *titlesClone;
+@property (strong, nonatomic, readwrite) SWAcapellaTitlesClone *titlesClone;
+//@property (strong, nonatomic, readwrite) SWAcapellaTitlesClone *titlesCloneTemp;
 @property (strong, nonatomic, readwrite) NSLayoutConstraint *titlesCloneCenterXConstraint;
+
 
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
@@ -90,7 +92,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 @property (strong, nonatomic, readwrite) UIPanGestureRecognizer *pan;
 @property (strong, nonatomic, readwrite) UILongPressGestureRecognizer *press;
 @property (weak, nonatomic, readwrite) UIGestureRecognizer *forceTouchGestureRecognizer;
-@property (readwrite, nonatomic) BOOL blockingGestures;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -120,7 +121,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 {
     if (acapella) {
 		
-		acapella.titles.alpha = 1.0;
+		acapella.titles.layer.opacity = 1.0;
 		[acapella.titlesClone removeFromSuperview];
 		acapella.titlesClone = nil;
 		
@@ -204,16 +205,17 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     [self.referenceView addGestureRecognizer:self.pan];
 	
 	
-	if (NO && [self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+	if ([self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
 		(self.owner.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)) {
 		
 //		self.previewingContext = [self.owner registerForPreviewingWithDelegate:self.owner sourceView:self.referenceView];
 		
 		self.forceInteractionProgress = [[UIPreviewForceInteractionProgress alloc] _initWithView:self.referenceView
 																					 targetState:2
-																			minimumRequiredState:0
+																			minimumRequiredState:1
 																			 useLinearClassifier:NO];
 		self.forceInteractionProgress.completesAtTargetState = YES;
+		[self.forceInteractionProgress setValue:@(YES) forKey:@"_updateMinimumStateWithTargetState"];
 		[self.forceInteractionProgress _setClassifierShouldRespectSystemGestureTouchFiltering:YES];
 		[self.forceInteractionProgress addProgressObserver:self];
 		[self.forceInteractionProgress _installProgressObserver];
@@ -221,17 +223,8 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 		
 		// Make sure UIPanGestureRecognizer take precendence over UIPreviewForceInteractionProgress (Force Touch)
 		for (UIGestureRecognizer *g in self.referenceView.gestureRecognizers) {
-			
 			if ([NSStringFromClass([g class]) isEqualToString:@"_UITouchesObservingGestureRecognizer"]) {
-				
 				self.forceTouchGestureRecognizer = g;
-				
-				for (UIGestureRecognizer *p in self.referenceView.gestureRecognizers) {
-					if (p != self.forceTouchGestureRecognizer && [p isKindOfClass:[UIPanGestureRecognizer class]]) {
-						[self.forceTouchGestureRecognizer requireGestureRecognizerToFail:p];
-					}
-				}
-				
 				break;
 			}
 		}
@@ -247,8 +240,9 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 //		[self.press requireGestureRecognizerToFail:self.pan];
 		
 	}
-
-	self.titlesClone = [self.titles acapella_copy];
+	
+	
+	self.titlesClone = [[SWAcapellaTitlesClone alloc] init];
 	self.titlesClone.tag = SWAcapellaTitlesStateNone;
 	[self.referenceView addSubview:self.titlesClone];
 	
@@ -282,8 +276,9 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 																  multiplier:1.0
 																	constant:0.0]];
 	
-	[self.referenceView setNeedsDisplay];
-	self.titles.alpha = 0.0;
+	[self.referenceView setNeedsLayout];
+	[self.referenceView layoutIfNeeded];
+	self.titlesClone.titles = self.titles;
 	
 	self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesClone attachedToAnchor:CGPointZero];
 }
@@ -292,24 +287,28 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 - (void)onTap:(UITapGestureRecognizer *)tap
 {
-	CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
-    //CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
-    
-    SEL sel = nil;
-    
-    if (xPercentage <= 0.25) { // left
-        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapleft]);
-    } else if (xPercentage > 0.75) { // right
-        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapright]);
-    } else { // centre
-        sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapcentre]);
-    }
-    
-    if (sel && [self.owner respondsToSelector:sel]) {
-        [self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
-    }
-    
-    SW_PIRACY;
+	if (!self.titlesClone.hidden) { // Don't do anything when titles view is hidden (ex when ratings view is visible)
+		
+		CGFloat xPercentage = [tap locationInView:tap.view].x / CGRectGetWidth(tap.view.bounds);
+		//CGFloat yPercentage = [tap locationInView:tap.view].y / CGRectGetHeight(tap.view.bounds);
+		
+		SEL sel = nil;
+		
+		if (xPercentage <= 0.25) { // left
+			sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapleft]);
+		} else if (xPercentage > 0.75) { // right
+			sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapright]);
+		} else { // centre
+			sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_tapcentre]);
+		}
+		
+		if (sel && [self.owner respondsToSelector:sel]) {
+			[self.owner performSelectorOnMainThread:sel withObject:tap waitUntilDone:NO];
+		}
+		
+		SW_PIRACY;
+		
+	}
 }
 
 - (void)onPan:(UIPanGestureRecognizer *)pan
@@ -319,24 +318,24 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 	}
 	
 	CGPoint panLocation = [pan locationInView:pan.view];
-	panLocation.y = self.titlesClone.center.y;
     
 	if (pan.state == UIGestureRecognizerStateBegan) {
 		
 		self.wrapAroundFallback = nil;
-		self.titlesClone.tag = SWAcapellaTitlesStatePanning;
 		[self.animator removeAllBehaviors];
+		self.titlesClone.tag = SWAcapellaTitlesStatePanning;
 		[self.titlesClone.layer removeAllAnimations];
 		self.titlesClone.transform = CGAffineTransformScale(self.titlesClone.transform, 1.0, 1.0);
+		[self.titlesClone setNeedsDisplay];
 		self._titlesVelocity = CGPointZero;
-		self.titles.alpha = 0.0;
+//		self.titles.layer.opacity = 0.0;
 		
-        self.attachment.anchorPoint = panLocation;
+        self.attachment.anchorPoint = CGPointMake(panLocation.x, self.titlesClone.center.y);
         [self.animator addBehavior:self.attachment];
         
     } else if (pan.state == UIGestureRecognizerStateChanged) {
         
-        self.attachment.anchorPoint = panLocation;
+        self.attachment.anchorPoint = CGPointMake(panLocation.x, self.attachment.anchorPoint.y);
         
     } else if (pan.state == UIGestureRecognizerStateEnded) {
         
@@ -366,16 +365,14 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
                 
 				[weakSelf.animator removeAllBehaviors];
 				weakSelf.titlesCloneCenterXConstraint.constant = offScreenRightX - CGRectGetMidX(self.referenceView.bounds);
-				weakSelf.titlesCloneCenterXConstraint.active = YES;
-                weakSelf.titlesClone.center = CGPointMake(offScreenRightX, weakSelf.titlesClone.center.y);
+				[weakSelf.referenceView setNeedsLayout];
                 [weakSelf didWrapAround:-1 pan:pan];
                 
             } else if (weakSelf.titlesClone.center.x > offScreenRightX) {
                 
 				[weakSelf.animator removeAllBehaviors];
 				weakSelf.titlesCloneCenterXConstraint.constant = offScreenLeftX - CGRectGetMidX(self.referenceView.bounds);
-				weakSelf.titlesCloneCenterXConstraint.active = YES;
-                weakSelf.titlesClone.center = CGPointMake(offScreenLeftX, weakSelf.titlesClone.center.y);
+				[weakSelf.referenceView setNeedsLayout];
                 [weakSelf didWrapAround:1 pan:pan];
                 
             } else {
@@ -403,38 +400,36 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 - (void)pressAtLocation:(CGPoint)location inView:(UIView *)view
 {
-	if (self.titlesClone.hidden) { // Don't do anything when titles view is hidden (ex when ratings view is visible)
-		return;
+	if (!self.titlesClone.hidden) { // Don't do anything when titles view is hidden (ex when ratings view is visible)
+		
+		CGFloat xPercentage = location.x / CGRectGetWidth(view.bounds);
+		//	CGFloat yPercentage = location.y / CGRectGetHeight(view.bounds);
+		
+		SEL sel = nil;
+		
+		if (xPercentage <= 0.25) { // left
+			sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_pressleft]);
+		} else if (xPercentage > 0.75) { // right
+			sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_pressright]);
+		} else { // centre
+			sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_presscentre]);
+		}
+		
+		if (sel && [self.owner respondsToSelector:sel]) {
+			if (!self.titlesClone.hidden) { // Don't do anything when titles view is hidded (ex when ratings view is visible)
+				[self.owner performSelectorOnMainThread:sel withObject:self.press waitUntilDone:NO];
+			}
+		}
+		
+		SW_PIRACY;
+		
 	}
-	
-	CGFloat xPercentage = location.x / CGRectGetWidth(view.bounds);
-//	CGFloat yPercentage = location.y / CGRectGetHeight(view.bounds);
-	
-	SEL sel = nil;
-	
-	if (xPercentage <= 0.25) { // left
-		sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_pressleft]);
-	} else if (xPercentage > 0.75) { // right
-		sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_pressright]);
-	} else { // centre
-		sel = NSSelectorFromString([NSString stringWithFormat:@"%@:", self.owner.acapellaPrefs.gestures_presscentre]);
-	}
-	
-	if (sel && [self.owner respondsToSelector:sel]) {
-//		if (!self.titles.hidden) { // Don't do anything when titles view is hidded (ex when ratings view is visible)
-			[self.owner performSelectorOnMainThread:sel withObject:self.press waitUntilDone:NO];
-//		}
-	}
-	
-	SW_PIRACY;
 }
 
 - (void)interactionProgressDidUpdate:(UIPreviewForceInteractionProgress *)arg1
 {
-	NSLog(@"%@:[%f]", NSStringFromSelector(_cmd), self.forceInteractionProgress.percentComplete);
-	
-	
-	if (self.titlesClone.tag == SWAcapellaTitlesStateNone && self.forceInteractionProgress.percentComplete > 0.2) {
+	if (!self.titlesClone.hidden && self.titlesClone.tag == SWAcapellaTitlesStateNone &&
+		self.forceInteractionProgress.percentComplete > 0.0) {
 		
 		self.titlesClone.tag = SWAcapellaTitlesStateForceScaling;
 		
@@ -442,8 +437,9 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 		self.pan.enabled = NO;
 		
 	} else if (self.titlesClone.tag == SWAcapellaTitlesStateForceScaling) {
-	
+		
 		CGFloat scale = 1.0 + (self.forceInteractionProgress.percentComplete * 0.5);
+		scale = MAX(1.0, scale);
 		self.titlesClone.transform = CGAffineTransformMakeScale(scale, scale);
 		
 	}
@@ -451,20 +447,20 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 - (void)interactionProgress:(UIPreviewForceInteractionProgress *)arg1 didEnd:(BOOL)arg2
 {
-	NSLog(@"%@:[%@]", NSStringFromSelector(_cmd), NSStringFromBool(arg2));
+	if (!self.titlesClone.hidden &&
+		(self.titlesClone.tag == SWAcapellaTitlesStateNone || self.titlesClone.tag == SWAcapellaTitlesStateForceScaling)) {
 	
-	if (self.titlesClone.tag == SWAcapellaTitlesStateForceScaling) {
-	
-		self.titlesClone.transform = CGAffineTransformMakeScale(1.0, 1.0);
+		self.titlesClone.transform = CGAffineTransformIdentity;
+		self.tap.enabled = NO;
+		self.pan.enabled = NO;
 		
 		if (arg2) {
 			[self pressAtLocation:[self.forceTouchGestureRecognizer locationInView:self.referenceView] inView:self.referenceView];
 		}
 		
+		self.titlesClone.tag = SWAcapellaTitlesStateNone;
 		self.tap.enabled = YES;
 		self.pan.enabled = YES;
-		
-		self.titlesClone.tag = SWAcapellaTitlesStateNone;
 	
 	}
 }
@@ -524,7 +520,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
  */
 - (void)didWrapAround:(NSInteger)direction pan:(UIPanGestureRecognizer *)pan
 {
-	self.titles.alpha = 0.0;
+//	self.titles.layer.opacity = 0.0;
 	
 	if (self.titlesClone.tag == SWAcapellaTitlesStatePanning) {
 		
@@ -556,16 +552,17 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 	dispatch_async(dispatch_get_main_queue(), ^(void) {
 		@autoreleasepool {
 			
-			self.titles.alpha = 0.0;
+//			self.titles.layer.opacity = 0.0;
 			self.wrapAroundFallback = nil;
+			
+			// Give text time to update
+			[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate:[NSDate date]];
+			[self.titlesClone setNeedsDisplay];
 			
 			if (self.titlesClone.tag == SWAcapellaTitlesStateWaitingToFinishWrapAround) {
 				
-				// Give text time to update
-				[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate:[NSDate date]];
 				
 				[self.animator removeAllBehaviors];
-				
 				self.titlesClone.tag = SWAcapellaTitlesStateWrappingAround;
 				
 				
@@ -576,7 +573,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 				
 				CGFloat horizontalVelocity = self._titlesVelocity.x;
 				//clamp horizontal velocity to its own width*(variable) per second
-				horizontalVelocity = fminf(fabs(horizontalVelocity), CGRectGetWidth(self.titlesClone.bounds) * 3.5);
+				horizontalVelocity = MIN(fabs(horizontalVelocity), CGRectGetWidth(self.titlesClone.bounds) * 3.5);
 				horizontalVelocity = copysignf(horizontalVelocity, self._titlesVelocity.x);
 				
 				[d addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesClone];
@@ -623,24 +620,32 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 	dispatch_async(dispatch_get_main_queue(), ^(void) {
 		@autoreleasepool {
 			
-			[self.animator removeAllBehaviors];
-			
-			self.titles.alpha = 0.0;
-			self.titlesClone.tag = SWAcapellaTitlesStateNone;
-			self.titlesCloneCenterXConstraint.constant = 0.0;
-			
-			UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
-			d.allowsRotation = NO;
-			d.resistance = 20;
-			[self.animator addBehavior:d];
-			
-			CGPoint snapPoint = CGPointMake(CGRectGetMidX(self.titlesClone.superview.bounds), self.titlesClone.center.y);
-			
-			UISnapBehaviorHorizontal *s = [[UISnapBehaviorHorizontal alloc] initWithItem:self.titlesClone
-																			 snapToPoint:snapPoint];
-			s.damping = 0.15;
-			[self.animator addBehavior:s];
-			
+			if (self.titlesClone.tag == SWAcapellaTitlesStatePanning || self.titlesClone.tag == SWAcapellaTitlesStateWrappingAround) {
+				
+				self.titlesClone.tag = SWAcapellaTitlesStateSnappingToCenter;
+				[self.animator removeAllBehaviors];
+				
+//				self.titles.layer.opacity = 0.0;
+				// Update constraint to the current position of the titles clone
+				self.titlesCloneCenterXConstraint.constant = CGRectGetMidX(self.titlesClone.frame) - CGRectGetMidX(self.referenceView.bounds);
+				[self.referenceView layoutIfNeeded];
+				
+				[UIView animateWithDuration:0.15
+									  delay:0.0
+									options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseOut
+								 animations:^{
+									 
+									 // animate back to the centre
+									 self.titlesCloneCenterXConstraint.constant = 0.0;
+									 [self.referenceView layoutIfNeeded];
+									 
+								 } completion:^(BOOL finished) {
+									 if (finished) {
+										 self.titlesClone.tag = SWAcapellaTitlesStateNone;
+									 }
+								 }];
+				
+			}
 			
 		}
 	});
@@ -651,7 +656,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
     //this method will get called if we stop dragging, but still have our finger down
     //check to see if we are dragging to make sure we dont remove all behaviours
 	
-    if (self.pan.state == UIGestureRecognizerStateChanged && self.titlesClone.tag != SWAcapellaTitlesStateNone) {
+    if (self.titlesClone.tag != SWAcapellaTitlesStateSnappingToCenter) {
         return;
     }
 	
@@ -670,8 +675,9 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 	self.wrapAroundFallback = nil;
 	[self.animator removeAllBehaviors];
 	self._titlesVelocity = CGPointZero;
-	self.titlesCloneCenterXConstraint.constant = 0.0;
 	[self.titlesClone.layer removeAllAnimations];
+	self.titlesCloneCenterXConstraint.constant = 0.0;
+	[self.referenceView setNeedsLayout];
 	[self.titlesClone setNeedsDisplay];
 	
 	[UIView animateWithDuration:0.11

@@ -58,10 +58,10 @@
 		
 		if (layer) {
 			
-//			CGFloat originalOpacity = layer.opacity;
+			// make titles layer visible and render in the clone
 			layer.opacity = 1.0;
 			
-			CGContextSetInterpolationQuality(UIGraphicsGetCurrentContext(), kCGInterpolationNone);
+			CGContextSetInterpolationQuality(UIGraphicsGetCurrentContext(), kCGInterpolationDefault);
 			[layer renderInContext:UIGraphicsGetCurrentContext()];
 			
 			layer.opacity = 0.0;

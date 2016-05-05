@@ -82,13 +82,9 @@
         
         if (self.acapellaPrefs.enabled) {
             
-            [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.titlesView.superview
-                                                          preInitializeAction:^(SWAcapella *a) {
-                                                              
-                                                              a.owner = self;
-                                                              a.titles = self.titlesView;
-                                                              
-                                                          }]
+			[SWAcapella setAcapella:[[SWAcapella alloc] initWithOwner:self
+														referenceView:self.titlesView.superview
+															   titles:self.titlesView]
                           ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
         }
@@ -449,7 +445,7 @@
         [self transportControlsView:self.transportControls tapOnControlType:3];
     //}
     
-    [self.acapella pulseAnimateView];
+    [self.acapella pulse];
 }
 
 %new

@@ -13,7 +13,6 @@
 
 #import "SWAcapellaTitlesClone.h"
 #import "SWAcapellaDelegate.h"
-#import "SWAcapellaTitlesProtocol.h"
 
 #import <UIKit/UIInteractionProgressObserver.h>
 
@@ -46,24 +45,16 @@ typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
 
 // This is the object which keeps a strong reference to this acapella associated object
 @property (weak, nonatomic) UIViewController<SWAcapellaDelegate> *owner;
-
 @property (weak, nonatomic) UIView *referenceView;
-@property (weak, nonatomic) UIView<SWAcapellaTitlesProtocol> *titles;
+@property (weak, nonatomic) UIView *titles;
+
 @property (strong, nonatomic, readonly) SWAcapellaTitlesClone *titlesClone;
 
 @property (strong, nonatomic, readonly) UITapGestureRecognizer *tap;
 @property (strong, nonatomic, readonly) UIPanGestureRecognizer *pan;
 @property (strong, nonatomic, readonly) UILongPressGestureRecognizer *press;
 
-/**
- *  Init an acapella with a reference view. Update the newly created acapellas values before it is fully initialized in preInitializeAction
- *
- *  @param referenceView
- *  @param preInitializeAction
- *
- *  @return SWAcapella
- */
-- (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
+- (id)initWithOwner:(UIViewController<SWAcapellaDelegate> *)owner referenceView:(UIView *)referenceView titles:(UIView *)titles;
 
 /**
  *  Tell Acapella titles view is ready to wrap around and snap back to centre
@@ -72,7 +63,7 @@ typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
 /**
  *  Perform animation that 'pulses' the view. (Increase then decrease in size, like a hearbeat)
  */
-- (void)pulseAnimateView;
+- (void)pulse;
 
 @end
 

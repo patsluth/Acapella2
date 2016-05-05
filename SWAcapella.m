@@ -95,8 +95,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
-@property (readwrite, nonatomic) CGPoint _titlesVelocity;
-
 @end
 
 
@@ -120,6 +118,8 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 + (void)removeAcapella:(SWAcapella *)acapella
 {
     if (acapella) {
+		
+		[[NSNotificationCenter defaultCenter] removeObserver:acapella];
 		
 		acapella.titles.layer.opacity = 1.0;
 		[acapella.titlesClone removeFromSuperview];
@@ -158,38 +158,33 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 #pragma mark - Init
 
-- (id)initWithReferenceView:(UIView *)referenceView preInitializeAction:(void (^)(SWAcapella *a))preInitializeAction;
+- (id)initWithOwner:(UIViewController<SWAcapellaDelegate> *)owner referenceView:(UIView *)referenceView titles:(UIView *)titles
 {
-    if (!referenceView) {
-        NSLog(@"SWAcapella error - Can't create SWAcapella. No referenceView supplied.");
-        return nil;
-    }
-    
-    self = [super init];
-    
-    if (self) {
-        
-        self.referenceView = referenceView;
-        
-        if (preInitializeAction) {
-            preInitializeAction(self);
-        }
-        
-        [self initialize];
-        
-    }
-    
-    return self;
+	NSAssert(owner != nil, @"SWAcapella owner cannot be nil");
+	NSAssert(referenceView != nil, @"SWAcapella referenceView cannot be nil");
+	NSAssert(titles != nil, @"SWAcapella titles cannot be nil");
+	
+	if (self = [super init]) {
+		
+		self.owner = owner;
+		self.referenceView = referenceView;
+		self.titles = titles;
+		
+		[self initialize];
+		
+	}
+	
+	return self;
 }
 
 - (void)initialize
 {
-    if (self.owner == nil || self.referenceView == nil) {
-        NSLog(@"SWAcapella error - owner[%@] and referenceView[%@] cannot be nil", [self.owner class], [self.referenceView class]);
-        return;
-    }
-    
-    [SWAcapella setAcapella:self ForObject:self.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
+	[SWAcapella setAcapella:self ForObject:self.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(applicationDidBecomeActive:)
+												 name:UIApplicationDidBecomeActiveNotification
+											   object:nil];
 	
 	
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
@@ -236,9 +231,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 		self.press.delegate = self;
 		[self.referenceView addGestureRecognizer:self.press];
 		
-//		[self.tap requireGestureRecognizerToFail:self.press];
-//		[self.press requireGestureRecognizerToFail:self.pan];
-		
 	}
 	
 	
@@ -281,6 +273,16 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 	self.titlesClone.titles = self.titles;
 	
 	self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesClone attachedToAnchor:CGPointZero];
+}
+
+#pragma mark - NSNotificationCenter
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+	// Fix for the titles view displaying the incorrect song if the song changes while the app is in the background
+	[self.referenceView setNeedsLayout];
+	[self.referenceView layoutIfNeeded];
+	self.titlesClone.titles = self.titles;
 }
 
 #pragma mark - UIGestureRecognizer
@@ -327,8 +329,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 		[self.titlesClone.layer removeAllAnimations];
 		self.titlesClone.transform = CGAffineTransformScale(self.titlesClone.transform, 1.0, 1.0);
 		[self.titlesClone setNeedsDisplay];
-		self._titlesVelocity = CGPointZero;
-//		self.titles.layer.opacity = 0.0;
+		self.titlesClone.velocity = CGPointZero;
 		
         self.attachment.anchorPoint = CGPointMake(panLocation.x, self.titlesClone.center.y);
         [self.animator addBehavior:self.attachment];
@@ -359,7 +360,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
         
         d.action = ^{
 			
-			weakSelf._titlesVelocity = [weakD linearVelocityForItem:weakSelf.titlesClone];
+			weakSelf.titlesClone.velocity = [weakD linearVelocityForItem:weakSelf.titlesClone];
             
             if (weakSelf.titlesClone.center.x < offScreenLeftX) {
                 
@@ -377,7 +378,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
                 
             } else {
                 
-                CGFloat absoluteXVelocity = fabs(weakSelf._titlesVelocity.x);
+                CGFloat absoluteXVelocity = fabs(weakSelf.titlesClone.velocity.x);
                 
                 //snap to center if we are moving to slow
                 if (absoluteXVelocity < CGRectGetMidX(weakSelf.referenceView.bounds)) {
@@ -425,6 +426,8 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 		
 	}
 }
+
+#pragma mark - UIPreviewForceInteractionProgress
 
 - (void)interactionProgressDidUpdate:(UIPreviewForceInteractionProgress *)arg1
 {
@@ -520,8 +523,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
  */
 - (void)didWrapAround:(NSInteger)direction pan:(UIPanGestureRecognizer *)pan
 {
-//	self.titles.layer.opacity = 0.0;
-	
 	if (self.titlesClone.tag == SWAcapellaTitlesStatePanning) {
 		
 		self.titlesClone.tag = SWAcapellaTitlesStateWaitingToFinishWrapAround;
@@ -552,7 +553,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 	dispatch_async(dispatch_get_main_queue(), ^(void) {
 		@autoreleasepool {
 			
-//			self.titles.layer.opacity = 0.0;
 			self.wrapAroundFallback = nil;
 			
 			// Give text time to update
@@ -571,10 +571,10 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 				[self.animator addBehavior:d];
 				
 				
-				CGFloat horizontalVelocity = self._titlesVelocity.x;
+				CGFloat horizontalVelocity = self.titlesClone.velocity.x;
 				//clamp horizontal velocity to its own width*(variable) per second
 				horizontalVelocity = MIN(fabs(horizontalVelocity), CGRectGetWidth(self.titlesClone.bounds) * 3.5);
-				horizontalVelocity = copysignf(horizontalVelocity, self._titlesVelocity.x);
+				horizontalVelocity = copysignf(horizontalVelocity, self.titlesClone.velocity.x);
 				
 				[d addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesClone];
 				
@@ -607,7 +607,7 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 					
 				};
 				
-				self._titlesVelocity = CGPointZero;
+				self.titlesClone.velocity = CGPointZero;
 				
 			}
 			
@@ -625,7 +625,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 				self.titlesClone.tag = SWAcapellaTitlesStateSnappingToCenter;
 				[self.animator removeAllBehaviors];
 				
-//				self.titles.layer.opacity = 0.0;
 				// Update constraint to the current position of the titles clone
 				self.titlesCloneCenterXConstraint.constant = CGRectGetMidX(self.titlesClone.frame) - CGRectGetMidX(self.referenceView.bounds);
 				[self.referenceView layoutIfNeeded];
@@ -665,16 +664,12 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 #pragma mark - Public
 
-- (void)pulseAnimateView
+- (void)pulse
 {
-//	if (self.titlesClone.tag != SWAcapellaTitlesStateNone || self.animator.running) {
-//		return;
-//	}
-	
 	self.titlesClone.tag = SWAcapellaTitlesStateNone;
 	self.wrapAroundFallback = nil;
 	[self.animator removeAllBehaviors];
-	self._titlesVelocity = CGPointZero;
+	self.titlesClone.velocity = CGPointZero;
 	[self.titlesClone.layer removeAllAnimations];
 	self.titlesCloneCenterXConstraint.constant = 0.0;
 	[self.referenceView setNeedsLayout];

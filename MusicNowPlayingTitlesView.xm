@@ -35,18 +35,6 @@
 	}
 }
 
-#pragma mark - SWAcapellaTitlesProtocol
-
-%new
-- (instancetype)acapella_copy
-{
-	MusicNowPlayingTitlesView *copy = [[[self class] alloc] initWithFrame:self.frame];
-	copy.translatesAutoresizingMaskIntoConstraints = NO;
-	copy.userInteractionEnabled = NO;
-	[copy setAttributedTexts:self.attributedTexts];
-	return copy;
-}
-
 %end
 
 

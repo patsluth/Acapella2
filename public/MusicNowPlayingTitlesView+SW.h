@@ -1,13 +1,11 @@
 
 #import "FuseUI/MusicNowPlayingTitlesView.h"
 
-#import "SWAcapellaTitlesProtocol.h"
 
 
 
 
-
-@interface MusicNowPlayingTitlesView(SW) <SWAcapellaTitlesProtocol>
+@interface MusicNowPlayingTitlesView(SW)
 {
 }
 

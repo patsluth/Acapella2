@@ -74,13 +74,9 @@
         
         if (self.acapellaPrefs.enabled) {
             
-            [SWAcapella setAcapella:[[SWAcapella alloc] initWithReferenceView:self.view
-                                                          preInitializeAction:^(SWAcapella *a) {
-                                                              
-                                                              a.owner = self;
-                                                              a.titles = MPU_SYSTEM_MEDIA_CONTROLS_VIEW.trackInformationView;
-                                                              
-                                                          }]
+			[SWAcapella setAcapella:[[SWAcapella alloc] initWithOwner:self
+														referenceView:self.view
+															   titles:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.trackInformationView]
                           ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
         }
@@ -369,7 +365,7 @@
         [self transportControlsView:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.transportControlsView tapOnControlType:3];
     }
     
-    [self.acapella pulseAnimateView];
+    [self.acapella pulse];
 }
 
 %new

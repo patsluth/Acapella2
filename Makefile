@@ -3,8 +3,8 @@
 
 
 
-FINALPACKAGE = 0
-DEBUG = 1
+FINALPACKAGE = 1
+DEBUG = 0
 PACKAGE_VERSION = 1.1-15
 
 
@@ -25,13 +25,13 @@ TARGET = iphone:clang:latest:7.0
 TWEAK_NAME = Acapella2
 Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
 Acapella2_FILES = MPUMediaControlsTitlesView.xm \
-                    MPUSystemMediaControlsViewController.xm \
+					MPUSystemMediaControlsViewController.xm \
                     MPUTransportControl.xm \
                     MPUTransportControlsView.xm \
-                    MPVolumeController.xm \
-                    MusicMiniPlayerViewController.xm \
-                    MusicNowPlayingTitlesView.xm \
-                    MusicNowPlayingViewController.xm \
+					MPVolumeController.xm \
+					MusicMiniPlayerViewController.xm \
+					MusicNowPlayingTitlesView.xm \
+					MusicNowPlayingViewController.xm \
                     SBLockScreenHintManager.xm \
 					SWAcapella.m \
 					SWAcapellaTitlesClone.m \
@@ -79,7 +79,7 @@ after-install::
 	$(ECHO_NOTHING)install.exec "killall -9 Music > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 	$(ECHO_NOTHING)install.exec "killall -9 Podcasts > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 	$(ECHO_NOTHING)install.exec "killall -9 Preferences > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
-#$(ECHO_NOTHING)install.exec "killall -9 backboardd > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
+	$(ECHO_NOTHING)install.exec "killall -9 backboardd > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 
 
 

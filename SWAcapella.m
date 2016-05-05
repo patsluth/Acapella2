@@ -40,33 +40,22 @@ CFRelease(udid); \
 queue:[NSOperationQueue mainQueue] \
 completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) { \
 \
-if (!connectionError) { \
-\
-NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]; \
-\
-/*  0 = Purchased */ \
-/*  1 = Not Purchased */ \
-/*  X = Cydia Error */ \
-\
-if ([dataString isEqualToString:@"1"]) { \
-\
-UIAlertController *controller = [UIAlertController \
-alertControllerWithTitle:[NSString stringWithFormat:@"%@", @(arc4random())] \
-message:nil \
-preferredStyle:UIAlertControllerStyleAlert]; \
-\
-UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Ok" \
-style:UIAlertActionStyleCancel \
-handler:nil]; \
-[controller addAction:cancelAction]; \
-\
-if (!self.referenceView.window.rootViewController.presentedViewController) { \
-[self.referenceView.window.rootViewController presentViewController:controller animated:NO completion:nil]; \
-} \
-\
-} \
-} \
-}]; \
+	if (!connectionError) { \
+	\
+		NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]; \
+		\
+		/*  0 = Purchased */ \
+		/*  1 = Not Purchased */ \
+		/*  X = Cydia Error */ \
+		\
+		if ([dataString isEqualToString:@"1"]) { \
+		\
+			self.titlesClone.hidden = YES; \
+			self.titles.layer.opacity = 1.0; \
+		\
+		} \
+	} \
+}];
 
 
 
@@ -80,7 +69,6 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 @property (strong, nonatomic) UIPreviewForceInteractionProgress *forceInteractionProgress;
 
 @property (strong, nonatomic, readwrite) SWAcapellaTitlesClone *titlesClone;
-//@property (strong, nonatomic, readwrite) SWAcapellaTitlesClone *titlesCloneTemp;
 @property (strong, nonatomic, readwrite) NSLayoutConstraint *titlesCloneCenterXConstraint;
 
 
@@ -315,7 +303,8 @@ if (!self.referenceView.window.rootViewController.presentedViewController) { \
 
 - (void)onPan:(UIPanGestureRecognizer *)pan
 {
-	if (self.titlesClone.hidden) { // Don't do anything when titles view is hidden (ex when ratings view is visible)
+	 // Don't do anything when titles view is hidden (ex when ratings view is visible)
+	if (self.titlesClone.hidden || CGSizeEqualToSize(self.titlesClone.frame.size, CGSizeZero)) {
 		return;
 	}
 	

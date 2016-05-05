@@ -6,7 +6,12 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2E1EFE6B1CDBB4BD00C474A7 /* Acapella2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E1EFE681CDBB4BD00C474A7 /* Acapella2.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		2E1EFE681CDBB4BD00C474A7 /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Acapella2.plist; sourceTree = "<group>"; };
 		2E5E51801CC3F052004DB6FF /* AcapellaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AcapellaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E5E51971CC3F974004DB6FF /* SWAcapellaDebug.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SWAcapellaDebug.xm; sourceTree = "<group>"; };
 		2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaMediaItemPreviewViewController.xm; sourceTree = "<group>"; };
@@ -51,6 +56,7 @@
 			children = (
 				2EBB75811BE97C5A00A3A82D /* layout */,
 				2EBB75821BE97C5A00A3A82D /* public */,
+				2E1EFE681CDBB4BD00C474A7 /* Acapella2.plist */,
 				2EBB758B1BE97C5A00A3A82D /* Makefile */,
 				2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */,
 				2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */,
@@ -125,6 +131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E1EFE6B1CDBB4BD00C474A7 /* Acapella2.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

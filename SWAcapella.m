@@ -74,7 +74,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
-@property (strong, nonatomic) UIAttachmentBehavior *attachment;
+@property (strong, nonatomic) UIAttachmentBehavior *bAttachment;
 
 @property (strong, nonatomic, readwrite) UITapGestureRecognizer *tap;
 @property (strong, nonatomic, readwrite) UIPanGestureRecognizer *pan;
@@ -119,8 +119,9 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		acapella.forceInteractionProgress = nil;
         
         [acapella.animator removeAllBehaviors];
-        acapella.animator = nil;
-        
+		acapella.animator = nil;
+		acapella.bAttachment = nil;
+		
         [acapella.tap.view removeGestureRecognizer:acapella.tap];
         [acapella.tap removeTarget:nil action:nil];
         acapella.tap = nil;
@@ -256,11 +257,11 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 																  multiplier:1.0
 																	constant:0.0]];
 	
+	[self.referenceView setNeedsUpdateConstraints];
 	[self.referenceView setNeedsLayout];
-	[self.referenceView layoutIfNeeded];
 	self.titlesClone.titles = self.titles;
 	
-	self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesClone attachedToAnchor:CGPointZero];
+	self.bAttachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesClone attachedToAnchor:CGPointZero];
 }
 
 #pragma mark - NSNotificationCenter
@@ -320,40 +321,41 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		[self.titlesClone setNeedsDisplay];
 		self.titlesClone.velocity = CGPointZero;
 		
-        self.attachment.anchorPoint = CGPointMake(panLocation.x, self.titlesClone.center.y);
-        [self.animator addBehavior:self.attachment];
+        self.bAttachment.anchorPoint = CGPointMake(panLocation.x, self.titlesClone.center.y);
+        [self.animator addBehavior:self.bAttachment];
         
     } else if (pan.state == UIGestureRecognizerStateChanged) {
         
-        self.attachment.anchorPoint = CGPointMake(panLocation.x, self.attachment.anchorPoint.y);
+        self.bAttachment.anchorPoint = CGPointMake(panLocation.x, self.bAttachment.anchorPoint.y);
         
     } else if (pan.state == UIGestureRecognizerStateEnded) {
         
-        [self.animator removeBehavior:self.attachment];
+        [self.animator removeBehavior:self.bAttachment];
         
         //velocity after dragging
         CGPoint velocity = [pan velocityInView:pan.view];
         
-        UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
-        d.allowsRotation = NO;
-        d.resistance = 1.8;
+        UIDynamicItemBehavior *bDynamicItem = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
+        bDynamicItem.allowsRotation = NO;
+        bDynamicItem.resistance = 1.8;
         
-        [self.animator addBehavior:d];
-        [d addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titlesClone];
+        [self.animator addBehavior:bDynamicItem];
+        [bDynamicItem addLinearVelocity:CGPointMake(velocity.x, 0.0) forItem:self.titlesClone];
         
         __unsafe_unretained SWAcapella *weakSelf = self;
-        __unsafe_unretained UIDynamicItemBehavior *weakD = d;
+        __unsafe_unretained UIDynamicItemBehavior *weakbDynamicItem = bDynamicItem;
 		
 		CGFloat offScreenRightX = CGRectGetMidX(self.referenceView.bounds) + CGRectGetWidth(self.titlesClone.bounds);
 		CGFloat offScreenLeftX = CGRectGetMidX(self.referenceView.bounds) - CGRectGetWidth(self.titlesClone.bounds);
         
-        d.action = ^{
+        bDynamicItem.action = ^{
 			
-			weakSelf.titlesClone.velocity = [weakD linearVelocityForItem:weakSelf.titlesClone];
+			weakSelf.titlesClone.velocity = [weakbDynamicItem linearVelocityForItem:weakSelf.titlesClone];
             
             if (weakSelf.titlesClone.center.x < offScreenLeftX) {
                 
 				[weakSelf.animator removeAllBehaviors];
+//				weakSelf.titlesClone.center = CGPointMake(offScreenRightX, weakSelf.titlesClone.center.y);
 				weakSelf.titlesCloneCenterXConstraint.constant = offScreenRightX - CGRectGetMidX(self.referenceView.bounds);
 				[weakSelf.referenceView setNeedsLayout];
                 [weakSelf didWrapAround:-1 pan:pan];
@@ -361,6 +363,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
             } else if (weakSelf.titlesClone.center.x > offScreenRightX) {
                 
 				[weakSelf.animator removeAllBehaviors];
+//				weakSelf.titlesClone.center = CGPointMake(offScreenLeftX, weakSelf.titlesClone.center.y);
 				weakSelf.titlesCloneCenterXConstraint.constant = offScreenLeftX - CGRectGetMidX(self.referenceView.bounds);
 				[weakSelf.referenceView setNeedsLayout];
                 [weakSelf didWrapAround:1 pan:pan];
@@ -556,8 +559,8 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 				
 				
 				//add original velocity
-				UIDynamicItemBehavior *d = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
-				[self.animator addBehavior:d];
+				UIDynamicItemBehavior *bDynamicItem = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
+				[self.animator addBehavior:bDynamicItem];
 				
 				
 				CGFloat horizontalVelocity = self.titlesClone.velocity.x;
@@ -565,15 +568,15 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 				horizontalVelocity = MIN(fabs(horizontalVelocity), CGRectGetWidth(self.titlesClone.bounds) * 3.5);
 				horizontalVelocity = copysignf(horizontalVelocity, self.titlesClone.velocity.x);
 				
-				[d addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesClone];
+				[bDynamicItem addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesClone];
 				
 				
 				__unsafe_unretained SWAcapella *weakSelf = self;
-				__unsafe_unretained UIDynamicItemBehavior *weakD = d;
+				__unsafe_unretained UIDynamicItemBehavior *weakbDynamicItem = bDynamicItem;
 				
-				d.action = ^{
+				bDynamicItem.action = ^{
 					
-					CGFloat velocity = [weakD linearVelocityForItem:weakSelf.titlesClone].x;
+					CGFloat velocity = [weakbDynamicItem linearVelocityForItem:weakSelf.titlesClone].x;
 					
 					BOOL toSlow = fabs(velocity) < CGRectGetMidX(weakSelf.referenceView.bounds);
 					
@@ -589,7 +592,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 						//the center have the same sign (-ve && -ve || +ve && +ve)
 						if (((distanceFromCenter < 0) == (velocity < 0))) {
 							//this will cause the toSlow condition to be met much quicker, snapping it to the centre
-							weakD.resistance = 60;
+							weakbDynamicItem.resistance = 60;
 						}
 						
 					}
@@ -606,37 +609,29 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 
 - (void)snapToCenter
 {
-	dispatch_async(dispatch_get_main_queue(), ^(void) {
-		@autoreleasepool {
+	@autoreleasepool {
+		
+		if (self.titlesClone.tag == SWAcapellaTitlesStatePanning || self.titlesClone.tag == SWAcapellaTitlesStateWrappingAround) {
 			
-			if (self.titlesClone.tag == SWAcapellaTitlesStatePanning || self.titlesClone.tag == SWAcapellaTitlesStateWrappingAround) {
-				
-				self.titlesClone.tag = SWAcapellaTitlesStateSnappingToCenter;
-				[self.animator removeAllBehaviors];
-				
-				// Update constraint to the current position of the titles clone
-				self.titlesCloneCenterXConstraint.constant = CGRectGetMidX(self.titlesClone.frame) - CGRectGetMidX(self.referenceView.bounds);
-				[self.referenceView layoutIfNeeded];
-				
-				[UIView animateWithDuration:0.15
-									  delay:0.0
-									options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveEaseOut
-								 animations:^{
-									 
-									 // animate back to the centre
-									 self.titlesCloneCenterXConstraint.constant = 0.0;
-									 [self.referenceView layoutIfNeeded];
-									 
-								 } completion:^(BOOL finished) {
-									 if (finished) {
-										 self.titlesClone.tag = SWAcapellaTitlesStateNone;
-									 }
-								 }];
-				
-			}
+			[self.animator removeAllBehaviors];
+			
+			UIDynamicItemBehavior *bDynamicItem = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
+			bDynamicItem.density = 70.0;
+			bDynamicItem.resistance = 10;
+			bDynamicItem.allowsRotation = NO;
+			bDynamicItem.angularResistance = CGFLOAT_MAX;
+			bDynamicItem.friction = 1.0;
+			[self.animator addBehavior:bDynamicItem];
+			
+			UISnapBehavior *bSnap = [[UISnapBehavior alloc] initWithItem:self.titlesClone snapToPoint:CGPointMake(CGRectGetMidX(self.referenceView.bounds), self.titlesClone.center.y)];
+			bSnap.damping = 0.2;
+			[self.animator addBehavior:bSnap];
+			
+			self.titlesClone.tag = SWAcapellaTitlesStateSnappingToCenter;
 			
 		}
-	});
+		
+	}
 }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
@@ -648,6 +643,8 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
         return;
     }
 	
+	self.titlesClone.tag = SWAcapellaTitlesStateNone;
+	self.titlesCloneCenterXConstraint.constant = 0.0;
     [animator removeAllBehaviors];
 }
 

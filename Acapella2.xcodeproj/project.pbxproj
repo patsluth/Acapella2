@@ -7,13 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E1EFE6B1CDBB4BD00C474A7 /* Acapella2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E1EFE681CDBB4BD00C474A7 /* Acapella2.plist */; };
+		2E8654721CDCF56000CC9F07 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8654711CDCF56000CC9F07 /* main.m */; };
+		2E8654751CDCF56000CC9F07 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8654741CDCF56000CC9F07 /* AppDelegate.m */; };
+		2E8654781CDCF56000CC9F07 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E8654771CDCF56000CC9F07 /* ViewController.m */; };
+		2E86547B1CDCF56000CC9F07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E8654791CDCF56000CC9F07 /* Main.storyboard */; };
+		2E86547D1CDCF56000CC9F07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E86547C1CDCF56000CC9F07 /* Assets.xcassets */; };
+		2E8654801CDCF56000CC9F07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E86547E1CDCF56000CC9F07 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2E1EFE681CDBB4BD00C474A7 /* Acapella2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Acapella2.plist; sourceTree = "<group>"; };
-		2E5E51801CC3F052004DB6FF /* AcapellaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AcapellaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E5E51971CC3F974004DB6FF /* SWAcapellaDebug.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = SWAcapellaDebug.xm; sourceTree = "<group>"; };
+		2E86546E1CDCF56000CC9F07 /* AcapellaTests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcapellaTests.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E8654711CDCF56000CC9F07 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2E8654731CDCF56000CC9F07 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		2E8654741CDCF56000CC9F07 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		2E8654761CDCF56000CC9F07 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		2E8654771CDCF56000CC9F07 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		2E86547A1CDCF56000CC9F07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2E86547C1CDCF56000CC9F07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2E86547F1CDCF56000CC9F07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2E8654811CDCF56000CC9F07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapellaMediaItemPreviewViewController.xm; sourceTree = "<group>"; };
 		2EBB75811BE97C5A00A3A82D /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
 		2EBB75821BE97C5A00A3A82D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
@@ -33,7 +47,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2E5E517D1CC3F052004DB6FF /* Frameworks */ = {
+		2E86546B1CDCF56000CC9F07 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,9 +60,33 @@
 		2E5E51811CC3F052004DB6FF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2E5E51801CC3F052004DB6FF /* AcapellaTests.xctest */,
+				2E86546E1CDCF56000CC9F07 /* AcapellaTests.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2E86546F1CDCF56000CC9F07 /* AcapellaTests */ = {
+			isa = PBXGroup;
+			children = (
+				2E8654731CDCF56000CC9F07 /* AppDelegate.h */,
+				2E8654741CDCF56000CC9F07 /* AppDelegate.m */,
+				2E8654761CDCF56000CC9F07 /* ViewController.h */,
+				2E8654771CDCF56000CC9F07 /* ViewController.m */,
+				2E8654791CDCF56000CC9F07 /* Main.storyboard */,
+				2E86547C1CDCF56000CC9F07 /* Assets.xcassets */,
+				2E86547E1CDCF56000CC9F07 /* LaunchScreen.storyboard */,
+				2E8654811CDCF56000CC9F07 /* Info.plist */,
+				2E8654701CDCF56000CC9F07 /* Supporting Files */,
+			);
+			path = AcapellaTests;
+			sourceTree = "<group>";
+		};
+		2E8654701CDCF56000CC9F07 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2E8654711CDCF56000CC9F07 /* main.m */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		2EBB756F1BE97BB900A3A82D = {
@@ -72,6 +110,7 @@
 				2E5E51971CC3F974004DB6FF /* SWAcapellaDebug.xm */,
 				2E8D83AC1C4457D3007A7F70 /* SWAcapellaMediaItemPreviewViewController.xm */,
 				2EF29A751C3C65BD001032FE /* SWAcapellaPrefs.xm */,
+				2E86546F1CDCF56000CC9F07 /* AcapellaTests */,
 				2E5E51811CC3F052004DB6FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,13 +118,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2E5E517F1CC3F052004DB6FF /* AcapellaTests */ = {
+		2E86546D1CDCF56000CC9F07 /* AcapellaTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2E5E51881CC3F052004DB6FF /* Build configuration list for PBXNativeTarget "AcapellaTests" */;
+			buildConfigurationList = 2E8654821CDCF56000CC9F07 /* Build configuration list for PBXNativeTarget "AcapellaTests" */;
 			buildPhases = (
-				2E5E517C1CC3F052004DB6FF /* Sources */,
-				2E5E517D1CC3F052004DB6FF /* Frameworks */,
-				2E5E517E1CC3F052004DB6FF /* Resources */,
+				2E86546A1CDCF56000CC9F07 /* Sources */,
+				2E86546B1CDCF56000CC9F07 /* Frameworks */,
+				2E86546C1CDCF56000CC9F07 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -93,8 +132,8 @@
 			);
 			name = AcapellaTests;
 			productName = AcapellaTests;
-			productReference = 2E5E51801CC3F052004DB6FF /* AcapellaTests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
+			productReference = 2E86546E1CDCF56000CC9F07 /* AcapellaTests.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -104,7 +143,7 @@
 			attributes = {
 				LastUpgradeCheck = 0730;
 				TargetAttributes = {
-					2E5E517F1CC3F052004DB6FF = {
+					2E86546D1CDCF56000CC9F07 = {
 						CreatedOnToolsVersion = 7.3;
 					};
 				};
@@ -115,43 +154,69 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 2EBB756F1BE97BB900A3A82D;
 			productRefGroup = 2E5E51811CC3F052004DB6FF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2E5E517F1CC3F052004DB6FF /* AcapellaTests */,
+				2E86546D1CDCF56000CC9F07 /* AcapellaTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2E5E517E1CC3F052004DB6FF /* Resources */ = {
+		2E86546C1CDCF56000CC9F07 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E1EFE6B1CDBB4BD00C474A7 /* Acapella2.plist in Resources */,
+				2E8654801CDCF56000CC9F07 /* LaunchScreen.storyboard in Resources */,
+				2E86547D1CDCF56000CC9F07 /* Assets.xcassets in Resources */,
+				2E86547B1CDCF56000CC9F07 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2E5E517C1CC3F052004DB6FF /* Sources */ = {
+		2E86546A1CDCF56000CC9F07 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E8654781CDCF56000CC9F07 /* ViewController.m in Sources */,
+				2E8654751CDCF56000CC9F07 /* AppDelegate.m in Sources */,
+				2E8654721CDCF56000CC9F07 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		2E8654791CDCF56000CC9F07 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2E86547A1CDCF56000CC9F07 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2E86547E1CDCF56000CC9F07 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2E86547F1CDCF56000CC9F07 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
-		2E5E51861CC3F052004DB6FF /* Debug */ = {
+		2E8654831CDCF56000CC9F07 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -186,20 +251,22 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = AcapellaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.patsluth.AcapellaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		2E5E51871CC3F052004DB6FF /* Release */ = {
+		2E8654841CDCF56000CC9F07 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -228,12 +295,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = AcapellaTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.patsluth.AcapellaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -255,14 +323,13 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2E5E51881CC3F052004DB6FF /* Build configuration list for PBXNativeTarget "AcapellaTests" */ = {
+		2E8654821CDCF56000CC9F07 /* Build configuration list for PBXNativeTarget "AcapellaTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2E5E51861CC3F052004DB6FF /* Debug */,
-				2E5E51871CC3F052004DB6FF /* Release */,
+				2E8654831CDCF56000CC9F07 /* Debug */,
+				2E8654841CDCF56000CC9F07 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		2EBB75731BE97BB900A3A82D /* Build configuration list for PBXProject "Acapella2" */ = {
 			isa = XCConfigurationList;

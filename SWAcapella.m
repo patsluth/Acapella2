@@ -349,8 +349,8 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
         __unsafe_unretained SWAcapella *weakSelf = self;
         __unsafe_unretained UIDynamicItemBehavior *weakbDynamicItem = bDynamicItem;
 		
-		CGFloat offScreenRightX = CGRectGetMidX(self.referenceView.bounds) + CGRectGetWidth(self.titlesClone.bounds);
-		CGFloat offScreenLeftX = CGRectGetMidX(self.referenceView.bounds) - CGRectGetWidth(self.titlesClone.bounds);
+		CGFloat offScreenRightX = CGRectGetMaxX(self.referenceView.bounds) + CGRectGetMidX(self.titlesClone.bounds);
+		CGFloat offScreenLeftX = CGRectGetMinX(self.referenceView.bounds) - CGRectGetMidX(self.titlesClone.bounds);
         
         bDynamicItem.action = ^{
 			

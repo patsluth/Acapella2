@@ -386,5 +386,53 @@
 	<true/>
 	<key>acapella2_vertex_volumeslider</key>
 	<true/>
+	<key>acapella2_widux_enabled</key>
+	<true/>
+	<key>acapella2_widux_gestures_presscentre</key>
+	<string>action_openapp</string>
+	<key>acapella2_widux_gestures_pressleft</key>
+	<string>action_intervalrewind</string>
+	<key>acapella2_widux_gestures_pressright</key>
+	<string>action_intervalforward</string>
+	<key>acapella2_widux_gestures_swipeleft</key>
+	<string>action_nexttrack</string>
+	<key>acapella2_widux_gestures_swiperight</key>
+	<string>action_previoustrack</string>
+	<key>acapella2_widux_gestures_tapcentre</key>
+	<string>action_playpause</string>
+	<key>acapella2_widux_gestures_tapleft</key>
+	<string>action_decreasevolume</string>
+	<key>acapella2_widux_gestures_tapright</key>
+	<string>action_increasevolume</string>
+	<key>acapella2_widux_progressslider</key>
+	<true/>
+	<key>acapella2_widux_transport_contextual</key>
+	<true/>
+	<key>acapella2_widux_transport_heart</key>
+	<true/>
+	<key>acapella2_widux_transport_intervalforward</key>
+	<false/>
+	<key>acapella2_widux_transport_intervalrewind</key>
+	<false/>
+	<key>acapella2_widux_transport_nexttrack</key>
+	<false/>
+	<key>acapella2_widux_transport_playbackrate</key>
+	<true/>
+	<key>acapella2_widux_transport_playpause</key>
+	<false/>
+	<key>acapella2_widux_transport_previoustrack</key>
+	<false/>
+	<key>acapella2_widux_transport_repeat</key>
+	<true/>
+	<key>acapella2_widux_transport_share</key>
+	<true/>
+	<key>acapella2_widux_transport_shuffle</key>
+	<true/>
+	<key>acapella2_widux_transport_sleeptimer</key>
+	<true/>
+	<key>acapella2_widux_transport_upnext</key>
+	<true/>
+	<key>acapella2_widux_volumeslider</key>
+	<true/>
 </dict>
 </plist>

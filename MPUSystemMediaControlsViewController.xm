@@ -144,7 +144,7 @@
 %new
 - (NSString *)acapellaKeyPrefix
 {
-    UIView *curView = self.view.superview;
+    UIView *curView = self.view;
     
     while (curView) {
         
@@ -193,10 +193,9 @@
 				return @"seng";
 			}
 			
-			// TODO:RENAME
-			// Widget
-			if (curView.tag == 4510) {
-				return @"widget";
+			// Widux
+			if (curView.tag == 4510) { // Value supplied by Widux dev Andrew Wiik
+				return @"widux";
 			}
 			
 		}

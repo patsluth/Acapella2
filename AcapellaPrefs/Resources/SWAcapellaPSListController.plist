@@ -44,7 +44,7 @@
 			<key>key</key>
 			<string>acapella2_musicnowplaying</string>
 			<key>label</key>
-			<string>Music/Podcasts (Now Playing)</string>
+			<string>Music (Now Playing)</string>
 			<key>defaults</key>
 			<string>com.patsluth.acapella2</string>
 		</dict>
@@ -58,7 +58,7 @@
 			<key>key</key>
 			<string>acapella2_musicmini</string>
 			<key>label</key>
-			<string>Music/Podcasts (Mini Player)</string>
+			<string>Music (Mini Player)</string>
 			<key>defaults</key>
 			<string>com.patsluth.acapella2</string>
 		</dict>
@@ -121,6 +121,20 @@
 			<string>acapella2_seng</string>
 			<key>label</key>
 			<string>Seng</string>
+			<key>defaults</key>
+			<string>com.patsluth.acapella2</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>SWAPSListController_Instance</string>
+			<key>isController</key>
+			<string>1</string>
+			<key>key</key>
+			<string>acapella2_widux</string>
+			<key>label</key>
+			<string>Widux</string>
 			<key>defaults</key>
 			<string>com.patsluth.acapella2</string>
 		</dict>

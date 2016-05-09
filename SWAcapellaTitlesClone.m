@@ -37,6 +37,13 @@
 	return self;
 }
 
+- (void)setHidden:(BOOL)hidden
+{
+	[super setHidden:hidden];
+	
+	[self setNeedsDisplay];
+}
+
 - (void)setTitles:(UIView *)titles
 {
 	_titles = titles;

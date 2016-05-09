@@ -32,7 +32,7 @@
 {
 	// Dont override if we dont have an acapella (disabled in this section)
 	// TODO: Localization
-	if (arg1.count == 0) {
+	if (![arg1 valueForKey:@"kMRMediaRemoteNowPlayingInfoTitle"]) { // No media item
 		
 		SWAcapellaPrefs *acapellaPrefs = objc_getAssociatedObject(self, @selector(_acapellaPrefs));
 		

@@ -193,6 +193,12 @@
 				return @"seng";
 			}
 			
+			// TODO:RENAME
+			// Widget
+			if (curView.tag == 4510) {
+				return @"widget";
+			}
+			
 		}
 		
         curView = curView.superview;
@@ -532,18 +538,15 @@
 
 - (void)layoutSubviews
 {
-//	SWAcapella *acapella = [SWAcapella acapellaForObject:self.trackInformationView];
-	
-	
     %orig();
 	
 	
-    //intelligently calcualate centre based on visible controls
+    // Calcualate centre based on visible controls
     if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
         
         CGFloat topGuideline = 0;
         
-        if (self.timeInformationView.layer.opacity > 0.0) { //visible
+        if (self.timeInformationView.layer.opacity > 0.0) { // Visible
             topGuideline += CGRectGetMaxY(self.timeInformationView.frame);
         }
         
@@ -553,16 +556,16 @@
         if (![self.transportControlsView acapella_hidden]) {
             bottomGuideline = CGRectGetMinY(self.transportControlsView.frame);
         } else {
-            if (self.volumeView.layer.opacity > 0.0) { //visible
+            if (self.volumeView.layer.opacity > 0.0) { // Visible
                 bottomGuideline = CGRectGetMinY(self.volumeView.frame);
             }
         }
         
         
-        //the midpoint between the currently visible views. This is where we will place our titles
-        NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
-        self.trackInformationView.center = CGPointMake(self.trackInformationView.center.x, midPoint);
-        
+        // The midpoint between the currently visible views. This is where we will place our titles
+        NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) * 0.5));
+		self.trackInformationView.center = CGPointMake(self.trackInformationView.center.x, midPoint);
+		
     }
 }
 

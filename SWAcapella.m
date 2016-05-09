@@ -259,6 +259,8 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 	
 	[self.referenceView setNeedsUpdateConstraints];
 	[self.referenceView setNeedsLayout];
+	
+	self.titlesClone.frame = self.titles.frame;
 	self.titlesClone.titles = self.titles;
 	
 	self.bAttachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesClone attachedToAnchor:CGPointZero];
@@ -271,6 +273,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 	// Fix for the titles view displaying the incorrect song if the song changes while the app is in the background
 	[self.referenceView setNeedsLayout];
 	[self.referenceView layoutIfNeeded];
+	self.titlesClone.frame = self.titles.frame;
 	self.titlesClone.titles = self.titles;
 }
 
@@ -305,7 +308,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 - (void)onPan:(UIPanGestureRecognizer *)pan
 {
 	 // Don't do anything when titles view is hidden (ex when ratings view is visible)
-	if (self.titlesClone.hidden || CGSizeEqualToSize(self.titlesClone.frame.size, CGSizeZero)) {
+	if (self.titlesClone.hidden || CGRectGetWidth(self.titlesClone.frame) == 0.0 || CGRectGetHeight(self.titlesClone.frame) == 0.0) {
 		return;
 	}
 	
@@ -318,6 +321,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		self.titlesClone.tag = SWAcapellaTitlesStatePanning;
 		[self.titlesClone.layer removeAllAnimations];
 		self.titlesClone.transform = CGAffineTransformScale(self.titlesClone.transform, 1.0, 1.0);
+		self.titles.layer.opacity = 0.0;
 		[self.titlesClone setNeedsDisplay];
 		self.titlesClone.velocity = CGPointZero;
 		
@@ -355,18 +359,18 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
             if (weakSelf.titlesClone.center.x < offScreenLeftX) {
                 
 				[weakSelf.animator removeAllBehaviors];
-//				weakSelf.titlesClone.center = CGPointMake(offScreenRightX, weakSelf.titlesClone.center.y);
+				weakSelf.titlesClone.center = CGPointMake(offScreenRightX, weakSelf.titlesClone.center.y);
 				weakSelf.titlesCloneCenterXConstraint.constant = offScreenRightX - CGRectGetMidX(self.referenceView.bounds);
 				[weakSelf.referenceView setNeedsLayout];
-                [weakSelf didWrapAround:-1 pan:pan];
+                [weakSelf didWrapAround:-1];
                 
             } else if (weakSelf.titlesClone.center.x > offScreenRightX) {
                 
 				[weakSelf.animator removeAllBehaviors];
-//				weakSelf.titlesClone.center = CGPointMake(offScreenLeftX, weakSelf.titlesClone.center.y);
+				weakSelf.titlesClone.center = CGPointMake(offScreenLeftX, weakSelf.titlesClone.center.y);
 				weakSelf.titlesCloneCenterXConstraint.constant = offScreenLeftX - CGRectGetMidX(self.referenceView.bounds);
 				[weakSelf.referenceView setNeedsLayout];
-                [weakSelf didWrapAround:1 pan:pan];
+                [weakSelf didWrapAround:1];
                 
             } else {
                 
@@ -513,11 +517,12 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
  *  @param direction left=(<0) right=(>0)
  *  @param pan UIPanGestureRecognizer that performed the wrap around
  */
-- (void)didWrapAround:(NSInteger)direction pan:(UIPanGestureRecognizer *)pan
+- (void)didWrapAround:(NSInteger)direction
 {
 	if (self.titlesClone.tag == SWAcapellaTitlesStatePanning) {
 		
 		self.titlesClone.tag = SWAcapellaTitlesStateWaitingToFinishWrapAround;
+		self.titles.layer.opacity = 0.0;
 		
 		SEL sel = nil;
 		
@@ -528,7 +533,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		}
 		
 		if (sel && [self.owner respondsToSelector:sel]) {
-			[self.owner performSelectorOnMainThread:sel withObject:pan waitUntilDone:NO];
+			[self.owner performSelectorOnMainThread:sel withObject:self.pan waitUntilDone:NO];
 		}
 		
 		
@@ -553,10 +558,8 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 			
 			if (self.titlesClone.tag == SWAcapellaTitlesStateWaitingToFinishWrapAround) {
 				
-				
-				[self.animator removeAllBehaviors];
 				self.titlesClone.tag = SWAcapellaTitlesStateWrappingAround;
-				
+				[self.animator removeAllBehaviors];
 				
 				//add original velocity
 				UIDynamicItemBehavior *bDynamicItem = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
@@ -609,6 +612,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 
 - (void)snapToCenter
 {
+	dispatch_async(dispatch_get_main_queue(), ^(void) {
 	@autoreleasepool {
 		
 		if (self.titlesClone.tag == SWAcapellaTitlesStatePanning || self.titlesClone.tag == SWAcapellaTitlesStateWrappingAround) {
@@ -617,14 +621,14 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 			
 			UIDynamicItemBehavior *bDynamicItem = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
 			bDynamicItem.density = 70.0;
-			bDynamicItem.resistance = 10;
+			bDynamicItem.resistance = 5;
 			bDynamicItem.allowsRotation = NO;
 			bDynamicItem.angularResistance = CGFLOAT_MAX;
 			bDynamicItem.friction = 1.0;
 			[self.animator addBehavior:bDynamicItem];
 			
 			UISnapBehavior *bSnap = [[UISnapBehavior alloc] initWithItem:self.titlesClone snapToPoint:CGPointMake(CGRectGetMidX(self.referenceView.bounds), self.titlesClone.center.y)];
-			bSnap.damping = 0.2;
+			bSnap.damping = 0.3;
 			[self.animator addBehavior:bSnap];
 			
 			self.titlesClone.tag = SWAcapellaTitlesStateSnappingToCenter;
@@ -632,6 +636,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		}
 		
 	}
+	});
 }
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
@@ -645,6 +650,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 	
 	self.titlesClone.tag = SWAcapellaTitlesStateNone;
 	self.titlesCloneCenterXConstraint.constant = 0.0;
+	self.titlesClone.center = CGPointMake(CGRectGetMidX(self.referenceView.bounds), self.titlesClone.center.y);
     [animator removeAllBehaviors];
 }
 
@@ -657,6 +663,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 	[self.animator removeAllBehaviors];
 	self.titlesClone.velocity = CGPointZero;
 	[self.titlesClone.layer removeAllAnimations];
+	self.titlesClone.frame = self.titles.frame;
 	self.titlesCloneCenterXConstraint.constant = 0.0;
 	[self.referenceView setNeedsLayout];
 	[self.titlesClone setNeedsDisplay];

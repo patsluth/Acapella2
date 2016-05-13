@@ -86,14 +86,6 @@
     
     if (self.acapella) {
         
-        
-        for (UIView *v in self.acapella.titles.subviews) { //button that handles titles tap
-            if ([v isKindOfClass:[UIButton class]]) {
-                UIButton *b = (UIButton *)v;
-                b.enabled = NO;
-            }
-        }
-        
         // Show/Hide progress slider
         if (self.acapellaPrefs.enabled && !self.acapellaPrefs.progressslider) {
             MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 0.0;
@@ -110,14 +102,7 @@
         
         
     } else { //restore original state
-        
-        for (UIView *v in self.acapella.titles.subviews) { //button that handles titles tap
-            if ([v isKindOfClass:[UIButton class]]) {
-                UIButton *b = (UIButton *)v;
-                b.enabled = YES;
-            }
-        }
-        
+		
         MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 1.0;
         MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 1.0;
         
@@ -144,7 +129,7 @@
 %new
 - (NSString *)acapellaKeyPrefix
 {
-    UIView *curView = self.view;
+    UIView *curView = self.view.superview;
     
     while (curView) {
         

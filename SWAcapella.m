@@ -109,6 +109,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		
 		[[NSNotificationCenter defaultCenter] removeObserver:acapella];
 		
+		acapella.titles.userInteractionEnabled = YES;
 		acapella.titles.layer.opacity = 1.0;
 		[acapella.titlesClone removeFromSuperview];
 		acapella.titlesClone = nil;
@@ -175,6 +176,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 												 name:UIApplicationDidBecomeActiveNotification
 											   object:nil];
 	
+	self.titles.userInteractionEnabled = NO;
 	
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.referenceView];
     self.animator.delegate = self;

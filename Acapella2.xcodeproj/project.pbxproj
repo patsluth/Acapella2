@@ -330,6 +330,7 @@
 				2E8654841CDCF56000CC9F07 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2EBB75731BE97BB900A3A82D /* Build configuration list for PBXProject "Acapella2" */ = {
 			isa = XCConfigurationList;

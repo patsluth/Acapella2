@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
 
 
 + (SWAcapella *)acapellaForObject:(id)object;
-+ (void)setAcapella:(SWAcapella *)acapella ForObject:(id)object withPolicy:(objc_AssociationPolicy)policy;
++ (void)setAcapella:(SWAcapella *)acapella forObject:(id)object withPolicy:(objc_AssociationPolicy)policy;
 + (void)removeAcapella:(SWAcapella *)acapella;
 
 

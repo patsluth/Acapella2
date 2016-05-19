@@ -85,7 +85,7 @@
 			[SWAcapella setAcapella:[[SWAcapella alloc] initWithOwner:self
 														referenceView:self.titlesView.superview
 															   titles:self.titlesView]
-                          ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+                          forObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
         }
         
@@ -175,7 +175,7 @@
 	
 	
 	// The midpoint between the currently visible views. This is where we will place our titles
-	NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) / 2.0));
+	NSInteger midPoint = (topGuideline + (ABS(topGuideline - bottomGuideline) / 2.0));
 	self.titlesView.center = CGPointMake(self.titlesView.center.x, midPoint);
 	
 }
@@ -303,18 +303,19 @@
     return %orig(arg1, arg2);
 }
 
-- (void)_handleTapGestureRecognizerAction:(UITapGestureRecognizer *)arg1 //tap on artwork
-{
-	if (self.acapella) {
-		
-		// touch is on the artwork view
-		if (![[arg1.view hitTest:[arg1 locationInView:arg1.view] withEvent:nil] isDescendantOfView:self.currentItemViewControllerContainerView]) {
-			return;
-		}
-	}
-	
-	%orig(arg1);
-}
+//- (void)_handleTapGestureRecognizerAction:(UITapGestureRecognizer *)arg1 //tap on artwork
+//{
+//	if (self.acapella) {
+//		
+//		// touch is on the artwork view
+//		if (![[arg1.view hitTest:[arg1 locationInView:arg1.view] withEvent:nil]
+//			  isDescendantOfView:self.currentItemViewControllerContainerView]) {
+//			return;
+//		}
+//	}
+//	
+//	%orig(arg1);
+//}
 
 /**
  *  Called when dismissing the UpNext view controller
@@ -584,13 +585,6 @@
 {
     objc_setAssociatedObject(self, @selector(_acapellaPrefs), acapellaPrefs, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
-
-#pragma mark - Testing
-
-//- (void)_setRatingsVisible:(BOOL)arg1
-//{
-//	%orig(arg1);
-//}
 
 %end
 

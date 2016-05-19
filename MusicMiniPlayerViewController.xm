@@ -75,7 +75,7 @@
 			[SWAcapella setAcapella:[[SWAcapella alloc] initWithOwner:self
 														referenceView:self.view
 															   titles:self.titlesView]
-                          ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+                          forObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
         }
         

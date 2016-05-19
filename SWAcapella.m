@@ -15,7 +15,7 @@
 #import "libsw/libSluthware/NSTimer+SW.h"
 #import "libsw/libSluthware/SWPrefs.h"
 
-#import "UIKit/UIPreviewForceInteractionProgress.h"
+//#import "UIKit/UIPreviewForceInteractionProgress.h"
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <MobileGestalt/MobileGestalt.h>
@@ -25,10 +25,12 @@
 
 
 
-#define SW_PIRACY NSURL *url = [NSURL URLWithString:@"https://saurik.sluthware.com"]; \
+#define SW_PIRACY NSURL \
+\
+*url = [NSURL URLWithString:@"https://saurik.sluthware.com"]; \
 NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url \
-cachePolicy:NSURLRequestReloadIgnoringCacheData \
-timeoutInterval:60.0]; \
+														  cachePolicy:NSURLRequestReloadIgnoringCacheData \
+													  timeoutInterval:60.0]; \
 [urlRequest setHTTPMethod:@"POST"]; \
 \
 CFStringRef udid = (CFStringRef)MGCopyAnswer(kMGUniqueDeviceID); \
@@ -37,8 +39,8 @@ NSString *postString = [NSString stringWithFormat:@"udid=%@&packageID=%@", udid,
 CFRelease(udid); \
 \
 [NSURLConnection sendAsynchronousRequest:urlRequest \
-queue:[NSOperationQueue mainQueue] \
-completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) { \
+								   queue:[NSOperationQueue mainQueue] \
+					   completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) { \
 \
 	if (!connectionError) { \
 	\
@@ -65,13 +67,8 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 {
 }
 
-//@property (strong, nonatomic) id<UIViewControllerPreviewing> previewingContext;
-@property (strong, nonatomic) UIPreviewForceInteractionProgress *forceInteractionProgress;
-
 @property (strong, nonatomic, readwrite) SWAcapellaTitlesClone *titlesClone;
 @property (strong, nonatomic, readwrite) NSLayoutConstraint *titlesCloneCenterXConstraint;
-
-
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIAttachmentBehavior *bAttachment;
@@ -80,6 +77,9 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 @property (strong, nonatomic, readwrite) UIPanGestureRecognizer *pan;
 @property (strong, nonatomic, readwrite) UILongPressGestureRecognizer *press;
 @property (weak, nonatomic, readwrite) UIGestureRecognizer *forceTouchGestureRecognizer;
+
+//@property (strong, nonatomic) id<UIViewControllerPreviewing> previewingContext;
+@property (strong, nonatomic) id /*UIPreviewForceInteractionProgress*/ forceInteractionProgress;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -91,14 +91,14 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 
 @implementation SWAcapella
 
-#pragma mark - Associated Objects
+#pragma mark - SWAcapella
 
 + (SWAcapella *)acapellaForObject:(id)object
 {
     return objc_getAssociatedObject(object, @selector(_acapella));
 }
 
-+ (void)setAcapella:(SWAcapella *)acapella ForObject:(id)object withPolicy:(objc_AssociationPolicy)policy
++ (void)setAcapella:(SWAcapella *)acapella forObject:(id)object withPolicy:(objc_AssociationPolicy)policy
 {
     objc_setAssociatedObject(object, @selector(_acapella), acapella, policy);
 }
@@ -114,11 +114,11 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		[acapella.titlesClone removeFromSuperview];
 		acapella.titlesClone = nil;
 		
-		if (acapella.forceInteractionProgress) {
-			[acapella.forceInteractionProgress removeProgressObserver:acapella];
-		}
-		acapella.forceInteractionProgress = nil;
-        
+//		if (acapella.forceInteractionProgress) {
+//			[acapella.forceInteractionProgress removeProgressObserver:acapella];
+//		}
+//		acapella.forceInteractionProgress = nil;
+		
         [acapella.animator removeAllBehaviors];
 		acapella.animator = nil;
 		acapella.bAttachment = nil;
@@ -142,13 +142,15 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 		
     }
     
-    [SWAcapella setAcapella:nil ForObject:acapella.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
-    [SWAcapella setAcapella:nil ForObject:acapella.owner withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+    [SWAcapella setAcapella:nil forObject:acapella.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
+    [SWAcapella setAcapella:nil forObject:acapella.owner withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
 }
 
 #pragma mark - Init
 
-- (id)initWithOwner:(UIViewController<SWAcapellaDelegate> *)owner referenceView:(UIView *)referenceView titles:(UIView *)titles
+- (id)initWithOwner:(UIViewController<SWAcapellaDelegate> *)owner
+	  referenceView:(UIView *)referenceView
+			 titles:(UIView *)titles
 {
 	NSAssert(owner != nil, @"SWAcapella owner cannot be nil");
 	NSAssert(referenceView != nil, @"SWAcapella referenceView cannot be nil");
@@ -169,7 +171,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 
 - (void)initialize
 {
-	[SWAcapella setAcapella:self ForObject:self.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
+	[SWAcapella setAcapella:self forObject:self.titles withPolicy:OBJC_ASSOCIATION_ASSIGN];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(applicationDidBecomeActive:)
@@ -191,32 +193,38 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
     [self.referenceView addGestureRecognizer:self.pan];
 	
 	
-	if ([self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
-		(self.owner.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)) {
+//	if (NSClassFromString(@"UIPreviewForceInteractionProgress")) {
+//		if ([self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+//			(self.owner.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)) {
+//			
+//			//		self.previewingContext = [self.owner registerForPreviewingWithDelegate:self.owner sourceView:self.referenceView];
+//			
+//			UIPreviewForceInteractionProgress *forceInteractionProgress;
+//			forceInteractionProgress = [[UIPreviewForceInteractionProgress alloc] _initWithView:self.referenceView
+//																					targetState:2
+//																		   minimumRequiredState:1
+//																			useLinearClassifier:NO];
+//			
+//			forceInteractionProgress.completesAtTargetState = YES;
+//			[forceInteractionProgress setValue:@(YES) forKey:@"_updateMinimumStateWithTargetState"];
+//			[forceInteractionProgress _setClassifierShouldRespectSystemGestureTouchFiltering:YES];
+//			[forceInteractionProgress addProgressObserver:self];
+//			[forceInteractionProgress _installProgressObserver];
+//			
+//			self.forceInteractionProgress = forceInteractionProgress;
+//			
+//			// Make sure UIPanGestureRecognizer take precendence over UIPreviewForceInteractionProgress (Force Touch)
+//			for (UIGestureRecognizer *g in self.referenceView.gestureRecognizers) {
+//				if ([NSStringFromClass([g class]) isEqualToString:@"_UITouchesObservingGestureRecognizer"]) {
+//					self.forceTouchGestureRecognizer = g;
+//					break;
+//				}
+//			}
+//		}
+//	}
+	
 		
-//		self.previewingContext = [self.owner registerForPreviewingWithDelegate:self.owner sourceView:self.referenceView];
-		
-		self.forceInteractionProgress = [[UIPreviewForceInteractionProgress alloc] _initWithView:self.referenceView
-																					 targetState:2
-																			minimumRequiredState:1
-																			 useLinearClassifier:NO];
-		self.forceInteractionProgress.completesAtTargetState = YES;
-		[self.forceInteractionProgress setValue:@(YES) forKey:@"_updateMinimumStateWithTargetState"];
-		[self.forceInteractionProgress _setClassifierShouldRespectSystemGestureTouchFiltering:YES];
-		[self.forceInteractionProgress addProgressObserver:self];
-		[self.forceInteractionProgress _installProgressObserver];
-		
-		
-		// Make sure UIPanGestureRecognizer take precendence over UIPreviewForceInteractionProgress (Force Touch)
-		for (UIGestureRecognizer *g in self.referenceView.gestureRecognizers) {
-			if ([NSStringFromClass([g class]) isEqualToString:@"_UITouchesObservingGestureRecognizer"]) {
-				self.forceTouchGestureRecognizer = g;
-				break;
-			}
-		}
-		
-		
-	} else {
+	if (!self.forceInteractionProgress) {
 	
 		self.press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onPress:)];
 		self.press.delegate = self;
@@ -268,15 +276,33 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 	self.bAttachment = [[UIAttachmentBehavior alloc] initWithItem:self.titlesClone attachedToAnchor:CGPointZero];
 }
 
-#pragma mark - NSNotificationCenter
+#pragma mark - UIGestureRecognizerDelegate
 
-- (void)applicationDidBecomeActive:(NSNotification *)notification
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-	// Fix for the titles view displaying the incorrect song if the song changes while the app is in the background
-	[self.referenceView setNeedsLayout];
-	[self.referenceView layoutIfNeeded];
-	self.titlesClone.frame = self.titles.frame;
-	self.titlesClone.titles = self.titles;
+	@autoreleasepool {
+		
+		if (gestureRecognizer == self.tap || gestureRecognizer == self.pan) {
+			
+			BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
+			return isControl ? !((UIControl *)touch.view).enabled : !isControl;
+		}
+		
+		return YES;
+		
+	}
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+	if (gestureRecognizer == self.pan) {
+		
+		CGPoint panVelocity = [self.pan velocityInView:self.pan.view];
+		return (ABS(panVelocity.x) > ABS(panVelocity.y)); // Only accept horizontal pans
+		
+	}
+	
+	return YES;
 }
 
 #pragma mark - UIGestureRecognizer
@@ -376,7 +402,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
                 
             } else {
                 
-                CGFloat absoluteXVelocity = fabs(weakSelf.titlesClone.velocity.x);
+                CGFloat absoluteXVelocity = ABS(weakSelf.titlesClone.velocity.x);
                 
                 //snap to center if we are moving to slow
                 if (absoluteXVelocity < CGRectGetMidX(weakSelf.referenceView.bounds)) {
@@ -427,88 +453,46 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 
 #pragma mark - UIPreviewForceInteractionProgress
 
-- (void)interactionProgressDidUpdate:(UIPreviewForceInteractionProgress *)arg1
-{
-	if (!self.titlesClone.hidden && self.titlesClone.tag == SWAcapellaTitlesStateNone &&
-		self.forceInteractionProgress.percentComplete > 0.0) {
-		
-		self.titlesClone.tag = SWAcapellaTitlesStateForceScaling;
-		
-		self.tap.enabled = NO;
-		self.pan.enabled = NO;
-		
-	} else if (self.titlesClone.tag == SWAcapellaTitlesStateForceScaling) {
-		
-		CGFloat scale = 1.0 + (self.forceInteractionProgress.percentComplete * 0.5);
-		scale = MAX(1.0, scale);
-		self.titlesClone.transform = CGAffineTransformMakeScale(scale, scale);
-		
-	}
-}
-
-- (void)interactionProgress:(UIPreviewForceInteractionProgress *)arg1 didEnd:(BOOL)arg2
-{
-	if (!self.titlesClone.hidden &&
-		(self.titlesClone.tag == SWAcapellaTitlesStateNone || self.titlesClone.tag == SWAcapellaTitlesStateForceScaling)) {
-	
-		self.titlesClone.transform = CGAffineTransformIdentity;
-		self.tap.enabled = NO;
-		self.pan.enabled = NO;
-		
-		if (arg2) {
-			[self pressAtLocation:[self.forceTouchGestureRecognizer locationInView:self.referenceView] inView:self.referenceView];
-		}
-		
-		self.titlesClone.tag = SWAcapellaTitlesStateNone;
-		self.tap.enabled = YES;
-		self.pan.enabled = YES;
-	
-	}
-}
-
-#pragma mark - UIGestureRecognizerDelegate
-
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-//shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+//- (void)interactionProgressDidUpdate:(UIPreviewForceInteractionProgress *)arg1
 //{
-//	return YES;
+//	if (!self.titlesClone.hidden &&
+//		self.titlesClone.tag == SWAcapellaTitlesStateNone &&
+//		arg1.percentComplete > 0.0) {
+//		
+//		self.titlesClone.tag = SWAcapellaTitlesStateForceScaling;
+//		
+//		self.tap.enabled = NO;
+//		self.pan.enabled = NO;
+//		
+//	} else if (self.titlesClone.tag == SWAcapellaTitlesStateForceScaling) {
+//		
+//		CGFloat scale = 1.0 + (arg1.percentComplete * 0.5);
+//		scale = MAX(1.0, scale);
+//		self.titlesClone.transform = CGAffineTransformMakeScale(scale, scale);
+//		
+//	}
 //}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-	@autoreleasepool {
-		
-		if (gestureRecognizer == self.tap || gestureRecognizer == self.pan) {
-			
-			BOOL isControl = [touch.view isKindOfClass:[UIControl class]];
-			return isControl ? !((UIControl *)touch.view).enabled : !isControl;
-		}
-		
-		return YES;
-		
-	}
-}
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer == self.pan) {
-        
-        CGPoint panVelocity = [self.pan velocityInView:self.pan.view];
-        return (fabs(panVelocity.x) > fabs(panVelocity.y)); // Only accept horizontal pans
-        
-    }
-    
-    return YES;
-}
-
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-//shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+//
+//- (void)interactionProgress:(UIPreviewForceInteractionProgress *)arg1 didEnd:(BOOL)arg2
 //{
-//    //only allow system gesture recognizers to begin if ours have failed
-//    return ([self.referenceView.gestureRecognizers containsObject:gestureRecognizer] &&
-//            ![self.referenceView.gestureRecognizers containsObject:otherGestureRecognizer]);
-//    
-//    return NO;
+//	if (!self.titlesClone.hidden &&
+//		(self.titlesClone.tag == SWAcapellaTitlesStateNone || self.titlesClone.tag == SWAcapellaTitlesStateForceScaling)) {
+//	
+//		self.titlesClone.transform = CGAffineTransformIdentity;
+//		self.tap.enabled = NO;
+//		self.pan.enabled = NO;
+//		
+//		if (arg2) {
+//			[self pressAtLocation:[self.forceTouchGestureRecognizer
+//								   locationInView:self.referenceView]
+//						   inView:self.referenceView];
+//		}
+//		
+//		self.titlesClone.tag = SWAcapellaTitlesStateNone;
+//		self.tap.enabled = YES;
+//		self.pan.enabled = YES;
+//	
+//	}
 //}
 
 #pragma mark - UIDynamics
@@ -570,7 +554,7 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 				
 				CGFloat horizontalVelocity = self.titlesClone.velocity.x;
 				//clamp horizontal velocity to its own width*(variable) per second
-				horizontalVelocity = MIN(fabs(horizontalVelocity), CGRectGetWidth(self.titlesClone.bounds) * 3.5);
+				horizontalVelocity = MIN(ABS(horizontalVelocity), CGRectGetWidth(self.titlesClone.bounds) * 3.5);
 				horizontalVelocity = copysignf(horizontalVelocity, self.titlesClone.velocity.x);
 				
 				[bDynamicItem addLinearVelocity:CGPointMake(horizontalVelocity, 0.0) forItem:self.titlesClone];
@@ -583,10 +567,12 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 					
 					CGFloat velocity = [weakbDynamicItem linearVelocityForItem:weakSelf.titlesClone].x;
 					
-					BOOL toSlow = fabs(velocity) < CGRectGetMidX(weakSelf.referenceView.bounds);
+					BOOL toSlow = ABS(velocity) < CGRectGetMidX(weakSelf.referenceView.bounds);
 					
 					if (toSlow) {
+						
 						[weakSelf snapToCenter];
+						
 					} else {
 						
 						CGFloat distanceFromCenter = weakSelf.titlesClone.center.x - CGRectGetMidX(self.titlesClone.superview.bounds);
@@ -617,13 +603,14 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
 	dispatch_async(dispatch_get_main_queue(), ^(void) {
 	@autoreleasepool {
 		
-		if (self.titlesClone.tag == SWAcapellaTitlesStatePanning || self.titlesClone.tag == SWAcapellaTitlesStateWrappingAround) {
+		if (self.titlesClone.tag == SWAcapellaTitlesStatePanning ||
+			self.titlesClone.tag == SWAcapellaTitlesStateWrappingAround) {
 			
 			[self.animator removeAllBehaviors];
 			
 			UIDynamicItemBehavior *bDynamicItem = [[UIDynamicItemBehavior alloc] initWithItems:@[self.titlesClone]];
 			bDynamicItem.density = 70.0;
-			bDynamicItem.resistance = 5;
+			bDynamicItem.resistance = 5.0;
 			bDynamicItem.allowsRotation = NO;
 			bDynamicItem.angularResistance = CGFLOAT_MAX;
 			bDynamicItem.friction = 1.0;
@@ -700,6 +687,17 @@ completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionEr
                          
                      }];
 
+}
+
+#pragma mark - NSNotificationCenter
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+	// Fix for the titles view displaying the incorrect song if the song changes while the app is in the background
+	[self.referenceView setNeedsLayout];
+	[self.referenceView layoutIfNeeded];
+	self.titlesClone.frame = self.titles.frame;
+	self.titlesClone.titles = self.titles;
 }
 
 #pragma mark - Internal

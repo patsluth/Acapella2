@@ -42,7 +42,7 @@
 	
 	// Initialize prefs for this instance
     if (self.acapellaKeyPrefix) {
-        self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithKeyPrefix:self.acapellaKeyPrefix];
+		self.acapellaPrefs = [[SWAcapellaPrefs alloc] initWithKeyPrefix:self.acapellaKeyPrefix];
     }
 	
 	
@@ -71,19 +71,18 @@
     
     
     if (!self.acapella) {
-        
+		
         if (self.acapellaPrefs.enabled) {
             
 			[SWAcapella setAcapella:[[SWAcapella alloc] initWithOwner:self
 														referenceView:self.view
 															   titles:MPU_SYSTEM_MEDIA_CONTROLS_VIEW.trackInformationView]
-                          ForObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
+						  forObject:self withPolicy:OBJC_ASSOCIATION_RETAIN_NONATOMIC];
             
         }
         
     }
-    
-    
+	
     if (self.acapella) {
         
         // Show/Hide progress slider
@@ -132,13 +131,6 @@
     UIView *curView = self.view.superview;
     
     while (curView) {
-        
-#ifdef DEBUG
-        id a = NSStringFromClass([curView class]);
-        id b = NSStringFromClass([curView.superview class]);
-        id c = NSStringFromClass([curView.window.rootViewController class]);
-        NSLog(@"Acapella System Media Controls Log %@-%@-%@", a, b, c);
-#endif
         
 		@autoreleasepool {
 			
@@ -547,7 +539,7 @@
         
         
         // The midpoint between the currently visible views. This is where we will place our titles
-        NSInteger midPoint = (topGuideline + (fabs(topGuideline - bottomGuideline) * 0.5));
+        NSInteger midPoint = (topGuideline + (ABS(topGuideline - bottomGuideline) * 0.5));
 		self.trackInformationView.center = CGPointMake(self.trackInformationView.center.x, midPoint);
 		
     }

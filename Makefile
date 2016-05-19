@@ -5,14 +5,14 @@
 
 FINALPACKAGE = 1
 DEBUG = 0
-PACKAGE_VERSION = 1.1-18
+PACKAGE_VERSION = 1.1-19
 
 
 
 
 
 ifeq ($(DEBUG), 1)
-    ARCHS = arm64
+	ARCHS = arm64
 else
     ARCHS = armv7 armv7s arm64
 endif
@@ -22,7 +22,10 @@ TARGET = iphone:clang:latest:7.0
 
 
 
+
+
 TWEAK_NAME = Acapella2
+
 Acapella2_CFLAGS = -fobjc-arc -Wno-arc-performSelector-leaks
 Acapella2_FILES = MPUMediaControlsTitlesView.xm \
 					MPUSystemMediaControlsViewController.xm \

@@ -701,6 +701,7 @@ CFRelease(udid); \
 	// Fix for the titles view displaying the incorrect song if the song changes while the app is in the background
 	[self.referenceView setNeedsLayout];
 	[self.referenceView layoutIfNeeded];
+	
 	self.titlesClone.frame = self.titles.frame;
 	self.titlesClone.titles = self.titles;
 }

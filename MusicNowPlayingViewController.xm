@@ -494,8 +494,7 @@
 %new
 - (void)action_showratings:(id)arg1
 {
-	// iOS <= 9.0.2
-	@try {
+	@try {				// iOS <= 9.0.2
 		
 		[self _setRatingsVisible:self.ratingControl.hidden];
 		
@@ -503,28 +502,18 @@
 		
 		NSLog(@"%@", exception);
 		
-		// iOS > 9.0.3
-		@try {
+		
+		@try {			// iOS > 9.0.3
 			
 			// iOS 9.0.3 shows the ratings view in the lyrics view now
 			// Hide the lyrics view if it is visible
-			NSLog(@"PAT PAT %@", @([self lyricsViewVisible]));
 			[self _setLyricsVisible:![self lyricsViewVisible]];
-			
-//			if (![self lyricsViewVisible]) {
-//				[self _setLyricsVisible:YES];
-//			} else {
-//				[self dismissDetailViewController:self.presentedDetailViewController];
-//			}
 			
 		} @catch (NSException *exception) {
 			NSLog(@"%@", exception);
 		}
 		
 	}
-	
-	
-	
 }
 
 %new

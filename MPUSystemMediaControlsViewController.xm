@@ -190,6 +190,8 @@
     return [SWAcapella acapellaForObject:self];
 }
 
+#pragma mark - MPUSystemMediaControlsViewController
+
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
     //THESE CODES ARE DIFFERENT FROM THE MEDIA COMMANDS

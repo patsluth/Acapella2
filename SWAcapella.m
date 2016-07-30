@@ -15,7 +15,7 @@
 #import "libsw/libSluthware/NSTimer+SW.h"
 #import "libsw/libSluthware/SWPrefs.h"
 
-//#import "UIKit/UIPreviewForceInteractionProgress.h"
+#import "UIKit/UIPreviewForceInteractionProgress.h"
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <MobileGestalt/MobileGestalt.h>
@@ -79,7 +79,7 @@ CFRelease(udid); \
 @property (weak, nonatomic, readwrite) UIGestureRecognizer *forceTouchGestureRecognizer;
 
 //@property (strong, nonatomic) id<UIViewControllerPreviewing> previewingContext;
-@property (strong, nonatomic) id /*UIPreviewForceInteractionProgress*/ forceInteractionProgress;
+@property (strong, nonatomic) /*id*/ UIPreviewForceInteractionProgress *forceInteractionProgress;
 
 @property (strong, nonatomic) NSTimer *wrapAroundFallback;
 
@@ -114,10 +114,10 @@ CFRelease(udid); \
 		[acapella.titlesClone removeFromSuperview];
 		acapella.titlesClone = nil;
 		
-//		if (acapella.forceInteractionProgress) {
-//			[acapella.forceInteractionProgress removeProgressObserver:acapella];
-//		}
-//		acapella.forceInteractionProgress = nil;
+		if (acapella.forceInteractionProgress) {
+			[acapella.forceInteractionProgress removeProgressObserver:acapella];
+		}
+		acapella.forceInteractionProgress = nil;
 		
         [acapella.animator removeAllBehaviors];
 		acapella.animator = nil;
@@ -193,35 +193,35 @@ CFRelease(udid); \
     [self.referenceView addGestureRecognizer:self.pan];
 	
 	
-//	if (NSClassFromString(@"UIPreviewForceInteractionProgress")) {
-//		if ([self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
-//			(self.owner.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)) {
-//			
-//			//		self.previewingContext = [self.owner registerForPreviewingWithDelegate:self.owner sourceView:self.referenceView];
-//			
-//			UIPreviewForceInteractionProgress *forceInteractionProgress;
-//			forceInteractionProgress = [[UIPreviewForceInteractionProgress alloc] _initWithView:self.referenceView
-//																					targetState:2
-//																		   minimumRequiredState:1
-//																			useLinearClassifier:NO];
-//			
-//			forceInteractionProgress.completesAtTargetState = YES;
-//			[forceInteractionProgress setValue:@(YES) forKey:@"_updateMinimumStateWithTargetState"];
-//			[forceInteractionProgress _setClassifierShouldRespectSystemGestureTouchFiltering:YES];
-//			[forceInteractionProgress addProgressObserver:self];
-//			[forceInteractionProgress _installProgressObserver];
-//			
-//			self.forceInteractionProgress = forceInteractionProgress;
-//			
-//			// Make sure UIPanGestureRecognizer take precendence over UIPreviewForceInteractionProgress (Force Touch)
-//			for (UIGestureRecognizer *g in self.referenceView.gestureRecognizers) {
-//				if ([NSStringFromClass([g class]) isEqualToString:@"_UITouchesObservingGestureRecognizer"]) {
-//					self.forceTouchGestureRecognizer = g;
-//					break;
-//				}
-//			}
-//		}
-//	}
+	if (NSClassFromString(@"UIPreviewForceInteractionProgress")) {
+		if ([self.owner.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&
+			(self.owner.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)) {
+			
+			//		self.previewingContext = [self.owner registerForPreviewingWithDelegate:self.owner sourceView:self.referenceView];
+			
+			UIPreviewForceInteractionProgress *forceInteractionProgress;
+			forceInteractionProgress = [[UIPreviewForceInteractionProgress alloc] _initWithView:self.referenceView
+																					targetState:2
+																		   minimumRequiredState:1
+																			useLinearClassifier:NO];
+			
+			forceInteractionProgress.completesAtTargetState = YES;
+			[forceInteractionProgress setValue:@(YES) forKey:@"_updateMinimumStateWithTargetState"];
+			[forceInteractionProgress _setClassifierShouldRespectSystemGestureTouchFiltering:YES];
+			[forceInteractionProgress addProgressObserver:self];
+			[forceInteractionProgress _installProgressObserver];
+			
+			self.forceInteractionProgress = forceInteractionProgress;
+			
+			// Make sure UIPanGestureRecognizer take precendence over UIPreviewForceInteractionProgress (Force Touch)
+			for (UIGestureRecognizer *g in self.referenceView.gestureRecognizers) {
+				if ([NSStringFromClass([g class]) isEqualToString:@"_UITouchesObservingGestureRecognizer"]) {
+					self.forceTouchGestureRecognizer = g;
+					break;
+				}
+			}
+		}
+	}
 	
 		
 	if (!self.forceInteractionProgress) {
@@ -452,47 +452,47 @@ CFRelease(udid); \
 
 #pragma mark - UIPreviewForceInteractionProgress
 
-//- (void)interactionProgressDidUpdate:(UIPreviewForceInteractionProgress *)arg1
-//{
-//	if (!self.titlesClone.hidden &&
-//		self.titlesClone.tag == SWAcapellaTitlesStateNone &&
-//		arg1.percentComplete > 0.0) {
-//		
-//		self.titlesClone.tag = SWAcapellaTitlesStateForceScaling;
-//		
-//		self.tap.enabled = NO;
-//		self.pan.enabled = NO;
-//		
-//	} else if (self.titlesClone.tag == SWAcapellaTitlesStateForceScaling) {
-//		
-//		CGFloat scale = 1.0 + (arg1.percentComplete * 0.5);
-//		scale = MAX(1.0, scale);
-//		self.titlesClone.transform = CGAffineTransformMakeScale(scale, scale);
-//		
-//	}
-//}
-//
-//- (void)interactionProgress:(UIPreviewForceInteractionProgress *)arg1 didEnd:(BOOL)arg2
-//{
-//	if (!self.titlesClone.hidden &&
-//		(self.titlesClone.tag == SWAcapellaTitlesStateNone || self.titlesClone.tag == SWAcapellaTitlesStateForceScaling)) {
-//	
-//		self.titlesClone.transform = CGAffineTransformIdentity;
-//		self.tap.enabled = NO;
-//		self.pan.enabled = NO;
-//		
-//		if (arg2) {
-//			[self pressAtLocation:[self.forceTouchGestureRecognizer
-//								   locationInView:self.referenceView]
-//						   inView:self.referenceView];
-//		}
-//		
-//		self.titlesClone.tag = SWAcapellaTitlesStateNone;
-//		self.tap.enabled = YES;
-//		self.pan.enabled = YES;
-//	
-//	}
-//}
+- (void)interactionProgressDidUpdate:(UIPreviewForceInteractionProgress *)arg1
+{
+	if (!self.titlesClone.hidden &&
+		self.titlesClone.tag == SWAcapellaTitlesStateNone &&
+		arg1.percentComplete > 0.0) {
+		
+		self.titlesClone.tag = SWAcapellaTitlesStateForceScaling;
+		
+		self.tap.enabled = NO;
+		self.pan.enabled = NO;
+		
+	} else if (self.titlesClone.tag == SWAcapellaTitlesStateForceScaling) {
+		
+		CGFloat scale = 1.0 + (arg1.percentComplete * 0.5);
+		scale = MAX(1.0, scale);
+		self.titlesClone.transform = CGAffineTransformMakeScale(scale, scale);
+		
+	}
+}
+
+- (void)interactionProgress:(UIPreviewForceInteractionProgress *)arg1 didEnd:(BOOL)arg2
+{
+	if (!self.titlesClone.hidden &&
+		(self.titlesClone.tag == SWAcapellaTitlesStateNone || self.titlesClone.tag == SWAcapellaTitlesStateForceScaling)) {
+	
+		self.titlesClone.transform = CGAffineTransformIdentity;
+		self.tap.enabled = NO;
+		self.pan.enabled = NO;
+		
+		if (arg2) {
+			[self pressAtLocation:[self.forceTouchGestureRecognizer
+								   locationInView:self.referenceView]
+						   inView:self.referenceView];
+		}
+		
+		self.titlesClone.tag = SWAcapellaTitlesStateNone;
+		self.tap.enabled = YES;
+		self.pan.enabled = YES;
+	
+	}
+}
 
 #pragma mark - UIDynamics
 

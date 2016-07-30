@@ -12,6 +12,8 @@
 {
 }
 
+- (BOOL)lyricsViewVisible;
+
 @end
 
 

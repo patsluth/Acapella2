@@ -206,6 +206,21 @@
     return [SWAcapella acapellaForObject:self];
 }
 
+
+
+%new
+- (BOOL)lyricsViewVisible
+{
+	NSString *classString = NSStringFromClass([self.presentedDetailViewController class]);
+	if ([classString isEqualToString:@"MusicNowPlayingLyricsViewController"]) {
+		return YES;
+	}
+	
+	return NO;
+}
+
+#pragma mark - MusicNowPlayingViewController
+
 - (id)transportControlsView:(id)arg1 buttonForControlType:(NSInteger)arg2
 {
     // TRANSPORT CONTROL TYPES
@@ -479,7 +494,37 @@
 %new
 - (void)action_showratings:(id)arg1
 {
-    [self _setRatingsVisible:self.ratingControl.hidden];
+	// iOS <= 9.0.2
+	@try {
+		
+		[self _setRatingsVisible:self.ratingControl.hidden];
+		
+	} @catch (NSException *exception) {
+		
+		NSLog(@"%@", exception);
+		
+		// iOS > 9.0.3
+		@try {
+			
+			// iOS 9.0.3 shows the ratings view in the lyrics view now
+			// Hide the lyrics view if it is visible
+			NSLog(@"PAT PAT %@", @([self lyricsViewVisible]));
+			[self _setLyricsVisible:![self lyricsViewVisible]];
+			
+//			if (![self lyricsViewVisible]) {
+//				[self _setLyricsVisible:YES];
+//			} else {
+//				[self dismissDetailViewController:self.presentedDetailViewController];
+//			}
+			
+		} @catch (NSException *exception) {
+			NSLog(@"%@", exception);
+		}
+		
+	}
+	
+	
+	
 }
 
 %new

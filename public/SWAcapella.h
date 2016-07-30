@@ -65,6 +65,8 @@ typedef NS_ENUM(NSInteger, SWAcapellaTitlesState) {
  */
 - (void)pulse;
 
+- (void)setTitlesCloneVisible:(BOOL)visible;
+
 @end
 
 

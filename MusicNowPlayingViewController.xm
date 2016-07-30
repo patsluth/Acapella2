@@ -326,37 +326,35 @@
 {
 	%orig(arg1);
 	
-	[self _setRatingsVisible:NO];
+	@try {
+		[self _setRatingsVisible:NO];
+	} @catch (NSException *exception) {
+		NSLog(@"%@", exception);
+	} @finally {
+		[self.acapella setTitlesCloneVisible:YES];
+	}
 }
 
 - (void)_showUpNext
 {
-	if (self.acapella) {
-		self.acapella.titlesClone.hidden = YES;
-		self.acapella.titles.layer.opacity = 0.0;
-	}
+	[self.acapella setTitlesCloneVisible:NO];
 	
     %orig();
 }
 
 - (void)_showUpNext:(id)arg1
 {
-	if (self.acapella) {
-		self.acapella.titlesClone.hidden = YES;
-		self.acapella.titles.layer.opacity = 0.0;
-	}
+	[self.acapella setTitlesCloneVisible:NO];
 	
 	%orig(arg1);
 }
 
-- (void)_setRatingsVisible:(BOOL)arg1
+- (void)_setRatingsVisible:(BOOL)arg1		// No longer available on iOS 9.3.3
 {
 	%orig(arg1);
 	
-	if (self.acapella) {
-		self.acapella.titlesClone.hidden = arg1;
-		self.acapella.titles.layer.opacity = self.acapella.titlesClone.hidden ? 1.0 : 0.0;
-	}
+	// Hide Acapella if Ratings are visible
+	[self.acapella setTitlesCloneVisible:!arg1];
 }
 
 #pragma mark - Acaplla(Actions)

@@ -413,7 +413,6 @@ CFRelease(udid); \
             
         };
 	}
-	
 }
 
 - (void)onPress:(UILongPressGestureRecognizer *)press
@@ -687,6 +686,12 @@ CFRelease(udid); \
                          
                      }];
 
+}
+
+- (void)setTitlesCloneVisible:(BOOL)visible
+{
+	self.titlesClone.hidden = !visible;
+	self.titles.layer.opacity = self.titlesClone.hidden ? 1.0 : 0.0;
 }
 
 #pragma mark - NSNotificationCenter

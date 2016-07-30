@@ -3,9 +3,9 @@
 
 
 
-FINALPACKAGE = 1
-DEBUG = 0
-PACKAGE_VERSION = 1.1-19
+FINALPACKAGE = 0
+DEBUG = 1
+PACKAGE_VERSION = 1.1-20
 
 
 
@@ -82,7 +82,7 @@ after-install::
 	$(ECHO_NOTHING)install.exec "killall -9 Music > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 	$(ECHO_NOTHING)install.exec "killall -9 Podcasts > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 	$(ECHO_NOTHING)install.exec "killall -9 Preferences > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
-	$(ECHO_NOTHING)install.exec "killall -9 backboardd > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
+#$(ECHO_NOTHING)install.exec "killall -9 backboardd > /dev/null 2> /dev/null"; echo -n '';$(ECHO_END)
 
 
 

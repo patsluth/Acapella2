@@ -309,6 +309,7 @@
 		2EBB75741BE97BB900A3A82D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 			};
 			name = Debug;
@@ -316,6 +317,7 @@
 		2EBB75751BE97BB900A3A82D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 			};
 			name = Release;

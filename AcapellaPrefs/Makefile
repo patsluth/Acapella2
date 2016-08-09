@@ -38,8 +38,14 @@ include theos/makefiles/swcommon.mk
 
 
 
-internal-stage::
+before-stage::
 	$(ECHO_NOTHING)pwd >> temp.txt; echo SWAcapellaPSListController >> temp.txt; cat temp.txt | tr '\n' ';' | ./exportPrefs; rm -r -f temp.txt;$(ECHO_END)
+
+
+
+
+
+internal-stage::
 	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences$(ECHO_END)
 	$(ECHO_NOTHING)cp entry.plist $(THEOS_STAGING_DIR)/Library/PreferenceLoader/Preferences/AcapellaPrefs2.plist$(ECHO_END)
 

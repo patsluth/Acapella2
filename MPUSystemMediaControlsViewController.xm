@@ -102,8 +102,12 @@
         
     } else { //restore original state
 		
-        MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 1.0;
-        MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 1.0;
+        // Only reset values for default media center instances
+        NSString *acapellaKeyPrefix = [self acapellaKeyPrefix];
+        if ([acapellaKeyPrefix isEqualToString:@"cc"] || [acapellaKeyPrefix isEqualToString:@"ls"]) {
+            MPU_SYSTEM_MEDIA_CONTROLS_VIEW.timeInformationView.layer.opacity = 1.0;
+            MPU_SYSTEM_MEDIA_CONTROLS_VIEW.volumeView.layer.opacity = 1.0;
+        }
         
     }
     
@@ -174,6 +178,24 @@
 			if (curView.tag == 4510) { // Value supplied by Widux dev Andrew Wiik
 				return @"widux";
 			}
+            
+            // Cleo
+            if (%c(CPCLCCMediaView) && [curView class] == %c(CPCLCCMediaView)) {
+                
+                MPUSystemMediaControlsViewController *_mediaControls;
+                // Need to distinguish between the CC and CLEO media constrols, since they both are subviews of CPCLCCMediaView
+                @try {
+                    _mediaControls = MSHookIvar<MPUSystemMediaControlsViewController *>(curView, "_mediaControls");
+                } @catch (NSException *exception) {
+                    NSLog(@"%@", exception);
+                } @finally {
+                    if (_mediaControls != self) {
+                        _mediaControls = nil;
+                        return @"cleo";
+                    }
+                }
+                
+            }
 			
 		}
 		

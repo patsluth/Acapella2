@@ -98,6 +98,54 @@
 	<true/>
 	<key>acapella2_cc_volumeslider</key>
 	<true/>
+	<key>acapella2_cleo_enabled</key>
+	<true/>
+	<key>acapella2_cleo_gestures_presscentre</key>
+	<string>action_openapp</string>
+	<key>acapella2_cleo_gestures_pressleft</key>
+	<string>action_intervalrewind</string>
+	<key>acapella2_cleo_gestures_pressright</key>
+	<string>action_intervalforward</string>
+	<key>acapella2_cleo_gestures_swipeleft</key>
+	<string>action_nexttrack</string>
+	<key>acapella2_cleo_gestures_swiperight</key>
+	<string>action_previoustrack</string>
+	<key>acapella2_cleo_gestures_tapcentre</key>
+	<string>action_playpause</string>
+	<key>acapella2_cleo_gestures_tapleft</key>
+	<string>action_decreasevolume</string>
+	<key>acapella2_cleo_gestures_tapright</key>
+	<string>action_increasevolume</string>
+	<key>acapella2_cleo_progressslider</key>
+	<false/>
+	<key>acapella2_cleo_transport_contextual</key>
+	<false/>
+	<key>acapella2_cleo_transport_heart</key>
+	<false/>
+	<key>acapella2_cleo_transport_intervalforward</key>
+	<false/>
+	<key>acapella2_cleo_transport_intervalrewind</key>
+	<false/>
+	<key>acapella2_cleo_transport_nexttrack</key>
+	<false/>
+	<key>acapella2_cleo_transport_playbackrate</key>
+	<false/>
+	<key>acapella2_cleo_transport_playpause</key>
+	<false/>
+	<key>acapella2_cleo_transport_previoustrack</key>
+	<false/>
+	<key>acapella2_cleo_transport_repeat</key>
+	<false/>
+	<key>acapella2_cleo_transport_share</key>
+	<false/>
+	<key>acapella2_cleo_transport_shuffle</key>
+	<false/>
+	<key>acapella2_cleo_transport_sleeptimer</key>
+	<false/>
+	<key>acapella2_cleo_transport_upnext</key>
+	<false/>
+	<key>acapella2_cleo_volumeslider</key>
+	<false/>
 	<key>acapella2_ls_enabled</key>
 	<true/>
 	<key>acapella2_ls_gestures_presscentre</key>

@@ -502,7 +502,6 @@
 		
 		NSLog(@"%@", exception);
 		
-		
 		@try {			// iOS > 9.0.3
 			
 			// iOS 9.0.3 shows the ratings view in the lyrics view now

@@ -86,7 +86,13 @@ static id prefValueForKey(NSString *key)
         return @"action_nil";
         
     } else if ([option isEqualToString:@"progressslider"]) {
-        return @(YES);
+        
+        if ([prefix isEqualToString:@"cleo"]) {
+            return @(NO);
+        } else {
+            return @(YES);
+        }
+        
     } else if ([option isEqualToString:@"transport"]) {
         
         if (parts.count < 3) {
@@ -94,7 +100,8 @@ static id prefValueForKey(NSString *key)
             return nil;
         }
         
-        if ([prefix isEqualToString:@"musicmini"]) { //all transport controls disabled for mini
+        if ([prefix isEqualToString:@"musicmini"] ||
+            [prefix isEqualToString:@"cleo"]) { //all transport controls disabled for mini and cleo
             return @(NO);
         }
         
@@ -129,7 +136,13 @@ static id prefValueForKey(NSString *key)
         }
         
     } else if ([option isEqualToString:@"volumeslider"]) {
-        return @(YES);
+        
+        if ([prefix isEqualToString:@"cleo"]) {
+            return @(NO);
+        } else {
+            return @(YES);
+        }
+        
     }
     
     return @"";

@@ -32,7 +32,7 @@
 		2EBB75811BE97C5A00A3A82D /* layout */ = {isa = PBXFileReference; lastKnownFileType = folder; path = layout; sourceTree = "<group>"; };
 		2EBB75821BE97C5A00A3A82D /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		2EBB75881BE97C5A00A3A82D /* SWAcapella.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = SWAcapella.m; sourceTree = "<group>"; };
-		2EBB758B1BE97C5A00A3A82D /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		2EBB758B1BE97C5A00A3A82D /* Makefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		2EBB758C1BE97C5A00A3A82D /* MPUMediaControlsTitlesView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUMediaControlsTitlesView.xm; sourceTree = "<group>"; };
 		2EBB758D1BE97C5A00A3A82D /* MPUSystemMediaControlsViewController.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUSystemMediaControlsViewController.xm; sourceTree = "<group>"; };
 		2EBB758E1BE97C5A00A3A82D /* MPUTransportControlsView.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = MPUTransportControlsView.xm; sourceTree = "<group>"; };
